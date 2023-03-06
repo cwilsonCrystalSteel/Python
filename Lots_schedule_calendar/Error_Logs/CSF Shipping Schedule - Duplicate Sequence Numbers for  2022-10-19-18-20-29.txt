@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125.0,CSF,Ticket,74,RB  GALVANIZED a309 & a310 L8X4X1/2 6:30 A.M.,10/24/2022,,,,3370,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3370
+2125.0,CSF,Ticket,74,(RB) L8X4X1/2 GALVANIZED 6:30 A.M.,10/20/2022,,,,3402,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3402

@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2142,CSM,Ticket,1,New Beam Mk: B5045 (replacement for damage B5032),,Dick G,,

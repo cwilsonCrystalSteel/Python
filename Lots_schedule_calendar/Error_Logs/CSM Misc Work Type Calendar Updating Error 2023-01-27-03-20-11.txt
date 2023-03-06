@@ -1,0 +1,2 @@
+CSM
+The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().

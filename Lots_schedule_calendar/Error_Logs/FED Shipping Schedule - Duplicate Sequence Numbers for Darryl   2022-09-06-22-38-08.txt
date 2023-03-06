@@ -1,0 +1,4 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2015.0,FED,Ticket,5,Replacement Plates Due to Shop Error,8/25/2022,Darryl  ,
+2015.0,FED,Ticket,7,PH-2015-094: Added bent plates - top of foundation at grid 3-6,,Darryl  ,

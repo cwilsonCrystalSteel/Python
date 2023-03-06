@@ -1,0 +1,6 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2123,CSF,Sequence,1,PH-2123-029 (LOT T001)East Roof Framing Plans At Classroom Addition,4/20/2022,Mike D,Yes
+2123,CSF,Sequence,1,PH-2123-032 (LOT T002) East Roof Framing,4/21/2022,Mike D,Yes
+2123,CSF,Sequence,2,PH-2123-030 (LOT T003)West Roof Framing Plans At Classroom Addition,5/2/2022,Mike D,Yes
+2123,CSF,Sequence,2,PH-2123-035 (Lot T004) West Roof Framing (BALANCE),5/2/2022,Mike D,Yes

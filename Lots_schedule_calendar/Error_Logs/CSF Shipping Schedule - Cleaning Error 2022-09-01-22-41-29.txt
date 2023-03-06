@@ -1,0 +1,2 @@
+CSF
+[Errno 2] No such file or directory: 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Error_Logs\\CSF Shipping Schedule - Duplicate Sequence Numbers for AN/JN 2022-09-01-22-41-29.txt'

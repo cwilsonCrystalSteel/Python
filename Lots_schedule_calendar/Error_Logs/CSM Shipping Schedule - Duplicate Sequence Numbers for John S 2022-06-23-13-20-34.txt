@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2038,CSM,Sequence,1,"Lots T033-T036 T038, T039,T042,T044, T053-TO55",10/25/2021,John S,YES
+2038,CSM,Sequence,1,Elevator 2 Guide Rails Lot T110,7/6/2022,John S,

@@ -1,0 +1,7 @@
+{"installed":{
+	"client_id":"476169250734-g9rm9fv3gp2drm3gvjqbfkkqlvsq6vnp.apps.googleusercontent.com",
+	"project_id":"lots-calendar","auth_uri":"https://accounts.google.com/o/oauth2/auth",
+	"token_uri":"https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+	"client_secret":"6BWQI6EjV4tI4Ro7nK5CoBGe",
+	"redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}

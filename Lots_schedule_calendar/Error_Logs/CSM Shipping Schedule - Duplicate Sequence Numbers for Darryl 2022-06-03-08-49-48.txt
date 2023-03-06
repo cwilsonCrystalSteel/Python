@@ -1,0 +1,8 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2009,CSM,Sequence,31.2,PH-2009-546: Added Steel per RFI 534 Response,10/18/2021,Darryl,yes
+2009,CSM,Sequence,31.2,PH-2009-597: Added Per FW - Perimeter Beam Kicker Detail,4/4/2022,Darryl,Yes
+2009,CSM,Sequence,34.3,PH-2009-546: Added Steel per RFI 534 Response,10/18/2021,Darryl,yes
+2009,CSM,Sequence,34.3,Added Per RFI 734 Response,3/18/2022,Darryl,Yes
+2009,CSM,Sequence,36.2,PH-2009-505: Lintel Angles,9/30/2021,Darryl,yes
+2009,CSM,Sequence,36.2,Added Per RFI 734 Response,3/18/2022,Darryl,Yes

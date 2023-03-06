@@ -1,0 +1,3 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2216,FED,Sequence,97,"All Sequences: Anchor Rod, Template &  Levelling Plate",,Mustafa,,

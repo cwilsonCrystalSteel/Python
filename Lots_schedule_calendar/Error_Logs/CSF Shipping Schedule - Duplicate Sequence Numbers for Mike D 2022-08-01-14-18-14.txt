@@ -1,0 +1,11 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2123.0,CSF,Sequence,1,PH-2123-032 (LOT T002) East Roof Framing,4/21/2022,Mike D,
+2123.0,CSF,Sequence,1,PH-2123-029 (LOT T001)East Roof Framing Plans At Classroom Addition,4/20/2022,Mike D,
+2022.0,CSF,,1,,7/16/2021,Mike D,
+2022.0,CSF,,1,,7/16/2021,Mike D,
+2022.0,CSF,Sequence,12,Item # 12 / Shop Release PH-2022-115,2/17/2022,Mike D,
+2123.0,CSF,Sequence,2,PH-2123-030 (LOT T003)West Roof Framing Plans At Classroom Addition,5/2/2022,Mike D,
+2123.0,CSF,Sequence,2,PH-2123-035 (Lot T004) West Roof Framing (BALANCE),5/2/2022,Mike D,
+2123.0,CSF,Sequence,97.1,Anchor Bolts for Columns (Shop release PH-2123-017),12/6/2021,Mike D,
+2123.0,CSF,Sequence,98,Embed Plates & Miscellaneous Materials,2/23/2022,Mike D,

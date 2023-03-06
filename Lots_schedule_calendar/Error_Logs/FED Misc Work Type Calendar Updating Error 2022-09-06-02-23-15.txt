@@ -1,0 +1,2 @@
+FED
+<HttpError 410 when requesting https://www.googleapis.com/calendar/v3/calendars/c_pd5da50k6ci6vsrh8g6a5fvjig%40group.calendar.google.com/events/7use50niirje21ddb5t0cn13ho? returned "Resource has been deleted". Details: "[{'domain': 'global', 'reason': 'deleted', 'message': 'Resource has been deleted'}]">

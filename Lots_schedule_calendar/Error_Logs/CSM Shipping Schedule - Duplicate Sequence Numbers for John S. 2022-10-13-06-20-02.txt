@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2121,CSM,Ticket,18,Added materials per SKS37-40 (GC RFI#516) (PH-2121-467 & PH-2121-468),10/12/2022,John S.,,8/24/2022,3105,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3105
+2121,CSM,Ticket,18,Replace Missing Landing Channels/Misc Material,10/14/2022,John S.,,,3106,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3106

@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2207,CSF,Sequence,97,Anchor bolts(Buyout) & Templates,8/23/2022,Mustafa ,Yes,7/5/2022
+2207,CSF,Sequence,97,Missing Embeds email dated 8/23 14xEP200+4xEP204,8/30/2022,Mustafa ,,7/12/2022

@@ -1,0 +1,8 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2218,CSM,Sequence,1,EXTRACTOR PIT (EP-1),,Mike M,
+2218,CSM,Sequence,2,EXTRACTOR PIT (EP-2),,Mike M,
+2218,CSM,Sequence,3,EXTRACTOR PIT (EP-3),,Mike M,
+2218,CSM,Sequence,14,RAW WAREHOUSE (RAW-5),,Mike M,
+2218,CSM,Sequence,15,FINISHED GOODS (FINISH-1),,Mike M,
+2218,CSM,Sequence,97,,,Mike M,

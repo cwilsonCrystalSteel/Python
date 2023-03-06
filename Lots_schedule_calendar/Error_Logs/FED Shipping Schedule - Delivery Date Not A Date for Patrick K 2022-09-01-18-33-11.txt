@@ -1,0 +1,5 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004.0,FED,Sequence,22,"EAST BUSTLE NORTH- 4TH FLOOR - Area 5,6 & 7 ",,Patrick K,
+2004.0,FED,Sequence,22.7,Area 6 added Cantilever restraint,,Patrick K,
+2004.0,FED,Ticket,1.5,Seq 1B -Field Fix per Bull #27 Rel. #1052 - 0.05 tons,,Patrick K,

@@ -1,0 +1,7 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2117,CSF,Sequence,15," PH-2117-133/137
+PH-2117-141/142/145/147
+PH-2117-155/157/158
+PH-2117-165/166/167
+PENTHOUSE STEEL GALVANIZED LOT #22-25-27",6/6/2022,Mustafa,

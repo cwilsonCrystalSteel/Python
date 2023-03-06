@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2127.0,CSF,Ticket,17,Added Plates for bent plate gaps field fix at Garden Center,,Mustafa,,11/11/1899

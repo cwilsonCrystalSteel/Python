@@ -1,0 +1,7 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2121,CSM,Item,7.1,,,John S,
+2121,CSM,Item,8.1,,,John S,
+2121,CSM,Item,9.1,,,John S,
+2121,CSM,Item,10.1,,,John S,
+2121,CSM,Item,67,Angle for overhead grill track per ASI 28,,John S,

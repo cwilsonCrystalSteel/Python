@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2117.0,CSF,Ticket,1,Field Bolts ,8/22/2022,Darryl ,,

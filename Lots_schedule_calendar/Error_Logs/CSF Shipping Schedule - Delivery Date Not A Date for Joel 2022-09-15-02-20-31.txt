@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2129.0,CSF,Ticket,3,RFI 115-PH-2129-XX,,Joel,,10/14/1899

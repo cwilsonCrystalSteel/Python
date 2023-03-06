@@ -1,0 +1,3 @@
+FED
+2215-4
+Ticket 2215-4<br>2023-02-21<br><a href="https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4615">Link to Google Sheets</a><br>(PM: Patrick K) Seq2 - Hoist beam - Load on top of T012<br>(02/14/2023 03:20) Added to Calendar with delivery date: 02/21/2023

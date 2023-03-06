@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125.0,CSF,Ticket,44,"RB L4x4x3/8 PL3/8x4""x10"" a572 GR.5 (NP)",9/29/2022,,,,3244,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3244
+2125.0,CSF,Ticket,45,"RB  L6x4x3/8""x 9'-2""  (See Detail)",9/29/2022,,,,3245,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3245

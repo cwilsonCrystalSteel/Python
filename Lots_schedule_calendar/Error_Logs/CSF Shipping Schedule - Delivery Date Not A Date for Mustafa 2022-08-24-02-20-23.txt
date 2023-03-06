@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2127.0,CSF,Ticket,22,Seq8 Additional Plates for B8030 and B8039 fix,,Mustafa,,11/11/1899

@@ -1,0 +1,5 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+1926,CSF,Sequence,22,Seq 22 FLOOR BEAMS PH-1926-233 LOT 50 - Regal Shipping,6/1/2022,Scott,
+1926,CSF,Sequence,22,Seq 22 ARCHES PH-1926-238 LOT 52 - Regal Shipping,6/1/2022,Scott,
+2125,CSF,Sequence,99,Connections of North Tower Steel to existing,,Scott,

@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2004.0,CSF,Ticket,36.1,Add'l Pls for Machine Beam Field Fixes -Rel. #1090,,Patrick K,,

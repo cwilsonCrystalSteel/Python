@@ -1,0 +1,13 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+1828,CSM,,10C,,12/4/2019,Anthony B,
+1828,CSM,,10R,,2/3/2020,Anthony B,
+1828,CSM,,14C,,1/21/2020,Anthony B,
+1828,CSM,,14R,,3/3/2020,Anthony B,
+1828,CSM,,16C,,3/4/2020,Anthony B,
+1828,CSM,,16R,,3/20/2020,Anthony B,
+1828,CSM,,4C,,11/4/2019,Anthony B,
+1828,CSM,,4R,,12/4/2019,Anthony B,
+1828,CSM,,6R,,12/21/2019,Anthony B,
+1828,CSM,,8C,,11/18/2019,Anthony B,
+1828,CSM,,8R,,1/13/2020,Anthony B,

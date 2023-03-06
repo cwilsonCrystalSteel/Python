@@ -1,0 +1,3 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2215.0,FED,Ticket,8,Seq5 Beam Missed to Add in T018 Rev0 package - Load on Top of T018 ,,Patrick K,,,4663,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4663

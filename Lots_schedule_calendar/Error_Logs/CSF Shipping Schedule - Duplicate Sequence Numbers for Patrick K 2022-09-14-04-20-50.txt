@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2004,CSF,Sequence,35,,6/17/2022,Patrick K,Yes,4/29/2022
+2004,CSF,Sequence,8,,6/1/2022,Patrick K,Yes,4/13/2022

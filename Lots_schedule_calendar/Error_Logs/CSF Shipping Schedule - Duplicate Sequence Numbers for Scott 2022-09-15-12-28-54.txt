@@ -1,0 +1,9 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 1 NP, SC, and G
+",9/6/2022,Scott,Yes,7/19/2022,3111,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3111
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 2 NP, SC, and G
+",9/15/2022,Scott,,7/28/2022,3112,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3112
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 3 NP, SC, and G
+",9/26/2022,Scott,,8/8/2022,3113,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3113
+2125,CSF,Sequence,71,DO NOT DEL- Seq 71 East Shaft Reno Work  (155.41) (Balance) (18 Tons/126 PCS),9/14/2022,Scott,,7/27/2022,3231,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3231

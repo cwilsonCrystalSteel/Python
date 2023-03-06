@@ -1,0 +1,3 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2120.0,FED,Ticket,91322.1,Rework Assembly Frames Due to Errors (Detailing / Fabrication) ?,9/18/2022,Mike D,Yes,,3231,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3231

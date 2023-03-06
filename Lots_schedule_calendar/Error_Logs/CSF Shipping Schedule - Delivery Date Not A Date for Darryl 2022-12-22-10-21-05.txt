@@ -1,0 +1,7 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSF,Sequence,10.1,T151 (Pipe Sleeve support at level 2),,Darryl,,11/11/1899,3356,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3356
+2125,CSF,Sequence,12.1,T151 (Pipe Sleeve support at level 2),,Darryl,,11/11/1899,3359,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3359
+2125,CSF,Sequence,15.1,T153 (PH-2125-582) (Pipe Sleeve support at level 3),,Darryl,,11/11/1899,3364,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3364
+2125,CSF,Sequence,18.1,T153 (PH-2125-582) (Pipe Sleeve support at level 3),,Darryl,,11/11/1899,3368,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3368
+2125,CSF,Sequence,20.1,T153 (PH-2125-582) (Pipe Sleeve support at level 3),,Darryl,,11/11/1899,3371,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3371

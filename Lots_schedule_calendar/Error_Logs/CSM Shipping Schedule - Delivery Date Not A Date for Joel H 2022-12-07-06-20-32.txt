@@ -1,0 +1,17 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2218.0,CSM,Sequence,16,RAW WAREHOUSE (RAW-1)-T042 T043 T044 T045 T046 T047,,Joel H,,11/11/1899,4699,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4699
+2218.0,CSM,Sequence,18,RAW WAREHOUSE (RAW-3)-T050 T051,,Joel H,,11/11/1899,4700,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4700
+2218.0,CSM,Sequence,20,RAW WAREHOUSE (RAW-5),,Joel H,,11/11/1899,4701,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4701
+2218.0,CSM,Sequence,24,CONVERTING,,Joel H,,11/11/1899,4704,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4704
+2218.0,CSM,Sequence,25,CONVERTING,,Joel H,,11/11/1899,4705,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4705
+2218.0,CSM,Sequence,26,CONVERTING,,Joel H,,11/11/1899,4706,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4706
+2218.0,CSM,Sequence,27,CONVERTING,,Joel H,,11/11/1899,4712,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4712
+2218.0,CSM,Sequence,28,OFFICE-3,,Joel H,,11/11/1899,4713,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4713
+2218.0,CSM,Sequence,29,OFFICE-4,,Joel H,,11/11/1899,4714,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4714
+2218.0,CSM,Sequence,30,OFFICE-5,,Joel H,,11/11/1899,4715,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4715
+2218.0,CSM,Sequence,31,OFFICE-6,,Joel H,,11/11/1899,4716,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4716
+2218.0,CSM,Sequence,97.8,RAW WAREHOUSE Additional Anchor Bolts,,Joel H,,,4724,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4724
+2218.0,CSM,Sequence,97.9,Segment Areas A & D & Switch Gear Anchor Bolts,,Joel H,,,4725,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4725
+2218.0,CSM,Sequence,17,RAW WAREHOUSE (RAW-2)-T048 T049,,Joel H,,11/11/1899,4735,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4735
+2218.0,CSM,Sequence,19,RAW WAREHOUSE (RAW-4)-T050 T051 T052 T053,,Joel H,,11/11/1899,4736,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4736

@@ -1,0 +1,16 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2222,FED,Sequence,4,Chevy Chase - Stair Canopy ,,Mike D,,11/11/1899,4822,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4822
+2222,FED,Sequence,5,Chevy Chase - Egrees Stair,,Mike D,,11/11/1899,4823,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4823
+2222,FED,Sequence,6,Chevy Chase - Elevator & Trail connector Stair,,Mike D,,11/11/1899,4824,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4824
+2222,FED,Sequence,7,Bethesda Enclosed Trainway (BET) / Switchboard Room Slab Support Steel,,Mike D,,11/11/1899,4825,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4825
+2222,FED,Sequence,7.97,Bethesda BET/Jet Fan & OCS Anchor Rod & LP,,Mike D,,11/11/1899,4826,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4826
+2222,FED,Sequence,8,Silver Spring Transit Center - Platform,,Mike D,,11/11/1899,4827,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4827
+2222,FED,Sequence,9,Silver Spring Transit Center - Stair Framing,,Mike D,,11/11/1899,4828,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4828
+2222,FED,Sequence,10,Silver Spring Transit Center - Elevator,,Mike D,,11/11/1899,4829,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4829
+2222,FED,Sequence,11,Silver Spring - WMATA Mezz,,Mike D,,11/11/1899,4830,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4830
+2222,FED,Sequence,12,Riverdale Park - Platform,,Mike D,,11/11/1899,4831,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4831
+2222,FED,Sequence,13,Riverdale Park - West Stair Canopy,,Mike D,,11/11/1899,4832,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4832
+2222,FED,Sequence,14,Riverdale Park - West Elevator,,Mike D,,11/11/1899,4833,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4833
+2222,FED,Sequence,15,Riverdale Park - East Stair Canopy,,Mike D,,11/11/1899,4834,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4834
+2222,FED,Sequence,16,Riverdale Park - East Elevator,,Mike D,,11/11/1899,4835,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4835

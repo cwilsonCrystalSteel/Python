@@ -1,0 +1,6 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2125,FED,Sequence,1,Entrance Steel - Need Field Dims,7/11/2022,Scott,
+2125,FED,Sequence,1,C1012,9/22/2022,Scott,
+2125,FED,Sequence,99,Entrance Steel - PH-2125-139 Seq99 Shop and Fitting Drawings Rev0 ,6/15/2022,Scott,
+2125,FED,Sequence,99,Connections of North Tower Steel to existing Lines H&J LOT 15 6:30 delivery,5/13/2022,Scott,Yes

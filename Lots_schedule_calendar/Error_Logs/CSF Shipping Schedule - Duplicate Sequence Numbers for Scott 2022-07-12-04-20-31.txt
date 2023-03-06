@@ -1,0 +1,7 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2125,CSF,Sequence,73,AHU-3/4 Reno Work ,6/30/2022,Scott,YES
+2125,CSF,Sequence,73,DECK Seq 73 AHU 3/4,11/21/2022,Scott,
+2125,CSF,Sequence,97,Anchor Bolts,2/15/2022,Scott,Yes
+2125,CSF,Sequence,97,PH-2125-057 (Embeds),4/11/2022,Scott,Yes
+2125,CSF,Sequence,97,Embeds PH-2125-173 NP,7/11/2022,Scott,
