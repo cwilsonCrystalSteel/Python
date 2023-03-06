@@ -1,0 +1,5 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2121,CSM,Item,41,Galv'd picket rail w/handrail at football field house concrete stair,5/1/2023,John S,,3/13/2023,3065,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3065
+2121,CSM,Item,41,Continuous 1/4” thk steel cap at theatre seating kneewall (exclusion28),3/24/2023,John S,,2/3/2023,3117,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3117
+2121,CSM,Item,42,Raked Picket Guardrail at field house grandstand cmu walls,5/1/2023,John S,,3/13/2023,3066,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3066
