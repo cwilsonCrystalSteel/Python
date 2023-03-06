@@ -75,14 +75,39 @@ def run_attendance_hours_report(state):
     for start_dt in reversed_start_date_dict.keys():
         
         # get the start and end dates for the basis dict
-        start_date0 = start_dt.strftime("%m/%d/%Y")
-        end_date0 = (start_dt + datetime.timedelta(days=3)).strftime("%m/%d/%Y")
-        start_date1 = (start_dt + datetime.timedelta(days=4)).strftime("%m/%d/%Y")
+        # start_date0 = start_dt.strftime("%m/%d/%Y")
+        # end_date0 = (start_dt + datetime.timedelta(days=3)).strftime("%m/%d/%Y")
+        # start_date1 = (start_dt + datetime.timedelta(days=4)).strftime("%m/%d/%Y")
+        # end_dt = start_dt + datetime.timedelta(days=6)
+        # end_date1 = end_dt.strftime("%m/%d/%Y")
+        # # get the basis dict
+        # basis0 = get_information_for_clock_based_email_reports(start_date0, end_date0, exclude_terminated=False)    
+        # basis1 = get_information_for_clock_based_email_reports(start_date1, end_date1, exclude_terminated=False) 
+        
+        basis_dt = {}
         end_dt = start_dt + datetime.timedelta(days=6)
-        end_date1 = end_dt.strftime("%m/%d/%Y")
-        # get the basis dict
-        basis0 = get_information_for_clock_based_email_reports(start_date0, end_date0, exclude_terminated=False)    
-        basis1 = get_information_for_clock_based_email_reports(start_date1, end_date1, exclude_terminated=False) 
+        
+        
+        this_start_dt = start_dt + datetime.timedelta(days=0)
+        this_end_dt = this_start_dt + datetime.timedelta(days = 1)
+        this_start_date = this_start_dt.strftime("%m/%d/%Y")
+        this_end_date = this_end_dt.strftime("%m/%d/%Y")
+        basis0 = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=None) 
+        ei = basis0['Employee Information']
+        basis_dt[this_start_dt] = {'Direct':basis0['Direct'], 'Indirect':basis0['Indirect']}
+        basis = basis0.copy()
+        for i in range(1,(end_dt-start_dt).days+1):
+            this_start_dt = start_dt + datetime.timedelta(days=i)
+            this_end_dt = this_start_dt + datetime.timedelta(days = 1)
+            this_start_date = this_start_dt.strftime("%m/%d/%Y")
+            this_end_date = this_end_dt.strftime("%m/%d/%Y")
+            print(this_start_date, this_start_date)
+            # this is so that we don't have to get the ei every single time after the first time
+            this_basis = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=ei) 
+            basis['Direct'] = basis['Direct'].append(this_basis['Direct'], ignore_index=True)
+            basis['Indirect'] = basis['Indirect'].append(this_basis['Indirect'], ignore_index=True)    
+                    
+        
         # go through each state
         # for state in reversed_start_date_dict[start_dt]:
 
@@ -112,13 +137,15 @@ def run_attendance_hours_report(state):
         data = data.dropna()
         
         # get the employee information df
-        ei = basis0['Employee Information']
+        # ei = basis0['Employee Information']
+        ei = basis['Employee Information']
         # set the index to the employee name
         ei = ei.set_index('Name')
         # get all employees at that state
         ei = ei[ei['Productive'].str.contains(state)]
         # Get all the hours put into one df
-        hours = basis0['Direct'].append(basis0['Indirect']).append(basis1['Direct']).append(basis1['Indirect'])
+        # hours = basis0['Direct'].append(basis0['Indirect']).append(basis1['Direct']).append(basis1['Indirect'])
+        hours = basis['Direct'].append(basis['Indirect'])
         # get rid of the delete job codes 
         hours = hours[~hours['Job Code'].isin(code_changes['Delete Job Codes'])]
         # group by the index & sum
