@@ -1,5 +1,0 @@
-CSF
-2125-T122
-qbftpj9v40jb5mmas08v1lurh0
-LOT 2125-T122
-<a href="https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3381">Sequences: 31</a><br>(01/03/2023 08:44) Added to Calendar with delivery date: 01/14/2023<br>(01/05/2023 03:20) Sequences changed from [30, 31] to [31]<br>(01/05/2023 03:20) Sequence change caused date change from 01/14/2023 to 01/16/2023
