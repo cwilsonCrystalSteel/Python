@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004,CSM,Sequence,20.1.1,EAST BUSTLE SOUTH-4TH FLOOR - Area1 (Column)-T073 - 11.96 tons,2/14/2022,Patrick K,

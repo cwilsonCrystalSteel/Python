@@ -1,0 +1,4 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2212.0,FED,Sequence,17.1,Splice material for Seq 17 PH-2212-017,9/19/2022,John S,
+2212.0,FED,Sequence,17.1,Splice material for Seq 17 PH-2212-017,9/19/2022,John S,

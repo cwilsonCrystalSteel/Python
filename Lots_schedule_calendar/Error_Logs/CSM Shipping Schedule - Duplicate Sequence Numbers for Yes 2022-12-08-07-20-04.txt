@@ -1,0 +1,6 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,GoogleSheetRowNumber,GoogleSheetLink
+2009,CSM,Ticket,39,,0.02,Yes,,1472,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1472
+2009,CSM,Ticket,39,,0.00,Yes,8/30/2021,1473,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1473
+2009,CSM,Ticket,40,,0.12,Yes,,1474,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1474
+2009,CSM,Ticket,40,,0.26,Yes,10/18/2021,1475,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1475

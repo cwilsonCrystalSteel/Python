@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSM,Sequence,72.6,7:00 am Transfer from CSM to CSF LOT 34 Penthouse  ,9/22/2022,Scott,,8/4/2022,3133,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3133
+2125,CSM,Sequence,72.6,"LOT 34 Penthouse  NP, GALV Parapet Deliver to CSF",9/15/2022,Scott,Yes,7/28/2022,3288,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3288

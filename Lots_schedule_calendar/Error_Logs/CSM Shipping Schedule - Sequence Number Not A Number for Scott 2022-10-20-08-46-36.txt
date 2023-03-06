@@ -1,0 +1,20 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+1926,CSM,Sequence,1 (NEP),,12/21/2020,Scott,,476,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D476
+1926,CSM,Sequence,10 (SS),,6/7/2021,Scott,,477,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D477
+1926,CSM,Sequence,11 (SS),,6/16/2021,Scott,,478,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D478
+1926,CSM,Sequence,12 (SS),,6/27/2021,Scott,,479,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D479
+1926,CSM,Sequence,13 (SS),,6/28/2021,Scott,,480,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D480
+1926,CSM,Sequence,2 (NEP),,12/23/2020,Scott,,481,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D481
+1926,CSM,Sequence,3 (NEP),,12/24/2020,Scott,,482,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D482
+1926,CSM,Sequence,4 (NEP),,11/30/2020,Scott,,483,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D483
+1926,CSM,Sequence,5 (SS),,2/22/2021,Scott,,484,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D484
+1926,CSM,Sequence,6 (SS),,3/16/2021,Scott,,485,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D485
+1926,CSM,Sequence,7 (SS),,4/5/2021,Scott,,486,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D486
+1926,CSM,Sequence,8 (SS),,5/3/2021,Scott,,487,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D487
+1926,CSM,Sequence,9 (SS),,5/11/2021,Scott,,488,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D488
+1926,CSM,Sequence,97 (NEP),,,Scott,,489,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D489
+1926,CSM,Sequence,97 (SS),,7/14/2020,Scott,,490,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D490
+1926,CSM,Sequence,99 (NEP),,11/5/2020,Scott,,491,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D491
+1926,CSM,Sequence,99 (SEP),,5/1/2021,Scott,,492,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D492
+1926,CSM,Sequence,99 (SS),,3/29/2021,Scott,,493,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D493

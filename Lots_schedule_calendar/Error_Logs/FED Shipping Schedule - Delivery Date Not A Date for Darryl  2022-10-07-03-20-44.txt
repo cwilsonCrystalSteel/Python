@@ -1,0 +1,7 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2116,FED,Sequence,16.4,Balance - Renovation Work Area D - T028,,Darryl ,,,2573,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2573
+2116,FED,Sequence,36.5,Balance - Third Floor Renovation Work Area C - T038,,Darryl ,,,2645,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2645
+2116,FED,Sequence,44.3,PH-2116-083 Balance Third Floor Renovation Work Area C (T019),,Darryl ,,,2673,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2673
+2116,FED,Sequence,46.3,Balance - New Steel Area E - T024 & T025,,Darryl ,,,2680,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2680
+2116,FED,Sequence,47.2,Balance New Steel Area E - T025,,Darryl ,,,2683,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2683

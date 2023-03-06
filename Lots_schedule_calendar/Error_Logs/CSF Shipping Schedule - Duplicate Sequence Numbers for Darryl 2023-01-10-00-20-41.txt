@@ -1,0 +1,6 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSF,Item,21.1,Nosing North Tower Stair L/J Seq 8 1st Floor,2/27/2023,Darryl,,2/13/2023,3316,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3316
+2125,CSF,Item,21.1,Nosing North Tower Stair L/J Seq 53 10th Floor,3/7/2023,Darryl,,1/17/2023,3317,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3317
+2125,CSF,Item,3.1,Blalock Shaft Metal GRATING (Mech F & FA) 5th Floor Seq 26,2/27/2023,Darryl,,1/9/2023,3273,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3273
+2125,CSF,Item,3.1,Blalock Shaft Metal GRATING (Mech F & FA) 14th Floor Seq 62,4/3/2023,Darryl,,2/13/2023,3274,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3274

@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2028,CSF,Sequence,11.6,PH-2028-647: Added Per CSF RFI #411 Response,,Joel,,,1946,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1946
+2028,CSF,Sequence,42.1,PH-2028-648 (T238): Added Per RFI 01566 Conn. Detail,,Joel,,,1987,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1987

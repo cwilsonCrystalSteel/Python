@@ -1,0 +1,15 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2038,CSM,Item,1,Steel stairs at vomitory #2 and #3,7/29/2022,John S,
+2038,CSM,Sequence,1,"Lots T033-T036 T038, T039,T042,T044, T053-TO55",10/25/2021,John S,YES
+2038,CSM,Item,14,"4 line pipe rail ""security fence"" at exterior patio",8/1/2022,John S,
+2038,CSM,Ticket,14,Ticket #14 - L3x3 for Panels,6/1/2022,John S,yes
+2038,CSM,Ticket,15,Misc Missing Brace Matl,6/15/2022,John S,yes
+2038,CSM,Item,15,Ametco trash gate,9/1/2022,John S,
+2038,CSM,Item,16,"Steel tube at countertop (VIP BOX4-312B, Broadcast BOX 305 and 306)",6/1/2022,John S,yES
+2038,CSM,Ticket,16,Missing Base Angle for Wall Panels,7/18/2022,John S,
+2038,CSM,Item,7,3-liner guardrail at loading dock ramp and raised platform – BOTH SIDES,8/15/2022,John S,
+2038,CSM,Sequence,7,Seq. 7 LotsT075 - T082,1/20/2022,John S,Yes
+2038,CSM,Sequence,8,Lot T094 (Need Col C8005 on 2/28),3/8/2022,John S,YES
+2038,CSM,Ticket,8,Ticket #8 - Additional Bridging Angle,3/30/2022,John S,YES
+2038,CSM,Item,8,Roof access ladder at hatch (Buyout),7/30/2022,John S,

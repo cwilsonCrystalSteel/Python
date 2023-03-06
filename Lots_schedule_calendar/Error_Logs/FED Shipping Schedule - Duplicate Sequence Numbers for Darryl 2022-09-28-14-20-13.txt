@@ -1,0 +1,4 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2015.0,FED,Ticket,9,Additional Channels for Electircal Pipe Sleeves opening at level 1,,Darryl,,,1718,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1718
+2015.0,FED,Ticket,9,Stock Channels and Angles for Field Fix associated with a change order to the GC ,9/28/2022,Darryl,,,4369,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4369

@@ -1,0 +1,6 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2117,CSF,Sequence,7,Lot#04,10/18/2021,Mustafa,Yes
+2117,CSF,Sequence,7,PH2117-109,1/19/2022,Mustafa,Yes
+2117,CSF,Sequence,7,PH2117-126 4.3 HOURS_deliver with Ticket 2561-2117 and Ticket 2563-2117,3/18/2022,Mustafa,Yes
+2117,CSF,Sequence,7,Field Fix & Temp Support (1.3 T),2/1/2022,Mustafa,

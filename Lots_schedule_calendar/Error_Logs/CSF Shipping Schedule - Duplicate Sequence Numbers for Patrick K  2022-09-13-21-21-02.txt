@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2004,CSF,Sequence,35,Additional Decking at EMR Level,9/14/2022,Patrick K ,,

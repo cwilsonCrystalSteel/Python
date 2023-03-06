@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "production-dashboard-daily",
+  "private_key_id": "1568a4c99f1fbc1b6b5a06e8bd3e031b94901e2c",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDMd1yigopk48lf\nex/5ac5V1oic9eXq5dnMPFchqZ1m3epbHdJ2i+j1OfWQwRz/LtjdOLIb5RbgIMIX\nJ6SCAw75BYJGGQ3fQvN/XBoJ7d7jA/zJSRHmSrOXva3ry3+dqD07G39gKyQvDIIh\n/G7wTrd82wLU3Clkz21+rWqrowVdCq55C0NrGK0BG+hKgnuBJWlJSfv1Z89WnOii\n7zAwVtP+9/A8ipV1VdsG1J6oqSE5S+KpiJf60UvPeynm9gh/2LaR5nBPZSRhYEw6\nl5s5+I/hj/Obicu0MrS0uRRVp9BGGDpS7o0PV0bHr9c9jWLzLhDrMK8frp/zzgGG\nIQNgYbrjAgMBAAECggEAUPF13i3QjNUyXJa5FztgQFIQPhcIoJ/Cw5wloEFt+xGi\nG9UoAt8rZ508zkPs70bD+nvd4rYkArFlNNZwRTnhvQqFwqtbdwWhsMss0b517Kgg\n9Cx1phXvmAQyrHSgvjCioNonaFJb3jZU9BBjeMWo1Qg8zDimOG73eV08q9r7HhQN\nnxSb/2YbmoLBXMn9k9GKJfD1CtkgSPm7FNggErGXXSCY0Uk33bGQMwj41HwOGr8F\nnxuBlL6O0NWAq8KssGBVOWDmrkSdrZ/YtYwanc1q6ae7FbqBxfNoOiHgE9N3AVPp\n1nVuxDLcWo0tJB/CRfphUGM3nyLocvnC6MDq7Ir76QKBgQDvTZJfnd0Z3RRSEBl4\nxeR+lK4nUHY7lrkMeJBaYB6ZoAbYv/OFipjKUPTaaLRFwvrYoGrvM50CdK2aPm+m\nbfZvEsExeYouNLpPkHHsFE7IuLwnsz3GAUN0Qj5g3+VlpoxaAayBpzyrR7eAX8L+\nVZeZY/ivqofx69PmZ7BxeywNywKBgQDau4lHTXiQYvlYQbVdUHv1J7LqR7ToQZ/E\nC1sSWbuEBIJVMUX1A81NhqwtXFxCiDqvszDdLO8Shg2CszZwfECVjx6JACm7bXS9\nyCuIp/HUyQ9Ez5Gdn/pV95oSXuqaNwEIctpqtTcIy4NgWcm319yt3ACjRQiHmXjR\nImXvrHvkSQKBgQDHlTfmPWCBSKzBAKJt4wZ+N/zD10y0yDFP4GHsrkv3LstnDTjK\ngNyLqFd+rWLk6AiUkb59/9sMiEmd4kL2WLH203qDi+2eOeXFpCAPmKRYrhJnPgvg\nT391wCYMX9AQJobaLpk0jUmBRNAb5kJYIwTMLt/jiuPU9i4F9SbojqUgXwKBgAVj\nBPh6kfOMXHOt+pd3ufXJqoBWj8AAjby4Qt/q0dFogwUyF3T3SQEVxfvAAI2q6TcW\nhKeNyb19C6wiWb7fcH++bJQXKu/wvCVIXroY2L3Szct2CTIGlJW1aVf2enSd0iqx\nGWvzVo2i5XNkArHCYS7u8h0TQCiGwRD1dek3KD3xAoGAepq9ZXgVUqERzg7Fambn\n8DBkU5zeQHmQsd61cFygAF+64bAVt3IX/ax3pcUyDUgi9aSNERAJKQ0yDpBj54ap\nQWTlq3YdAnWAb9/qefdLDxGYgQvNge8zBr10gSQafpX33+Vizy/l5NkRGCwG6hFj\nxCzNIvy63FtBWNunJ9ladGI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "production-dashboard-daily@production-dashboard-daily.iam.gserviceaccount.com",
+  "client_id": "101767670631675751699",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/production-dashboard-daily%40production-dashboard-daily.iam.gserviceaccount.com"
+}

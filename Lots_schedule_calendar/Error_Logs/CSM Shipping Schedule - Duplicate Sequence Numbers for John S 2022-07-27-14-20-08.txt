@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2121,CSM,Item,58.1, Exterior loose lintel #385,7/19/2022,John S,yes,5/31/2022
+2121,CSM,Item,58.1,Bnt PL Lintel (58-MS167) Added per RFI 452,8/15/2022,John S,,

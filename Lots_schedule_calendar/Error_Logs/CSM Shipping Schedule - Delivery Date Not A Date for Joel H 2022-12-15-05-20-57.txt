@@ -1,0 +1,9 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2218,CSM,Sequence,16,RAW WAREHOUSE (RAW-1)-T042 T043 T044 T045 T046 T047,,Joel H,,11/11/1899,4743,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4743
+2218,CSM,Sequence,17,RAW WAREHOUSE (RAW-2)-T048 T049,,Joel H,,11/11/1899,4744,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4744
+2218,CSM,Sequence,18,RAW WAREHOUSE (RAW-3)-T050 T051,,Joel H,,11/11/1899,4745,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4745
+2218,CSM,Sequence,19,RAW WAREHOUSE (RAW-4)-T050 T051 T052 T053,,Joel H,,11/11/1899,4746,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4746
+2218,CSM,Sequence,20,RAW WAREHOUSE (RAW-5),,Joel H,,11/11/1899,4747,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4747
+2218,CSM,Sequence,97.8,RAW WAREHOUSE Additional Anchor Bolts,,Joel H,,,4757,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4757
+2218,CSM,Sequence,97.9,Segment Areas A & D & Switch Gear Anchor Bolts,,Joel H,,,4763,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4763

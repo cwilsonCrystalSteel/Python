@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2004,CSF,Sequence,10/5/22,Web reinforcement plates per Bulletin #26 - Release #1144,10/5/2022,Patrick K,,8/17/2022,1134,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1134
+2201,CSF,Sequence,,,,Patrick K,,11/11/1899,4463,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4463

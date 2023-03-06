@@ -1,0 +1,6 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2215.0,FED,Ticket,2,Ticket #02 - Leveling Plates Remakes ,02/22/2023,Patrick K,Yes,,4373,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4373
+2215.0,FED,Ticket,2,Seq2 - Added plate for roof davit  - Load on top of T005,2/7/2023,Patrick K,,,4644,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4644
+2215.0,FED,Ticket,3,150 EA. Standard OSHA Posts,2/24/2023,Patrick K,Yes,,4374,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4374
+2215.0,FED,Ticket,3,Seq2 - Added plate for roof davit  - Load on top of T006,2/14/2023,Patrick K,,,4645,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4645

@@ -1,0 +1,6 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+1926,CSM,Item,70,12 Fin PL's looking for a shared Load,8/16/2022,Scott,,494,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D494
+1926,CSM,Sequence,70,SS - Louvers Seq5-7,8/2/2022,Scott,,475,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D475
+2125,CSM,Sequence,72.6,"LOT 34 Penthouse  NP, GALV Parapet Deliver to CSF",9/15/2022,Scott,,3444,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3444
+2125,CSM,Sequence,72.6,7:00 am Transfer from CSM to CSF LOT 34 Penthouse  ,9/22/2022,Scott,,3246,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3246

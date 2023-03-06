@@ -1,0 +1,65 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2121,CSM,Item,35.1,Relieving angle,,John S,,,2970,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2970
+2217,CSM,Item,1,ST-1 (level 2 to roof),,John S,,11/11/1899,4334,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4334
+2217,CSM,Item,2,ST-2 (level B to level 20),,John S,,11/11/1899,4335,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4335
+2217,CSM,Item,3,ST-5 (covered entry level to level 3),,John S,,11/11/1899,4336,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4336
+2217,CSM,Item,4,ST-3 & ST-4 (level 1 to level 5),,John S,,11/11/1899,4337,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4337
+2217,CSM,Item,5,ST-6 (level 2.5M to level 3),,John S,,11/11/1899,4338,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4338
+2217,CSM,Item,6,ST-7 (level 3 to level 5),,John S,,11/11/1899,4339,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4339
+2217,CSM,Item,7,ST-8 (level B to level 1),,John S,,11/11/1899,4340,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4340
+2217,CSM,Item,8,Stair at Transformer Vault,,John S,,11/11/1899,4341,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4341
+2217,CSM,Item,9,Stair at Market,,John S,,11/11/1899,4342,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4342
+2217,CSM,Item,10,Picket guardrail with attached handrail and wall mounted handrail at loading dock concrete ramp.,,John S,,11/11/1899,4343,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4343
+2217,CSM,Item,11,Wall mounted handrail at motor court B [Callout 1] exterior concrete stair,,John S,,11/11/1899,4344,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4344
+2217,CSM,Item,12,Wall mounted handrail at riverside arcade concrete stair,,John S,,11/11/1899,4345,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4345
+2217,CSM,Item,13,Roof access ladder,,John S,,11/11/1899,4346,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4346
+2217,CSM,Item,14,PE-1 to PE-4 Elevator components,,John S,,11/11/1899,4347,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4347
+2217,CSM,Item,14.1,Sump pit cover and frame,,John S,,11/11/1899,4348,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4348
+2217,CSM,Item,14.2,Pit ladder,,John S,,11/11/1899,4349,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4349
+2217,CSM,Item,14.3,Hoist beam,,John S,,11/11/1899,4350,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4350
+2217,CSM,Item,14.4,Divider beam,,John S,,11/11/1899,4351,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4351
+2217,CSM,Item,14.5,Sill angle,,John S,,11/11/1899,4352,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4352
+2217,CSM,Item,14.6,Intermediate rail support,,John S,,11/11/1899,4353,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4353
+2217,CSM,Item,15,PE-5 & PE- 6 Elevator  components,,John S,,11/11/1899,4354,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4354
+2217,CSM,Item,15.1,Sump pit cover and frame,,John S,,11/11/1899,4355,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4355
+2217,CSM,Item,15.2,Pit ladder,,John S,,11/11/1899,4356,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4356
+2217,CSM,Item,15.3,Hoist beam,,John S,,11/11/1899,4357,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4357
+2217,CSM,Item,15.4,Divider beam,,John S,,11/11/1899,4358,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4358
+2217,CSM,Item,15.5,Sill angle,,John S,,11/11/1899,4359,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4359
+2217,CSM,Item,15.6,Intermediate rail support,,John S,,11/11/1899,4360,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4360
+2217,CSM,Item,16, FSAE-1 & FSAE-2 Elevator components,,John S,,11/11/1899,4361,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4361
+2217,CSM,Item,16.1,Sump pit cover and frame,,John S,,11/11/1899,4362,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4362
+2217,CSM,Item,16.2,Pit ladder,,John S,,11/11/1899,4363,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4363
+2217,CSM,Item,16.3,Hoist beam,,John S,,11/11/1899,4364,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4364
+2217,CSM,Item,16.4,Divider beam,,John S,,11/11/1899,4365,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4365
+2217,CSM,Item,16.5,Sill angle,,John S,,11/11/1899,4366,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4366
+2217,CSM,Item,16.6,Intermediate rail support,,John S,,11/11/1899,4367,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4367
+2217,CSM,Item,17,  SE-3 Elevator components,,John S,,11/11/1899,4368,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4368
+2217,CSM,Item,17.1,Sump pit cover and frame,,John S,,11/11/1899,4369,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4369
+2217,CSM,Item,17.2,Pit ladder,,John S,,11/11/1899,4370,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4370
+2217,CSM,Item,17.3,Hoist beam,,John S,,11/11/1899,4371,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4371
+2217,CSM,Item,17.4,Divider beam,,John S,,11/11/1899,4372,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4372
+2217,CSM,Item,17.5,Sill angle,,John S,,11/11/1899,4373,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4373
+2217,CSM,Item,17.6,Intermediate rail support,,John S,,11/11/1899,4376,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4376
+2217,CSM,Item,18,BOH vanity countertop steel support,,John S,,11/11/1899,4377,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4377
+2217,CSM,Item,19,CMU wall support,,John S,,11/11/1899,4378,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4378
+2217,CSM,Item,20,Brick relieving angle,,John S,,11/11/1899,4379,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4379
+2217,CSM,Item,21,Brick shelf angle,,John S,,11/11/1899,4380,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4380
+2217,CSM,Item,22,Brick hanger support,,John S,,11/11/1899,4381,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4381
+2217,CSM,Item,23,Window head hanger support,,John S,,11/11/1899,4382,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4382
+2217,CSM,Item,24,Cladding steel support along level 2 bar terrace and level 5 pool terrace,,John S,,11/11/1899,4383,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4383
+2217,CSM,Item,25,2” x 3/16” galvanized bar grating steel stair & platform and 2-liner guardrail,,John S,,11/11/1899,4384,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4384
+2217,CSM,Item,26,Steel bollard,,John S,,11/11/1899,4385,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4385
+2217,CSM,Item,27,Won door steel support,,John S,,11/11/1899,4386,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4386
+2217,CSM,Item,28,East screen wall and canopy steel framing,,John S,,11/11/1899,4387,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4387
+2217,CSM,Item,29,Separator beam at stair 1 & 2 shaft wall,,John S,,11/11/1899,4388,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4388
+2217,CSM,Item,30,Louver head brick angle lintel,,John S,,11/11/1899,4389,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4389
+2217,CSM,Item,31,Continuous angle support for glass rail at pool terrace,,John S,,11/11/1899,4390,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4390
+2217,CSM,Item,32,Louver head loose angle lintel,,John S,,11/11/1899,4391,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4391
+2217,CSM,Item,33,Brick loose angle lintel,,John S,,11/11/1899,4392,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4392
+2217,CSM,Item,34,Stair nosing at stair adjacent to service corridor,,John S,,11/11/1899,4393,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4393
+2217,CSM,Item,35,Embed plate at compactor rail,,John S,,11/11/1899,4394,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4394
+2217,CSM,Item,36,Embed angle at loading dock edge,,John S,,11/11/1899,4395,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4395
+2217,CSM,Item,37,"Embed plate for general use by GC (quantity given per SOW)
+PL 1/2""x12x1'-0"" w/ (4) 3/4""ØX6"" HD Studs (Galv.)(25 pcs)",,John S,,11/11/1899,4396,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4396

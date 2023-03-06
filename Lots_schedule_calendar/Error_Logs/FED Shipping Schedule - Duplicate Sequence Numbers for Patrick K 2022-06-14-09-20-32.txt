@@ -1,0 +1,4 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004,FED,Sequence,28.4,Area # 16 - Lot #T236 - 7.54 tons,7/5/2022,Patrick K,
+2004,FED,Sequence,28.4,Area #16 - (LOT #T232),7/11/2022,Patrick K,

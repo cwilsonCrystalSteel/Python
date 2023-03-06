@@ -1,0 +1,5 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2127,CSF,Sequence,10,"Lot 026, Deliver with Ticket 2560K - DELIVER AT 5:00 PM",8/22/2022,Mustafa,Yes,7/4/2022,3575,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3575
+2127,CSF,Sequence,10,PROCORE RELEASE_PH2127-230 LOT T035 4 hours,11/15/2022,Mustafa,,,3576,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3576
+2127,CSF,Sequence,10,DELIVER AT 5:00 PM Missing Pieces AS10007/B10021-10022-10029-10041,9/1/2022,Mustafa,Yes,#REF!,3577,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3577

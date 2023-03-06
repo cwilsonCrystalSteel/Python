@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125.0,CSF,Ticket,41,Thermal Pad Buyout 5 Pcs,10/24/2022,Scott,,,3507,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3507
+2125.0,CSF,Ticket,41,Thermal Pads - 5 pcs (Seq 12),10/24/2022,Scott,,9/5/2022,3509,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3509

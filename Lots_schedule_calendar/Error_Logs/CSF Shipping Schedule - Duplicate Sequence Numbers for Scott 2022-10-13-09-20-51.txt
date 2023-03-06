@@ -1,0 +1,10 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSF,Sequence,41,Level 8,12/23/2022,Scott,,11/4/2022,3335,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3335
+2125,CSF,Sequence,41,South Tower - Column Reinforcement & Braces,1/6/2022,Scott,Yes,11/18/2021,3367,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3367
+2125,CSF,Sequence,72,930 AM Delivery Balance of Seq 72 PAINTED/NON-PAINTED PLUS SHOPWORK BEAMSTONNAGE IS A GUESS,9/23/2022,Scott,Yes,8/5/2022,3086,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3086
+2125,CSF,Sequence,72,Balance of Seq 72 GALVANIZED TONNAGE IS A GUESS,9/29/2022,Scott,Yes,8/11/2022,3087,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3087
+2125,CSF,Sequence,72,Balance of Seq 72 PARAPET STEEL TONNAGE IS A GUESS,9/29/2022,Scott,Yes,8/11/2022,3088,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3088
+2125,CSF,Sequence,72,Balance of 72 - TWO LOADS - traffic to check,9/29/2022,Scott,Yes,8/11/2022,3288,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3288
+2125,CSF,Sequence,72,PH-2125-356 Bent PL,10/14/2022,Scott,,8/26/2022,3352,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3352
+2125,CSF,Sequence,72,Penthouse,8/22/2022,Scott,Yes,7/4/2022,3381,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3381

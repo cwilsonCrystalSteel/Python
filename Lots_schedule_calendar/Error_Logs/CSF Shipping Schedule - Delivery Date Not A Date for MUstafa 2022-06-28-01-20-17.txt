@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2127.0,CSF,Ticket,9,Added Bent plates for Seq2&3 field fix,,MUstafa,
+2127.0,CSF,Ticket,10,"Added Shear Plates for seq4,6,&8 field fixes",,MUstafa,

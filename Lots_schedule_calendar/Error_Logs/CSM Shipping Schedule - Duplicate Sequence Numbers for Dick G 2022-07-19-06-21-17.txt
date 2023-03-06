@@ -1,0 +1,9 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2142,CSM,Sequence,1,Sector 1,9/7/2022,Dick G,
+2142,CSM,Item,14,Bollard at signage @ Satellite concourse,10/23/2022,Dick G,
+2142,CSM,Item,15,Exterior bollard @ Shuttle station,10/23/2022,Dick G,
+2142,CSM,Item,16,Infrared curtain steel post support at entry club @ Satellite concourse,10/23/2022,Dick G,
+2142,CSM,Item,7,Toilet partition steel support ,11/13/2022,Dick G,
+2142,CSM,Sequence,7,Misc Scope Added Items,8/1/2022,Dick G,
+2142,CSM,Item,8, Steel support at lavatory and knee guard wall ,11/13/2022,Dick G,

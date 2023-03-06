@@ -1,0 +1,10 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2218,CSM,Sequence,7.1,,,Joel H,,11/11/1899,4764,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4764
+2218,CSM,Sequence,7.2,,,Joel H,,11/11/1899,4765,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4765
+2218,CSM,Sequence,8.1,,,Joel H,,11/11/1899,4767,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4767
+2218,CSM,Sequence,9.1,,,Joel H,,11/11/1899,4769,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4769
+2218,CSM,Sequence,20,RAW WAREHOUSE (RAW-5),,Joel H,,11/11/1899,4780,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4780
+2218,CSM,Sequence,21.1,,,Joel H,,11/11/1899,4782,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4782
+2218,CSM,Sequence,97.8,RAW WAREHOUSE Additional Anchor Bolts,,Joel H,,,4791,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4791
+2218,CSM,Sequence,97.11,,,Joel H,,11/11/1899,4793,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4793

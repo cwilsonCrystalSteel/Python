@@ -1,0 +1,66 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2116,FED,Sequence,10,Second Floor Renovation Work - Lanham Connector,,Darryl,,11/11/1899
+2116,FED,Sequence,11.1,PH-2116-049  (LOT T016) Second Floor Renovation Work Area C,,Darryl,,11/11/1899
+2116,FED,Sequence,11.2,Balance - Second Floor Renovation Work Area C,,Darryl,,11/11/1899
+2116,FED,Sequence,12.2,PH-2116-049 (LOT T016) Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,12.3,Balance - Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,13.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,13.2,Balance - Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,14.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,14.2,Balance - Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,15.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,15.2,Balance - Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,16,PH-2116-049 (LOT T016) Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,16.1,Balance - Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,18.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,19.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,20.1,PH-2116-049  (T016) Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,21.2,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,21.3,Balance - Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,22.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,22.2,Balance - Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,23.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,23.2,Balance -  Second Floor Renovation Work Area D - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,24.1,Balance Renovation Work Area E,,Darryl,,
+2116,FED,Sequence,26.2,Balance Renovation Work Area E,,Darryl,,
+2116,FED,Sequence,27.2,Balance Renovation Work Area E,,Darryl,,
+2116,FED,Sequence,28.2,Balance Renovation Work Area E,,Darryl,,
+2116,FED,Sequence,29.2,Balance Renovation Work Area E,,Darryl,,
+2116,FED,Sequence,31,Third Floor Renovation Work - Lanham Connector,,Darryl,,11/11/1899
+2116,FED,Sequence,32.1,Balance Renovation Work Area C ,,Darryl,,
+2116,FED,Sequence,33.2,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,
+2116,FED,Sequence,34.1,Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,35.1,Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,36.2,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,
+2116,FED,Sequence,37.2,Balance Third Floor Renovation Work Area D - Perimeter,,Darryl,,
+2116,FED,Sequence,39.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,40.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,41.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,42.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,43.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,44.1,Balance Third Floor Renovation Work Area C - Perimeter,,Darryl,,11/11/1899
+2116,FED,Sequence,46.1,PH-2116-049 (LOT T016) New Steel Area E,,Darryl,,11/11/1899
+2116,FED,Sequence,46.2,Balance New Steel Area E,,Darryl,,
+2116,FED,Sequence,47,PH-2116-049 (LOT T016) New Steel Area E,,Darryl,,11/11/1899
+2116,FED,Sequence,47.1,Balance New Steel Area E,,Darryl,,
+2116,FED,Sequence,49,Roof Renovation Work - Lanham Connector,,Darryl,,11/11/1899
+2116,FED,Sequence,50.1,Balance Roof Renovation Work Area C ,,Darryl,,11/11/1899
+2116,FED,Sequence,51.2,Balance Roof Renovation Work Area C ,,Darryl,,
+2116,FED,Sequence,52.2,Balance Roof Renovation Work Area C ,,Darryl,,
+2116,FED,Sequence,53,Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,54.1,PH-2116-049 (LOT T016) Roof Renovation Work Area C,,Darryl,,11/11/1899
+2116,FED,Sequence,54.2,Balance Roof Renovation Work Area C,,Darryl,,
+2116,FED,Sequence,55.1,Balance Roof Renovation Work Area C,,Darryl,,11/11/1899
+2116,FED,Sequence,56.1,Balance Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,57.1,PH-2116-049 (LOT T016) Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,57.2,Balance Roof Renovation Work Area D,,Darryl,,
+2116,FED,Sequence,58.1,Balance Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,59.1,Balance Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,60,Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,61.1,Balance Roof Renovation Work Area D,,Darryl,,11/11/1899
+2116,FED,Sequence,62,Renovation Work Areas C & D,,Darryl,,11/11/1899
+2116,FED,Sequence,63.1,Balance Roof Renovation Work Area E,,Darryl,,11/11/1899
+2116,FED,Sequence,64.1,Balance Roof Renovation Work Area E,,Darryl,,11/11/1899
+2116,FED,Sequence,65.1,PH-2116-049 (LOT T016) Roof Renovation Work Area E,,Darryl,,11/11/1899
+2116,FED,Sequence,65.2,Balance Roof Renovation Work Area E,,Darryl,,

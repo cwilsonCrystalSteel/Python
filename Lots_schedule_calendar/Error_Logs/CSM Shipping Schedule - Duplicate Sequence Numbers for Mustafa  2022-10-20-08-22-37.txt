@@ -1,0 +1,46 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+2216,CSM,Sequence,1,"T001, T003, T013",11/15/2022,Mustafa ,,4165,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4165
+2216,CSM,Sequence,10,T015 T016,12/8/2022,Mustafa ,,4175,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4175
+2216,CSM,Sequence,11,T017,12/8/2022,Mustafa ,,4176,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4176
+2216,CSM,Sequence,12,"T004, T018",12/12/2022,Mustafa ,,4177,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4177
+2216,CSM,Sequence,13,T017,12/12/2022,Mustafa ,,4178,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4178
+2216,CSM,Sequence,14,T017,12/14/2022,Mustafa ,,4179,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4179
+2216,CSM,Sequence,15,"T017, T019",12/19/2022,Mustafa ,Missing W33X130x52'- FED AS15004-T019,4180,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4180
+2216,CSM,Sequence,16,T019,12/21/2022,Mustafa ,,4181,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4181
+2216,CSM,Sequence,17,"T019, T034",12/27/2022,Mustafa ,,4182,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4182
+2216,CSM,Sequence,18,"T019, T020",1/6/2023,Mustafa ,,4183,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4183
+2216,CSM,Sequence,19,T020,1/6/2023,Mustafa ,Missing W33X130- FED AS19002-T020,4184,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4184
+2216,CSM,Sequence,2,"T002, T003, T013",11/16/2022,Mustafa ,,4166,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4166
+2216,CSM,Sequence,20,T020,1/9/2023,Mustafa ,,4185,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4185
+2216,CSM,Sequence,21,T020,1/17/2023,Mustafa ,,4186,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4186
+2216,CSM,Sequence,22,"T023, T029, T035",11/1/2022,Mustafa ,,4188,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4188
+2216,CSM,Sequence,23,"T023, T029, T035",11/1/2022,Mustafa ,,4189,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4189
+2216,CSM,Sequence,24,T076,1/19/2023,Mustafa ,,4190,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4190
+2216,CSM,Sequence,25,T077,1/23/2023,Mustafa ,,4191,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4191
+2216,CSM,Sequence,27,T077 T078,1/25/2023,Mustafa ,,4193,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4193
+2216,CSM,Sequence,28,T024 T030 T035,11/1/2022,Mustafa ,,4194,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4194
+2216,CSM,Sequence,29,T024  T030 T035,11/1/2022,Mustafa ,,4195,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4195
+2216,CSM,Sequence,3,"T002, T013",11/17/2022,Mustafa ,,4167,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4167
+2216,CSM,Sequence,30,T031 T035,11/7/2022,Mustafa ,,4196,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4196
+2216,CSM,Sequence,31,T079,1/27/2023,Mustafa ,,4197,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4197
+2216,CSM,Sequence,32,T080,1/31/2023,Mustafa ,,4198,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4198
+2216,CSM,Sequence,33,T080,2/1/2023,Mustafa ,,4199,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4199
+2216,CSM,Sequence,34,T032,11/7/2022,Mustafa ,,4200,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4200
+2216,CSM,Sequence,36,T081,2/2/2023,Mustafa ,,4201,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4201
+2216,CSM,Sequence,37,T082,2/3/2023,Mustafa ,OFA,4202,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4202
+2216,CSM,Sequence,38,T038,11/21/2022,Mustafa ,,4203,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4203
+2216,CSM,Sequence,39,T039,11/28/2022,Mustafa ,,4204,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4204
+2216,CSM,Sequence,4,T014,11/22/2022,Mustafa ,,4168,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4168
+2216,CSM,Sequence,40,T039,11/29/2022,Mustafa ,,4275,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4275
+2216,CSM,Sequence,41,T040,11/30/2022,Mustafa ,,4205,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4205
+2216,CSM,Sequence,42,T046,12/2/2022,Mustafa ,,4206,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4206
+2216,CSM,Sequence,6,T014,11/28/2022,Mustafa ,,4170,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4170
+2216,CSM,Sequence,61,"T027, T033",11/15/2022,Mustafa ,,4225,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4225
+2216,CSM,Item,61,PH-2216-061: Added per SW - RFI Sketch#260A  Response-On Top of T003,11/15/2022,Mustafa ,,4187,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4187
+2216,CSM,Sequence,68,,1/9/2023,Mustafa ,,4232,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4232
+2216,CSM,Sequence,7,T014,11/30/2022,Mustafa ,,4171,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4171
+2216,CSM,Sequence,70,,1/16/2023,Mustafa ,,4234,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4234
+2216,CSM,Sequence,8,"T005, T015 T074",12/5/2022,Mustafa ,,4172,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4172
+2216,CSM,Ticket,9,PH-2216-113:Added per SW,,Mustafa ,,4174,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4174
+2216,CSM,Sequence,9,T016,12/7/2022,Mustafa ,,4173,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4173
