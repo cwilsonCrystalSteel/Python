@@ -12,7 +12,9 @@ pydir = 'c://users/cwilson/documents/python/'
 # all the files within the directory
 files = [y for x in os.walk(pydir) for y in glob.glob(os.path.join(x[0], '*.py'))]
 # function/string to find within the python files
-function_name_as_str = "history_csv"
+
+function_name_as_str = "JTURNER"
+
 
 print('The string in question:\t\t"' + function_name_as_str + '"', end='\n\n')
 
