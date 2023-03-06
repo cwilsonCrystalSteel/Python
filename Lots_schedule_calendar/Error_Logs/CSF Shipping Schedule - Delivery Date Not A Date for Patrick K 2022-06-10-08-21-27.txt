@@ -1,0 +1,14 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004,CSF,Sequence,3,,,Patrick K,
+2004,CSF,Sequence,5.6,5F,,Patrick K,
+2004,CSF,Sequence,8,,,Patrick K,
+2004,CSF,Sequence,16,,,Patrick K,
+2004,CSF,Sequence,20,,,Patrick K,
+2004,CSF,Sequence,21,,,Patrick K,
+2004,CSF,Sequence,22,,,Patrick K,
+2004,CSF,Sequence,24,,,Patrick K,
+2004,CSF,Sequence,25,,,Patrick K,
+2004,CSF,Sequence,26,,,Patrick K,
+2004,CSF,Sequence,27,,,Patrick K,
+2004,CSF,Sequence,35,,,Patrick K,

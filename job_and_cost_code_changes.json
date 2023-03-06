@@ -1,0 +1,34 @@
+{
+	"Indirect Cost Codes":
+		["300 REVISIONS",
+		"400 TRUCKING",
+		"425 TRANSFERS OUT",
+		"450 WORK FOR OTHERS",
+		"760 CSF REPAIR WORK",
+		"770 FED REPAIR WORK",
+		"780 CSM REPAIR WORK"],
+	"Indirect Job Codes":
+		["1626 - Federalsburg Plant Improvement",
+		"302001 - Yard upgrade/concrete dun",
+		"302002 - Trans&Rollover conveyors",
+		"302003 - Overton paint shop clean up",
+		"302004 - Overton Paint shop cranes",
+		"302005 - Overton Paint shop Blaster",
+		"302006 - Overton Paint Fix,jigs &power",
+		"302101 - Shot Blast Machine Overton",
+		"302107 - PEDDINGHAUS PLATE PROCESSOR",
+		"302103 - Skid Project",
+		"152002 - New Blast Building"],
+	"Delete Job Codes":
+		["647 - Unexcused Absence",
+		"648 - Unpaid time off request",
+	    "649 - PTO (Office)",
+	    "650 - PTO (Shop)",
+	    "651 - Holiday",
+		"653 - Bereavement",
+	    "654 - Work Comp",
+	    "656 - Emergency Paid Leave"],
+	"Direct Job Codes":
+		["200 - Quality Control",
+		"250 - RECEIVING / STEEL BAY"]
+}

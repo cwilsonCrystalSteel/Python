@@ -1,0 +1,5 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2009,CSM,Ticket,36,Aluminum Vent Plugs ,11/15/2021,Darryl ,Yes
+2009,CSM,Ticket,39,PH-2009-599: Added Plates for Field Welding per SK-1,,Darryl ,Yes
+2009,CSM,Ticket,40,PH-2009-601: Added Per RFI 827 Response,,Darryl ,Yes

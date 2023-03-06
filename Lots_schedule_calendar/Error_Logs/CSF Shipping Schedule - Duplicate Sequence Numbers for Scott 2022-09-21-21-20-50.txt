@@ -1,0 +1,13 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 1 NP, SC, and G
+",9/6/2022,Scott,Yes,7/19/2022,3117,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3117
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 2 NP, SC, and G
+",9/16/2022,Scott,Yes,7/29/2022,3118,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3118
+2125,CSF,Sequence,71,"7:00 AM Seq 71 Priority 3 NP, SC, and G
+",9/26/2022,Scott,,8/8/2022,3119,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3119
+2125,CSF,Sequence,71,DO NOT DEL- Seq 71 East Shaft Reno Work  (155.41) (Balance) (18 Tons/126 PCS),9/14/2022,Scott,Yes,7/27/2022,3245,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3245
+2125,CSF,Sequence,72,1:00pm Delivery Balance of Seq 72 PAINTED/NON-PAINTED PLUS SHOPWORK BEAMSTONNAGE IS A GUESS,9/22/2022,Scott,,,2987,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2987
+2125,CSF,Sequence,72,Balance of Seq 72 GALVANIZED TONNAGE IS A GUESS,9/29/2022,Scott,,,2988,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2988
+2125,CSF,Sequence,72,Balance of Seq 72 PARAPET STEEL TONNAGE IS A GUESS,9/29/2022,Scott,,,2989,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2989
+2125,CSF,Sequence,72,Penthouse,8/22/2022,Scott,Yes,7/4/2022,3252,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3252

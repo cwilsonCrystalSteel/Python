@@ -1,0 +1,20 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+1826,CSF,Sequence,10,,3/24/2020,Joel,yes
+1826,CSF,Sequence,10,PH-1826-301,7/30/2020,Joel,Yes
+1826,CSF,Sequence,10,PH-1826-303,7/30/2020,Joel,Yes
+1826,CSF,Sequence,10,10 & 19,9/14/2020,Joel,Yes
+1826,CSF,Sequence,10,10 & 11  (PH-1826-341),11/23/2020,Joel,Yes
+1826,CSF,Sequence,11,,4/1/2020,Joel,Yes
+1826,CSF,Sequence,11,PH-1826-330,CANCEL,Joel,Yes
+1826,CSF,Sequence,19,PH-1826-231,5/15/2020,Joel,Yes
+1826,CSF,Sequence,19,,5/28/2020,Joel,Yes
+1826,CSF,Sequence,19,  PH-1826-395,6/30/2021,Joel,Yes
+1826,CSF,Sequence,3,,3/2/2020,Joel,Yes
+1826,CSF,Sequence,3,PH-1826-179,3/10/2020,Joel,Yes
+1826,CSF,Sequence,97,AR,8/14/2019,Joel,yes
+1826,CSF,Sequence,97,LPs/TPs,8/23/2019,Joel,yes
+1826,CSF,Sequence,97,EM,8/29/2019,Joel,Yes
+1826,CSF,Sequence,97,LPs PH-1826-035,10/11/2019,Joel,yes
+1826,CSF,Sequence,97, EM / Item #2 EM,11/27/2019,Joel,yes
+1826,CSF,Sequence,97,LPs PH-1826-112,1/24/2020,Joel,Yes

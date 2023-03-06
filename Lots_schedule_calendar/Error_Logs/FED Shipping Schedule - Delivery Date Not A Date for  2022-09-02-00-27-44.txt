@@ -1,0 +1,6 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004.0,FED,Sequence,52,Grating Infills (multiple levels),,,
+2004.0,FED,Sequence,53,Web reinforcement plates per Bulletin #26,,,
+2004.0,FED,Sequence,55,Stair support @ 1st Floor-South,,,
+2004.0,FED,Sequence,56,32nd Street Entrance Canopy Support,,,

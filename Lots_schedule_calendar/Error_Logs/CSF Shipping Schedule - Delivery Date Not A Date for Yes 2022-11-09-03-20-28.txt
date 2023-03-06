@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+2020.0,CSF,Ticket,18,,1.29,Yes,,1868,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1868
+2020.0,CSF,Ticket,23,,0.38,Yes,,1871,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1871

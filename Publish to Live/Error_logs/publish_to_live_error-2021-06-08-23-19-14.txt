@@ -1,0 +1,106 @@
+MD
+<!DOCTYPE html>
+<html lang=en>
+  <meta charset=utf-8>
+  <meta name=viewport content="initial-scale=1, minimum-scale=1, width=device-width">
+  <title>Error 502 (Server Error)!!1</title>
+  <style>
+    *{margin:0;padding:0}html,code{font:15px/22px arial,sans-serif}html{background:#fff;color:#222;padding:15px}body{margin:7% auto 0;max-width:390px;min-height:180px;padding:30px 0 15px}* > body{background:url(//www.google.com/images/errors/robot.png) 100% 5px no-repeat;padding-right:205px}p{margin:11px 0 22px;overflow:hidden}ins{color:#777;text-decoration:none}a img{border:0}@media screen and (max-width:772px){body{background:none;margin-top:0;max-width:none;padding-right:0}}#logo{background:url(//www.google.com/images/branding/googlelogo/1x/googlelogo_color_150x54dp.png) no-repeat;margin-left:-5px}@media only screen and (min-resolution:192dpi){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat 0% 0%/100% 100%;-moz-border-image:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) 0}}@media only screen and (-webkit-min-device-pixel-ratio:2){#logo{background:url(//www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png) no-repeat;-webkit-background-size:100% 100%}}#logo{display:inline-block;height:54px;width:150px}
+  </style>
+  <a href=//www.google.com/><span id=logo aria-label=Google></span></a>
+  <p><b>502.</b> <ins>That’s an error.</ins>
+  <p>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.  <ins>That’s all we know.</ins>
+
+--- Start of the Variables ---
+
+__annotations__
+
+__builtins__
+
+__cached__
+
+__doc__
+
+__file__
+
+__loader__
+
+__name__
+
+__package__
+
+__spec__
+
+__warningregistry__
+
+cell
+
+col
+
+count
+
+datetime
+
+e
+
+gather_states_data
+
+good_to_run
+
+gspread
+
+i
+
+init_google_sheet
+
+j
+
+last_date
+
+last_datetime
+
+last_time
+
+letter
+
+level
+
+live_output_google_sheets_key
+
+number
+
+right_now
+
+right_now_date
+
+right_now_time
+
+row
+
+sh
+
+sheet_name
+
+state
+
+state_data
+
+states
+
+sys
+
+time
+
+totals
+
+totals_lists
+
+update_history
+
+val
+
+value
+
+worksheet
+
+x

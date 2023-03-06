@@ -1,0 +1,3 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2004,FED,Sequence,3.7,3C Plates -East of Cols. @ 31 Line (T261) ,,Patrick K,,

@@ -1,0 +1,18 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2116,FED,Sequence,50.1,Balance Roof Renovation Work Area C (T025 & T026),,Darryl,,11/11/1899
+2116,FED,Sequence,51.2,Balance Roof Renovation Work Area C (T026),,Darryl,,11/11/1899
+2116,FED,Sequence,52.2,Balance Roof Renovation Work Area C (T026),,Darryl,,11/11/1899
+2116,FED,Sequence,53,Renovation Work Area D (T026),,Darryl,,11/11/1899
+2116,FED,Sequence,54.2,Balance Roof Renovation Work Area C (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,55.1,Balance Roof Renovation Work Area C (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,56.1,Balance Roof Renovation Work Area D (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,57.2,Balance Roof Renovation Work Area D (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,58.1,Balance Roof Renovation Work Area D (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,59.1,Balance Roof Renovation Work Area D (T027),,Darryl,,11/11/1899
+2116,FED,Sequence,60,Roof Renovation Work Area D (T028),,Darryl,,11/11/1899
+2116,FED,Sequence,61.1,Balance Roof Renovation Work Area D (T028),,Darryl,,11/11/1899
+2116,FED,Sequence,62,Renovation Work Areas C & D (T028),,Darryl,,11/11/1899
+2116,FED,Sequence,63.1,Balance Roof Renovation Work Area E (T028),,Darryl,,11/11/1899
+2116,FED,Sequence,64.1,Balance Roof Renovation Work Area E (T028),,Darryl,,11/11/1899
+2116,FED,Sequence,65.2,Balance Roof Renovation Work Area E (T029),,Darryl,,11/11/1899

@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2127.0,CSF,Ticket,18,Added Plates for bent plate gaps field fix at Tower Building (Seq1),,Mustafa,,11/11/1899

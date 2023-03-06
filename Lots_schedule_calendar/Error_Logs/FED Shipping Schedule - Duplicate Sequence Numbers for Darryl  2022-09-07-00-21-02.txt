@@ -1,0 +1,45 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2128.0,FED,Sequence,1,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+2015.0,FED,Ticket,1,Hilti Items Missing at FED / Have to reorder.,8/2/2022,Darryl ,Missing Material Off Delivery
+2128.0,FED,Ticket,1,Material for ECSF due to plasma table restrictions ,9/8/2022,Darryl ,
+1932.0,FED,Ticket,1,Shims. Change Order to the GC forthcoming.,2/22/2022,Darryl ,
+2128.0,FED,Sequence,10,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-064",7/25/2022,Darryl ,
+2128.0,FED,Sequence,11,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-064",7/25/2022,Darryl ,
+2128.0,FED,Sequence,13,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-064",7/25/2022,Darryl ,
+2128.0,FED,Sequence,15,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+ Advance Thick Plates: PH-2128-073 ",7/25/2022,Darryl ,
+2128.0,FED,Sequence,18,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-057",7/25/2022,Darryl ,
+2128.0,FED,Sequence,2,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+2015.0,FED,Ticket,2,Replacement angles. Concrete Sub Error ,8/2/2022,Darryl ,
+2128.0,FED,Sequence,20,"1"" thk Angles : PH-2128-153
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-057",7/25/2022,Darryl ,
+2128.0,FED,Sequence,3,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+2128.0,FED,Sequence,4,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+2128.0,FED,Sequence,5,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+1932.0,FED,Ticket,5,Aluminum Plugs for vent holes. ,4/8/2022,Darryl ,
+2128.0,FED,Sequence,6,"Advance Thick Plates: PH-2128-029
+1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-040",7/25/2022,Darryl ,
+2128.0,FED,Sequence,7,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-051",7/25/2022,Darryl ,
+2128.0,FED,Sequence,8,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+ Advance Thick Plates: PH-2128-073 
+Advance Thick Plates: PH-2128-051",7/25/2022,Darryl ,
+2128.0,FED,Sequence,9,"1"" thk  Bent Plate & Angle: PH-2128-129_PH-2128-154
+Advance Thick Plates: PH-2128-051",7/25/2022,Darryl ,

@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2117.0,CSF,Ticket,97,Plate Washers for OS Holes - South Canopy,7/26/2022,Darryl,,

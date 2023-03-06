@@ -1,0 +1,3 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2004.0,FED,Ticket,35.6,WTs & Plates per Bulletin# 25 (06.65 Tons) - rel. PH-2004-1140,,Patrick K ,,,1063,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1063

@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2107,CSM,Item,1.1,PH-2107-102  4-C3x4.1 Titan Fix,6/1/2022,Dick G,Yes,4/13/2022
+2107,CSM,Item,1.1,PH-2107-106 Clip Angles with bolts,8/25/2022,Dick G,,

@@ -1,0 +1,4 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2116,FED,Sequence,23.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,8/15/2022,Darryl,,6/27/2022
+2116,FED,Sequence,23.1,PH-2116-049 (LOT T016) Second Floor Renovation Work Area D - Perimeter,8/15/2022,Darryl,,

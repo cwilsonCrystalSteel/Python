@@ -1,0 +1,2 @@
+CSF
+'NoneType' object has no attribute 'copy'

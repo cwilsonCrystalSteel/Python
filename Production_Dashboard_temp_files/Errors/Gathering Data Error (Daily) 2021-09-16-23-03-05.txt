@@ -1,0 +1,27 @@
+Daily
+{'code': 500, 'message': 'Internal error encountered.', 'status': 'INTERNAL'}
+--- Start of the Variables ---
+
+base_data
+
+dashboard_name
+
+dashboard_options
+
+download_base
+
+download_folder
+
+e
+
+end_date
+
+json_file
+
+key
+
+start_date
+
+states
+
+today

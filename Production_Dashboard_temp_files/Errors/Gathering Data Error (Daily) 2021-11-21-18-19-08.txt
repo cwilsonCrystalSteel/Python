@@ -1,0 +1,27 @@
+Daily
+You are trying to merge on object and float64 columns. If you wish to proceed you should use pd.concat
+--- Start of the Variables ---
+
+base_data
+
+dashboard_name
+
+dashboard_options
+
+download_base
+
+download_folder
+
+e
+
+end_date
+
+json_file
+
+key
+
+start_date
+
+states
+
+today

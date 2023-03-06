@@ -1,0 +1,5 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2143,CSM,Sequence,33.2,,,Neil Kaufman,,11/11/1899
+2143,CSM,Sequence,33.3,,,Neil Kaufman,,11/11/1899
+2143,CSM,Sequence,33.4,,,Neil Kaufman,,11/11/1899

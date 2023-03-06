@@ -1,0 +1,8 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+1927.0,FED,,1 - Rel #146,,5/25/2020,Patrick K,
+1927.0,FED,,1 - Release #160,,5/27/2020,Patrick K,
+1927.0,FED,,Seq 1 Release #166,,6/10/2020,Patrick K,
+1927.0,FED,,Seq 2 Release #167,,6/16/2020,Patrick K,
+2004.0,FED,Sequence,20.1.1,EAST BUSTLE SOUTH - 4TH FLOOR - Area1 (T065) - 15.82 tons,3/29/2022,Patrick K,
+2004.0,FED,Sequence,5.7.1,5F-PLAZA Plates (Add'l Strap Plates) LOT #140/PH-2004-559,5/13/2022,Patrick K,

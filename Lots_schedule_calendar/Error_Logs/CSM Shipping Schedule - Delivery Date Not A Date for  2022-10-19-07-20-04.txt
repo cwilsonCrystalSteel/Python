@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2121,CSM,Ticket,21,Seq5 Added Bent Plate per Shopcall (Stair#17 Glazing Support),,,,,3104,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3104

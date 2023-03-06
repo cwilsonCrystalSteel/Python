@@ -1,0 +1,174 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+2218,CSM,Sequence,1,EXTRACTOR PIT (EP-1)-T001 T002 T008 T009 T013 T017 T018,10/3/2022,,Yes,4493,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4493
+2121,CSM,Ticket,1,ASI 22 Precast support angles,4/1/2022,,Yes,3081,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3081
+2121,CSM,Sequence,1,Level 1 (Area C&D 1st to 2nd flr)-LOT#T001,10/12/2021,,Yes,3099,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3099
+2107,CSM,Sequence,1,,6/10/2021,,Yes,2457,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2457
+2142,CSM,Ticket,1,New Beam Mk: B5045 (replacement for damage B5032),8/29/2022,,Yes,3895,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3895
+2216,CSM,Sequence,1,"T001, T003, T013",11/15/2022,,,4165,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4165
+2107,CSM,Ticket,1, Fall Arrest,10/19/2022,,,2469,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2469
+2207,CSM,Sequence,1,New Building,11/2/2022,,,3995,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3995
+2217,CSM,Sequence,1,Sequence 1 ,7/10/2023,,,4404,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4404
+2217,CSM,Item,1,ST-1 (level 2 to roof) Buyout,8/1/2023,,,4430,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4430
+2121,CSM,Ticket,10,Field Fix - Added per Missed Pocket (B4011),6/17/2022,,Yes,3096,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3096
+2207,CSM,Item,10,"Includes a $3,200.00 allowance to repair 27 LF of existing railing per A2.22 – note #6",12/5/2022,,,4012,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4012
+2217,CSM,Sequence,10,Sequence 10,7/24/2023,,,4413,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4413
+2142,CSM,Item,10,Interior Overhead door support ,11/13/2022,,,3878,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3878
+2217,CSM,Item,10,Picket guardrail with attached handrail and wall mounted handrail at loading dock concrete ramp.,9/1/2023,,,4439,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4439
+2107,CSM,Item,10,Trench Cover,8/26/2022,,Yes,2452,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2452
+2218,CSM,Sequence,10,CASTING (CAST-1)-T028 T029 T030 T031 T032 T071,11/19/2022,,,4504,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4504
+2216,CSM,Sequence,10,T015 T016,12/8/2022,,,4175,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4175
+2218,CSM,Sequence,11,CASTING (CAST-2)-T033 T034 T035 T036 T037 T071,11/21/2022,,,4506,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4506
+2207,CSM,Item,11,Roof Opening Patch,11/17/2022,,,4013,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4013
+2142,CSM,Item,11,Infrared curtain steel post support at entry curb,12/5/2022,,,3879,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3879
+2217,CSM,Item,11,Wall mounted handrail at motor court B [Callout 1] exterior concrete stair,9/1/2023,,,4440,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4440
+2142,CSM,Ticket,11,Ticket 93022-11 - p567 ,10/6/2022,,Yes,3906,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3906
+2216,CSM,Sequence,11,T017,12/8/2022,,,4176,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4176
+2217,CSM,Sequence,11,Sequence 11,7/25/2023,,,4414,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4414
+2107,CSM,Item,11,Crane Maint Walkway Grating - Buy Out,5/16/2022,,Yes,2456,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2456
+2217,CSM,Sequence,12,Sequence 12,7/26/2023,,,4415,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4415
+2142,CSM,Item,12,"Access ladder to roof hatch at unassigned room with ladder safety post and fall 
+protection",11/13/2022,,,3926,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3926
+2142,CSM,Ticket,12,Ticket 101022-12R1 - Angle a111 & Bolts & Primers,10/14/2022,,Partial,3907,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3907
+2207,CSM,Item,12,Added Guardrail at CT-1 Support Platform,11/15/2022,,,4014,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4014
+2217,CSM,Item,12,Wall mounted handrail at riverside arcade concrete stair,9/1/2023,,,4441,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4441
+2216,CSM,Sequence,12,"T004, T018",12/12/2022,,,4177,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4177
+2121,CSM,Ticket,12,Replace Plates 35-MS10,7/6/2022,,Yes,3097,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3097
+2218,CSM,Sequence,12,CASTING (CAST-3)-T037 T039 T040 T041,11/22/2022,,,4507,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4507
+2217,CSM,Sequence,13,Sequence 13,7/27/2023,,,4416,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4416
+2142,CSM,Item,13,Exterior bollard @ Satellite concourse,11/23/2022,,,3880,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3880
+2142,CSM,Ticket,13,Erection Cable and Accessories Olive Branch to BNA,10/12/2022,,Yes,3908,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3908
+2217,CSM,Item,13,Roof access ladder,11/1/2023,,,4442,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4442
+2121,CSM,Ticket,13,Replace Misc Lintel Angles,6/30/2022,,Yes,3098,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3098
+2216,CSM,Sequence,13,T017,12/12/2022,,,4178,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4178
+2207,CSM,Item,13,Conc Plank Roof Opening Patch,11/15/2022,,,4015,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4015
+2142,CSM,Item,14,Bollard at signage @ Satellite concourse,11/23/2022,,,3881,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3881
+2217,CSM,Item,14,PE-1 to PE-4 Elevator components,7/1/2023,,,4443,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4443
+2217,CSM,Sequence,14,Sequence 14,7/28/2023,,,4417,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4417
+2216,CSM,Sequence,14,T017,12/14/2022,,,4179,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4179
+2142,CSM,Ticket,14,Bolt List to finish Concourse Bldg - Erector can PU,10/14/2022,,Yes,3909,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3909
+2217,CSM,Item,15,PE-5 & PE- 6 Elevator  components,,,,4450,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4450
+2121,CSM,Ticket,15,Replace missing Item 27 Material,8/8/2022,,Yes,3102,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3102
+2217,CSM,Sequence,15,Sequence 15,7/29/2023,,,4418,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4418
+2142,CSM,Item,15,Exterior bollard @ Shuttle station,11/23/2022,,,3882,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3882
+2217,CSM,Sequence,16,Sequence 16,7/30/2023,,,4419,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4419
+2121,CSM,Ticket,16,Deliver Field House deck (Pick up at MSEC),9/8/2022,,Yes,3101,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3101
+2142,CSM,Item,16,Infrared curtain steel post support at entry curb @ Satellite concourse,11/23/2022,,,3883,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3883
+2216,CSM,Sequence,16,T019,12/21/2022,,,4181,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4181
+2217,CSM,Item,16, FSAE-1 & FSAE-2 Elevator components,,,,4457,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4457
+2142,CSM,Ticket,16,Ticket 16 - 2_p915 & p905,10/18/2022,,Yes,3911,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3911
+2216,CSM,Sequence,17,"T019, T034",12/27/2022,,,4182,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4182
+2121,CSM,Ticket,17,Item 35 - Added Bent Plate Lintel 35-MS37-38,9/21/2022,,Yes,3103,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3103
+2217,CSM,Sequence,17,Sequence 17,7/31/2023,,,4420,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4420
+2217,CSM,Item,17,  SE-3 Elevator components,,,,4464,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4464
+2216,CSM,Sequence,18,"T019, T020",1/6/2023,,,4183,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4183
+2217,CSM,Sequence,18,Sequence 18,8/1/2023,,,4421,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4421
+2217,CSM,Item,18,BOH vanity countertop steel support,11/1/2023,,,4473,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4473
+2121,CSM,Ticket,18,Added materials per SKS37-40 (GC RFI#516) (PH-2121-467 & PH-2121-468),10/12/2022,,Yes,3104,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3104
+2217,CSM,Item,19,CMU wall support,,,,4474,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4474
+2121,CSM,Ticket,19,Replace Missing Landing Channels/Misc Material-ITEM#14,10/20/2022,,,3105,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3105
+2217,CSM,Sequence,19,Sequence 19,8/2/2023,,,4422,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4422
+2207,CSM,Sequence,2,Existing Building,12/5/2022,,,3996,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3996
+2121,CSM,Sequence,2,Level1(Cols-1st/2nd flr) & Level2 (Beams-3rd flr) - (Area B1)-LOT#T006,12/15/2021,,Yes,3045,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3045
+2121,CSM,Ticket,2,Epoxy Anchors from Fed,3/21/2022,,Yes,3082,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3082
+2217,CSM,Item,2,ST-2 (level B to level 20) Buyout,8/1/2023,,,4431,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4431
+2216,CSM,Sequence,2,"T002, T003, T013",11/16/2022,,,4166,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4166
+2217,CSM,Sequence,2,Sequence 2,7/12/2023,,,4405,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4405
+2207,CSM,Item,2,Pipe railing and kick plate at grating per note 5 on S2.53,11/15/2022,,,4003,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4003
+2107,CSM,Sequence,2,Seq2 T001 & T002,5/10/2021,,Yes,2458,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2458
+2107,CSM,Ticket,2,Handrail loops to the short ladder,10/19/2022,,,2470,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2470
+2121,CSM,Ticket,20,Grating and angle SUMP PIT GRATES,10/20/2022,,,3106,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3106
+2216,CSM,Sequence,20,T020,1/9/2023,,,4185,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4185
+2142,CSM,Item,20,Added Bollard at Existing Fire Hydrant,10/23/2022,,,3930,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3930
+2217,CSM,Sequence,20,Sequence 20 ,8/3/2023,,,4423,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4423
+2217,CSM,Item,20,Brick relieving angle,,,,4475,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4475
+2121,CSM,Ticket,21,Seq5 Added Bent Plate per Shopcall (Stair#17 Glazing Support),10/31/2022,,,3108,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3108
+2216,CSM,Sequence,21,T020,1/17/2023,,,4186,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4186
+2217,CSM,Sequence,21,Sequence 21 Truss T1A,8/4/2023,,,4424,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4424
+2217,CSM,Item,21,Brick shelf angle,,,,4476,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4476
+2218,CSM,Sequence,21,OVEN (OVEN-1),12/3/2022,,,4520,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4520
+2216,CSM,Sequence,22,"T023, T029, T035",11/1/2022,,,4188,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4188
+2217,CSM,Sequence,22,Sequence 22 Truss T1B,8/5/2023,,,4425,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4425
+2217,CSM,Item,22,Brick hanger support,,,,4477,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4477
+2218,CSM,Sequence,22,OVEN (OVEN-2) (MATERIAL NOT ON HOLD),12/4/2022,,,4521,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4521
+2121,CSM,Ticket,22,Seq1 Slab Extension Angles (Added per SKS-43) (Area D),10/31/2022,,,3109,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3109
+2217,CSM,Item,23,Window head hanger support,,,,4478,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4478
+2216,CSM,Sequence,23,"T023, T029, T035",11/1/2022,,,4189,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4189
+2217,CSM,Sequence,23,Sequence 23,8/6/2023,,,4426,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4426
+2121,CSM,Ticket,23,Stair Pans for Stair 12 & 15 (Buyout FabSup) Prime Gray,10/20/2022,,,2331,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2331
+2217,CSM,Item,24,Cladding steel support along level 2 bar terrace and level 5 pool terrace,,,,4479,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4479
+2217,CSM,Sequence,24,Sequence 24,8/7/2023,,,4427,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4427
+2121,CSM,Ticket,24,Added CMU wall clips SKS-42,10/25/2022,,,3107,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3107
+2216,CSM,Sequence,24,T076,1/19/2023,,,4190,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4190
+2217,CSM,Item,25,2” x 3/16” galvanized bar grating steel stair & platform and 2-liner guardrail,,,,4480,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4480
+2121,CSM,Item,25,Ladders (Buyout),9/30/2022,,Yes,2995,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2995
+2217,CSM,Sequence,25,Sequence 25,8/8/2023,,,4428,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4428
+2216,CSM,Sequence,25,T077,1/23/2023,,,4191,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4191
+2142,CSM,Sequence,3,Sector 2/3 Starts Shipping   Complete by 9/9,9/2/2022,,Yes,3886,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3886
+2207,CSM,Sequence,3,Existing Building,12/5/2022,,,3997,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3997
+2107,CSM,Sequence,3,,9/17/2021,,Yes,2463,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2463
+2207,CSM,Item,3,Ships ladder,11/15/2022,,,4004,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4004
+2216,CSM,Sequence,3,"T002, T013",11/17/2022,,,4167,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4167
+2217,CSM,Item,3,ST-5 (covered entry level to level 3) Buyout,8/1/2023,,,4432,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4432
+2121,CSM,Ticket,3,Replace B3014,4/15/2022,,Yes,3083,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3083
+2121,CSM,Sequence,3,Seq3 Level2 (Area B2) T012,1/19/2022,,Yes,3054,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3054
+2217,CSM,Sequence,3,Sequence 3,7/14/2023,,,4406,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4406
+2142,CSM,Ticket,3,Ticket 90922-3 p18 plate,9/12/2022,,Yes,3898,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3898
+2121,CSM,Sequence,3.2,Seq3 Level2 (Area B2) T014,1/24/2022,,Yes,3056,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3056
+2121,CSM,Item,3.2,Stair D Rails,10/30/2022,,,2986,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2986
+2217,CSM,Item,4,ST-3 & ST-4 (level 1 to level 5) Buyout,8/1/2023,,,4433,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4433
+2207,CSM,Item,4,"Pipe rails at access platform per S2.03; E, F/S3.01",12/5/2022,,,4006,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4006
+2107,CSM,Sequence,4,,9/17/2021,,Yes,2465,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2465
+2121,CSM,Sequence,4,Seq 4 (Area B3) T025,2/8/2022,,Yes,3061,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3061
+2217,CSM,Sequence,4,Sequence 4,7/15/2023,,,4407,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4407
+2121,CSM,Ticket,4,Remake B1087 - Osha Posts,5/2/2022,,Yes,3088,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3088
+2216,CSM,Sequence,4,T014,11/22/2022,,,4168,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4168
+2142,CSM,Ticket,4,Ticket 90922-4 P98 plate,9/10/2022,,Yes,3899,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3899
+2207,CSM,Sequence,4,Existing Building,12/5/2022,,,3998,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3998
+2218,CSM,Sequence,5,EXTRACTOR PIT (EP-5)-T007 T014 T022,10/26/2022,,Yes,4499,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4499
+2121,CSM,Sequence,5,Area A T027&T028,3/15/2022,,Yes,3064,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3064
+2121,CSM,Ticket,5,Field Fix for B5025 Embed Connection,5/25/2022,,Yes,3089,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3089
+2142,CSM,Sequence,5,Sector 3/4 - Lots various dates starting 8/12,8/12/2022,,Yes,3888,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3888
+2142,CSM,Ticket,5,Ticket 90922-5  plates,9/19/2022,,Yes,3900,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3900
+2216,CSM,Sequence,5,NO WORK- JUST DATE REVISION PURPOSES,11/23/2022,,,1965,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1965
+2217,CSM,Item,5,ST-6 (level 2.5M to level 3) Buyout,8/1/2023,,,4434,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4434
+2217,CSM,Sequence,5,Sequence 5,7/17/2023,,,4408,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4408
+2207,CSM,Sequence,5,Existing Building,12/5/2022,,,3999,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3999
+2218,CSM,Sequence,6,EXTRACTOR PIT (EP-6)-T007 T023,10/27/2022,,Yes,4500,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4500
+2217,CSM,Sequence,6,Sequence 6,7/19/2023,,,4409,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4409
+2121,CSM,Sequence,6,Athletic Field T033,7/11/2022,,Yes,3069,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3069
+2142,CSM,Ticket,6,Ticket 90922-6 plate,9/19/2022,,Yes,3901,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3901
+2121,CSM,Ticket,6,Field Fix for missing Embed Connection (EP130),5/23/2022,,Yes,3093,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3093
+2216,CSM,Sequence,6,T014,11/28/2022,,,4170,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4170
+2207,CSM,Item,6,"OH door frame, fire damper and sill support per 2/A1.50, 2/A1.70, 4/A3.60, 1/A4.50, 4/A4.61",11/15/2022,,,4008,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4008
+2142,CSM,Sequence,6,Shuttle Station,3/6/2023,,,3889,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3889
+2217,CSM,Item,6,ST-7 (level 3 to level 5) Buyout,8/1/2023,,,4435,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4435
+2121,CSM,Ticket,6,Rework B1088,4/25/2022,,Yes,3092,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3092
+2216,CSM,Sequence,61,"T027, T033",11/15/2022,,,4225,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4225
+2121,CSM,Item,61,"Steel bar at theatre concrete rmp (exposed 4"")",11/1/2022,,,3029,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3029
+2216,CSM,Item,61,PH-2216-061: Added per SW - RFI Sketch#260A  Response-On Top of T003,11/15/2022,,,4187,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4187
+2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68B,12/16/2022,,,4566,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4566
+2216,CSM,Sequence,68,,1/9/2023,,,4232,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4232
+2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68A,11/28/2022,,,4565,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4565
+2217,CSM,Item,7,ST-8 (level B to level 1) Buyout,8/1/2023,,,4436,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4436
+2121,CSM,Item,7,Steel Stair H(#10) Bldg C  Priority 3,10/12/2022,,Yes,2939,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2939
+2121,CSM,Ticket,7,Field Fix for Added Bent Plate per RFI#427,5/24/2022,,Yes,3094,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3094
+2217,CSM,Sequence,7,Sequence 7,7/21/2023,,,4410,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4410
+2218,CSM,Sequence,7,MEZZANINE (MEZZ-1)-T015 T024 T070,10/31/2022,,YES,4501,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4501
+2142,CSM,Item,7,Toilet partition steel support ,11/13/2022,,,3875,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3875
+2216,CSM,Sequence,7,T014,11/30/2022,,,4171,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4171
+2217,CSM,Item,8,Stair at Transformer Vault,8/1/2023,,,4437,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4437
+2142,CSM,Item,8, Steel support at lavatory and knee guard wall ,11/13/2022,,,3876,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3876
+2142,CSM,Ticket,8,Ticket #8 - Plate p86,9/27/2022,,Yes,3903,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3903
+2207,CSM,Item,8,"Louver head and sill angle per 1/A1.70, 3/A3.60, 5,6/A5.62, B, E/S3.53",12/5/2022,,,4010,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4010
+2216,CSM,Sequence,8,"T005, T015 T074",12/5/2022,,,4172,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4172
+2218,CSM,Sequence,8,MEZZANINE (MEZZ-2)-T012 T015 T016 T025 T026 T070 ,11/1/2022,,YES,4502,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4502
+2217,CSM,Sequence,8,Sequence 8,7/22/2023,,,4411,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4411
+2217,CSM,Item,9,Stair at Market,8/1/2023,,,4438,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4438
+2216,CSM,Ticket,9,PH-2216-113:Added per SW,,,,4174,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4174
+2142,CSM,Item,9, CMU wall clips,11/13/2022,,,3877,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3877
+2218,CSM,Sequence,9,MEZZANINE (MEZZ-3)-T016 T026 T027 T070,11/2/2022,,YES,4503,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4503
+2121,CSM,Ticket,9,field fix - added bent plate connector for Area C&D,5/23/2022,,Yes,3095,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3095
+2217,CSM,Sequence,9,Sequence 9,7/23/2023,,,4412,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4412
+2107,CSM,Item,9,Bollard ,6/10/2021,,Yes,2455,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2455
+2216,CSM,Sequence,9,T016,12/7/2022,,,4173,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4173

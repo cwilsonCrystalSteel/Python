@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2127.0,CSF,Ticket,7,Added Shear Plates per RFI 180 and 180.01 responses,,Mustafa,

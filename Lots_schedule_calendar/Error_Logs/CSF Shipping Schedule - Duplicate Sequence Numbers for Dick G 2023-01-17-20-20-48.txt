@@ -1,0 +1,6 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2127,CSF,Sequence,3,Deliver with Ticket 2560C,7/18/2022,Dick G,Yes,5/30/2022,3702,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3702
+2206,CSF,Sequence,3,Steel - Lines 6 - 9 Level 1 to Roof,5/31/2023,Dick G,,4/12/2023,4308,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4308
+2206,CSF,Sequence,97,Anchor Bolts ,3/31/2023,Dick G,,2/10/2023,4323,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4323
+2206,CSF,Sequence,97,Embeds ,3/31/2023,Dick G,,2/10/2023,4324,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4324

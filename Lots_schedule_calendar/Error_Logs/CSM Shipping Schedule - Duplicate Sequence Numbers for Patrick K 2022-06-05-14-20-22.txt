@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004,CSM,Sequence,23,Seq 23-26 Columns (LOT #T199),6/20/2022,Patrick K,
+2004,CSM,Sequence,23,EAST BUSTLE N RETURN - 4th Floor (1.89 Tons),,Patrick K,

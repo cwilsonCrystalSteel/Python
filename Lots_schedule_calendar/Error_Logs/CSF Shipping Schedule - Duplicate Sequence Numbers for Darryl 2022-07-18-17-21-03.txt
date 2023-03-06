@@ -1,0 +1,4 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2117.0,CSF,Ticket,11,Missing Galvanized Flat Washers,7/8/2022,Darryl,Yes
+2117.0,CSF,Item,16, (Grating) - Buyout,7/19/2022,Darryl,

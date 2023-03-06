@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2107,CSM,Ticket,,PH-2107-106 Clip Angle,,Dick G,,

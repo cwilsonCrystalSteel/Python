@@ -1,0 +1,6 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2015.0,FED,Ticket,1,Hilti Items Missing at FED / Have to reorder.,8/2/2022,Darryl ,Missing Material Off Delivery
+1932.0,FED,Ticket,1,Shims. Change Order to the GC forthcoming.,2/22/2022,Darryl ,
+2015.0,FED,Ticket,2,Replacement angles. Concrete Sub Error ,8/2/2022,Darryl ,
+1932.0,FED,Ticket,5,Aluminum Plugs for vent holes. ,4/8/2022,Darryl ,

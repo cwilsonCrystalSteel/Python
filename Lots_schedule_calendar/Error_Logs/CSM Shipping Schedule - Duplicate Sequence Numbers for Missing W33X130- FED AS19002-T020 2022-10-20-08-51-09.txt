@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
+2216,CSM,Sequence,19,T020,1/6/2023,Missing W33X130- FED AS19002-T020,,4184,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4184

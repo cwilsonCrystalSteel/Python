@@ -1,0 +1,4 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2142,CSM,Sequence,8,Oil/Water Separators,,,,
+2142,CSM,Sequence,97.3,Seq97 Embeds - Oil/Water Separator ,,,,

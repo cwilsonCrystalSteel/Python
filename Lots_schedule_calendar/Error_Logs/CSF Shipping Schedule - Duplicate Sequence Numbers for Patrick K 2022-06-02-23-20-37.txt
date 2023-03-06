@@ -1,0 +1,5 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
+2004,CSF,Sequence,25.1,East Bustle 6th Floor - Columns  (T212)  ,7/5/2022,Patrick K,
+2004,CSF,Sequence,25.1,"Seq 25, 26, 28, 29 (31 Line Columns) (LOT #T212)",7/5/2022,Patrick K,
+2004,CSF,Sequence,3.3,3C & 3D - LOT #T024,6/4/2022,Patrick K,

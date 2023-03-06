@@ -1,0 +1,3 @@
+CSM
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2121,CSM,Ticket,17,Added bent plate lintel (West side of Area A),,John S,,

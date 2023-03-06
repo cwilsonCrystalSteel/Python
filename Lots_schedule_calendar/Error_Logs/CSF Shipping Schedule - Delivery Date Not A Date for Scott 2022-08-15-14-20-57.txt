@@ -1,0 +1,3 @@
+CSF
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
+2125,CSF,Buyout,200,DECK,,Scott,,11/11/1899

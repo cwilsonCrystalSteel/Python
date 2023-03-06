@@ -1,0 +1,6 @@
+FED
+Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
+2216.0,FED,Ticket,2,PAINT FOR TOUCH UPDELIVER WITH SEQ3 TRUSS,12/9/2022,Mustafa ,Yes,10/21/2022,4928,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4928
+2216.0,FED,Ticket,3,mustafa ticket mk2216-03,12/14/2022,Mustafa ,Yes,,4929,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4929
+2216.0,FED,Ticket,51.1,AS51004,2/28/2023,Mustafa ,,,4856,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4856
+2216.0,FED,Ticket,51.1,Mustafa ticket MK2216-55.1  AS51004-4 a6 CLIPS,2/27/2023,Mustafa ,Yes,,4857,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4857
