@@ -1,3 +1,0 @@
-CSF
-2129-5
-5e4ej3svj6kopcco7bae01pvec<br>Ticket 2129-5<br><a href="https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3885">Link to Google Sheets</a><br>(PM: Dick G) Seq1&4 Added Plate washer per RFI 136 - Ship with Seq 1<br>(11/14/2022 09:22) Added to Calendar with delivery date: 11/14/2022<br>(12/05/2022 10:06) Delivery date changed from 11/14/2022 to 11/30/2022<br>(12/09/2022 07:20) Delivery date changed from 11/30/2022 to 12/12/2022

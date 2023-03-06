@@ -1,3 +1,0 @@
-CSF
-2125-181
-Ticket 2125-181<br>2023-02-20<br><a href="https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D5078">Link to Google Sheets</a><br>(PM: Darryl) Shim plate for connection at C32001 and B32005<br>(02/13/2023 20:20) Added to Calendar with delivery date: 02/20/2023
