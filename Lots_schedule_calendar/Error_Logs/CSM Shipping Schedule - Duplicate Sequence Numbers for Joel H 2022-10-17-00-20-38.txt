@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2218,CSM,Sequence,22,OVEN (OVEN-2) (MATERIAL NOT ON HOLD),12/4/2022,Joel H,,10/16/2022,4510,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4510
-2218,CSM,Sequence,22,OVEN (OVEN-2) (MATERIAL ON HOLD),12/4/2022,Joel H,,10/16/2022,4511,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4511
-2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68A,11/28/2022,Joel H,,10/10/2022,4554,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4554
-2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68B,12/16/2022,Joel H,,10/28/2022,4555,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4555

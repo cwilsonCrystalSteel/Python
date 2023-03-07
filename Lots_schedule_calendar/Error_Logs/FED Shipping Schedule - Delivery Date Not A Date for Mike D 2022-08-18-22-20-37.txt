@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2120,FED,Sequence,2.12,PH-2120-094 - Lot 021 - Eight stair wind barrier post w/ W8 bracing beam,,Mike D,,

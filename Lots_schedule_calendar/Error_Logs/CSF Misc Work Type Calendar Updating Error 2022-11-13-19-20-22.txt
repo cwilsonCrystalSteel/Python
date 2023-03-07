@@ -1,2 +1,0 @@
-CSF
-'Series' object has no attribute 'date'

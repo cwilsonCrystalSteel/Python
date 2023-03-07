@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2127,CSF,Sequence,3,DELIVER AT 5:00 PM Missing Pieces CRV3010/3012/3016/3018/3021/3023/3027,9/1/2022,Mustafa,Yes,#REF!,3674,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3674
-2127,CSF,Sequence,3,PH2127-240_ 5.82 hours,1/9/2023,Mustafa,,11/21/2022,3753,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3753

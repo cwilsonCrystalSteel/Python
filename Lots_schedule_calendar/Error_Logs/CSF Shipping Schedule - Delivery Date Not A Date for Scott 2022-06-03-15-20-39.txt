@@ -1,6 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,84,Elevator 5 & 6,6/31/22,Scott,
-2125,CSF,Sequence,75,CMU wall clips ,TBD,Scott,
-2125,CSF,Sequence,77,Stair G slab Infill,TBD,Scott,
-2125,CSF,Sequence,78,Blalock Roof Framing,TBD,Scott,

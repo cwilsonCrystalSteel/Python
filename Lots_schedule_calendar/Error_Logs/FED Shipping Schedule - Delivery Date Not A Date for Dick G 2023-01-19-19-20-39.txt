@@ -1,5 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2221,FED,Sequence,2,Sequence 2 - W40 Beams,,Dick G,,11/11/1899,4868,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4868
-2221,FED,Sequence,5,Sequence 5 - W40 Beams,,Dick G,,11/11/1899,4869,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4869
-2221,FED,Sequence,6,Sequence 6 - W40 Beams,,Dick G,,11/11/1899,4870,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4870

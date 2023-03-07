@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,19,Level 3 Interstitial,11/1/2022,Scott,
-2125,CSF,Sequence,73,DECK Seq 73 AHU 3/4,11/21/2022,Scott,
-2125,CSF,Sequence,73,AHU-3/4 Reno Work ,6/30/2022,Scott,YES

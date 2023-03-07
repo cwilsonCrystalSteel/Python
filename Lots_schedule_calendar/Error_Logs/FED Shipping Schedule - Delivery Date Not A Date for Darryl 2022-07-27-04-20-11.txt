@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2015,FED,Ticket,2,PH-2015-080: Shim Plates,,Darryl,,11/11/1899
