@@ -1,9 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2117.0,CSF,Ticket,1,MK2117-001,9/28/2021,Mustafa,Yes
-2117.0,CSF,Ticket,1,KS2117-01 deliver with a pickup,3/28/2022,Mustafa,Yes
-2117.0,CSF,Ticket,10,Ticket MK2117-010,2/18/2022,Mustafa,Yes
-2117.0,CSF,Ticket,23,MK2117-023,4/21/2022,Mustafa,Yes
-2117.0,CSF,Ticket,23,MK2117-023_2 Angles,4/26/2022,Mustafa,Yes
-2127.0,CSF,Ticket,5,MK2127-05,5/31/2022,Mustafa,yes
-2127.0,CSF,Ticket,5,Added template and base plate per CSF RFI#72 - Load on top of lot T004,,Mustafa,yes

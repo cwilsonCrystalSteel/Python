@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,99,PH-2125-052 (2 shear tabs RFI-39),3/28/2022,Scott,yes
-2125,CSF,Sequence,99,Connections of North Tower Steel to existing,,Scott,

@@ -1,7 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2125,CSF,Sequence,68,South Tower - Shaft Reinf Channels PH-2125-024 Lot 4,2/17/2022,Scott,Yes,12/30/2021
-2125,CSF,Sequence,68,T005 PH-2125-036 Channel and Angle Reinf. (Seq 68 & 69),3/3/2022,Scott,Yes,1/13/2022
-2125,CSF,Sequence,68,LOT 33 - Shear Tabs NP,7/19/2022,Scott,,5/31/2022
-2125,CSF,Sequence,73,AHU-3/4 Reno Work ,6/30/2022,Scott,YES,5/12/2022
-2125,CSF,Sequence,73,DECK Seq 73 AHU 3/4,11/21/2022,Scott,,10/3/2022

@@ -1,8 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2216.0,FED,Ticket,2,PAINT FOR TOUCH UPDELIVER WITH SEQ3 TRUSS,12/9/2022,Mustafa ,Yes,10/21/2022,4930,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4930
-2216.0,FED,Ticket,2000,"Seq2, 11, 21, 25, 27, 38, 41, 42, 52, 55, 94 Missing pieces - T138_AS11001  AS38001  AS41001 (2) AS52000    AS52002     C2004   (1)    C2003   (2)   AS55013  AS27003 BR25006 BR27004  
-",3/3/2023,Mustafa ,,1/13/2023,4921,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4921
-2216.0,FED,Ticket,3,mustafa ticket mk2216-03,12/14/2022,Mustafa ,Yes,,4931,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4931
-2216.0,FED,Ticket,51.1,AS51004,2/28/2023,Mustafa ,,,4858,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4858
-2216.0,FED,Ticket,51.1,Mustafa ticket MK2216-55.1  AS51004-4 a6 CLIPS,2/27/2023,Mustafa ,Yes,,4859,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4859

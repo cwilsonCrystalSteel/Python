@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004,FED,Sequence,23,EAST BUSTLE  - 4th Floor (Seq23A) - Area 8 (49.93 Tons),,Patrick K,

@@ -1,2 +1,0 @@
-FED
-<HttpError 403 when requesting https://www.googleapis.com/calendar/v3/calendars/c_pd5da50k6ci6vsrh8g6a5fvjig%40group.calendar.google.com/events/3njanp87l2sft3g4fu55obh4gc? returned "Rate Limit Exceeded". Details: "[{'domain': 'usageLimits', 'reason': 'rateLimitExceeded', 'message': 'Rate Limit Exceeded'}]">

@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2139,FED,Buyout,1,Deck Detailing,TBD,Mustafa,
-2139,FED,Buyout,2,Joist Detailing,TBD,Mustafa,

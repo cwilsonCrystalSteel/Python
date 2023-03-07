@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2035,FED,Ticket,8,"6 Pcs 6"" Bollards",4/18/2022,Scott,Yes
-2035,FED,Ticket,8,"6 Pcs 6"" Bollards",4/25/2022,Scott,Yes
