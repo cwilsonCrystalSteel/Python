@@ -1,7 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2129,CSM,Sequence,19.2,Seq 19 Trusses - (Lot#T062),,Dick G,,10/14/1899,3965,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3965
-2129,CSM,Sequence,21.2,Seq 21 Roof Trusses (Lot#T091&T092),,Dick G,,10/14/1899,3969,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3969
-2129,CSM,Sequence,21.3,Seq 21 Roof Trusses (Lot#T088&T090),,Dick G,,10/14/1899,3970,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3970
-2129,CSM,Sequence,21.4,Seq 21 Roof Trusses (Lot#T089),,Dick G,,10/14/1899,3971,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3971
-2129,CSM,Sequence,21.5,Seq 21 Roof Trusses (Lot#T087),,Dick G,,10/14/1899,3972,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3972

@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004,FED,Sequence,EAST BUSTLE - 10TH FLOOR -Area 18,,9/6/2022,Patrick K,,7/19/2022

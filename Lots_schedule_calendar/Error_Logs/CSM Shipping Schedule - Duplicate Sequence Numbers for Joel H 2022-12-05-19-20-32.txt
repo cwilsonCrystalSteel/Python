@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68A-T001-T004,11/28/2022,Joel H,Partial,10/10/2022,4777,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4777
-2224,CSM,Sequence,68,SDI-Heartland - Fabarc Seq 68B-T005-T012 T018,12/16/2022,Joel H,,10/28/2022,4778,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4778

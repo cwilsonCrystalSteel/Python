@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
-2142,CSM,Ticket,10,Ticket 92622-10 - Backing Bar,10/4/2022,Unrealistic lead time when ticket was entered,Yes,3905,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3905
-2142,CSM,Ticket,2,Ticket 90622-2 p18 plate,9/7/2022,Unrealistic lead time when ticket was entered,Yes,3897,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3897
-2142,CSM,Ticket,7,Ticket 90922-7 AS2006 Remake + Plates & Angle,9/27/2022,Unrealistic lead time when ticket was entered,Yes,3902,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3902
-2142,CSM,Ticket,9,Ticket 90922-9 - Remake AS2036 - HSS  made wrong,10/4/2022,Unrealistic lead time when ticket was entered,Yes,3904,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3904

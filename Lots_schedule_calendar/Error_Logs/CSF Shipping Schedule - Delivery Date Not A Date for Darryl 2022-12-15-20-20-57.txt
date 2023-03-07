@@ -1,7 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2125,CSF,Sequence,2.2,T147 (Pipe Sleeve support) ,,Darryl,,11/11/1899,3324,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3324
-2125,CSF,Sequence,3.1,T147 (Pipe Sleeve support) ,,Darryl,,11/11/1899,3326,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3326
-2125,CSF,Sequence,5.3,T147 (Pipe Sleeve support) ,,Darryl,,11/11/1899,3331,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3331
-2125,CSF,Sequence,6.1,T147 (Pipe Sleeve support) ,,Darryl,,11/11/1899,3333,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3333
-2125,CSF,Sequence,7.2,T147 (Pipe Sleeve support) ,,Darryl,,11/11/1899,3335,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3335

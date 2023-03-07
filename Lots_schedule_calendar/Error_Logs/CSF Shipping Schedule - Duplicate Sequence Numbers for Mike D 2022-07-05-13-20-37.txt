@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2115,CSF,Sequence,19,Area B (T035 ) (Sequences 18 & 19),8/22/22,Mike D,
-2115,CSF,Sequence,19,Area B (T036),8/22/22,Mike D,

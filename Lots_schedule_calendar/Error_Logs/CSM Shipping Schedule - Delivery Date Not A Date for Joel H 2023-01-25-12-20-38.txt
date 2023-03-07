@@ -1,9 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2218,CSM,Sequence,7.1,Tank Mezzanine Electrical Room,,Joel H,,11/11/1899,4792,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4792
-2218,CSM,Sequence,7.2,MEZZANINE (MEZZ-1) - Added Beams per Bulletin 03,,Joel H,,11/11/1899,4806,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4806
-2218,CSM,Sequence,8.1,MEZZANINE (MEZZ-2) - Added Beams per Bulletin 03,,Joel H,,11/11/1899,4808,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4808
-2218,CSM,Sequence,9.1,MEZZANINE (MEZZ-3) - Added Beams per Bulletin 03,,Joel H,,11/11/1899,4810,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4810
-2218,CSM,Sequence,21.1,Electrical and Maintenance Shop Room,,Joel H,,11/11/1899,4819,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4819
-2218,CSM,Sequence,97.8,,,Joel H,,,4828,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4828
-2218,CSM,Sequence,97.11,Sprinkler Anchor Bolts,,Joel H,,11/11/1899,4830,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4830

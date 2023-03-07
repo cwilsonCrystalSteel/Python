@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
-2116,FED,Sequence,32.3,Balance - Third Floor Renovation Work Area C - T038,10/30/2022,Darryl ,,1557,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1557
-2116,FED,Sequence,54.3,Roof Renovation Work Area C PH-2116-078 (LOT T017),10/25/2022,Darryl ,,1629,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1629

@@ -1,7 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2117,CSF,Sequence,99,,9/17/2021,Mustafa,Yes
-2117,CSF,Sequence,99,PH2117-129_49 HOURS deliver with a pickup,3/28/2022,Mustafa,Yes
-2117,CSF,Sequence,15, LOT#T023 Level 8-9-10,5/4/2022,Mustafa,Yes
-2117,CSF,Sequence,15,All Seq15,6/6/2022,Mustafa,
-2117,CSF,Sequence,99,ph2117-129 ,6/6/22,Mustafa,

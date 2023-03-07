@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004,CSM,Sequence,23.3,"Column and Pipe Braces (Area 11, 12 &13) LOT #T241",,Patrick K,
-2004,CSM,Sequence,26.1,"Column and Pipe Braces (Area 11, 12 &13) LOT #T241",,Patrick K,

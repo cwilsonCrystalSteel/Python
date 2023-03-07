@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-1926.0,FED,Sequence,PH-1926-086 Seq97,,12/15/2020,Scott,
-1926.0,FED,Sequence,Seq 97 Mock Up (PH-1926-166),,4/1/2021,Scott,

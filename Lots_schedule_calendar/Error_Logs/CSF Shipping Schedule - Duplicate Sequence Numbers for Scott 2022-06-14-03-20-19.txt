@@ -1,8 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Item,1.1,North Tower Stair L/J Seq 8 1st Floor Seq 8,9/22/2022,Scott,
-2125,CSF,Item,1.1,North Tower Stair L/J 10th Floor Seq 53,3/7/2023,Scott,
-2125,CSF,Item,21.1,Nosing North Tower Stair L/J Seq 8 1st Floor,9/22/2022,Scott,
-2125,CSF,Item,21.1,Nosing North Tower Stair L/J Seq 53 10th Floor,3/7/2023,Scott,
-2125,CSF,Item,3.1,Blalock Shaft Metal GRATING (Mech F & FA) 5th Floor Seq 26,12/9/2022,Scott,
-2125,CSF,Item,3.1,Blalock Shaft Metal GRATING (Mech F & FA) 14th Floor Seq 62,4/3/2023,Scott,

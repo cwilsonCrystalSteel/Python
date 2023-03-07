@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2127.0,CSF,Ticket,26, Seq12 Added Plates&Angles (RFI 223)  - PH-2127-202,9/13/2022,Mustafa,Yes,7/26/2022,3811,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3811
-2127.0,CSF,Ticket,26,L7X4,3/3/2023,Mustafa,,1/13/2023,3850,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3850
