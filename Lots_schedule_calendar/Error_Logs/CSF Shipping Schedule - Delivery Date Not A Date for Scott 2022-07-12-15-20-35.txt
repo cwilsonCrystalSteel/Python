@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,68.1,LOT 33 - Shear tabs for C*'s at Line 2 NP,,Scott,
-2125,CSF,Sequence,99.7,Seq 1 ADV Material,,Scott,
-2125,CSF,Sequence,99.85,PH-2125-186 - ADV Seq85 Level12 South Tower,,Scott,

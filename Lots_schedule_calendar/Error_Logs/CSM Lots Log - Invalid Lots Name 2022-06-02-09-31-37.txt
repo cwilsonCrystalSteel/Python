@@ -1,3 +1,0 @@
-CSM
-Job,Seq. #,Fabrication Site,LOTS Name,Fab Release Date,Transmittal #
-1926,Item#70,CSM,1926-229,2022-03-14,PH-1926-229

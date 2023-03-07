@@ -1,5 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2143,CSM,Sequence,33.2,,,,,
-2143,CSM,Sequence,33.3,,,,,
-2143,CSM,Sequence,33.4,,,,,

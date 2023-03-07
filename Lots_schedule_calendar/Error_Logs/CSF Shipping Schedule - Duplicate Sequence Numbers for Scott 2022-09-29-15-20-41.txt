@@ -1,6 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2125.0,CSF,Ticket,41,Thermal Pad Buyout 5 Pcs,10/24/2022,Scott,,,3495,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3495
-2125.0,CSF,Ticket,41,Thermal Pads - 5 pcs (Seq 12),10/24/2022,Scott,,9/5/2022,3497,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3497
-2125.0,CSF,Ticket,44,"RB L4x4x3/8 - PL3/8x4""x10"" A572 GR.5 (NP)",9/29/2022,Scott,,,3235,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3235
-2125.0,CSF,Ticket,45,"RB L6x4x3/8 x 9'-2"" AN9001 (See Attachment)",9/29/2022,Scott,,,3236,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3236

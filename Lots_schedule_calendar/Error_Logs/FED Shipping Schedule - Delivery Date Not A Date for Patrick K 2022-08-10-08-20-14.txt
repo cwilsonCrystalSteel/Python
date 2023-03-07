@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004,FED,Ticket,39.46,Add'l plates for field fixes-Seq39 & 46-Rel #1097,,Patrick K,,

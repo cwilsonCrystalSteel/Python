@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2132,CSF,Sequence,3,2nd floor + roof (mid-west),2/7/2022,Darryl,Yes
-2132,CSF,Sequence,3,Additional HSS (PH-2132-078),4/5/2022,Darryl,Yes

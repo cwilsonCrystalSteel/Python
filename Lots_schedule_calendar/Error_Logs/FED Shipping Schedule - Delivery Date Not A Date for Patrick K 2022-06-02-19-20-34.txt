@@ -1,7 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004,FED,Sequence,3,REINFORCING (2nd -3rd -4th Floor ) (76.35 Tons),,Patrick K,
-2004,FED,Sequence,22,"EAST BUSTLE NORTH- 4TH FLOOR - Area 5,6 & 7 (128.03 Tons)",,Patrick K,
-2004,FED,Sequence,22.7,Area 6 added Cantilever restraint,,Patrick K,
-2004,FED,Sequence,23,EAST BUSTLE  - 4th Floor (Seq23A) - Area 8 (49.93 Tons),,Patrick K,
-2004,FED,Sequence,42,,,Patrick K,

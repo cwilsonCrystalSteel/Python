@@ -1,6 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2035,FED,Sequence,13,,5/25/2021,Scott,Yes
-2035,FED,Sequence,13,PH-2035-119 Seq 13,12/7/2021,Scott,yes
-2125,FED,Sequence,1,Entrance Steel - Need Field Dims,6/10/2022,Scott,
-2125,FED,Sequence,1,C1012,9/22/2022,Scott,

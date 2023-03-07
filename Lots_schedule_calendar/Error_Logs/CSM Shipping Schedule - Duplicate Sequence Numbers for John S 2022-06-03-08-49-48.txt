@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2038,CSM,Sequence,5.1,Lot #T066 Truss Brace Framing Grid D thru G,12/8/2021,John S,YES
-2038,CSM,Sequence,5.1,Lot #T068 Truss Brace Framing Grid D thru G,12/9/2021,John S,YES
-2038,CSM,Sequence,5.1,Lot #T069 Truss Brace Framing Grid D thru G,12/10/2021,John S,YES
-2038,CSM,Sequence,5.1,Lot #T070 Truss Brace Framing Grid D thru G,12/13/2021,John S,YES

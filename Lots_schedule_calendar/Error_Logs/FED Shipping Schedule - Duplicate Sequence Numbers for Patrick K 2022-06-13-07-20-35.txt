@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004,FED,Sequence,29.2,Seq29 Lot #T235,,Patrick K,
-2004,FED,Sequence,29.2,Area #17 (LOT #T233),7/11/2022,Patrick K,

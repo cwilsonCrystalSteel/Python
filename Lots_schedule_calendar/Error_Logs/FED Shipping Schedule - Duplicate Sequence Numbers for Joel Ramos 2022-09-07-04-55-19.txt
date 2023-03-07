@@ -1,8 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2138.0,FED,Item,,,,Joel Ramos,
-2138.0,FED,Item,,,,Joel Ramos,
-2138.0,FED,Item,43,LOAD 4 = REMAINING ITEMS 43 PIECES,,Joel Ramos,
-2138.0,FED,Item,43,"LOAD 2 = 43.1B3, 43.1-B4, (2)43-PL1, 43-B3, 43-C1 & 43.1-C3 2pm arrival",9/8/2022,Joel Ramos,
-2138.0,FED,Item,43,"LOAD 1  =   (2) 43.1-EP1, (2) 43.1-EP2 & Shim Plates",8/30/2022,Joel Ramos,
-2138.0,FED,Item,43,"LOAD 3 = 43.1-B1, 43.1-B2, (2) 43-PL2 & HARDWARE 2pm arrival",9/15/2022,Joel Ramos,

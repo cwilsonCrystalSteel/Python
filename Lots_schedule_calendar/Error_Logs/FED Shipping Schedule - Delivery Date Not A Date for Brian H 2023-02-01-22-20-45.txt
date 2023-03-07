@@ -1,6 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2222,FED,Sequence,20,Silver Spring WMATA Metro Entrance Canopy,,Brian H,,11/11/1899,4931,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4931
-2222,FED,Sequence,20.97,Silver Spring WMATA Metro Entrance Canopy Anchor Rod & LP,,Brian H,,11/11/1899,4932,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4932
-2222,FED,Sequence,12.97,Riverdale Park Station - Anchor Rod & LP,,Brian H,,11/11/1899,4934,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4934
-2222,FED,Sequence,11,Bethesda Enclosed Trainway (BET) ,,Brian H,,,4940,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4940
