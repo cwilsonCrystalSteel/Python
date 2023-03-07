@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2033,FED,Sequence,11,,12/1/2021,Mustafa,Yes
-2033,FED,Sequence,11,,3/16/2022,Mustafa,Yes

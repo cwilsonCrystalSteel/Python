@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2125,CSF,Sequence,89,Linen Chute opening support (Basement to level12 South Tower),,Scott,,11/11/1899

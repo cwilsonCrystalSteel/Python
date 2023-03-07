@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2121,CSM,Item,3.3,Embebs Steel Stair D(Bldg B),,John S,
-2121,CSM,Item,12.3,Embeds for Courtyard stair(Bldg B),,John S,

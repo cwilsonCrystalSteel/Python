@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-1926,CSM,Sequence,70,SS - Louvers Seq5-7,8/2/2022,Scott,
-1926,CSM,Item,70,12 Fin PL's looking for a shared Load,8/16/2022,Scott,

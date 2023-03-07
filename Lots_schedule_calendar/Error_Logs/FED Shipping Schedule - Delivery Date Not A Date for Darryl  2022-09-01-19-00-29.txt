@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2116.0,FED,Sequence,97.3,Embed Materials with Thick Plates (PH-2116-063),,Darryl ,

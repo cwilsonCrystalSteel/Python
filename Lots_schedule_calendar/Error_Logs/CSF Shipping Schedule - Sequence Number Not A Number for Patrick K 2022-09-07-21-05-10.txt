@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004,CSF,Sequence,Bull3ye5,"Missing AN3000, AN3009, TPL3125 & TPL3553",9/8/2022,Patrick K,,

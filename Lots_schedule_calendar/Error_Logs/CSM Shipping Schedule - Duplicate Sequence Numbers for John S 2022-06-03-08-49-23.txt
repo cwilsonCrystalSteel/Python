@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2121,CSM,Ticket,6,Rework B1088,4/25/2022,John S,YES
-2121,CSM,Ticket,6,Field Fix for missing Embed Connection (EP130),5/23/2022,John S,YES

@@ -1,5 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2116,FED,Sequence,15.5,Balance -  Second Floor Renovation Work Area C,,Darryl,,,2559,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2559
-2116,FED,Sequence,21.5,Balance - Second Floor Renovation Work Area D,,Darryl,,,2579,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2579
-2116,FED,Sequence,22.4,Balance - Second Floor Renovation Work Area D - Perimeter,,Darryl,,,2584,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2584

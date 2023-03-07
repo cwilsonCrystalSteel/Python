@@ -1,6 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,70.4,PH-2125-086 Seq70.4 Lot# T014,5/21/2022,Scott,Yes
-2125,CSF,Sequence,70.4,L12 Bracing 5AM DELIVERY,6/29/2022,Scott,
-2125,CSF,Sequence,73,DECK Seq 73 AHU 3/4,11/21/2022,Scott,
-2125,CSF,Sequence,73,AHU-3/4 Reno Work ,6/30/2022,Scott,YES

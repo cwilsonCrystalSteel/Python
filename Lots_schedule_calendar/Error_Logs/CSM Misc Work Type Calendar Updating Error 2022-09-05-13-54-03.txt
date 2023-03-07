@@ -1,2 +1,0 @@
-CSM
-<HttpError 403 when requesting https://www.googleapis.com/calendar/v3/calendars/c_uqopq4705q7o473uveoah08h7o%40group.calendar.google.com/events/fmupop7h7fc7ldsee7lc9v4m28? returned "Rate Limit Exceeded". Details: "[{'domain': 'usageLimits', 'reason': 'rateLimitExceeded', 'message': 'Rate Limit Exceeded'}]">

@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2117.0,CSF,Ticket,1,MK2117-001,9/28/2021,Mustafa,Yes,8/10/2021
-2117.0,CSF,Ticket,1,KS2117-01 deliver with a pickup,3/28/2022,Mustafa,Yes,2/7/2022
-2117.0,CSF,Ticket,1,Field Bolts ,8/19/2022,Mustafa,,4/12/2022

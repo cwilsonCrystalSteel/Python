@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2035,CSF,Sequence,16,,,Scott,,11/11/1899
-2035,CSF,Sequence,97.3,,,Scott,,

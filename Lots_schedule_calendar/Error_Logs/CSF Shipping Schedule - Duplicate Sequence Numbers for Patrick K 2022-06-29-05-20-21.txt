@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004.0,CSF,Ticket,18,LOBBY COLUMN - 4th Flr Temp Conn. & shims-Rel.#989 (0.95 Tons),7/5/2022,Patrick K,
-2004.0,CSF,Ticket,18,LOBBY COLUMN - 4th Flr Addl Shim-Rel. #1001 (0.021 Tons),7/5/2022,Patrick K,

@@ -1,8 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2218,CSM,Sequence,11,RAW WAREHOUSE (RAW-2),,,
-2218,CSM,Sequence,12,RAW WAREHOUSE (RAW-3),,,
-2218,CSM,Sequence,13,RAW WAREHOUSE (RAW-4),,,
-2218,CSM,Sequence,16,FINISHED GOODS (FINISH-2),,,
-2218,CSM,Sequence,17,FINISHED GOODS (FINISH-3),,,
-2218,CSM,Sequence,18,FINISHED GOODS (FINISH-4),,,

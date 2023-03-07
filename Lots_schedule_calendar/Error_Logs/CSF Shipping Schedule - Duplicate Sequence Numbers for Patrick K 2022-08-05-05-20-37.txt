@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004.0,CSF,Ticket,20.2,Seq 20 Fix Plate - Release #1067,8/5/2022,Patrick K,,6/17/2022
-2004.0,CSF,Ticket,20.2,Extra plates  for Seq15 (PH-2004-885) - 0.4824 tons,6/16/2022,Patrick K,Yes,4/28/2022
