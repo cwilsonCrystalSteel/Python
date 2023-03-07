@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2127.0,CSF,Ticket,12,New embed plates for replacement per RFI 210 ,,Dick G,
-2127.0,CSF,Ticket,13,Added Plates at North Elevator per RFI #211,,Dick G,

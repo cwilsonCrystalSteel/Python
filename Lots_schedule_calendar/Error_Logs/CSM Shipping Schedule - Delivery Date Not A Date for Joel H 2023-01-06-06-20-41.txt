@@ -1,8 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2218,CSM,Sequence,1.1,EXTRACTOR PIT (EP-1)-T091 Additional Beams per Bulletin 02/03,,Joel H,,11/11/1899,4721,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4721
-2218,CSM,Sequence,2.1,EXTRACTOR PIT (EP-1)-T091 Additional Beams per Bulletin 02/03,,Joel H,,11/11/1899,4723,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4723
-2218,CSM,Sequence,5.1,EXTRACTOR PIT (EP-1)-T092 Additional Beams per Bulletin 02/03,,Joel H,,11/11/1899,4727,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4727
-2218,CSM,Sequence,6.1,EXTRACTOR PIT (EP-1)-T092 Additional Beams per Bulletin 02/03,,Joel H,,11/11/1899,4729,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4729
-2218,CSM,Sequence,20,RAW WAREHOUSE (RAW-5),,Joel H,,11/11/1899,4743,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4743
-2218,CSM,Sequence,97.8,RAW WAREHOUSE Additional Anchor Bolts,,Joel H,,,4753,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4753

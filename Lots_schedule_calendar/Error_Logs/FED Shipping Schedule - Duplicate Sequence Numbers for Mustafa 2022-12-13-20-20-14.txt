@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2139.0,FED,Ticket,1,FIELD BOLTS MK2139-01,12/14/2022,Mustafa,,,3823,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3823
-2139.0,FED,Ticket,1,Seq35 Added Mock-Up Steel PH-2139-044 ( 2.9 hours),12/14/2022,Mustafa,,10/26/2022,4062,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4062

@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,68.1,LOT 33 - Added Loose Plates Per Ex. Connx Seq 68,,Scott,
-2125,CSF,Sequence,79,PKG2-0736 NE Core Chilled Water Lines Steel & Infills -Level 12-14,,Scott,
-2125,CSF,Sequence,99.7,Seq 1 ADV Material,,Scott,

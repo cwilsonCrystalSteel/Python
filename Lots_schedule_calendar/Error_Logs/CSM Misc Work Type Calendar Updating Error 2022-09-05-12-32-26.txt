@@ -1,2 +1,0 @@
-CSM
-Unable to find the server at gmail.googleapis.com

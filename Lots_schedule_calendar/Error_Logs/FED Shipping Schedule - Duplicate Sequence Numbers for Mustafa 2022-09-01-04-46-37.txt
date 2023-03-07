@@ -1,7 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2015.0,FED,Ticket,1,MK2015-01,6/27/2022,Mustafa,
-2033.0,FED,Sequence,11,,3/16/2022,Mustafa,
-2033.0,FED,Sequence,11,,12/1/2021,Mustafa,
-2033.0,FED,Ticket,4,MK2033-004 TICKET,3/16/2022,Mustafa,
-2033.0,FED,Sequence,8,PH-2033-120,9/29/2021,Mustafa,

@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2127.0,CSF,Ticket,29,MK2127-029+ Cell Closures * should be on site at7:00 am),9/15/2022,Mustafa,Yes,7/28/2022

@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004.0,CSF,Ticket,36,Conn. Plates (0.30 Tons),,Patrick K,

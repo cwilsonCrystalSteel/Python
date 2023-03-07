@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2127,CSF,Sequence,3,Deliver with Ticket 2560C,7/18/2022,Dick G,Yes,5/30/2022,3666,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3666
-2127,CSF,Sequence,7,Deliver with Ticket 2560G - 7pm Delv,7/19/2022,Dick G,Yes,5/31/2022,3671,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3671
-2127,CSF,Sequence,7,T016B - 7pm Delivery - In Delmar for shipping,8/11/2022,Dick G,Yes,6/23/2022,3672,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3672

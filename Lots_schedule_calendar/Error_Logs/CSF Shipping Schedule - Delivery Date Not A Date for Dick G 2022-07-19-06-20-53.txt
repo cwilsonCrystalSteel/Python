@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2127.0,CSF,Ticket,14,New embed plates for replacement @ Roof and Penhouse,,Dick G,

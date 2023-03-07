@@ -1,5 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2117,CSF,Sequence,4.1,LOT 02,9/22/2021,Mustafa,Yes
-2117,CSF,Sequence,4.1,Lot#16,2/10/2022,Mustafa,YES
-2117,CSF,Sequence,4.1,LOT T30,6/14/22,Mustafa,
