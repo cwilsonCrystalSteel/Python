@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2219,CSM,Sequence,72S12,T001,,John S.,,
-2219,CSM,Sequence,72S12,T002,,John S.,,
-2219,CSM,Sequence,72S12,T003,,John S.,,
-2219,CSM,Sequence,72S12,T004,,John S.,,

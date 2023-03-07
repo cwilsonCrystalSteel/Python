@@ -1,5 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2120,FED,Sequence,1,Lower Posts / 144 Req'd per week,8/30/2021,Mike D,Yes
-2120,FED,Ticket,1,(30) Fixed hinge plates/FED shop work ticket 071122-2120,7/22/2022,Mike D,
-2120,FED,Sequence,2,(6) Upper Posts for Mockup,11/8/2021,Mike D,Yes

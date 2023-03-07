@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004.0,CSF,Ticket,35.3,Add'l Pls per SK RFI #1072 -,,Patrick K,,

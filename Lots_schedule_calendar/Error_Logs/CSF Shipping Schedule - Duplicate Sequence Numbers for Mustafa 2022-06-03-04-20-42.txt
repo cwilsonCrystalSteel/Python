@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2117,CSF,Sequence,15,All Seq15,6/6/2022,Mustafa,
-2117,CSF,Sequence,99,ph2117-129 ,6/6/22,Mustafa,

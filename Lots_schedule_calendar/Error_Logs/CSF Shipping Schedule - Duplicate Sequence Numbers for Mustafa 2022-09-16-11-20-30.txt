@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2127.0,CSF,Ticket,29,MK2127-029+ Cell Closures * should be on site at7:00 am),9/15/2022,Mustafa,Yes,7/28/2022,1074,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D1074
-2127.0,CSF,Ticket,29,Additional angles and Plates for seq13 gap field fix - PH-2127-210,,Mustafa,,11/11/1899,3365,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3365

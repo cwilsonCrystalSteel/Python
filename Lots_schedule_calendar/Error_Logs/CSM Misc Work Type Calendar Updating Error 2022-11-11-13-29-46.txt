@@ -1,2 +1,0 @@
-CSM
-sequence item 0: expected str instance, Series found
