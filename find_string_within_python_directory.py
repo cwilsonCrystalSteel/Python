@@ -7,40 +7,45 @@ Created on Tue Jun  1 10:43:44 2021
 
 import glob, os
 
-# directory to search within
-pydir = 'c://users/cwilson/documents/python/'
-# all the files within the directory
-files = [y for x in os.walk(pydir) for y in glob.glob(os.path.join(x[0], '*.py'))]
-# function/string to find within the python files
-
-function_name_as_str = "JTURNER"
 
 
-print('The string in question:\t\t"' + function_name_as_str + '"', end='\n\n')
-
-# dict with file names & line numbers the function_name_as_str appears on
-specific = {}
-
-for file in files:
+def find_string_in_the_dir(string_to_find):
+    function_name_as_str = "Production_Dashboard_temp_files"
+    function_name_as_str = string_to_find
+    # directory to search within
+    pydir = 'c://users/cwilson/documents/python/'
+    # all the files within the directory
+    files = [y for x in os.walk(pydir) for y in glob.glob(os.path.join(x[0], '*.py'))]
+    # function/string to find within the python files
     
-    if file.endswith('find_string_within_python_directory.py'):
-        continue
     
-    with open(file) as f:
+    
+    print('The string in question:\t\t"' + function_name_as_str + '"', end='\n\n')
+    
+    # dict with file names & line numbers the function_name_as_str appears on
+    specific = {}
+    
+    for file in files:
         
-        lines = f.readlines()
+        if file.endswith('find_string_within_python_directory.py'):
+            continue
         
-        for i,line in enumerate(lines):
+        with open(file) as f:
             
-            if function_name_as_str in line:
+            lines = f.readlines()
+            
+            for i,line in enumerate(lines):
                 
-                print('In the file:\t\t\t\t' + os.path.basename(file))
-                print('The string is on line #:\t' + str(i))
-                if file not in specific:
-                    specific[file] = []
-                    specific[file].append(i)
+                if function_name_as_str in line:
                     
-                else:
-                    specific[file].append(i)
+                    print('In the file:\t\t\t\t' + os.path.basename(file))
+                    print('The string is on line #:\t' + str(i))
+                    if file not in specific:
+                        specific[file] = []
+                        specific[file].append(i)
+                        
+                    else:
+                        specific[file].append(i)
                 
 
+find_string_in_the_dir('Production_Dashboard_temp_files')
