@@ -1,2 +1,0 @@
-FED
-'NoneType' object has no attribute 'copy'

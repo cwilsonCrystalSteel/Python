@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2015,FED,Sequence,1,PH-2015-013: T001_PH-2015-019: T004 deliver with ticket #2567-2015+ THREADED RODS (1-10-2-11-3-13-14-7-9-12-6-8-4-5-15),7/22/2022,Darryl,
-2015,FED,Sequence,2,PH-2015-025: T010_PH-2015-045:T010 (REPACKAGE),7/25/2022,Darryl,

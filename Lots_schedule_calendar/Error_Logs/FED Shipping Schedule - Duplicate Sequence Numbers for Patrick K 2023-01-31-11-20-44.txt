@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2215,FED,Sequence,97,Parking Garage,2/13/2023,Patrick K,,12/26/2022,4568,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4568
-2215,FED,Sequence,97,LP: PH-2215-003,11/7/2022,Patrick K,Yes,9/19/2022,4569,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4569

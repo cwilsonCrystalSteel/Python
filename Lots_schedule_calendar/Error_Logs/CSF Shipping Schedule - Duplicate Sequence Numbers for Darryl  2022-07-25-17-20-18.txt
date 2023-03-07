@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2117.0,CSF,Ticket,97,Seq4 (PH-2117-222),7/28/2022,Darryl ,,

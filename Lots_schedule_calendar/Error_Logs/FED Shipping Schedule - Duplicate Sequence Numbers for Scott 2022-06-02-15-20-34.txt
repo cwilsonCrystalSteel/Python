@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,FED,Sequence,1,PH-2125-121  Lot# T018,6/10/22,Scott,
-2125,FED,Sequence,1,C1012,9/22/2022,Scott,

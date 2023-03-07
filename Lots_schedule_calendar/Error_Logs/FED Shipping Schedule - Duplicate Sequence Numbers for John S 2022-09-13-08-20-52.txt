@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2212,FED,Sequence,17.1,Splice material for Seq 17 PH-2212-017,9/19/2022,John S,,8/1/2022
-2212,FED,Sequence,17.1,Splice material for Seq 17 PH-2212-017,9/19/2022,John S,,8/1/2022

@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2216,FED,Sequence,97,Embed Plates,10/3/2022,Mustafa,

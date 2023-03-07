@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2117.0,CSF,Ticket,99.10,Connection PL for Field Fix of W8 at CL M5,,Darryl,,

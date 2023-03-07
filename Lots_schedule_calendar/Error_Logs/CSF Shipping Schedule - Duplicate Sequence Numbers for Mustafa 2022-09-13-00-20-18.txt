@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2127,CSF,Sequence,8, LOT T034 B8123-B8124-B8125-B8126-B8127-B8128,9/13/2022,Mustafa,,7/26/2022

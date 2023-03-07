@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2004,FED,Ticket,18,Seq13 & 18 Connection materials - Lower Levels,6/6/2022,Patrick K,
-2004,FED,Ticket,18,Seq13 & 18 Connection materials - Lower Levels Rel #919,6/6/2022,Patrick K,

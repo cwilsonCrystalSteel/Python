@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2120,CSF,Item,2.2,Staircase #13,,Mike D,,11/11/1899

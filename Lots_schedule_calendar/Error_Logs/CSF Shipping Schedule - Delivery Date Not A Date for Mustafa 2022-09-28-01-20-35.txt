@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2127.0,CSF,Ticket,32,Added Plate for field fix of beam marked B10039 per RFi 249 response - PH-2127-213,,Mustafa,,11/11/1899,3447,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3447
-2127.0,CSF,Ticket,33,PH-2127-216,,Mustafa,,,3448,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3448

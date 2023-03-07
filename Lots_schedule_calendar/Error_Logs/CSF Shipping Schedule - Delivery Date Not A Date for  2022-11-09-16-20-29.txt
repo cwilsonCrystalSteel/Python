@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
-2125,CSF,Item,24,,,,,3329,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3329

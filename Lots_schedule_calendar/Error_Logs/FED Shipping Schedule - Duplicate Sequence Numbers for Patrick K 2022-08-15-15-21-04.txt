@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2004,FED,Sequence,27.1,8th Fl Area #14 (LOT #T215) - 20.87 tons,8/11/2022,Patrick K,Yes,6/23/2022
-2004,FED,Sequence,27.1,Seq 27-29 LOT #T245,8/19/2022,Patrick K,,

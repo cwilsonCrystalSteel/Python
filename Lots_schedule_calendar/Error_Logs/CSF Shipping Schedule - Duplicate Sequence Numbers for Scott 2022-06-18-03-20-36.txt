@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2125,CSF,Sequence,71,East Shaft Reno Work ,9/1/2022,Scott,

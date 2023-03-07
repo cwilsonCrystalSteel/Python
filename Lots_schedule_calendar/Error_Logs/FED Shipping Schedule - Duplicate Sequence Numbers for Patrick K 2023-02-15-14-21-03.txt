@@ -1,6 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2215,FED,Sequence,3.1,"T008, T009, T010",2/16/2023,Patrick K,,,4292,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4292
-2215,FED,Sequence,3.1,"T008, T009, T010",2/16/2023,Patrick K,,,4304,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4304
-2215,FED,Sequence,97,Parking Garage,3/7/2023,Patrick K,,1/17/2023,4623,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4623
-2215,FED,Sequence,97,LP: PH-2215-003,11/7/2022,Patrick K,Yes,9/19/2022,4624,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4624

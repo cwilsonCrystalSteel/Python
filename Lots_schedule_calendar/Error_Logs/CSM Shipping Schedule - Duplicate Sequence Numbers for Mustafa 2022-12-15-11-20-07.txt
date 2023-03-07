@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped?,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2207,CSM,Item,2,Pipe railing and kick plate at grating per note 5 on S2.53,11/29/2022,Mustafa,Yes,10/11/2022,4241,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4241
-2207,CSM,Item,2,PH-2207-065,12/19/2022,Mustafa,,10/31/2022,4243,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4243
-2207,CSM,Item,3,Missing Ladder Treads,12/19/2022,Mustafa,,,3834,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3834
-2207,CSM,Item,3,Ships ladder,11/30/2022,Mustafa,Yes,10/12/2022,4242,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4242

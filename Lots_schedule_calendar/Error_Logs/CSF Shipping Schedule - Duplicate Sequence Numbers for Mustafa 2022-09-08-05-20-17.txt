@@ -1,6 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2127,CSF,Sequence,8, LOT T034 B8123-B8124-B8125-B8126-B8127-B8128,9/7/2022,Mustafa,,7/20/2022
-2127,CSF,Sequence,97,Embeds,2/28/2022,Mustafa,Yes,1/10/2022
-2127,CSF,Sequence,97,PH2127-096 Ticket MK2127-02,4/27/2022,Mustafa,Yes,3/9/2022
-2127,CSF,Sequence,97,EP108-109-111-112-124,5/11/2022,Mustafa,Yes,3/23/2022

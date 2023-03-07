@@ -1,3 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2117,CSF,Sequence,5,ph2117-152 lot#26,5/17/2022,Mishler,

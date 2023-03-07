@@ -1,4 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2120,CSM,Item,1,Staircase Mockup / Shop Release PH-2120-049,6/9/2022,Mike D,
-2120,CSM,Item,1,"Balance of Staircases (14) / 15 Total, including mockup",7/18/22,Mike D,
