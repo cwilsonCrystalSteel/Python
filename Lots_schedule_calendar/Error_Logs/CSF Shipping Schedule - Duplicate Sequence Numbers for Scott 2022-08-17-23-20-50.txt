@@ -1,6 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2125,CSF,Sequence,73,AHU-3/4 Reno Work ,6/30/2022,Scott,Yes,5/12/2022
-2125,CSF,Sequence,73,DECK Seq 73 AHU 3/4,11/21/2022,Scott,,10/3/2022
-2125,CSF,Sequence,77,LOT 48 Stair G slab Infill,8/19/2022,Scott,,7/1/2022
-2125,CSF,Sequence,77,,,Scott,,11/11/1899

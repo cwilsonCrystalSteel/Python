@@ -1,4 +1,0 @@
-CSF
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2139,CSF,Sequence,97,Shepherds Parkway Anchor Bolt,1/11/2023,Mustafa,
-2139,CSF,Sequence,97,Maintenance Building Anchor Bolt,1/12/2023,Mustafa,

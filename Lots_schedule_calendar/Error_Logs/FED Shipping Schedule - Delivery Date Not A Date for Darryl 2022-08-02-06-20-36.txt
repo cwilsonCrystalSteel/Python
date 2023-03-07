@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2116,FED,Sequence,11.1,PH-2116-049  (LOT T016) Second Floor Renovation Work Area C,,Darryl,,

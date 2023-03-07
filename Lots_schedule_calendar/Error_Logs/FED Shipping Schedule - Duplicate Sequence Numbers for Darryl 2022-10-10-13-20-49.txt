@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop,GoogleSheetRowNumber,GoogleSheetLink
-2116,FED,Sequence,32.3, PH-2116-079 (LOT T026) Third Floor Renovation Work Area C,10/26/2022,Darryl,,9/7/2022,2631,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2631
-2116,FED,Sequence,54.3,PH-2116-060,10/6/2022,Darryl,Yes,8/18/2022,3428,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3428

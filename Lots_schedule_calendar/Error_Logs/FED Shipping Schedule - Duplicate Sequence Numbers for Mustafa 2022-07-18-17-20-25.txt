@@ -1,8 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped
-2015,FED,Ticket,1,MK2015-01,6/27/2022,Mustafa,Yes
-2139,FED,Buyout,1,Deck Detailing,7/30/2022,Mustafa,
-2139,FED,Sequence,1,Area1,1/2/2023,Mustafa,
-2139,FED,Sequence,18,Area2,1/23/2023,Mustafa,
-2139,FED,Buyout,2,Joist Detailing,7/30/2022,Mustafa,
-2139,FED,Sequence,2,Area1,1/2/2023,Mustafa,

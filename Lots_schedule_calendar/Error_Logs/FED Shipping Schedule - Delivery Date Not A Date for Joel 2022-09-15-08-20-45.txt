@@ -1,3 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2014,FED,Sequence,5.5,Added steel at Bunker Roof Hatch (PH-2014-293),,Joel,,10/14/1899

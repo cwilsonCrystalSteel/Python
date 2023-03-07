@@ -1,4 +1,0 @@
-FED
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,Dwgs Needed in Shop
-2120,FED,Sequence,2.8,Upper Level Wind Barrier and End Post / All  WT9 x 35.3 / All Tapered & Bent,7/21/2022,Mike D,,6/2/2022
-2120,FED,Sequence,2.8,(BALANCE) Posts /T020 / (PH-2120-068),7/29/2022,Mike D,,2/4/2022

@@ -1,6 +1,0 @@
-CSM
-Job,Fabrication Site,Type of Work,Number,Work Description,Delivery,PM,Shipped,GoogleSheetRowNumber,GoogleSheetLink
-2121,CSM,Item,31,"Escutcheon plates on gym gallery pipe columns line 22/C1,F,H,I",2/14/2022,Jessica--John S.,,3004,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3004
-2121,CSM,Item,37,Courtyard gate at level 2 aligned with bridge at line22.9/KK.2,10/8/2021,Jessica--John S.,,3010,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3010
-2121,CSM,Item,39,Edge angle deck support at ramp,,Jessica--John S.,,2983,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D2983
-2121,CSM,Item,42,Bi-fold door jamb support (exclusion30),10/8/2021,Jessica--John S.,,3015,https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D3015
