@@ -171,7 +171,7 @@ for i in range(0,delta):
                 # add the lot to the df
                 xls_lot['LOT'] = lot
                
-                
+                # this is for when a lot already exists in the xls_main but needs to be updated
                 if xls_file_exists_with_previous_date:
                     print('Updating lot {}'.format(lot))
                     # get a copy of the main file's data for that LOT
