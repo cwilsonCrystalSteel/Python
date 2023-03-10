@@ -48,17 +48,7 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     # define the Google sheets sheetname for each state
     # also apply special changes to TN b/c scott wants prefab & fab instead of fit/qeld/saw/inventory
     if state == 'TN':
-        sheet = 'CSM QC Form'
-        ''' this is for SCOTT - break it to fab & prefab '''
-        # define fab & prefab swaps
-        # fab_dept = {'FIT/WELD':'FAB','QA/QC':'FAB'}
-        # prefab_dept = {'DETAIL':'PREFAB','SAW AND DRILL':'PREFAB','RECIEVING':'PREFAB'}
-        # ei.loc[:,'Department'] = ei['Department'].replace(fab_dept)
-        # ei.loc[:,'Department'] = ei['Department'].replace(prefab_dept)
-        # other_dept = ei[(ei['Department'] != 'FAB') & (ei['Department'] != 'PREFAB')]
-        # other_dept = other_dept.assign(Department='OTHER')
-        # ei.loc[other_dept.index,'Department'] = other_dept['Department']    
-        
+        sheet = 'CSM QC Form'        
     elif state == 'DE':
         sheet = 'CSF QC Form'
     elif state == 'MD':
