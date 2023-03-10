@@ -18,7 +18,7 @@ from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 # get the data from the fab listing google sheet
 # fablisting_df = grab_google_sheet(shop + ' QC Form', "06/01/2021", "02/15/2022")
 # get the df of eva destinations 
-eva_destinations_df = get_df_of_all_lots_files_information()
+# eva_destinations_df = get_df_of_all_lots_files_information()
 
 # fill = apply_model_hours2(fablisting_df, how='model', fill_missing_values=True, shop=shop, return_missing_job_lots=True)
 # fill['missing job lots'].to_excel('c:\\users\\cwilson\\downloads\\' + shop + ' missing job lots.xlsx')
@@ -42,91 +42,120 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         if fablisting_df.shape[0]:
             df = pd.DataFrame()
             
-            for job_lot in x.index:
-                # get the job 
-                job = job_lot[0]
-                # get the lot name
-                lot_name = job_lot[1]
-                # get the chunk with only that job & lot
-                chunk = fablisting_df[(fablisting_df['Job #'] == job) & (fablisting_df['Lot Name'] == lot_name)]
-                chunk = chunk.copy()
+            jobs = pd.unique(x.index.get_level_values(level=0))
+            for job in jobs:
+                print(job)
                 
-                # start widdling down the big ass list of EVA files
-                eva = eva_destinations_df[(eva_destinations_df['lot'] == lot_name) & (eva_destinations_df['job'] == job)]
-                '''
-                shops = list(eva['shop'])
-                # get only that location's eva file
-                eva = eva[eva['shop'] == shop]
-                # this will fail if there is not lot file available after looking for the LOT NAME -> JOB -> SHOP                
+                chunk_job = fablisting_df[fablisting_df['Job #'] == job]
+                # if for some reason the chunk returns no rows we have an issue!
+                if not chunk_job.shape[0]:
+                    print('No rows found for chunk_job: {}'.format(job))
+                    chunk_job['Hours Per Piece'] = np.nan
+                    df = df.append(chunk_job)     
+                    continue 
+                # try to get the job's eva database open
                 try:
-                    # the iloc[-1] ensures getting the newest file
-                    eva_destination = eva.iloc[-1]['destination']
-                except:
-                    print('There is no file for {}'.format(job_lot))
-                    if lot_name == 'T000':
-                        reason = 'No LOT on fablisting'
-                    else:
-                        reason = 'Cannot find file in EVA folder'
-                    missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':reason,'shops':shops}, ignore_index=True)
-                    chunk['Hours Per Piece'] = np.nan
-                    df = df.append(chunk)
-                    continue
+                    xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')                
+                except Exception:
+                    print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
+                    chunk_job['Hours Per Piece'] = np.nan
+                    df = df.append(chunk_job)
+                    continue 
+                
+                lots = x.xs(job, level=0).index
+                
+                for lot_name in lots:
+                    print(job, lot_name)
+                    # get the job 
+                    # job = job_lot[0]
+                    # get the lot name
+                    # lot_name = job_lot[1]
+                    # get the chunk with only that job & lot
+                    chunk = chunk_job[chunk_job['Lot Name'] == lot_name]
+                    if not chunk.shape[0]:
+                        print('no rows found for chunk: {}'.format(lot_name))
+                        chunk['Hours Per Piece'] = np.nan
+                        df = df.append(chunk)
+                        continue
+                    chunk = chunk.copy()
                     
+                    # start widdling down the big ass list of EVA files
+                    # eva = eva_destinations_df[(eva_destinations_df['lot'] == lot_name) & (eva_destinations_df['job'] == job)]
                     '''
-                # try to  open the EVA xls file
-                try:
-                    # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
-                    xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
-                    xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
-                except:
-                    print('Cannot open {}'.format(eva.iloc[-1]['basename']))
-                    ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
-                    # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
-                    chunk['Hours Per Piece'] = np.nan
+                    shops = list(eva['shop'])
+                    # get only that location's eva file
+                    eva = eva[eva['shop'] == shop]
+                    # this will fail if there is not lot file available after looking for the LOT NAME -> JOB -> SHOP                
+                    try:
+                        # the iloc[-1] ensures getting the newest file
+                        eva_destination = eva.iloc[-1]['destination']
+                    except:
+                        print('There is no file for {}'.format(job_lot))
+                        if lot_name == 'T000':
+                            reason = 'No LOT on fablisting'
+                        else:
+                            reason = 'Cannot find file in EVA folder'
+                        missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':reason,'shops':shops}, ignore_index=True)
+                        chunk['Hours Per Piece'] = np.nan
+                        df = df.append(chunk)
+                        continue
+                        
+                        '''
+                    # try to  open the EVA xls file
+                    try:
+                        # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+                        # xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
+                        xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
+                    except:
+                        # print('Cannot open {}'.format(eva.iloc[-1]['basename']))
+                        print('Cannot open {}'.format(lot_name))
+                        ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
+                        # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
+                        chunk['Hours Per Piece'] = np.nan
+                        df = df.append(chunk)
+                        continue
+                    
+                    # group by the page
+                    xls_lot_paged = xls_lot_from_main.groupby('PAGE').sum()
+                    # get only the main members and then get the sum of the QTY
+                    xls_lot_mainmember_qty = xls_lot_from_main[xls_lot_from_main['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
+                    # drop the qty from the grouped df
+                    xls_lot_paged = xls_lot_paged.drop(columns='QTY')
+                    # add in the new calculated quantity
+                    xls_lot_paged = xls_lot_paged.join(xls_lot_mainmember_qty)
+                    # calcualte man hours per piece
+                    xls_lot_paged['TOTAL MANHOURS PER PIECE'] = xls_lot_paged['TOTAL MANHOURS'] / xls_lot_paged['QTY']
+                    
+                    
+                    
+                    
+                    ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
+                    # get a copy of the pcmarks column
+                    pcmarks = chunk['Piece Mark - REV'].copy()
+                    # split the piece marks based on a hyphen - this is incase they have the rev # next to it
+                    pcmarks = pcmarks.str.split('-').str[0]
+                    # get rid of any extra spaces in the piece mark 
+                    pcmarks = pcmarks.str.strip()
+                    # create a copy of chunk to prevent setwithcopy warning
+                    chunk_copy = chunk.copy()
+                    # set the copy of chunk's pcmark column to the new pcmarks series that has no hyphens now
+                    chunk_copy['Piece Mark - REV'] = pcmarks
+                    # set chunk to equal the copy  
+                    chunk = chunk_copy
+                    # get rid of the copy 
+                    del chunk_copy
+                    # grab the current index - for later so you can put the index back to normal
+                    current_index = chunk.index
+                     # set the index to be piecemark so that i can join easily
+                    chunk = chunk.set_index('Piece Mark - REV', drop=False)
+                    # get the hours per piece from the grouped xls df
+                    chunk['Hours Per Piece'] = xls_lot_paged['TOTAL MANHOURS PER PIECE']
+                    # set the chunk index back 
+                    chunk = chunk.set_index(current_index)
+                    
+                    
+                    # appends chunk to df, but now with 'Hours Per Piece' column
                     df = df.append(chunk)
-                    continue
-                
-                # group by the page
-                xls_lot_paged = xls_lot_from_main.groupby('PAGE').sum()
-                # get only the main members and then get the sum of the QTY
-                xls_lot_mainmember_qty = xls_lot_from_main[xls_lot_from_main['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
-                # drop the qty from the grouped df
-                xls_lot_paged = xls_lot_paged.drop(columns='QTY')
-                # add in the new calculated quantity
-                xls_lot_paged = xls_lot_paged.join(xls_lot_mainmember_qty)
-                # calcualte man hours per piece
-                xls_lot_paged['TOTAL MANHOURS PER PIECE'] = xls_lot_paged['TOTAL MANHOURS'] / xls_lot_paged['QTY']
-                
-                
-                
-                
-                ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
-                # get a copy of the pcmarks column
-                pcmarks = chunk['Piece Mark - REV'].copy()
-                # split the piece marks based on a hyphen - this is incase they have the rev # next to it
-                pcmarks = pcmarks.str.split('-').str[0]
-                # get rid of any extra spaces in the piece mark 
-                pcmarks = pcmarks.str.strip()
-                # create a copy of chunk to prevent setwithcopy warning
-                chunk_copy = chunk.copy()
-                # set the copy of chunk's pcmark column to the new pcmarks series that has no hyphens now
-                chunk_copy['Piece Mark - REV'] = pcmarks
-                # set chunk to equal the copy  
-                chunk = chunk_copy
-                # get rid of the copy 
-                del chunk_copy
-                # grab the current index - for later so you can put the index back to normal
-                current_index = chunk.index
-                 # set the index to be piecemark so that i can join easily
-                chunk = chunk.set_index('Piece Mark - REV', drop=False)
-                # get the hours per piece from the grouped xls df
-                chunk['Hours Per Piece'] = xls_lot_paged['TOTAL MANHOURS PER PIECE']
-                # set the chunk index back 
-                chunk = chunk.set_index(current_index)
-                
-                
-                # appends chunk to df, but now with 'Hours Per Piece' column
-                df = df.append(chunk)
 
         # if the fablisting_df is empty, then do this stuff
         else:
