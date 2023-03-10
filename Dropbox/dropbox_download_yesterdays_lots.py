@@ -173,33 +173,33 @@ for i in range(0,delta):
                
                 # this is for when a lot already exists in the xls_main but needs to be updated
                 if xls_file_exists_with_previous_date:
-                    print('Updating lot {}'.format(lot))
-                    # get a copy of the main file's data for that LOT
-                    xls_main_with_same_lot = xls_main[xls_main['LOT'] == lot].copy()
-                    # create a copy of the xls_lot
-                    xls_lot_to_compare = xls_lot.copy()
-                    # give the xls_main an OLD tag
-                    xls_main_with_same_lot['new/old'] = 'old'
-                    #give the xls_lot copy a NEW tag
-                    xls_lot_to_compare['new/old']='new'
-                    # these are the fields we use to differentiate duplicates
-                    subset = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'MAIN MEMBER','PRODUCTION CODE','SHAPE', 'LABOR CODE', 'LOT']
+                    # print('Updating lot {}'.format(lot))
+                    # # get a copy of the main file's data for that LOT
+                    # xls_main_with_same_lot = xls_main[xls_main['LOT'] == lot].copy()
+                    # # create a copy of the xls_lot
+                    # xls_lot_to_compare = xls_lot.copy()
+                    # # give the xls_main an OLD tag
+                    # xls_main_with_same_lot['new/old'] = 'old'
+                    # #give the xls_lot copy a NEW tag
+                    # xls_lot_to_compare['new/old']='new'
+                    # # these are the fields we use to differentiate duplicates
+                    # subset = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'MAIN MEMBER','PRODUCTION CODE','SHAPE', 'LABOR CODE', 'LOT']
                 
-                    # append the copies of main & xls_lot
-                    x_appeneded = xls_lot_to_compare.append(xls_main_with_same_lot, ignore_index=True)
-                    # get any records that are not duplicates
-                    # this will maintain any records that are unique to xls_main and to xls_lot
-                    non_duplicated = x_appeneded[x_appeneded.duplicated(subset) == False]
-                    # get the new version of any duplicate records
-                    duplicated_and_new = x_appeneded[(x_appeneded.duplicated(subset) == True) & (x_appeneded['new/old'] == 'new')]
-                    # create the updated records for that lot
-                    x_updated_lot = non_duplicated.append(duplicated_and_new) 
-                    # get rid of the new/old column
-                    x_updated_lot = x_updated_lot.drop(columns=['new/old'])
+                    # # append the copies of main & xls_lot
+                    # x_appeneded = xls_lot_to_compare.append(xls_main_with_same_lot, ignore_index=True)
+                    # # get any records that are not duplicates
+                    # # this will maintain any records that are unique to xls_main and to xls_lot
+                    # non_duplicated = x_appeneded[x_appeneded.duplicated(subset) == False]
+                    # # get the new version of any duplicate records
+                    # duplicated_and_new = x_appeneded[(x_appeneded.duplicated(subset) == True) & (x_appeneded['new/old'] == 'new')]
+                    # # create the updated records for that lot
+                    # x_updated_lot = non_duplicated.append(duplicated_and_new) 
+                    # # get rid of the new/old column
+                    # x_updated_lot = x_updated_lot.drop(columns=['new/old'])
                     # drop all of the previous lot data
                     xls_main = xls_main[xls_main['LOT'] != lot]
                     # append the updated lot data to xls_main
-                    xls_main = xls_main.append(x_updated_lot)
+                    # xls_main = xls_main.append(xls_lot)
                     
                     
                     
