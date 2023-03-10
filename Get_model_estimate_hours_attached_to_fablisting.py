@@ -53,7 +53,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 
                 # start widdling down the big ass list of EVA files
                 eva = eva_destinations_df[(eva_destinations_df['lot'] == lot_name) & (eva_destinations_df['job'] == job)]
-                
+                '''
                 shops = list(eva['shop'])
                 # get only that location's eva file
                 eva = eva[eva['shop'] == shop]
@@ -72,56 +72,33 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     df = df.append(chunk)
                     continue
                     
-                    
+                    '''
                 # try to  open the EVA xls file
                 try:
-                    xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+                    # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+                    xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
+                    xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
                 except:
                     print('Cannot open {}'.format(eva.iloc[-1]['basename']))
                     ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
-                    missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
+                    # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
                     chunk['Hours Per Piece'] = np.nan
                     df = df.append(chunk)
                     continue
                 
-                
-                xls_lot_paged = xls_lot.groupby('PAGE').sum()
-                xls_lot_mainmember_qty = xls_lot[xls_lot['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
+                # group by the page
+                xls_lot_paged = xls_lot_from_main.groupby('PAGE').sum()
+                # get only the main members and then get the sum of the QTY
+                xls_lot_mainmember_qty = xls_lot_from_main[xls_lot_from_main['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
+                # drop the qty from the grouped df
                 xls_lot_paged = xls_lot_paged.drop(columns='QTY')
+                # add in the new calculated quantity
                 xls_lot_paged = xls_lot_paged.join(xls_lot_mainmember_qty)
+                # calcualte man hours per piece
                 xls_lot_paged['TOTAL MANHOURS PER PIECE'] = xls_lot_paged['TOTAL MANHOURS'] / xls_lot_paged['QTY']
-                xls_drop_by_part = xls_lot_paged
                 
                 
-                ''' Commenting all of this out b/c
-                xls_lot['Duplicator'] = xls_lot['PAGE'].astype(str) + xls_lot['PRODUCTION CODE'].astype(str) + xls_lot['SHAPE'].astype(str) + xls_lot['LABOR CODE'].astype(str)
                 
-                xls_duplicator_count = xls_lot.groupby(['Duplicator']).sum()['QTY']
-                
-                # drop any duplicate rows based on the duplicator column
-                xls_drop = xls_lot.drop_duplicates(subset=['Duplicator'])
-                # These lines were added in response to 2218-T066 
-                #Alex sent an email on 1/6/2023 6:56 am
-                
-                # #???? 
-                # xls_drop = xls_drop.join(xls_duplicator_count, on='Duplicator', rsuffix=' Total')
-                # #????
-                # xls_drop['TOTAL MANHOURS'] = xls_drop['TOTAL MANHOURS'] * xls_drop['QTY Total']
-                # #????
-                # xls_drop = xls_drop.drop(columns=['QTY Total'])
-                # # ????
-                
-                # Get only the pieces that are marked as main members
-                mainmembers = xls_lot[xls_lot['MAIN MEMBER'] == 1]
-                # get the quantitys from the main members
-                mainmembersqty = mainmembers.groupby(['PAGE']).sum()['QTY']
-                # group the xls without duplicates by the PAGe & sum data
-                xls_drop_by_part = xls_drop.groupby(['PAGE']).sum()
-                # the quantity needs to be set the quantity of just the main members
-                xls_drop_by_part['QTY'] = mainmembersqty
-                # recalculate the man hours per piece
-                xls_drop_by_part['TOTAL MANHOURS PER PIECE'] = xls_drop_by_part['TOTAL MANHOURS'] / xls_drop_by_part['QTY']
-                '''
                 
                 ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
                 # get a copy of the pcmarks column
@@ -143,7 +120,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                  # set the index to be piecemark so that i can join easily
                 chunk = chunk.set_index('Piece Mark - REV', drop=False)
                 # get the hours per piece from the grouped xls df
-                chunk['Hours Per Piece'] = xls_drop_by_part['TOTAL MANHOURS PER PIECE']
+                chunk['Hours Per Piece'] = xls_lot_paged['TOTAL MANHOURS PER PIECE']
                 # set the chunk index back 
                 chunk = chunk.set_index(current_index)
                 
