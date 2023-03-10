@@ -57,6 +57,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 shops = list(eva['shop'])
                 # get only that location's eva file
                 eva = eva[eva['shop'] == shop]
+                
+                
                 # this will fail if there is not lot file available after looking for the LOT NAME -> JOB -> SHOP                
                 try:
                     # the iloc[-1] ensures getting the newest file
@@ -76,6 +78,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 # try to  open the EVA xls file
                 try:
                     xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+                    xls_main = pd.read_excel('c://downloads//' + str(job) + '.xlsx')
+                    xls_lot0 = xls_main[xls_main['LOT'] == lot_name]
                 except:
                     print('Cannot open {}'.format(eva.iloc[-1]['basename']))
                     ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
