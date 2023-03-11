@@ -38,8 +38,8 @@ def get_timeclock_summary(today_str=today_str, state=state, basis=None):
     
     hours_productive = hours_productive[~hours_productive['Productive'].str.contains('NON')]
     
-    num_employees = pd.unique(hours_productive['Name']).shape[0]
+    num_employees = pd.unique(hours_productive.index).shape[0]
     num_direct = hours_productive[hours_productive['Is Direct']]['Hours'].sum().round(2)
     num_indirect = hours_productive[~hours_productive['Is Direct']]['Hours'].sum().round(2)
     
-    return {'employees':num_employees, 'direct':num_direct, 'indirect':num_indirect}
+    return {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
