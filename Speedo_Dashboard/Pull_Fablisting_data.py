@@ -42,7 +42,7 @@ def get_fablisting_plus_model_summary(sheet=sheet, start_date=start_date, end_da
     
     earned_hours = with_model[with_model['Has Model']]['Earned Hours'].sum().round(2)
     tonnage = (with_model['Weight'].sum() / 2000).round(2)
-    quantity = with_model['Quantity'].sum()
+    quantity = int(with_model['Quantity'].sum())
     
     
-    return {'Earned':earned_hours, 'Tons':tonnage, 'Qty':quantity}
+    return {'Earned Hours':earned_hours, 'Tons':tonnage, 'Quantity Pieces':quantity}
