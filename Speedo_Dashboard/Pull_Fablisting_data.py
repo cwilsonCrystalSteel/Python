@@ -19,7 +19,8 @@ start_dt = datetime.datetime.now().replace(hour=0, minute=0, second=0, microseco
 start_date = start_dt.strftime('%m/%d/%Y')
 end_dt = start_dt + datetime.timedelta(days=1)
 end_date = end_dt.strftime('%m/%d/%Y')
-def get_fablisting_plus_model_summary(sheet, start_date=start_date, end_date=end_date):
+
+def get_fablisting_plus_model_summary(sheet=sheet, start_date=start_date, end_date=end_date):
     print('Pulling fablisting for: {} to {}'.format(start_date, end_date))
     
     start_dt = datetime.datetime.strptime(start_date, '%m/%d/%Y')
