@@ -12,10 +12,11 @@ import pandas as pd
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
 
-def get_timeclock_summary(today_str, state, basis=None):
-    state = 'TN'
-    # today = datetime.datetime.now()
-    # today_str = today.strftime("%m/%d/%Y")
+state = 'TN'
+today = datetime.datetime.now()
+today_str = today.strftime("%m/%d/%Y")
+
+def get_timeclock_summary(today_str=today_str, state=state, basis=None):
     
     
     today = datetime.datetime.strptime(today_str, "%m/%d/%Y")
