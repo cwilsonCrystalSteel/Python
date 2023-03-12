@@ -33,7 +33,7 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
             # row = rows[i]
             row
             cols = row.find_all('td')
-            print(len(cols))
+            
             
             
             # cell_contains_table = [j for j,ele in enumerate(cols) if 'table' in str(ele)]
@@ -43,7 +43,7 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
             
             
             if len(cols) == 18 and i == 0:
-                print('found header row: {}'.format(i))
+                print('{}: Header row'.format(i))
                 # this is the headers row
                 headers = [ele.text.strip() for ele in cols]
                 headers.remove('')
@@ -59,12 +59,12 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
             # the colspan tag only appears when there is an employee name i think
             elif any([ele.get('colspan') for ele in cols]) and len(cols) == 1:
                 id_name = [ele.text.strip() for ele in cols][0]
-                print('This is the employee name row for {} on {}'.format(id_name,i))
+                print('{}: This is the employee name row for {}'.format(i, id_name))
             # the only other tie there is only one 'td' is when there is a blank row
             elif len(cols) == 1:
-                print('this is an empty row: {}'.format(i))
+                print('{}: this is an empty row'.format(i))
             else:
-                print('this is a record row: {}'.format(i))
+                print('{}: this is a record row'.format(i))
                 col_texts = [ele.text.strip() for ele in cols]
                 
                 first_non_blank = next(sub for sub in col_texts if sub)
@@ -76,7 +76,7 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                 first_non_blank_idx = col_texts.index(first_non_blank)
                 next_data = [id_name]
                 for j in range(first_non_blank_idx, len(col_texts)):
-                    print(col_texts[j])
+                    # print(col_texts[j])
                     next_data.append(col_texts[j])
                 # timein = col_texts[first_non_blank_idx]
                 # actualtimein = col_texts[11]
@@ -93,25 +93,8 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                 #              actualtimeout, pto, jobcode, costcode, hours, 
                 #              rate, shifttotal, weektotal]
                 data.append(next_data)
-                
-                print(data)
-            
-            
-            
-            
-            # classes = [ele.get('class') for ele in cols]
-            
-            
-            
-            
-            
-            
-            
-            
-            # cols = [ele.text.strip() for ele in cols]
-            # cols = [ele for ele in cols if ele]
-            # # if len(cols) > 2:
-            # data.append(cols)
+       
+        
     df = pd.DataFrame(data[1:], columns=data[0])
     df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')
     df['Hours'] = pd.to_numeric(df['Hours'])
