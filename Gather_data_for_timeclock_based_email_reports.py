@@ -113,15 +113,15 @@ def clean_up_this_gunk(times_df, ei):
 
 
 
-def skip_timeclock_automated_retrieval(times_df_html_path, ei_csv_path):
-    times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path)
+def skip_timeclock_automated_retrieval(times_df_html_path, ei_csv_path, in_and_out_times=False):
+    times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path, in_and_out_times=in_and_out_times)
     ei = pd.read_csv(ei_csv_path)
     
     return clean_up_this_gunk(times_df, ei)
     
 
 
-def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=True, download_folder="C:\\users\\cwilson\\downloads\\"):
+def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=True, download_folder="C:\\users\\cwilson\\downloads\\", in_and_out_times=False):
 
     today = datetime.datetime.today().date()
     
@@ -145,7 +145,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             if latest_html_time.date() == today:
                 print(latest_html)
                 # times_df = output_each_clock_entry_job_and_costcode(latest_html)
-                times_df = new_output_each_clock_entry_job_and_costcode(latest_html)
+                times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
                 # delete the html file
                 os.remove(latest_html)                
             else:
