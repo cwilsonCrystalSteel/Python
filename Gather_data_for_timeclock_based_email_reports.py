@@ -15,7 +15,7 @@ import os
 import datetime
 from TimeClock_Group_Hours import download_group_hours
 from TimeClock_Tools_Employee_Location import download_most_current_employee_location_csv
-from Read_Group_hours_HTML import new_output_each_clock_entry_job_and_costcode
+from Read_Group_hours_HTML import new_output_each_clock_entry_job_and_costcode, new_and_imporved_group_hours_html_reader
 import json
 
 
@@ -114,7 +114,9 @@ def clean_up_this_gunk(times_df, ei):
 
 
 def skip_timeclock_automated_retrieval(times_df_html_path, ei_csv_path, in_and_out_times=False):
-    times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path, in_and_out_times=in_and_out_times)
+    # times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path, in_and_out_times=in_and_out_times)
+    times_df = new_and_imporved_group_hours_html_reader(times_df_html_path, in_and_out_times=in_and_out_times)
+
     ei = pd.read_csv(ei_csv_path)
     
     return clean_up_this_gunk(times_df, ei)
@@ -145,7 +147,8 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             if latest_html_time.date() == today:
                 print(latest_html)
                 # times_df = output_each_clock_entry_job_and_costcode(latest_html)
-                times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
+                # times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
+                times_df = new_and_imporved_group_hours_html_reader(latest_html, in_and_out_times=in_and_out_times)
                 # delete the html file
                 os.remove(latest_html)                
             else:
@@ -195,11 +198,11 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
     return ei
 
 
-def get_information_for_clock_based_email_reports(start_date, end_date, exclude_terminated=True, download_folder="C:\\users\\cwilson\\downloads\\", ei=None):
+def get_information_for_clock_based_email_reports(start_date, end_date, exclude_terminated=True, download_folder="C:\\users\\cwilson\\downloads\\", ei=None, in_and_out_times=False):
     
     
     
-    times_df = get_clock_times_html_downloaded(start_date, end_date, exclude_terminated, download_folder)
+    times_df = get_clock_times_html_downloaded(start_date, end_date, exclude_terminated, download_folder, in_and_out_times=in_and_out_times)
     
     if ei is None:
         ei = get_ei_csv_downloaded(exclude_terminated, download_folder)
