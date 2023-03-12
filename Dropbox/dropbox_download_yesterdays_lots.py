@@ -36,7 +36,7 @@ except Exception:
     last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
     
 # get the datetime of that date
-last_successful_dt = datetime.datetime.strptime(last_successful_date,'%Y-%m-%d').date()
+last_successful_dt = datetime.datetime.strptime(last_successful_date,'%m/%d/%Y').date()
 
 # get yesterday's date
 yesterday = (datetime.datetime.now() + datetime.timedelta(days=-1)).date()
