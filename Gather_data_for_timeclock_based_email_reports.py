@@ -115,8 +115,10 @@ def clean_up_this_gunk(times_df, ei):
 
 def skip_timeclock_automated_retrieval(times_df_html_path, ei_csv_path, in_and_out_times=False):
     # times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path, in_and_out_times=in_and_out_times)
-    times_df = new_and_imporved_group_hours_html_reader(times_df_html_path, in_and_out_times=in_and_out_times)
-
+    try:
+         times_df = new_and_imporved_group_hours_html_reader(times_df_html_path, in_and_out_times=in_and_out_times)
+    except Exception:
+         times_df = new_output_each_clock_entry_job_and_costcode(times_df_html_path, in_and_out_times=in_and_out_times)
     ei = pd.read_csv(ei_csv_path)
     
     return clean_up_this_gunk(times_df, ei)
@@ -146,9 +148,11 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             # if the file was created today, then use it, if not then throw error            
             if latest_html_time.date() == today:
                 print(latest_html)
-                # times_df = output_each_clock_entry_job_and_costcode(latest_html)
                 # times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
-                times_df = new_and_imporved_group_hours_html_reader(latest_html, in_and_out_times=in_and_out_times)
+                try:
+                    times_df = new_and_imporved_group_hours_html_reader(latest_html, in_and_out_times=in_and_out_times)
+                except Exception:
+                    times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
                 # delete the html file
                 os.remove(latest_html)                
             else:
