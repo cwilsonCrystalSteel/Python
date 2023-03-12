@@ -48,4 +48,4 @@ def find_string_in_the_dir(string_to_find):
                         specific[file].append(i)
                 
 
-find_string_in_the_dir('c://downloads/')
+find_string_in_the_dir('new_output_each_clock_entry_job_and_costcode')
