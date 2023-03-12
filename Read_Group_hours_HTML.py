@@ -15,6 +15,123 @@ import numpy as np
 
 
 
+def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
+    
+    # I Dont know what I did but this gets all the rows of the html table
+    data = []
+    with open(html_file, 'r') as f:
+        
+        soup = BeautifulSoup(f, 'html.parser')
+        # print(soup.prettify())
+        table = soup.find('body')
+        rows = table.find_all('tr')
+    
+    
+    
+        for i,row in enumerate(rows):
+            # i+= 1
+            # row = rows[i]
+            row
+            cols = row.find_all('td')
+            print(len(cols))
+            
+            
+            # cell_contains_table = [j for j,ele in enumerate(cols) if 'table' in str(ele)]
+            # if len(cell_contains_table):
+            #     print('removing a table record {}'.format(i))
+            #     cols.pop(cell_contains_table[0])
+            
+            
+            if len(cols) == 18 and i == 0:
+                print('found header row: {}'.format(i))
+                # this is the headers row
+                headers = [ele.text.strip() for ele in cols]
+                headers.remove('')
+                headers.remove('M')
+                headers.remove('I')
+                headers.remove('O')
+                headers.remove('Note')
+                headers.remove('Edit')
+                headers.remove('Brk')
+                headers = ['Name'] + headers
+                data.append(headers)
+                
+            # the colspan tag only appears when there is an employee name i think
+            elif any([ele.get('colspan') for ele in cols]) and len(cols) == 1:
+                id_name = [ele.text.strip() for ele in cols][0]
+                print('This is the employee name row for {} on {}'.format(id_name,i))
+            # the only other tie there is only one 'td' is when there is a blank row
+            elif len(cols) == 1:
+                print('this is an empty row: {}'.format(i))
+            else:
+                print('this is a record row: {}'.format(i))
+                col_texts = [ele.text.strip() for ele in cols]
+                
+                first_non_blank = next(sub for sub in col_texts if sub)
+                
+                if first_non_blank == 'X':
+                    first_non_blank = next(sub for sub in col_texts[col_texts.index('X')+1:] if sub)
+                    print('{} the first nonblank was x, the next was {}'.format(i,first_non_blank))
+                
+                first_non_blank_idx = col_texts.index(first_non_blank)
+                next_data = [id_name]
+                for j in range(first_non_blank_idx, len(col_texts)):
+                    print(col_texts[j])
+                    next_data.append(col_texts[j])
+                # timein = col_texts[first_non_blank_idx]
+                # actualtimein = col_texts[11]
+                # timeout = col_texts[12]
+                # actualtimeout = col_texts[13]
+                # pto = col_texts[14]
+                # jobcode = col_texts[15]
+                # costcode = col_texts[16]
+                # hours = col_texts[17]
+                # rate = col_texts[18]
+                # shifttotal = col_texts[19]
+                # weektotal = col_texts[20]
+                # next_data = [id_name, timein, actualtimein, timeout, 
+                #              actualtimeout, pto, jobcode, costcode, hours, 
+                #              rate, shifttotal, weektotal]
+                data.append(next_data)
+                
+                print(data)
+            
+            
+            
+            
+            # classes = [ele.get('class') for ele in cols]
+            
+            
+            
+            
+            
+            
+            
+            
+            # cols = [ele.text.strip() for ele in cols]
+            # cols = [ele for ele in cols if ele]
+            # # if len(cols) > 2:
+            # data.append(cols)
+    df = pd.DataFrame(data[1:], columns=data[0])
+    df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')
+    df['Hours'] = pd.to_numeric(df['Hours'])
+    df['Job #'] = pd.to_numeric(df['Job Code'].str.split('-').str[0])
+    df['Name'] = df['Name'].str.split(' - ').str[1]
+    
+    
+    lot_ccs = df[df['Cost Code'].str[0] == '9']['Cost Code']
+    # get the lot cost codes ending in PAINT or LOAD
+    lot_ccs = lot_ccs[(lot_ccs.str[-5:] == 'PAINT') | (lot_ccs.str[-4:] == 'LOAD')]
+    # chop off the PAINT or LOAD & strip whitespace
+    new_lot_ccs = lot_ccs.str[:-5].str.strip()    
+    df.loc[new_lot_ccs.index, 'Cost Code'] = new_lot_ccs
+    df = df.rename(columns = {'Time in':'Time In', 'Time out':'Time Out'})
+    df = df[['Cost Code', 'Hours', 'Job #', 'Job Code', 'Name', 'Time In', 'Time Out']]
+    
+    if not in_and_out_times:
+        df = df.drop(columns = ['Time In','Time Out'], axis=0)
+    
+    return df
 
 
 def output_dict_of_each_employees_hours(html_file):
