@@ -21,7 +21,7 @@ def get_timeclock_summary(today_str=today_str, state=state, basis=None):
     
     today = datetime.datetime.strptime(today_str, "%m/%d/%Y")
     if basis == None:
-        basis = get_information_for_clock_based_email_reports(today_str, today_str, exclude_terminated=False, ei=None) 
+        basis = get_information_for_clock_based_email_reports(today_str, today_str, exclude_terminated=False, ei=None, in_and_out_times=True) 
     
     direct = basis['Direct']
     indirect = basis['Indirect']
