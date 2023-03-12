@@ -31,15 +31,9 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
         for i,row in enumerate(rows):
             # i+= 1
             # row = rows[i]
-            row
+            # row
             cols = row.find_all('td')
-            
-            
-            
-            # cell_contains_table = [j for j,ele in enumerate(cols) if 'table' in str(ele)]
-            # if len(cell_contains_table):
-            #     print('removing a table record {}'.format(i))
-            #     cols.pop(cell_contains_table[0])
+            # cols            
             
             
             if len(cols) == 18 and i == 0:
