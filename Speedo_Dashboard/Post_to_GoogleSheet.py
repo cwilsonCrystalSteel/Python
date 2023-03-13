@@ -20,14 +20,29 @@ now_str = now.strftime('%m/%d/%Y %H:%M')
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json'
                      }
-shop = 'CSM'
-sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
-worksheet = sh.worksheet(shop)
-worksheet_list_of_lists = worksheet.get_all_values()
-df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
+
+def get_google_sheet_as_df():
+    shop = 'CSM'
+    sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
+    worksheet = sh.worksheet(shop)
+    worksheet_list_of_lists = worksheet.get_all_values()
+    df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
+
+    try:
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+    except Exception:
+        print('could not convert timestamp to dataframe')
+        
+    df['IsReal'] = df['IsReal'].astype(int).astype(bool)   
+    
+    df.iloc[:,2:] = df[df.columns[2:]].astype(float)
+    
+    return df
 
 
 def post_observation(fablisting_summary, timeclock_summary):
+    
+    df = get_google_sheet_as_df()
     # first clear the isReal=0
     summary = {}
     summary.update(fablisting_summary)
@@ -62,6 +77,6 @@ def post_observation(fablisting_summary, timeclock_summary):
 
 
 
-def post_predictor():
+def post_predictor(df_today):
     # simply append a isReal=0 row
     return None
