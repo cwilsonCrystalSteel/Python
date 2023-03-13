@@ -17,14 +17,21 @@ now_str = now.strftime('%m/%d/%Y %H:%M')
 
 
 
+shop = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json'
                      }
 
-def get_google_sheet_as_df():
-    shop = 'CSM'
+def get_gspread_worksheet(shop):
     sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
     worksheet = sh.worksheet(shop)
+    return worksheet
+    
+
+def get_google_sheet_as_df(worksheet=None):
+    if worksheet == None:
+        worksheet = get_gspread_worksheet(shop)
+        
     worksheet_list_of_lists = worksheet.get_all_values()
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
 
@@ -40,15 +47,17 @@ def get_google_sheet_as_df():
     return df
 
 
-def post_observation(fablisting_summary, timeclock_summary):
+def post_observation(gsheet_dict, isReal=True):
     
-    df = get_google_sheet_as_df()
-    # first clear the isReal=0
-    summary = {}
-    summary.update(fablisting_summary)
-    summary.update(timeclock_summary)
+    
+    
+    
+    worksheet = get_gspread_worksheet(shop)
+    df = get_google_sheet_as_df(worksheet)
+    
+    
     # check to see if a formula exists
-    df_pred_row = df[~df['IsReal'].astype(int).astype(bool)]
+    df_pred_row = df[~df['IsReal']]
     # overwrite the predictor row
     if df_pred_row.shape[0]:
         idx_num = df_pred_row.index[-1]
@@ -61,11 +70,11 @@ def post_observation(fablisting_summary, timeclock_summary):
         if col == 'Timestamp':
             value = now_str
         elif col == 'IsReal':
-            value = 1
+            value = int(isReal)
         elif col == 'Total Hours':
-            value = (summary['Direct Hours'] + summary['Indirect Hours']).round(2)
+            value = (gsheet_dict['Direct Hours'] + gsheet_dict['Indirect Hours']).round(2)
         else:
-            value = summary[col]
+            value = gsheet_dict[col]
         
         cell = colletter + str(row_num)
         print(cell, col, value)
@@ -77,6 +86,12 @@ def post_observation(fablisting_summary, timeclock_summary):
 
 
 
-def post_predictor(df_today):
+def post_predictor(gsheet_pred_dict, isReal=False):
+    
+    post_observation(gsheet_pred_dict, isReal=isReal)
+    
+    
+    
+    
     # simply append a isReal=0 row
     return None
