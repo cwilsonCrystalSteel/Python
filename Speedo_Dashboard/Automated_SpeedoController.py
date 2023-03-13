@@ -17,9 +17,15 @@ from Post_to_GoogleSheet import post_observation, post_predictor
 
 fablisting_summary = get_fablisting_plus_model_summary()
 timeclock_summary = get_timeclock_summary()
+
+gsheet_dict = {}
+gsheet_dict.update(fablisting_summary)
+gsheet_dict.update(timeclock_summary)
+
+post_observation(gsheet_dict)
+
 predictor = None
 
-post_observation(fablisting_summary, timeclock_summary)
 
 # if predictor != None:
 #     predictor = get_prediction_formula()
