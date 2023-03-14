@@ -4,12 +4,13 @@ Created on Mon Mar  6 19:36:21 2023
 
 @author: CWilson
 """
-
+import sys
+sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
 from production_dashboards_google_credentials import init_google_sheet
 import pandas as pd
 import datetime
 import time
-from Predictor import get_prediction_formula
+from Predictor import get_prediction_dict
 # this one will send TimeClock & Fablisting data to google sheet
 now = datetime.datetime.now()
 now_str = now.strftime('%m/%d/%Y %H:%M')
@@ -86,9 +87,11 @@ def post_observation(gsheet_dict, isReal=True):
 
 
 
-def post_predictor(gsheet_pred_dict, isReal=False):
+def post_predictor(gsheet_pred_dict):
     
-    post_observation(gsheet_pred_dict, isReal=isReal)
+    
+    
+    post_observation(gsheet_pred_dict, isReal=False)
     
     
     
