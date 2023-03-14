@@ -4,6 +4,9 @@ Created on Sat Mar 11 08:53:58 2023
 
 @author: CWilson
 """
+import sys
+sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
+sys.path.append('C:\\Users\\cwilson\\documents\\python')
 
 from sklearn.linear_model import LinearRegression
 from Post_to_GoogleSheet import get_google_sheet_as_df
@@ -28,7 +31,7 @@ def get_seconds_until_end_of_workday(start):
     return seconds
 
 
-def get_prediction_formula():
+def get_prediction_dict():
     
     df = get_google_sheet_as_df()
     today_df = df[df['Timestamp'] >= start_of_workday]

@@ -9,7 +9,6 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
 from Pull_Fablisting_data import get_fablisting_plus_model_summary
 from Pull_TimeClock_data import get_timeclock_summary
-from Predictor import get_prediction_formula
 from Post_to_GoogleSheet import post_observation, post_predictor
 
 # this will be the controller for automation?
