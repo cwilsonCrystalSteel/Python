@@ -9,7 +9,6 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
 
 from sklearn.linear_model import LinearRegression
-from Post_to_GoogleSheet import get_google_sheet_as_df
 import datetime
 import numpy as np
 import pandas as pd
@@ -31,9 +30,9 @@ def get_seconds_until_end_of_workday(start):
     return seconds
 
 
-def get_prediction_dict():
+def get_prediction_dict(df):
     
-    df = get_google_sheet_as_df()
+    
     today_df = df[df['Timestamp'] >= start_of_workday]
     
     start = min(today_df['Timestamp'])
@@ -45,5 +44,5 @@ def get_prediction_dict():
     
     regression = LinearRegression()
     regression.fit(X,y)
-    regression.predict(X)    
+    regression.predict(X)
     return None
