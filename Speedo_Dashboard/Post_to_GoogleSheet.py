@@ -87,9 +87,11 @@ def post_observation(gsheet_dict, isReal=True):
 
 
 
-def post_predictor(gsheet_pred_dict):
+def post_predictor():
+   
+    df = get_google_sheet_as_df()
     
-    
+    gsheet_pred_dict = get_prediction_dict(df)
     
     post_observation(gsheet_pred_dict, isReal=False)
     
