@@ -19,7 +19,7 @@ from Fitter_Welder_Stats_functions import convert_weight_to_earned_hours
 from Fitter_Welder_Stats_functions import get_employee_name_ID
 from Fitter_Welder_Stats_functions import download_employee_group_hours
 from Fitter_Welder_Stats_functions import get_employee_hours
-from Fitter_welder_Stats_functions import combine_multiple_all_both_csv_files_into_one_big_one
+from Fitter_Welder_Stats_functions import combine_multiple_all_both_csv_files_into_one_big_one
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 from Gather_data_for_timeclock_based_email_reports import skip_timeclock_automated_retrieval
 from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
@@ -27,8 +27,8 @@ from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
 
 
 state = 'TN'
-start_date = "10/01/2022"
-end_date = "10/31/2022"
+start_date = "02/01/2022"
+end_date = "02/28/2022"
 states = ['TN','MD','DE']
 
 
