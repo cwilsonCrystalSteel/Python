@@ -93,14 +93,20 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                     next_data.append(col_texts[j])
              
                 
-                if len(next_data) > 13:
-                    break
+                # if len(next_data) > 13:
+                #     break
                 data.append(next_data)
        
         
     df = pd.DataFrame(data[1:], columns=data[0])
     df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')
-    df['Hours'] = pd.to_numeric(df['Hours'])
+    try:
+        df['Hours'] = pd.to_numeric(df['Hours'])
+    except Exception:
+        hour_minute = df['Hours'].str.split(':')
+        df['Hours'] = hour_minute.str[0].astype(int) + hour_minute.str[1].astype(int)/60
+        df['Hours'] = df['Hours'].round(2)
+        
     df['Job #'] = pd.to_numeric(df['Job Code'].str.split('-').str[0])
     df['Name'] = df['Name'].str.split(' - ').str[1]
     
