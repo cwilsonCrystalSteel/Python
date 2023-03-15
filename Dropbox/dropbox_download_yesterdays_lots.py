@@ -23,7 +23,7 @@ def write_to_logfile(dt, status):
 critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS']
 # base_dir = "C:\\Users\\cwilson\\Dropbox\\EVA REPORTS FOR THE DAY\\"
 base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
-
+base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
 
 
 # open up the log 
@@ -36,7 +36,10 @@ except Exception:
     last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
     
 # get the datetime of that date
-last_successful_dt = datetime.datetime.strptime(last_successful_date,'%m/%d/%Y').date()
+try:
+    last_successful_dt = datetime.datetime.strptime(last_successful_date,'%m/%d/%Y').date()
+except Exception:
+    last_successful_dt = datetime.datetime.strptime(last_successful_date,'%Y-%m-%d').date()
 
 # get yesterday's date
 yesterday = (datetime.datetime.now() + datetime.timedelta(days=-1)).date()
@@ -81,11 +84,16 @@ for i in range(0,delta):
     write_to_logfile(day_dt, 'Started')
     
     try:
+        base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
         years = os.listdir(base_dir)
     except:
         print('COULD NOT CONNECT TO THE X DRIVE / DROPBOX')
-        write_to_logfile(day_dt, 'Could not connect to the dropbox')
-        exit()    
+        try:
+            base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
+            years = os.listdir(base_dir)   
+        except:
+            write_to_logfile(day_dt, 'Could not connect to the dropbox')
+            exit()    
     
     year = str(day_dt.year)
 
@@ -160,14 +168,24 @@ for i in range(0,delta):
                 # start by assuming headers are on row 0
                 header_num = 0
                 # open just the first col with 5 rows
-                xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                try:
+                    xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                except:
+                    xls_main_test = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
+             
                 # if the header is not 'JOB NUMBER' iterate header_num and try again
                 while xls_main_test.columns[0] != 'JOB NUMBER':
                     header_num += 1
-                    xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                    try:
+                        xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                    except:
+                        xls_main_test = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
     
                 #open the main file with the correct header number
-                xls_main = pd.read_excel(xls_main_name, engine='xlrd', header=header_num)
+                try:
+                    xls_main = pd.read_excel(xls_main_name, engine='xlrd', header=header_num)
+                except:
+                    xls_main = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num)
                 # add the lot to the df
                 xls_lot['LOT'] = lot
                 
