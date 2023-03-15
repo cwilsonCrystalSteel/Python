@@ -36,7 +36,7 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
             # cols            
             
             
-            if len(cols) == 18 and i == 0:
+            if i == 0:
                 print('{}: Header row'.format(i))
                 # this is the headers row
                 headers = [ele.text.strip() for ele in cols]
@@ -62,30 +62,39 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                 col_texts = [ele.text.strip() for ele in cols]
                 
                 first_non_blank = next(sub for sub in col_texts if sub)
+                first_non_blank_idx = col_texts.index(first_non_blank)
                 
-                if first_non_blank == 'X':
-                    first_non_blank = next(sub for sub in col_texts[col_texts.index('X')+1:] if sub)
-                    print('{} the first nonblank was x, the next was {}'.format(i,first_non_blank))
+                new_col_texts = col_texts[first_non_blank_idx + 1:]
+                print(first_non_blank, first_non_blank_idx)
+                while first_non_blank == 'X':
+                    
+                    try:
+                        first_non_blank = next(sub for sub in new_col_texts[new_col_texts.index('X')+1:] if sub)
+                        
+                        first_non_blank_idx = new_col_texts.index(first_non_blank)
+                        new_col_texts = new_col_texts[first_non_blank_idx + 1:]
+                        
+                    
+                    except Exception:
+                        new_col_texts = new_col_texts[1:]
+                        first_non_blank = next(sub for sub in new_col_texts if sub)
+                    # print(first_non_blank, first_non_blank_idx)
+                
+                
+                
+                # if first_non_blank == 'X':
+                #     first_non_blank = next(sub for sub in col_texts[col_texts.index('X')+1:] if sub)
+                #     print('{} the first nonblank was x, the next was {}'.format(i,first_non_blank))
                 
                 first_non_blank_idx = col_texts.index(first_non_blank)
                 next_data = [id_name]
                 for j in range(first_non_blank_idx, len(col_texts)):
                     # print(col_texts[j])
                     next_data.append(col_texts[j])
-                # timein = col_texts[first_non_blank_idx]
-                # actualtimein = col_texts[11]
-                # timeout = col_texts[12]
-                # actualtimeout = col_texts[13]
-                # pto = col_texts[14]
-                # jobcode = col_texts[15]
-                # costcode = col_texts[16]
-                # hours = col_texts[17]
-                # rate = col_texts[18]
-                # shifttotal = col_texts[19]
-                # weektotal = col_texts[20]
-                # next_data = [id_name, timein, actualtimein, timeout, 
-                #              actualtimeout, pto, jobcode, costcode, hours, 
-                #              rate, shifttotal, weektotal]
+             
+                
+                if len(next_data) > 13:
+                    break
                 data.append(next_data)
        
         
