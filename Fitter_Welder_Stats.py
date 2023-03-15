@@ -27,8 +27,8 @@ from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
 
 
 state = 'TN'
-start_date = "02/01/2023"
-end_date = "02/28/2023"
+start_date = "01/01/2023"
+end_date = "01/31/2023"
 states = ['TN','MD','DE']
 
 
