@@ -122,6 +122,22 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
     
     if not in_and_out_times:
         df = df.drop(columns = ['Time In','Time Out'], axis=0)
+    else:
+        try:
+            df['Time In'] = pd.to_datetime(df['Time In'])
+        except:
+            time_split = df['Time In'].str.split(' ')
+            dates = pd.to_datetime(time_split.str[0], errors='coerce')
+            hour_minute = time_split.str[1].str.split(':')
+            try:
+                time = pd.to_datetime(hour_minute.str[0]).time()
+                dts = dates + time
+            except:
+                time = pd.to_timedelta(hour_minute.str[0].astype(float), unit='hours')
+                dts = dates + time
+            df['Time In'] = dts
+            
+            
     
     return df
 
