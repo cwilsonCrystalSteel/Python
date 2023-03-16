@@ -22,6 +22,7 @@ start_dt = now
 if start_dt.hour < 6:
     start_dt = start_dt - datetime.timedelta(days=1)
     start_dt = start_dt.replace(hour=6, minute=0, second=0, microsecond=0)
+    
 else:
     start_dt = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
