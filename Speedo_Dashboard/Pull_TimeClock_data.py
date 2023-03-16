@@ -16,27 +16,37 @@ state = 'TN'
 today = datetime.datetime.now()
 today_str = today.strftime("%m/%d/%Y")
 
-def get_timeclock_summary(today_str=today_str, state=state, basis=None):
+def get_timeclock_summary(start_dt, end_dt, state, basis=None):
     
-    now = datetime.datetime.now()
-    
-    end_dt = datetime.datetime.strptime(today_str, '%m/%d/%Y')
-    
-    # if it is before 6 am, make the start date the previous day
-    if now.hour < 6:
-        start_dt = end_dt - datetime.timedelta(days=1)
-    else:
-        start_dt = end_dt
-        
+            
     end_date = end_dt.strftime('%m/%d/%Y')
     start_date = start_dt.strftime('%m/%d/%Y')
+            
     
     if basis == None:
-        basis = get_information_for_clock_based_email_reports(start_date, end_date, exclude_terminated=False, ei=None, in_and_out_times=True) 
+        start_dt_loop = start_dt
+        start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
+        print('Getting Timeclock for: {}'.format(start_date_loop))
+        basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
+        basis = basis_orig.copy()
+        ei = basis['Employee Information']
+        for i in range(0, (end_dt-start_dt).days):
+            start_dt_loop = start_dt_loop + datetime.timedelta(days=i+1)
+            start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
+            print('Getting Timeclock for: {}'.format(start_date_loop))
+            basis_additional = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=ei, in_and_out_times=True) 
+            basis['Direct'] = basis['Direct'].append(basis_additional['Direct'], ignore_index=True)
+            basis['Indirect'] = basis['Indirect'].append(basis_additional['Indirect'], ignore_index=True)
     
-    # give them an extra hour early to be able to clock in
-    start_dt = start_dt.replace(hour=3, minute=0)
-    end_dt = end_dt.replace(hour=5, minute=59)
+    
+    
+    
+    
+    
+    # give them an extra couple of hours for early clock ins
+    # i doubt anyone is going to start 2nd shift after 3 a.m.
+    start_dt_filter = start_dt.replace(hour=3, minute=0)
+    end_dt_filter = end_dt.replace(hour=4, minute=0)
     
     
     direct = basis['Direct']
@@ -47,7 +57,7 @@ def get_timeclock_summary(today_str=today_str, state=state, basis=None):
     # get rid of any that don't convert
     hours = hours[~hours['Time In'].isna()]
     # get only records that the clock in time is for that work day
-    hours = hours[(hours['Time In'] >= start_dt) & (hours['Time In'] <= end_dt)]
+    hours = hours[(hours['Time In'] >= start_dt_filter) & (hours['Time In'] <= end_dt_filter)]
     
     # hours = hours[hours['Location'] == state]
     
