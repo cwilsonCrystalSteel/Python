@@ -43,15 +43,12 @@ def get_google_sheet_as_df(worksheet=None):
         
     df['IsReal'] = df['IsReal'].astype(int).astype(bool)   
     
-    df.iloc[:,2:] = df[df.columns[2:]].astype(float)
+    df.iloc[:,3:] = df[df.columns[3:]].astype(float)
     
     return df
 
 
 def post_observation(gsheet_dict, isReal=True):
-    
-    
-    
     
     worksheet = get_gspread_worksheet(shop)
     df = get_google_sheet_as_df(worksheet)
@@ -74,6 +71,11 @@ def post_observation(gsheet_dict, isReal=True):
             value = int(isReal)
         elif col == 'Total Hours':
             value = (gsheet_dict['Direct Hours'] + gsheet_dict['Indirect Hours']).round(2)
+        elif col == 'Efficiency':
+            if gsheet_dict['Direct Hours']:
+                value = (gsheet_dict['Earned Hours'] / gsheet_dict['Direct Hours']).round(2)
+            else:
+                value = 0
         else:
             value = gsheet_dict[col]
         
