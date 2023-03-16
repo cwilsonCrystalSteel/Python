@@ -23,16 +23,12 @@ start_date = start_dt.strftime('%m/%d/%Y')
 end_dt = start_dt + datetime.timedelta(days=1)
 end_date = end_dt.strftime('%m/%d/%Y')
 
-def get_fablisting_plus_model_summary(sheet=sheet, start_date=start_date, end_date=end_date):
-    print('Pulling fablisting for: {} to {}'.format(start_date, end_date))
+def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     
-    start_dt = datetime.datetime.strptime(start_date, '%m/%d/%Y')
-    # the production day runs from Day 0 6AM to Day + 1 5:59 AM
-    start_dt = start_dt.replace(hour=6)
-    # add one day to make the end time start + one day
-    end_dt = start_dt + datetime.timedelta(days=1)    
+    start_date = start_dt.strftime('%m/%d/%Y')
     # format as the date string
     end_date = end_dt.strftime('%m/%d/%Y')
+    print('Pulling fablisting for: {} to {}'.format(start_date, end_date))
     # get fablisting for all of start_date and all of end_date
     fablisting = grab_google_sheet(sheet, start_date, end_date)
     # get dates between yesterday at 6 am and today at 6 am
