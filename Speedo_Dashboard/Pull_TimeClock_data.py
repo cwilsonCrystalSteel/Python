@@ -18,7 +18,7 @@ today_str = today.strftime("%m/%d/%Y")
 
 def get_timeclock_summary(start_dt, end_dt, state, basis=None):
     
-            
+    now = datetime.datetime.now()
     end_date = end_dt.strftime('%m/%d/%Y')
     start_date = start_dt.strftime('%m/%d/%Y')
             
@@ -32,6 +32,8 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None):
         ei = basis['Employee Information']
         for i in range(0, (end_dt-start_dt).days):
             start_dt_loop = start_dt_loop + datetime.timedelta(days=i+1)
+            if start_dt_loop > now:
+                continue
             start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
             print('Getting Timeclock for: {}'.format(start_date_loop))
             basis_additional = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=ei, in_and_out_times=True) 
