@@ -12,26 +12,25 @@ import datetime
 import time
 from Predictor import get_prediction_dict
 # this one will send TimeClock & Fablisting data to google sheet
-now = datetime.datetime.now()
-now_str = now.strftime('%m/%d/%Y %H:%M')
 
 
 
 
-shop = 'CSM'
+
+sheet_name = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json'
                      }
 
-def get_gspread_worksheet(shop):
+def get_gspread_worksheet(sheet_name):
     sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
-    worksheet = sh.worksheet(shop)
+    worksheet = sh.worksheet(sheet_name)
     return worksheet
     
 
 def get_google_sheet_as_df(worksheet=None):
     if worksheet == None:
-        worksheet = get_gspread_worksheet(shop)
+        worksheet = get_gspread_worksheet(sheet_name)
         
     worksheet_list_of_lists = worksheet.get_all_values()
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
@@ -48,9 +47,11 @@ def get_google_sheet_as_df(worksheet=None):
     return df
 
 
-def post_observation(gsheet_dict, isReal=True):
+def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
+    now = datetime.datetime.now()
+    now_str = now.strftime('%m/%d/%Y %H:%M')
     
-    worksheet = get_gspread_worksheet(shop)
+    worksheet = get_gspread_worksheet(sheet_name)
     df = get_google_sheet_as_df(worksheet)
     
     
