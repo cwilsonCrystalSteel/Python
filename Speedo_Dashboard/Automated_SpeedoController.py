@@ -18,15 +18,26 @@ state = 'TN'
 sheet = 'CSM QC Form' 
 
 now = datetime.datetime.now()
-start_dt = now
-if start_dt.hour < 6:
-    start_dt = start_dt - datetime.timedelta(days=1)
-    start_dt = start_dt.replace(hour=6, minute=0, second=0, microsecond=0)
-    
-else:
-    start_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
 
-end_dt = start_dt + datetime.timedelta(days=1)
+
+now_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
+start_dt = now_dt
+# get start_dt as most recent monday
+while start_dt.weekday() != 0:
+    start_dt -= datetime.timedelta(days=1)
+
+end_dt = start_dt + datetime.timedelta(days=6)
+end_dt = end_dt.replace(hour=23, minute=59)
+
+# start_dt = now
+# if start_dt.hour < 6:
+#     start_dt = start_dt - datetime.timedelta(days=1)
+#     start_dt = start_dt.replace(hour=6, minute=0, second=0, microsecond=0)
+    
+# else:
+#     start_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
+
+# end_dt = start_dt + datetime.timedelta(days=1)
 
 
 fablisting_summary = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet)
