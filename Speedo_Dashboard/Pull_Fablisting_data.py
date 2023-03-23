@@ -18,10 +18,10 @@ from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
 state = 'TN'
 sheet = 'CSM QC Form' 
 
-start_dt = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-start_date = start_dt.strftime('%m/%d/%Y')
-end_dt = start_dt + datetime.timedelta(days=1)
-end_date = end_dt.strftime('%m/%d/%Y')
+# start_dt = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+# start_date = start_dt.strftime('%m/%d/%Y')
+# end_dt = start_dt + datetime.timedelta(days=1)
+# end_date = end_dt.strftime('%m/%d/%Y')
 
 def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     

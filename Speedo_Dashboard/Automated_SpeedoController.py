@@ -23,7 +23,7 @@ now = datetime.datetime.now()
 now_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
 start_dt = now_dt
 # get start_dt as most recent monday
-while start_dt.weekday() != 0:
+while start_dt.weekday() != 6:
     start_dt -= datetime.timedelta(days=1)
 
 end_dt = start_dt + datetime.timedelta(days=6)

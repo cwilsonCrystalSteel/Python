@@ -30,9 +30,9 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None):
         basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
         basis = basis_orig.copy()
         ei = basis['Employee Information']
-        for i in range(0, (end_dt-start_dt).days):
-            start_dt_loop = start_dt_loop + datetime.timedelta(days=i+1)
-            if start_dt_loop > now:
+        for i in range(1, (end_dt-start_dt).days):
+            start_dt_loop = start_dt_loop + datetime.timedelta(days=1)
+            if start_dt_loop.date() > now.date():
                 continue
             start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
             print('Getting Timeclock for: {}'.format(start_date_loop))
@@ -68,10 +68,11 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None):
     ei = ei.set_index('Name')
     # get all employees at that state
     ei = ei[ei['Productive'].str.contains(state)]
-    
+    # only get hours when there is an employee match
     hours = ei[['Productive','Shift']].join(hours.set_index('Name'), how='inner')
     
     hours_productive = hours[~hours['Productive'].str.contains('NON')]
+    # hours_productive = hours
     
     num_employees = pd.unique(hours_productive.index).shape[0]
     num_direct = hours_productive[hours_productive['Is Direct']]['Hours'].sum().round(2)
