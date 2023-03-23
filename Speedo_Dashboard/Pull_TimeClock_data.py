@@ -16,7 +16,7 @@ state = 'TN'
 today = datetime.datetime.now()
 today_str = today.strftime("%m/%d/%Y")
 
-def get_timeclock_summary(start_dt, end_dt, state, basis=None):
+def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive_report=False):
     
     now = datetime.datetime.now()
     end_date = end_dt.strftime('%m/%d/%Y')
@@ -77,5 +77,14 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None):
     num_employees = pd.unique(hours_productive.index).shape[0]
     num_direct = hours_productive[hours_productive['Is Direct']]['Hours'].sum().round(2)
     num_indirect = hours_productive[~hours_productive['Is Direct']]['Hours'].sum().round(2)
+    
+    try:
+        group_like_timeclock_report_TNproductive = hours_productive.copy()
+        group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
+        group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()
+        group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
+    except:
+        print('could not make TN productive like report')
+    
     
     return {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
