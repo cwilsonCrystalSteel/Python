@@ -41,7 +41,7 @@ print('running the speedo dashboard for {} to {}'.format(start_dt, end_dt))
 
 
 fablisting_summary = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet)
-timeclock_summary = get_timeclock_summary(start_dt, end_dt, state=state, basis=None)
+timeclock_summary = get_timeclock_summary(start_dt, end_dt, state=state, basis=None, output_productive_report=False)
 
 run_for_date = start_dt.strftime('%m/%d/%Y')
 gsheet_dict = {'Date':run_for_date}
