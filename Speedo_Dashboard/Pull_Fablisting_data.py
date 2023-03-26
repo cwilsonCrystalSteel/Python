@@ -39,8 +39,8 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     num_with_model = with_model['Has Model'].sum()
     num_without_model = with_model.shape[0] - num_with_model
     
-    earned_hours = with_model[with_model['Has Model']]['Earned Hours'].sum().round(2)
-    tonnage = (with_model['Weight'].sum() / 2000).round(2)
+    earned_hours = np.round(with_model[with_model['Has Model']]['Earned Hours'].sum(), 2)
+    tonnage = np.round((with_model['Weight'].sum() / 2000), 2)
     quantity = int(with_model['Quantity'].sum())
     
     
