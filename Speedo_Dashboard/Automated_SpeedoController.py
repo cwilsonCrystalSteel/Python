@@ -25,6 +25,7 @@ start_dt = now_dt
 # get start_dt as most recent monday
 while start_dt.weekday() != 6:
     start_dt -= datetime.timedelta(days=1)
+    
 
 end_dt = start_dt + datetime.timedelta(days=6)
 end_dt = end_dt.replace(hour=23, minute=59)
@@ -48,10 +49,12 @@ gsheet_dict = {'Date':run_for_date}
 gsheet_dict.update(fablisting_summary)
 gsheet_dict.update(timeclock_summary)
 
-if gsheet_dict['Direct Hours']:
-    post_observation(gsheet_dict)
-else:
-    print('There was no direct horus so I wont post anything')
+post_observation(gsheet_dict)
+
+# if gsheet_dict['Direct Hours']:
+#     post_observation(gsheet_dict)
+# else:
+#     print('There was no direct horus so I wont post anything')
 
 predictor = None
 

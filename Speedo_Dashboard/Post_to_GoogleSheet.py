@@ -11,6 +11,7 @@ import pandas as pd
 import datetime
 import time
 from Predictor import get_prediction_dict
+import numpy as np
 # this one will send TimeClock & Fablisting data to google sheet
 
 
@@ -83,6 +84,8 @@ def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
         cell = colletter + str(row_num)
         print(cell, col, value)
         time.sleep(1)
+        if isinstance(value, np.int32):
+            value = int(value)
         worksheet.update(cell, value, value_input_option='USER_ENTERED')
     
     # then paste the observed data
