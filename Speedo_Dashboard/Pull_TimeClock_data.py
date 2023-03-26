@@ -11,6 +11,7 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 import pandas as pd
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
+import numpy as np
 
 state = 'TN'
 today = datetime.datetime.now()
@@ -75,16 +76,19 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive
     # hours_productive = hours
     
     num_employees = pd.unique(hours_productive.index).shape[0]
-    num_direct = hours_productive[hours_productive['Is Direct']]['Hours'].sum().round(2)
-    num_indirect = hours_productive[~hours_productive['Is Direct']]['Hours'].sum().round(2)
+    num_direct = np.round(hours_productive[hours_productive['Is Direct']]['Hours'].sum(), 2)
+    num_indirect = np.round(hours_productive[~hours_productive['Is Direct']]['Hours'].sum(), 2)
+    output = {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
     
     try:
         group_like_timeclock_report_TNproductive = hours_productive.copy()
         group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
         group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()
         group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
+        if output_productive_report:
+            output['productive_report'] = group_like_timeclock_report_TNproductive
     except:
         print('could not make TN productive like report')
-    
-    
-    return {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
+
+        
+    return output
