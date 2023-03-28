@@ -171,7 +171,120 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         
         if fill_missing_values == True:
             df = fill_missing_model_earned_hours(df, shop)
+    
+    elif how == 'model but Justins dumb way of getting average hours':
+        # get the different job & lot combinations (and the count of # of records for each, but that doesn't matter)
+        x = fablisting_df.groupby(['Job #','Lot Name']).size()
+        
+        
+        if fablisting_df.shape[0]:
+            df = pd.DataFrame()
+            
+            jobs = pd.unique(x.index.get_level_values(level=0))
+            for job in jobs:
+                print(job)
+                
+                chunk_job = fablisting_df[fablisting_df['Job #'] == job]
+                # if for some reason the chunk returns no rows we have an issue!
+                if not chunk_job.shape[0]:
+                    print('No rows found for chunk_job: {}'.format(job))
+                    chunk_job['Hours Per Piece'] = np.nan
+                    df = df.append(chunk_job)     
+                    continue 
+                # try to get the job's eva database open
+                try:
+                    xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')                
+                except Exception:
+                    print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
+                    chunk_job['Hours Per Piece'] = np.nan
+                    df = df.append(chunk_job)
+                    continue 
+                
+                lots = x.xs(job, level=0).index
+                
+                for lot_name in lots:
+                    print(job, lot_name)
 
+                    chunk = chunk_job[chunk_job['Lot Name'] == lot_name]
+                    if not chunk.shape[0]:
+                        print('no rows found for chunk: {}'.format(lot_name))
+                        chunk['Hours Per Piece'] = np.nan
+                        df = df.append(chunk)
+                        continue
+                    chunk = chunk.copy()
+                    
+           
+                    # try to  open the EVA xls file
+                    try:
+                        # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+                        # xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
+                        xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
+                    except:
+                        # print('Cannot open {}'.format(eva.iloc[-1]['basename']))
+                        print('Cannot open {}'.format(lot_name))
+                        ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
+                        # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
+                        chunk['Hours Per Piece'] = np.nan
+                        df = df.append(chunk)
+                        continue
+                    
+          
+                    # group by the page
+                    xls_lot_paged = xls_lot_from_main.groupby('PAGE').sum()
+                    # get only the main members and then get the sum of the QTY
+                    xls_lot_mainmember_qty = xls_lot_from_main[xls_lot_from_main['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
+                    # drop the qty from the grouped df
+                    xls_lot_paged = xls_lot_paged.drop(columns='QTY')
+                    # add in the new calculated quantity
+                    xls_lot_paged = xls_lot_paged.join(xls_lot_mainmember_qty)
+                    # get the average earned hours per quantity I guess
+                    avg_per_qty = xls_lot_paged['TOTAL MANHOURS'].sum() / xls_lot_paged['MAIN MEMBER'].sum()
+                    
+                    
+                    
+                    ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
+                    # get a copy of the pcmarks column
+                    pcmarks = chunk['Piece Mark - REV'].copy()
+                    # split the piece marks based on a hyphen - this is incase they have the rev # next to it
+                    pcmarks = pcmarks.str.split('-').str[0]
+                    # get rid of any extra spaces in the piece mark 
+                    pcmarks = pcmarks.str.strip()
+                    # create a copy of chunk to prevent setwithcopy warning
+                    chunk_copy = chunk.copy()
+                    # set the copy of chunk's pcmark column to the new pcmarks series that has no hyphens now
+                    chunk_copy['Piece Mark - REV'] = pcmarks
+                    # set chunk to equal the copy  
+                    chunk = chunk_copy
+                    # get rid of the copy 
+                    del chunk_copy
+                    # grab the current index - for later so you can put the index back to normal
+                    current_index = chunk.index
+                     # set the index to be piecemark so that i can join easily
+                    chunk = chunk.set_index('Piece Mark - REV', drop=False)
+                    # get the hours per piece from the grouped xls df
+                    chunk['Hours Per Piece'] = avg_per_qty
+                    # set the chunk index back 
+                    chunk = chunk.set_index(current_index)
+                    # appends chunk to df, but now with 'Hours Per Piece' column
+                    df = df.append(chunk)
+
+        # if the fablisting_df is empty, then do this stuff
+        else:
+            # just let df be a copy of fablisting_df -> basically just to keep the columns
+            df = fablisting_df.copy()
+            # just set the column of 'Hours Per Piece' to nan
+            df['Hours Per Piece'] = np.nan
+
+        # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
+        df['Earned Hours'] = df['Quantity'] * df['Hours Per Piece']
+        # figure out which pieces did not have a match for EVA hours in the .xls files
+        df['Has Model'] = ~df['Earned Hours'].isna()
+        
+        if fill_missing_values == True:
+            df = fill_missing_model_earned_hours(df, shop)
+            
+    
+    
     elif how == 'old way':
         df = fill_missing_model_earned_hours(fablisting_df, shop)
     
