@@ -36,13 +36,13 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
     # 
     if how == 'model':
         # get the different job & lot combinations (and the count of # of records for each, but that doesn't matter)
-        x = fablisting_df.groupby(['Job #','Lot Name']).size()
+        joblots = fablisting_df.groupby(['Job #','Lot Name']).size()
         
         
         if fablisting_df.shape[0]:
             df = pd.DataFrame()
             
-            jobs = pd.unique(x.index.get_level_values(level=0))
+            jobs = pd.unique(joblots.index.get_level_values(level=0))
             for job in jobs:
                 print(job)
                 
@@ -62,7 +62,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     df = df.append(chunk_job)
                     continue 
                 
-                lots = x.xs(job, level=0).index
+                lots = joblots.xs(job, level=0).index
                 
                 for lot_name in lots:
                     print(job, lot_name)
@@ -174,13 +174,13 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
     
     elif how == 'model but Justins dumb way of getting average hours':
         # get the different job & lot combinations (and the count of # of records for each, but that doesn't matter)
-        x = fablisting_df.groupby(['Job #','Lot Name']).size()
+        joblots = fablisting_df.groupby(['Job #','Lot Name']).size()
         
         
         if fablisting_df.shape[0]:
             df = pd.DataFrame()
             
-            jobs = pd.unique(x.index.get_level_values(level=0))
+            jobs = pd.unique(joblots.index.get_level_values(level=0))
             for job in jobs:
                 print(job)
                 
@@ -200,7 +200,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     df = df.append(chunk_job)
                     continue 
                 
-                lots = x.xs(job, level=0).index
+                # get the second index level - which is the lots
+                lots = joblots.xs(job, level=0).index
                 
                 for lot_name in lots:
                     print(job, lot_name)
@@ -211,13 +212,12 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         chunk['Hours Per Piece'] = np.nan
                         df = df.append(chunk)
                         continue
+                    
                     chunk = chunk.copy()
                     
            
                     # try to  open the EVA xls file
                     try:
-                        # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
-                        # xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
                         xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
                     except:
                         # print('Cannot open {}'.format(eva.iloc[-1]['basename']))
@@ -229,18 +229,9 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         continue
                     
           
-                    # group by the page
-                    xls_lot_paged = xls_lot_from_main.groupby('PAGE').sum()
-                    # get only the main members and then get the sum of the QTY
-                    xls_lot_mainmember_qty = xls_lot_from_main[xls_lot_from_main['MAIN MEMBER'] == 1].groupby('PAGE').sum()['QTY']
-                    # drop the qty from the grouped df
-                    xls_lot_paged = xls_lot_paged.drop(columns='QTY')
-                    # add in the new calculated quantity
-                    xls_lot_paged = xls_lot_paged.join(xls_lot_mainmember_qty)
-                    # get the average earned hours per quantity I guess
-                    avg_per_qty = xls_lot_paged['TOTAL MANHOURS'].sum() / xls_lot_paged['MAIN MEMBER'].sum()
                     
-                    
+                    avg_per_pound = xls_lot_from_main['TOTAL MANHOURS'].sum() / xls_lot_from_main['WEIGHT'].sum()
+                                       
                     
                     ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
                     # get a copy of the pcmarks column
@@ -262,7 +253,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                      # set the index to be piecemark so that i can join easily
                     chunk = chunk.set_index('Piece Mark - REV', drop=False)
                     # get the hours per piece from the grouped xls df
-                    chunk['Hours Per Piece'] = avg_per_qty
+                    chunk['Hours Per Pound'] = avg_per_pound
                     # set the chunk index back 
                     chunk = chunk.set_index(current_index)
                     # appends chunk to df, but now with 'Hours Per Piece' column
@@ -276,7 +267,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             df['Hours Per Piece'] = np.nan
 
         # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
-        df['Earned Hours'] = df['Quantity'] * df['Hours Per Piece']
+        df['Earned Hours'] = df['Weight'] * df['Hours Per Pound']
         # figure out which pieces did not have a match for EVA hours in the .xls files
         df['Has Model'] = ~df['Earned Hours'].isna()
         
