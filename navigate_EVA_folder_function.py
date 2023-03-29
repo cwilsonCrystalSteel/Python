@@ -7,6 +7,7 @@ Created on Wed Feb 16 16:25:52 2022
 import os 
 import glob
 import pandas as pd
+import re
 
 def get_df_of_all_lots_files_information():
     
@@ -23,17 +24,12 @@ def get_df_of_all_lots_files_information():
     base_dir = '//192.168.50.9//Dropbox_(CSF)//production control\\EVA REPORTS FOR THE DAY\\'
     
     
-    
-    
     try:
         years = os.listdir(base_dir)
     except:
         print('COULD NOT CONNECT TO THE X DRIVE / DROPBOX')
         exit()
-        
-        
-        
-        
+  
     if 'desktop.ini' in years:
         years.remove('desktop.ini')
     
@@ -67,33 +63,37 @@ def get_df_of_all_lots_files_information():
                     basename = os.path.basename(xls_file)
                     
                     basename_components = basename.split('-')
-                    
-                    if len(basename_components) == 3:
-                        # job # is the start of the filename
-                        job_str = basename_components[0]
-                        #
-                        job_int = int(job_str)
-                        # lot is the middle portion of the filename
-                        lot = basename_components[1]
-                        # chop off the '.xls' and only maintain the shop 
-                        shop = basename_components[2][:-4]
-                        
-                        # skip the xls file if it does not have a valid name
-                        if lot[0] != 'T':
-                            continue
-                    
-                    else:
-                        print('ERROR THE FILENAME IS INVALID')
+            
+                    if len(basename_components) != 3:
+                        print('ERROR THE FILENAME IS INVALID: {}'.format(basename))
                         ''' SEND ERROR THAT THE FILENAME IS INVALID
                         1) Emad
                         2) mildred tong
                         3) me
                         '''
+                        try:
+                            basename_components = re.split('-|\ ', basename)
+                            job_str = basename_components[0]
+                            lot = basename_components[1]
+                            shop = basename_components[2][:-4]
+                            print('Able to resolve the invalid filename')
+                        except:
+                            
+                            continue
+                        
+                    else:
+                        # job # is the start of the filename
+                        job_str = basename_components[0]
+                        # lot is the middle portion of the filename
+                        lot = basename_components[1]
+                        # chop off the '.xls' and only maintain the shop 
+                        shop = basename_components[2][:-4]
+                        
                     print(day, month, year)
                     
                     ez_dir = 'X:\\' + xls_file[31: xls_file.find(basename)]
                     
-                    df = df.append({'year':year, 'month':month, 'day':day, 'job':job_int,'lot':lot,'shop':shop,'basename':basename, 'destination':xls_file, 'ez_dir':ez_dir}, ignore_index=True)
+                    df = df.append({'year':year, 'month':month, 'day':day, 'job':job_str,'lot':lot,'shop':shop,'basename':basename, 'destination':xls_file, 'ez_dir':ez_dir}, ignore_index=True)
                     big_ole_dict[year][month][day].append(basename)
                     
     return df
