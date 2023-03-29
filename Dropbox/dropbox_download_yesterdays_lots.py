@@ -11,6 +11,7 @@ import os
 import glob
 import pandas as pd
 import datetime
+import re
 
 log_path = 'C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Last_day_retrieved_log.csv'
 def write_to_logfile(dt, status):
@@ -20,7 +21,7 @@ def write_to_logfile(dt, status):
     log.to_csv(log_path, index=False)
 
 
-critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS']
+critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
 # base_dir = "C:\\Users\\cwilson\\Dropbox\\EVA REPORTS FOR THE DAY\\"
 base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
 base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
@@ -134,7 +135,24 @@ for i in range(0,delta):
             
             basename_components = basename.split('-')
             
-            if len(basename_components) == 3:
+            if len(basename_components) != 3:
+                print('ERROR THE FILENAME IS INVALID: {}'.format(basename))
+                ''' SEND ERROR THAT THE FILENAME IS INVALID
+                1) Emad
+                2) mildred tong
+                3) me
+                '''
+                try:
+                    basename_components = re.split('-|\ ', basename)
+                    job_str = basename_components[0]
+                    lot = basename_components[1]
+                    shop = basename_components[2][:-4]
+                    print('Able to resolve the invalid filename')
+                except:
+                    # 5 + '5'
+                    continue
+                
+            else:
                 # job # is the start of the filename
                 job_str = basename_components[0]
                 # lot is the middle portion of the filename
@@ -143,23 +161,31 @@ for i in range(0,delta):
                 shop = basename_components[2][:-4]
                 
                 
-            else:
-                print('ERROR THE FILENAME IS INVALID')
-                ''' SEND ERROR THAT THE FILENAME IS INVALID
-                1) Emad
-                2) mildred tong
-                3) me
-                '''
             print(basename, day, month_str, year)
             
             # open the current lots file -> fingers crossed the header is alwasy row 2
             # only maintain those 9 columns that we actually need to pass along -> smaller file sizes
-            try:
-                xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
-            except:
+            sheet_num = 0
+            while sheet_num < 5:
+                try:
+                    xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns)
+                    break
+                except:
+                    print('Sheet Number {} did not contain the critical_cols'.format(sheet_num))
+                    print('\t\t',basename, day, month_str, year)
+                sheet_num += 1
+            if sheet_num  == 4:
                 print('the file does not have a valid sheet_name to be added')
                 print('\t\t',basename, day, month_str, year)
-                continue
+                # 5 + '5'
+                continue                
+            # try:
+            #     xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
+            # except:
+            #     print('the file does not have a valid sheet_name to be added')
+            #     print('\t\t',basename, day, month_str, year)
+            #     5 + '5'
+            #     continue
             
             xls_main_name = 'c://downloads//' + job_str + '.xlsx'  
             # this is if the storage file in c:/downloads exists for that job
