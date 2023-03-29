@@ -48,28 +48,7 @@ yesterday = (datetime.datetime.now() + datetime.timedelta(days=-1)).date()
 delta = (yesterday - last_successful_dt).days
  
 
-# write_to_logfile(yesterday, 'Started')
 
-# try:
-#     years = os.listdir(base_dir)
-# except:
-#     print('COULD NOT CONNECT TO THE X DRIVE / DROPBOX')
-#     write_to_logfile(yesterday, 'Could not connect to the dropbox')
-#     exit()
-    
-
-# year = str(yesterday.year)
-
-# months = os.listdir(base_dir + year)
-
-# #get it as a zero padded number -> 01 or 12
-# month_num = str(yesterday.month).zfill(2)
-# # '%B' gets the month name
-# month_name = yesterday.strftime('%B').upper()
-
-# month_str = month_num + ' - ' + month_name
-
-# days = os.listdir(base_dir + year + '\\' + month_str)
 
 
 
@@ -117,6 +96,10 @@ for i in range(0,delta):
     if day in days:
     
         xls_files = glob.glob(base_dir + year + '\\' + month_str + '\\' + day + "\\*.xls")
+        ph = [i for i in xls_files if 'PH' in i]
+        if len(ph):
+            print(ph)
+        xls_files = [i for i in xls_files if not 'PH' in i]
         
         for xls_file in xls_files:
             # xls_file = [i for i in xls_files if 'T084' in i][0]
@@ -149,7 +132,6 @@ for i in range(0,delta):
                     shop = basename_components[2][:-4]
                     print('Able to resolve the invalid filename')
                 except:
-                    # 5 + '5'
                     continue
                 
             else:
@@ -161,36 +143,65 @@ for i in range(0,delta):
                 shop = basename_components[2][:-4]
                 
                 
-            print(basename, day, month_str, year)
+            # print(basename, day, month_str, year)
             
-            # open the current lots file -> fingers crossed the header is alwasy row 2
-            # only maintain those 9 columns that we actually need to pass along -> smaller file sizes
+            ''' Try to massage the lot name '''
+            if lot[0] == 'T' and len(lot) == 4:
+                print('Rule 0: {}'.format(lot))
+                
+            elif lot[0] == 'T' and len(lot) == 3:
+                old_lot = lot
+                lot = 'T' + lot[1:].zfill(3)
+                print('Rule 1: {} to {}'.format(old_lot, lot))
+                
+            elif lot.isnumeric():
+                old_lot = lot
+                lot = 'T' + lot.zfill(3)
+                print('Rule 2: {} to {}'.format(old_lot, lot))
+                
+            elif lot[0] == 'T' and lot[1:4].isnumeric():
+                old_lot = lot
+                lot = lot[:4]
+                print('Rule 3: {} to {}'.format(old_lot, lot))
+                
+            else:
+                print('This lot does not fill other criteria')
+                5 + '5'
+                
+            
+            # we are going to iterate thru the sheet_names as numbers to find the right one b/c calling by name results in a lot of failures
             sheet_num = 0
-            while sheet_num < 5:
+            max_sheet_num = 6
+            while sheet_num <= max_sheet_num:
                 try:
+                    # open the current lots file -> fingers crossed the header is alwasy row 2
+                    # only maintain those 9 columns that we actually need to pass along -> smaller file sizes
                     xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns)
+                    # if for some reason it pulls it but the dataframe is shape (0,0)
+                    if not xls_lot.size:
+                        5 + '5' #???
+                        # keep going in the while loop - try another sheet_name
+                        continue
+                        
                     break
                 except:
-                    print('Sheet Number {} did not contain the critical_cols'.format(sheet_num))
-                    print('\t\t',basename, day, month_str, year)
+                    5
+                    # print('Sheet Number {} did not contain the critical_cols'.format(sheet_num))
+                    # print('\t\t',basename, day, month_str, year)
+                
                 sheet_num += 1
-            if sheet_num  == 4:
-                print('the file does not have a valid sheet_name to be added')
-                print('\t\t',basename, day, month_str, year)
-                # 5 + '5'
+                
+            # when we max out the sheet_name iterator - skip this LOT
+            if sheet_num  == max_sheet_num:
+                # print('the file does not have a valid sheet_name to be added')
+                # print('\t\t',basename, day, month_str, year)
+                5 + '5' #???
                 continue                
-            # try:
-            #     xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
-            # except:
-            #     print('the file does not have a valid sheet_name to be added')
-            #     print('\t\t',basename, day, month_str, year)
-            #     5 + '5'
-            #     continue
-            
+
+            # get the 'database' from c:/downlaods/jobnumber
             xls_main_name = 'c://downloads//' + job_str + '.xlsx'  
             # this is if the storage file in c:/downloads exists for that job
-            if os.path.exists(xls_main_name):
-                
+            if os.path.exists(xls_main_name):  
                 # start by assuming headers are on row 0
                 header_num = 0
                 # open just the first col with 5 rows
@@ -212,47 +223,18 @@ for i in range(0,delta):
                     xls_main = pd.read_excel(xls_main_name, engine='xlrd', header=header_num)
                 except:
                     xls_main = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num)
+                
                 # add the lot to the df
                 xls_lot['LOT'] = lot
                 
+                # if that LOT already exists in xls_main
                 if xls_main[xls_main['LOT'] == lot].shape[0]:
+                    # get rid of that LOT's records from xls_main
                     xls_main = xls_main[xls_main['LOT'] != lot]
                 
                 xls_lot_grouped = xls_lot.groupby(['JOB NUMBER','SEQUENCE','PAGE','MAIN MEMBER','PRODUCTION CODE','SHAPE','LABOR CODE','LOT']).sum()
                 xls_lot_grouped = xls_lot_grouped.reset_index(drop=False)
-                # this is for when a lot already exists in the xls_main but needs to be updated
-                # if xls_file_exists_with_previous_date:
-                #     print('Updating lot {}'.format(lot))
-                #     # get a copy of the main file's data for that LOT
-                #     xls_main_with_same_lot = xls_main[xls_main['LOT'] == lot].copy()
-                #     # create a copy of the xls_lot
-                #     xls_lot_to_compare = xls_lot.copy()
-                #     # give the xls_main an OLD tag
-                #     xls_main_with_same_lot['new/old'] = 'old'
-                #     #give the xls_lot copy a NEW tag
-                #     xls_lot_to_compare['new/old']='new'
-                #     # these are the fields we use to differentiate duplicates
-                #     subset = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'MAIN MEMBER','PRODUCTION CODE','SHAPE', 'LABOR CODE', 'LOT']
-                
-                #     # append the copies of main & xls_lot
-                #     x_appeneded = xls_lot_to_compare.append(xls_main_with_same_lot, ignore_index=True)
-                #     # get any records that are not duplicates
-                #     # this will maintain any records that are unique to xls_main and to xls_lot
-                #     non_duplicated = x_appeneded[x_appeneded.duplicated(subset) == False]
-                #     # get the new version of any duplicate records
-                #     duplicated_and_new = x_appeneded[(x_appeneded.duplicated(subset) == True) & (x_appeneded['new/old'] == 'new')]
-                #     # create the updated records for that lot
-                #     x_updated_lot = non_duplicated.append(duplicated_and_new) 
-                #     # get rid of the new/old column
-                #     x_updated_lot = x_updated_lot.drop(columns=['new/old'])
-                #     # drop all of the previous lot data
-                #     xls_main = xls_main[xls_main['LOT'] != lot]
-                #     # append the updated lot data to xls_main
-                #     xls_main = xls_main.append(x_updated_lot)
-                    
-                    
-                    
-                    
+                #
                     
                 # append the lot's pieces to that main file 
                 xls_main = xls_main.append(xls_lot)
