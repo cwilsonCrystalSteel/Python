@@ -65,7 +65,15 @@ def clean_up_this_gunk(times_df, ei):
     
 
     code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
-   
+    #incorporate the ffect of the new jobcode/costcode style in timeclock
+    for category in code_changes.keys():
+        # get the list of jobs/costcodes to be changed
+        changes = code_changes[category]
+        # strip out everything but the jobnumber - that is the new job code
+        alternate_style = [i.split(' ')[0] for i in changes]
+        # add the 2 lists together and set it back into the dict[key]
+        code_changes[category] = changes + alternate_style
+        
     hours = times_df[~times_df['Job Code'].isin(code_changes['Delete Job Codes'])]
     # join the state to the hours df
     hours = hours.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
@@ -148,10 +156,11 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             # if the file was created today, then use it, if not then throw error            
             if latest_html_time.date() == today:
                 print(latest_html)
-                # times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
                 try:
+                    # try the new method of reading timeclock
                     times_df = new_and_imporved_group_hours_html_reader(latest_html, in_and_out_times=in_and_out_times)
                 except Exception:
+                    # try the old way of reading timeclock incase the top fails
                     times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
                 # delete the html file
                 os.remove(latest_html)                
@@ -204,8 +213,6 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
 
 def get_information_for_clock_based_email_reports(start_date, end_date, exclude_terminated=True, download_folder="C:\\users\\cwilson\\downloads\\", ei=None, in_and_out_times=False):
     
-    
-    
     times_df = get_clock_times_html_downloaded(start_date, end_date, exclude_terminated, download_folder, in_and_out_times=in_and_out_times)
     
     if ei is None:
@@ -214,8 +221,6 @@ def get_information_for_clock_based_email_reports(start_date, end_date, exclude_
     if times_df is None:
         return None
     else:
-        
-    
         return clean_up_this_gunk(times_df, ei)
     
     
