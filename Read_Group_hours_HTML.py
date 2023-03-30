@@ -13,6 +13,62 @@ from bs4 import BeautifulSoup
 import datetime
 import numpy as np
 
+def turn_new_timeclock_into_old(df_with_jobcode_1na):
+    df = df_with_jobcode_1na
+    
+    ''' working with work entries that are for LOTs'''
+    haslot = df[df['Cost Code'].str.contains(' LOT ')]
+    # the cost code has form 'XXXXy\yZZZ LOT ZZZ' where XXXX=jobnum, y=fluff, ZZZ=lotnum
+    split_costcode = haslot['Cost Code'].str.split('\\')
+    # the job is the first 4 
+    job_code = split_costcode.str[0].str[:-1]
+    cost_code = split_costcode.str[1]
+    # get the lot cost codes ending in PAINT or LOAD
+    ccs_with_removals = cost_code[(cost_code.str[-5:] == 'PAINT') | (cost_code.str[-4:] == 'LOAD')]
+    # chop off the PAINT or LOAD & strip whitespace
+    ccs_with_removals = ccs_with_removals.str[:-5].str.strip()    
+    # replace the cost_codes with the ones that we stripped ppaint & load from
+    cost_code.loc[ccs_with_removals.index] = ccs_with_removals
+    
+    haslot.loc[job_code.index, 'Job Code'] = job_code
+    haslot.loc[job_code.index, 'Cost Code'] = cost_code
+    
+    ''' Working with work entries that are NOT Lots but have a slash at the start '''
+    notlot = df[~df['Cost Code'].str.contains(' LOT ')]
+    # this finds records that have a singular slash in them -- thank you python for the escaping needs
+    hasslash = notlot[notlot['Cost Code'].str[:6].str.contains('\\\\')]
+    split_costcode = hasslash['Cost Code'].str.split('\\')
+    job_code = split_costcode.str[0].str[:-1]
+    cost_code = split_costcode.str[1]
+    
+    hasslash.loc[job_code.index, 'Job Code'] = job_code
+    hasslash.loc[job_code.index, 'Cost Code'] = cost_code
+    
+    ''' Working with whatever the hell else is left after the LOTs and early Slashes '''
+    remainder = notlot.drop(index=hasslash.index)
+    # what is left has the first 3 numbers as the job
+    job_code = remainder['Cost Code'].str[:3]
+    # the remainder of the cost code will be the cost code
+    cost_code = remainder['Cost Code'].str[4:]
+    # get the cost codes ending in the shop number
+    ccs_with_removals = cost_code[cost_code.str[-3:].isin(['CSM','CSF','FED','CMH','CMW'])]
+    ccs_with_removals = ccs_with_removals.str[:-4]
+    cost_code.loc[ccs_with_removals.index] = ccs_with_removals
+            
+    remainder.loc[job_code.index, 'Job Code'] = job_code
+    remainder.loc[job_code.index, 'Cost Code'] = cost_code 
+    
+    cmw_codes = remainder[remainder['Cost Code'].str.contains('CMW CODES')]
+    cmw_codes = cmw_codes['Cost Code'].str.replace('\\',' ')
+    remainder.loc[cmw_codes.index, 'Cost Code'] = cmw_codes 
+    
+    # join the dfs together into one 
+    output = haslot.append(hasslash).append(remainder)
+    # not putting errors='coerce' is gonna bite me in the butt later
+    output['Job #'] = pd.to_numeric(output['Job Code'])
+    
+    return output
+    
 
 
 def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
@@ -118,7 +174,21 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
     new_lot_ccs = lot_ccs.str[:-5].str.strip()    
     df.loc[new_lot_ccs.index, 'Cost Code'] = new_lot_ccs
     df = df.rename(columns = {'Time in':'Time In', 'Time out':'Time Out'})
-    df = df[['Cost Code', 'Hours', 'Job #', 'Job Code', 'Name', 'Time In', 'Time Out']]
+    # df = df[['Cost Code', 'Hours', 'Job #', 'Job Code', 'Name', 'Time In', 'Time Out']]
+    df = df[['Name','Job #','Job Code','Cost Code','Hours','Time In','Time Out']]
+    
+    # fix the new job code / cost code stuff starting 3023-03-30
+    # the Job code will be "'1 - N/A'"
+    
+    # break out the records with the new style of timeclock 
+    new_jobcode_style = df[df['Job Code'] == '1 - N/A']
+    # keep the old ones - they have already been worked correctly
+    old_jobcode_style = df[df['Job Code'] != '1 - N/A'] 
+    # convert the new ones to the old format
+    new_jobcode_style_converted_back_to_old = turn_new_timeclock_into_old(new_jobcode_style)
+    # and remake df out of the 2 dfs
+    df = old_jobcode_style.append(new_jobcode_style_converted_back_to_old)
+    
     
     if not in_and_out_times:
         df = df.drop(columns = ['Time In','Time Out'], axis=0)
