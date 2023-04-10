@@ -101,8 +101,14 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                 headers.remove('I')
                 headers.remove('O')
                 headers.remove('Note')
-                headers.remove('Edit')
-                headers.remove('Brk')
+                try:
+                    headers.remove('Edit')
+                except:
+                    print("headers.remove('Edit') did not work, skipping")
+                try:
+                    headers.remove('Brk')
+                except:
+                    print("headers.remove('Brk') did not work, skipping")    
                 headers = ['Name'] + headers
                 data.append(headers)
                 
