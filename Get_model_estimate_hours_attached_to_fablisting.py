@@ -264,7 +264,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             # just let df be a copy of fablisting_df -> basically just to keep the columns
             df = fablisting_df.copy()
             # just set the column of 'Hours Per Piece' to nan
-            df['Hours Per Piece'] = np.nan
+            df['Hours Per Pound'] = np.nan
 
         # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
         df['Earned Hours'] = df['Weight'] * df['Hours Per Pound']
