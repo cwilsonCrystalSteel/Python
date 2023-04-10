@@ -49,7 +49,8 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive
     # give them an extra couple of hours for early clock ins
     # i doubt anyone is going to start 2nd shift after 3 a.m.
     start_dt_filter = start_dt.replace(hour=3, minute=0)
-    end_dt_filter = end_dt.replace(hour=4, minute=0)
+    # end_dt_filter = end_dt.replace(hour=4, minute=0)
+    end_dt_filter = end_dt + datetime.timedelta(hours=4)
     
     
     direct = basis['Direct']
