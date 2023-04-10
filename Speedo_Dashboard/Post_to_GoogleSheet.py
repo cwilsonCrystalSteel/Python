@@ -12,6 +12,7 @@ import datetime
 import time
 from Predictor import get_prediction_dict
 import numpy as np
+import os
 # this one will send TimeClock & Fablisting data to google sheet
 
 
@@ -105,4 +106,41 @@ def post_predictor():
     
     
     # simply append a isReal=0 row
+    return None
+
+
+
+
+
+
+
+def move_to_archive():
+    
+    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive.csv'
+    
+    if os.path.exists(archive_file):
+        archive = pd.read_csv(archive_file, index_col=0)
+        
+        worksheet = get_google_sheet_as_df()
+        to_archive = worksheet.iloc[:1,:]
+        
+        with open(archive_file, 'a', newline='') as f:
+            to_archive.to_csv(f, header=False, index=False, line_terminator='\n')
+            
+        sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
+        # Get the first worksheet
+        worksheet = sh.worksheet(sheet_name)
+        
+        # Delete the second row
+        worksheet.delete_row(2)
+        
+        
+    else:
+        print('creat the archive')
+        worksheet = get_google_sheet_as_df()
+        worksheet = worksheet.iloc[:worksheet.shape[0]-100]
+        worksheet.to_csv(archive_file, index=False)
+        
+    
+    
     return None
