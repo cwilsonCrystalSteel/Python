@@ -24,11 +24,29 @@ google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json'
                      }
 
+def remove_empty_rows_between_data(worksheet):
+        
+    # get all values in worksheet
+    values = worksheet.get_all_values()    
+    
+    empty_rows = []
+    
+    # iterate through rows and find empty rows
+    for i, row in enumerate(values):
+        if all(cell == '' for cell in row):
+            empty_rows.append(i+1) # add 1 to index to match Google Sheet indices
+    
+    # iterate through empty rows in reverse order and delete them
+    for row_index in reversed(empty_rows):
+        worksheet.delete_rows(row_index)
+
 def get_gspread_worksheet(sheet_name):
     sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
     worksheet = sh.worksheet(sheet_name)
+    remove_empty_rows_between_data(worksheet)
+    worksheet = sh.worksheet(sheet_name)
     return worksheet
-    
+
 
 def get_google_sheet_as_df(worksheet=None):
     if worksheet == None:
