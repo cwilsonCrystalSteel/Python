@@ -224,40 +224,45 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         print('Cannot open {}'.format(lot_name))
                         ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
                         # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
-                        chunk['Hours Per Piece'] = np.nan
+                        chunk['Hours Per Pound'] = np.nan
                         df = df.append(chunk)
                         continue
                     
-          
-                    
-                    avg_per_pound = xls_lot_from_main['TOTAL MANHOURS'].sum() / xls_lot_from_main['WEIGHT'].sum()
-                                       
-                    
-                    ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
-                    # get a copy of the pcmarks column
-                    pcmarks = chunk['Piece Mark - REV'].copy()
-                    # split the piece marks based on a hyphen - this is incase they have the rev # next to it
-                    pcmarks = pcmarks.str.split('-').str[0]
-                    # get rid of any extra spaces in the piece mark 
-                    pcmarks = pcmarks.str.strip()
-                    # create a copy of chunk to prevent setwithcopy warning
-                    chunk_copy = chunk.copy()
-                    # set the copy of chunk's pcmark column to the new pcmarks series that has no hyphens now
-                    chunk_copy['Piece Mark - REV'] = pcmarks
-                    # set chunk to equal the copy  
-                    chunk = chunk_copy
-                    # get rid of the copy 
-                    del chunk_copy
-                    # grab the current index - for later so you can put the index back to normal
-                    current_index = chunk.index
-                     # set the index to be piecemark so that i can join easily
-                    chunk = chunk.set_index('Piece Mark - REV', drop=False)
-                    # get the hours per piece from the grouped xls df
-                    chunk['Hours Per Pound'] = avg_per_pound
-                    # set the chunk index back 
-                    chunk = chunk.set_index(current_index)
-                    # appends chunk to df, but now with 'Hours Per Piece' column
-                    df = df.append(chunk)
+                    if xls_lot_from_main.shape[0]:
+                        
+                        avg_per_pound = xls_lot_from_main['TOTAL MANHOURS'].sum() / xls_lot_from_main['WEIGHT'].sum()
+                                           
+                        
+                        ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
+                        # get a copy of the pcmarks column
+                        pcmarks = chunk['Piece Mark - REV'].copy()
+                        # split the piece marks based on a hyphen - this is incase they have the rev # next to it
+                        pcmarks = pcmarks.str.split('-').str[0]
+                        # get rid of any extra spaces in the piece mark 
+                        pcmarks = pcmarks.str.strip()
+                        # create a copy of chunk to prevent setwithcopy warning
+                        chunk_copy = chunk.copy()
+                        # set the copy of chunk's pcmark column to the new pcmarks series that has no hyphens now
+                        chunk_copy['Piece Mark - REV'] = pcmarks
+                        # set chunk to equal the copy  
+                        chunk = chunk_copy
+                        # get rid of the copy 
+                        del chunk_copy
+                        # grab the current index - for later so you can put the index back to normal
+                        current_index = chunk.index
+                         # set the index to be piecemark so that i can join easily
+                        chunk = chunk.set_index('Piece Mark - REV', drop=False)
+                        # get the hours per piece from the grouped xls df
+                        chunk['Hours Per Pound'] = avg_per_pound
+                        # set the chunk index back 
+                        chunk = chunk.set_index(current_index)
+                        # appends chunk to df, but now with 'Hours Per Piece' column
+                        df = df.append(chunk)
+                    else:
+                        ''' fill in missing values if fill_missing_values=True '''
+                        chunk['Hours Per Pound'] = np.nan
+                        df = df.append(chunk)
+                        continue
 
         # if the fablisting_df is empty, then do this stuff
         else:
