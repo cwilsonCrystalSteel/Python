@@ -82,11 +82,11 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive
     output = {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
     
     try:
-        group_like_timeclock_report_TNproductive = hours_productive.copy()
-        group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
-        group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()
-        group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
         if output_productive_report:
+            group_like_timeclock_report_TNproductive = hours_productive.copy()
+            group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
+            group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()['Hours']
+            group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
             output['productive_report'] = group_like_timeclock_report_TNproductive
     except:
         print('could not make TN productive like report')
