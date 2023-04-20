@@ -57,7 +57,7 @@ def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997"
     
     # This trys to convert the 'Job #', 'Quantity', "Weight' columns to a number
     # if it cannot convert it to a number, it sets it as NaN
-    df['Job #'] = df['Job #'].apply(pd.to_numeric, errors='coerce')
+    df['Job #'] = df['Job #'].apply(pd.to_numeric, errors='coerce', downcast='integer')
     df['Quantity'] = df['Quantity'].apply(pd.to_numeric, errors='coerce')
     df['Weight'] = df['Weight'].apply(pd.to_numeric, errors='coerce')
     
