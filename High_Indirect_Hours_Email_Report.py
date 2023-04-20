@@ -658,8 +658,10 @@ def email_eva_vs_hpt(date_str, eva_vs_hpt_dict, email_recipients):
     by_pcmark = eva_vs_hpt_dict['Yesterday']['Pcmark'].iloc[:25]
     by_lot = eva_vs_hpt_dict['10 day']['Lot'].iloc[:10]
     by_job = eva_vs_hpt_dict['60 day']['Job'].iloc[:10]
-
-    by_pcmark['bins'] = pd.cut(by_pcmark['% Diff'], [0,0.5,1,max(2, max(by_pcmark['% Diff']))])
+    
+    
+    percent_diff = by_pcmark['% Diff'].copy()
+    by_pcmark.loc[:,'bins'] = pd.cut(percent_diff, [0,0.5,1,max(2, max(percent_diff))])
     by_pcmark_summary = by_pcmark.groupby('bins').count()
     by_pcmark = by_pcmark.drop(columns=['bins'])
     by_pcmark_summary['Range'] = ['< 50%','50-100%','> 100%']
