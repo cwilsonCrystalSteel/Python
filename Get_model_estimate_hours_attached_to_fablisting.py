@@ -188,7 +188,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 # if for some reason the chunk returns no rows we have an issue!
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
-                    chunk_job['Hours Per Piece'] = np.nan
+                    chunk_job['Hours Per Pound'] = np.nan
                     df = df.append(chunk_job)     
                     continue 
                 # try to get the job's eva database open
@@ -196,7 +196,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')                
                 except Exception:
                     print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
-                    chunk_job['Hours Per Piece'] = np.nan
+                    chunk_job['Hours Per Pound'] = np.nan
                     df = df.append(chunk_job)
                     continue 
                 
@@ -209,7 +209,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     chunk = chunk_job[chunk_job['Lot Name'] == lot_name]
                     if not chunk.shape[0]:
                         print('no rows found for chunk: {}'.format(lot_name))
-                        chunk['Hours Per Piece'] = np.nan
+                        chunk['Hours Per Pound'] = np.nan
                         df = df.append(chunk)
                         continue
                     
@@ -232,7 +232,6 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         
                         avg_per_pound = xls_lot_from_main['TOTAL MANHOURS'].sum() / xls_lot_from_main['WEIGHT'].sum()
                                            
-                        
                         ''' This is to get rid of the revision numbers on the pcmark os that I can join the manhours '''
                         # get a copy of the pcmarks column
                         pcmarks = chunk['Piece Mark - REV'].copy()
