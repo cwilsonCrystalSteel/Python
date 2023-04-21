@@ -17,8 +17,11 @@ state = 'TN'
 today = datetime.datetime.now()
 today_str = today.strftime("%m/%d/%Y")
 
-def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive_report=False):
-    
+def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False):
+    if states == None:
+        states = ['TN','MD','DE']
+        
+        
     now = datetime.datetime.now()
     end_date = end_dt.strftime('%m/%d/%Y')
     start_date = start_dt.strftime('%m/%d/%Y')
@@ -62,34 +65,38 @@ def get_timeclock_summary(start_dt, end_dt, state, basis=None, output_productive
     hours = hours[~hours['Time In'].isna()]
     # get only records that the clock in time is for that work day
     hours = hours[(hours['Time In'] >= start_dt_filter) & (hours['Time In'] <= end_dt_filter)]
-    
-    # hours = hours[hours['Location'] == state]
-    
+    # pull the employee information df out of the basis dict
     ei = basis['Employee Information']
     # set the index to the employee name
     ei = ei.set_index('Name')
-    # get all employees at that state
-    ei = ei[ei['Productive'].str.contains(state)]
-    # only get hours when there is an employee match
-    hours = ei[['Productive','Shift']].join(hours.set_index('Name'), how='inner')
     
-    hours_productive = hours[~hours['Productive'].str.contains('NON')]
-    # hours_productive = hours
+    # init the output dict so that we can have a dict of dicts
+    output = {}
     
-    num_employees = pd.unique(hours_productive.index).shape[0]
-    num_direct = np.round(hours_productive[hours_productive['Is Direct']]['Hours'].sum(), 2)
-    num_indirect = np.round(hours_productive[~hours_productive['Is Direct']]['Hours'].sum(), 2)
-    output = {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
-    
-    try:
-        if output_productive_report:
-            group_like_timeclock_report_TNproductive = hours_productive.copy()
-            group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
-            group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()['Hours']
-            group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
-            output['productive_report'] = group_like_timeclock_report_TNproductive
-    except:
-        print('could not make TN productive like report')
+    for state in states:
+        output[state] = {}
+        # get all employees at that state
+        ei_state = ei[ei['Productive'].str.contains(state)]
+        # only get hours when there is an employee match
+        hours_state = ei_state[['Productive','Shift']].join(hours.set_index('Name'), how='inner')
+        
+        hours_productive = hours_state[~hours_state['Productive'].str.contains('NON')]
+        # hours_productive = hours
+        
+        num_employees = pd.unique(hours_productive.index).shape[0]
+        num_direct = np.round(hours_productive[hours_productive['Is Direct']]['Hours'].sum(), 2)
+        num_indirect = np.round(hours_productive[~hours_productive['Is Direct']]['Hours'].sum(), 2)
+        output[state] = {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
+        
+        try:
+            if output_productive_report:
+                group_like_timeclock_report_TNproductive = hours_productive.copy()
+                group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
+                group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()['Hours']
+                group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
+                output[state]['productive_report'] = group_like_timeclock_report_TNproductive
+        except:
+            print('could not make TN productive like report')
 
         
     return output
