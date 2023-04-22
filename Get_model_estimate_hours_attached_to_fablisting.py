@@ -57,10 +57,13 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 try:
                     xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')                
                 except Exception:
-                    print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
-                    chunk_job['Hours Per Piece'] = np.nan
-                    df = df.append(chunk_job)
-                    continue 
+                    try:
+                        xls_main = pd.read_excel('C://downloads//' + str(int(job)) + '.xlsx')  
+                    except Exception:
+                        print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
+                        chunk_job['Hours Per Piece'] = np.nan
+                        df = df.append(chunk_job)
+                        continue 
                 
                 lots = joblots.xs(job, level=0).index
                 
@@ -105,7 +108,10 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     try:
                         # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
                         # xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
-                        xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
+                        if 'T' in lot_name:
+                            xls_lot_from_main = xls_main[(xls_main['LOT'] == lot_name) | (xls_main['LOT'] == lot_name.replace('T',''))]
+                        else:
+                            xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
                     except:
                         # print('Cannot open {}'.format(eva.iloc[-1]['basename']))
                         print('Cannot open {}'.format(lot_name))
@@ -195,10 +201,13 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 try:
                     xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')                
                 except Exception:
-                    print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
-                    chunk_job['Hours Per Pound'] = np.nan
-                    df = df.append(chunk_job)
-                    continue 
+                    try:
+                        xls_main = pd.read_excel('C://downloads//' + str(int(job)) + '.xlsx')  
+                    except Exception:
+                        print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
+                        chunk_job['Hours Per Pound'] = np.nan
+                        df = df.append(chunk_job)
+                        continue 
                 
                 # get the second index level - which is the lots
                 lots = joblots.xs(job, level=0).index
@@ -218,7 +227,10 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
            
                     # try to  open the EVA xls file
                     try:
-                        xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
+                        if 'T' in lot_name:
+                            xls_lot_from_main = xls_main[(xls_main['LOT'] == lot_name) | (xls_main['LOT'] == lot_name.replace('T',''))]
+                        else:
+                            xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
                     except:
                         # print('Cannot open {}'.format(eva.iloc[-1]['basename']))
                         print('Cannot open {}'.format(lot_name))

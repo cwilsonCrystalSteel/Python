@@ -39,7 +39,14 @@ for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
     fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet)
 
 
-
+if state == 'TN':
+   sheet = 'CSM QC Form'        
+elif state == 'DE':
+   sheet = 'CSF QC Form'
+elif state == 'MD':
+   sheet = 'FED QC Form'
+        
+    
 
 run_for_date = start_dt.strftime('%m/%d/%Y')
 gsheet_dict = {'Date':run_for_date}
