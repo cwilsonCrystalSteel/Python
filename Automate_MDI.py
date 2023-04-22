@@ -23,6 +23,11 @@ states = ['TN','DE','MD']
 
 # basis = get_information_for_clock_based_email_reports(start_date, start_date)
 
+def shape_check_before_to_excel(df_or_series, writer, sheet_name, indexTF):
+    if df_or_series.shape[0]:
+        df_or_series.to_excel(writer, sheet_name, index=indexTF)
+    else:
+        print('cannot send this df/series to excel b/c shape[0] == 0: {}'.format(sheet_name))
 
 def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     '''
@@ -127,9 +132,13 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     
     direct = direct_df['Hours'].sum()
     
-    efficiency_new = earned_new / direct
-    
-    efficiency_old = earned_old / direct
+    if direct:
+        efficiency_new = earned_new / direct
+        
+        efficiency_old = earned_old / direct
+    else:
+        efficiency_new = 0
+        efficiency_old = 0
 
     indirect_df = basis['Indirect']
     
@@ -157,18 +166,24 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     if proof == True:
         print(path + state + ' MDI ' + file_date + '.xlsx')
         with pd.ExcelWriter(path + state + ' MDI ' + file_date + '.xlsx') as writer:
-            state_series.to_excel(writer, 'MDI')
-            pieces_missing_model.to_excel(writer, 'Missing Model Pieces')
-            direct_df_departments.to_excel(writer, 'LOT Department Breakdown')
-            direct_df.to_excel(writer, 'Direct Hours', index=False)
-            indirect_df.to_excel(writer, 'Indirect Hours', index=False)
-            with_model.to_excel(writer, 'Fablisting', index=False)
-            pieces_hours_difference.to_excel(writer, 'EVA vs HPT', index=False)
+            # state_series.to_excel(writer, 'MDI')
+            # pieces_missing_model.to_excel(writer, 'Missing Model Pieces')
+            # direct_df_departments.to_excel(writer, 'LOT Department Breakdown')
+            # direct_df.to_excel(writer, 'Direct Hours', index=False)
+            # indirect_df.to_excel(writer, 'Indirect Hours', index=False)
+            # with_model.to_excel(writer, 'Fablisting', index=False)
+            # pieces_hours_difference.to_excel(writer, 'EVA vs HPT', index=False)
             
+            shape_check_before_to_excel(state_series, writer, sheet_name='MDI', indexTF=True)
+            shape_check_before_to_excel(pieces_missing_model, writer, sheet_name='Missing Model Pieces', indexTF=True)
+            shape_check_before_to_excel(direct_df_departments, writer, sheet_name='LOT Department Breakdown', indexTF=True)
+            shape_check_before_to_excel(direct_df, writer, sheet_name='Direct Hours', indexTF=False)
+            shape_check_before_to_excel(indirect_df, writer, sheet_name='Indirect Hours', indexTF=False)
+            shape_check_before_to_excel(with_model, writer, sheet_name='Fablisting', indexTF=False)
+            shape_check_before_to_excel(pieces_hours_difference, writer, sheet_name='EVA vs HPT', indexTF=False)
                 
     
     return {'MDI Summary':state_series.to_frame(), 'Missing Pieces':pieces_missing_model, 'Direct by Department':direct_df_departments, 'EVA vs HPT':pieces_hours_difference}
-
 
 
 def verify_mdi(state, start_date, end_date, proof=False):
@@ -203,7 +218,8 @@ def verify_mdi(state, start_date, end_date, proof=False):
     end_date = end_date.replace('/','-')
     file = path + state + ' Verification ' + start_date + ' to ' + end_date +'.xlsx'
     with pd.ExcelWriter(file) as writer:
-        state_df.to_excel(writer, 'Verification')
+        # state_df.to_excel(writer, 'Verification')
+        shape_check_before_to_excel(state_df, writer, sheet_name='Verification', indexTF=True)
     return state_df
 
 
@@ -309,10 +325,16 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         filename = path + 'EVA_vs_HPT ' + file_date + timespan_str + '.xlsx'
         print(filename)
         with pd.ExcelWriter(filename) as writer:
-            missing_pieces.to_excel(writer, 'Missing Pieces', index=False)
-            eva_vs_hpt.to_excel(writer, 'Pcmark', index=False)
-            eva_vs_hpt_by_lot.to_excel(writer, 'Lot', index=False)
-            eva_vs_hpt_by_job.to_excel(writer, 'Job', index=False)
+            # missing_pieces.to_excel(writer, 'Missing Pieces', index=False)
+            # eva_vs_hpt.to_excel(writer, 'Pcmark', index=False)
+            # eva_vs_hpt_by_lot.to_excel(writer, 'Lot', index=False)
+            # eva_vs_hpt_by_job.to_excel(writer, 'Job', index=False)
+            
+            shape_check_before_to_excel(missing_pieces, writer, sheet_name='Missing Pieces', indexTF=False)
+            shape_check_before_to_excel(eva_vs_hpt, writer, sheet_name='Pcmark', indexTF=False)
+            shape_check_before_to_excel(eva_vs_hpt_by_lot, writer, sheet_name='Lot', indexTF=False)
+            shape_check_before_to_excel(eva_vs_hpt_by_job, writer, sheet_name='Job', indexTF=False)
+            
     
     return {'Pcmark':eva_vs_hpt, 
             'Job':eva_vs_hpt_by_job, 
