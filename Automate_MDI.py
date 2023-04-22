@@ -260,7 +260,15 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         if sheet == sheets[0]:
             all_fab = with_model
         else:
-            all_fab = all_fab.append(with_model)
+            all_fab = all_fab.append(with_model, ignore_index=True)
+    
+    try:
+        all_fab['Weight'] = all_fab['Weight'].apply(pd.to_numeric, errors='coerce')
+        all_fab['EVA'] = all_fab['EVA'].apply(pd.to_numeric, errors='coerce')
+        all_fab['HPT'] = all_fab['HPT'].apply(pd.to_numeric, errors='coerce')
+        all_fab['Quantity'] = all_fab['Quantity'].apply(pd.to_numeric, errors='coerce')
+    except:
+        print('For some damn reason one of the all_fab number columns wont convert to numeric')
     
     missing_pieces = all_fab[all_fab['Has Model'] == False]
     
