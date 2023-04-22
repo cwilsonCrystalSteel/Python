@@ -55,14 +55,14 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
                       'rrivera@crystalsteel.net','wciocson@crystalsteel.net']
 
 
-''' un-comment this when debugging '''
+''' un-comment this when debugging 
 
-# state_recipients = {'TN':['cwilson@crystalsteel.net'],
-#                     'MD':['cwilson@crystalsteel.net'],
-#                     'DE':['cwilson@crystalsteel.net'],}
-# eva_hpt_recipients = ['cwilson@crystalsteel.net']
+state_recipients = {'TN':['cwilson@crystalsteel.net'],
+                    'MD':['cwilson@crystalsteel.net'],
+                    'DE':['cwilson@crystalsteel.net'],}
+eva_hpt_recipients = ['cwilson@crystalsteel.net']
 
-
+'''
 #%%
 
 # get the data from TIMECLOCK then do basic transformations to it
