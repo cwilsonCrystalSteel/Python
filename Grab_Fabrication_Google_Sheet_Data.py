@@ -70,6 +70,5 @@ def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997"
     # removes the row if there is a NaN in the 'Weight' column
     df = df[~df["Weight"].isna()]
     
-    
 
     return df
