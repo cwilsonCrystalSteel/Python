@@ -34,13 +34,13 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     # get dates between yesterday at 6 am and today at 6 am
     fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
     # get the model hours attached to fablisting
-    with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=False, shop=sheet[:3])
+    with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
     # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
 
     num_with_model = with_model['Has Model'].sum()
     num_without_model = with_model.shape[0] - num_with_model
     
-    earned_hours = np.round(with_model[with_model['Has Model']]['Earned Hours'].sum(), 2)
+    earned_hours = np.round(with_model['Earned Hours'].sum(), 2)
     tonnage = np.round((with_model['Weight'].sum() / 2000), 2)
     quantity = int(with_model['Quantity'].sum())
     
