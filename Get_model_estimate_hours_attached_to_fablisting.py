@@ -418,6 +418,7 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
 
 
 def fill_missing_model_earned_hours(fablisting_df, shop):
+    fablisting_df = fablisting_df.copy()
     # this is the file that has the 
     averages = pd.read_excel('C:\\downloads\\averages.xlsx')
     # sort the averages by the horus per ton
