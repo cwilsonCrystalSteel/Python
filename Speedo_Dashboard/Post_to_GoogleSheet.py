@@ -141,7 +141,7 @@ def move_to_archive():
         
         worksheet = get_google_sheet_as_df()
         # only archive if we have data & we have over 100 rows
-        if worksheet.shape[0] and worksheet.shape[0] > 100:
+        if worksheet.shape[0] and worksheet.shape[0] > 90:
             to_archive = worksheet.iloc[:1,:]
             
             with open(archive_file, 'a', newline='') as f:
