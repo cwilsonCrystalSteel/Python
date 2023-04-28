@@ -37,6 +37,24 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
     # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
 
+    '''
+    with_model['date'] = with_model['Timestamp'].dt.date
+    with_model.to_excel('c:\\users\\cwilson\\downloads\\fablisting_with_model.xlsx')
+    with_model.groupby('date').sum().to_excel('c:\\users\\cwilson\\downloads\\fablisting_with_model_date_grouped.xlsx')
+    
+    
+    pieces = with_model.groupby(['Job #','Lot #', 'Piece Mark - REV','Has Model']).agg({'Weight':sum, 'Quantity':sum, 'Earned Hours':sum, 'Timestamp':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y %H:%M'))})
+    formresponses = pd.read_excel('c:\\users\\cwilson\\downloads\\formResponses.xlsx')
+    fr_pieces = formresponses[formresponses['Site'] == 'CSM'].groupby(['Job #','Lot #','Piecemark']).agg({'Weight':sum, 'Qty':sum, 'EVA':sum, 'Date':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y'))})
+    pieces = pieces.reset_index()
+    fr_pieces = fr_pieces.reset_index()
+    pieces['Lot #'] = pieces['Lot #'].astype(str)
+    fr_pieces['Lot #'] = fr_pieces['Lot #'].astype(str)
+    joined = pd.merge(pieces.reset_index(), fr_pieces.reset_index(), left_on=['Job #','Lot #','Piece Mark - REV'], right_on=['Job #','Lot #','Piecemark'])
+    joined.to_excel('c:\\users\\cwilson\\downloads\\withModel_vs_formResponses.xlsx')
+    '''
+
+    
     num_with_model = with_model['Has Model'].sum()
     num_without_model = with_model.shape[0] - num_with_model
     
