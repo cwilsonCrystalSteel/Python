@@ -44,6 +44,7 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     
     
     pieces = with_model.groupby(['Job #','Lot #', 'Piece Mark - REV','Has Model']).agg({'Weight':sum, 'Quantity':sum, 'Earned Hours':sum, 'Timestamp':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y %H:%M'))})
+    # go to the form responses tab of fablisting & just copy paste the rows you want (with header0 into excel file)
     formresponses = pd.read_excel('c:\\users\\cwilson\\downloads\\formResponses.xlsx')
     fr_pieces = formresponses[formresponses['Site'] == 'CSM'].groupby(['Job #','Lot #','Piecemark']).agg({'Weight':sum, 'Qty':sum, 'EVA':sum, 'Date':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y'))})
     pieces = pieces.reset_index()
@@ -51,6 +52,9 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet):
     pieces['Lot #'] = pieces['Lot #'].astype(str)
     fr_pieces['Lot #'] = fr_pieces['Lot #'].astype(str)
     joined = pd.merge(pieces.reset_index(), fr_pieces.reset_index(), left_on=['Job #','Lot #','Piece Mark - REV'], right_on=['Job #','Lot #','Piecemark'])
+    joined = joined[['Job #','Lot #','Piecemark','Has Model','Weight_x','Weight_y','Quantity','Qty','Earned Hours','EVA','Timestamp','Date']]
+    joined = joined.rename(columns={'Quantity':'Qty_x','Qty':'Qty_y','Earned Hours':'EVA_x','EVA':'EVA_y','Date':'FR Date'})
+    joined['Diff'] = joined['EVA_x'] - joined['EVA_y']
     joined.to_excel('c:\\users\\cwilson\\downloads\\withModel_vs_formResponses.xlsx')
     '''
 
