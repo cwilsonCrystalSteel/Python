@@ -306,7 +306,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             no_model_plus_ll['Earned Hours'] = no_model_plus_ll['Weight'] * no_model_plus_ll['LOT EVA per lb']
             
             no_model_plus_ll = no_model_plus_ll[list(df.columns)]     
-            
+                        
             df.loc[no_model_plus_ll.index] = no_model_plus_ll
             
             # then try to backfilll with the old HPT way
@@ -510,7 +510,7 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
     
     if 'Has Model' in df.columns:
         # get the pieces without model hours
-        no_model = df[~df['Has Model']]
+        no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]
         # join the hours per ton based on the job #
         no_model = no_model.join(averages['Hours per Ton'], on='Job #')
         # calcualte the earned horus from the weight & average man hours per ton
