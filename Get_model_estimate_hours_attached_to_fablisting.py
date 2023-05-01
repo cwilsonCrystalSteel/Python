@@ -12,6 +12,10 @@ import os
 import numpy as np
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from navigate_EVA_folder_function import get_df_of_all_lots_files_information
+import sys
+sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
+from attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
+
 
 
 # shop = 'CSM'
@@ -271,6 +275,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         df = df.append(chunk)
                     else:
                         ''' fill in missing values if fill_missing_values=True '''
+                        
                         chunk['Hours Per Pound'] = np.nan
                         df = df.append(chunk)
                         continue
@@ -288,6 +293,23 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         df['Has Model'] = ~df['Earned Hours'].isna()
         
         if fill_missing_values == True:
+            # first try to infill usijng the LOTS LOG tab of production schedule
+            
+            ll = get_LOTS_log_eva_hours()
+            
+            no_model = df[df['Has Model'] == False].copy()
+            
+            no_model['LOTS Name'] = no_model['Job #'].astype(str) + '-' + no_model['Lot Name']
+            
+            no_model_plus_ll = pd.merge(no_model.reset_index(), ll, left_on=['LOTS Name'], right_on=['LOTS Name']).set_index('index')
+            
+            no_model_plus_ll['Earned Hours'] = no_model_plus_ll['Weight'] * no_model_plus_ll['LOT EVA per lb']
+            
+            no_model_plus_ll = no_model_plus_ll[list(df.columns)]     
+            
+            df.loc[no_model_plus_ll.index] = no_model_plus_ll
+            
+            # then try to backfilll with the old HPT way
             df = fill_missing_model_earned_hours(df, shop)
             
     
@@ -307,7 +329,33 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         return{'df':df, 'missing job lots':missing_job_lots}
 
 
+def get_LOTS_log_eva_hours():
+    _ProductionWorksheetGooglekey = "1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4"
 
+    sh = init_google_sheet_production_worksheet(_ProductionWorksheetGooglekey)
+    # get the values from the shipping schedule as a list of lists
+    worksheet = sh.worksheet('LOTS Log').get_all_values()
+    
+    ll = pd.DataFrame(worksheet[3:], columns=worksheet[2])    
+
+    new_cols = {}
+    for col in ll.columns:
+        new_col = col.replace('\n', ' ')
+        new_cols[col] = new_col
+        
+    # replace columns with new columns w/o line breaks
+    ll = ll.rename(columns=new_cols)    
+    
+    ll = ll[['Job','Fabrication Site','LOTS Name','Tonnage','TOTAL MHRS']]
+    ll = ll.rename(columns={'TOTAL MHRS':'LOT EVA Hours'})
+    ll['LOT EVA Hours'] = pd.to_numeric(ll['LOT EVA Hours'])
+    ll = ll[~ll['LOT EVA Hours'].isna()]
+    ll['Tonnage'] = pd.to_numeric(ll['Tonnage'])
+    ll = ll[~ll['Tonnage'].isna()]
+    ll['LOT EVA per lb'] = ll['LOT EVA Hours'] / (ll['Tonnage'] * 2000)
+    return ll
+    
+    
 def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, shop='min'):
     
     if how == 'model':
