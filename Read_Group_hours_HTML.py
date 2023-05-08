@@ -32,6 +32,10 @@ def turn_new_timeclock_into_old(df_with_jobcode_1na):
     
     haslot.loc[job_code.index, 'Job Code'] = job_code
     haslot.loc[job_code.index, 'Cost Code'] = cost_code
+    # get any instances that have a job code that does not fit the normal 4 digit routine
+    weirdos = haslot[haslot['Job Code'].str.len() > 4]
+    weirdos['Job Code'] = weirdos['Job Code'].str[:4]
+    haslot.loc[weirdos.index, 'Job Code'] = weirdos['Job Code']
     
     ''' Working with work entries that are NOT Lots but have a slash at the start '''
     notlot = df[~df['Cost Code'].str.contains(' LOT ')]
