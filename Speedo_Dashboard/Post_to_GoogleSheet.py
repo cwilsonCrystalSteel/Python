@@ -105,7 +105,13 @@ def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
         time.sleep(1)
         if isinstance(value, np.int32):
             value = int(value)
-        worksheet.update(cell, value, value_input_option='USER_ENTERED')
+        try:
+            worksheet.update(cell, value, value_input_option='USER_ENTERED')
+        except:
+            num_columns = len(df.columns)-1
+         
+            worksheet.append_row([''] * num_columns, value_input_option='USER_ENTERED')
+            worksheet.update(cell, value, value_input_option='USER_ENTERED')
     
     # then paste the observed data
     return None
