@@ -53,7 +53,7 @@ gsheet_dict = {'Date':run_for_date}
 gsheet_dict.update(fablisting_summary['CSM QC Form'])
 gsheet_dict.update(timeclock_summary['TN'])
 
-post_observation(gsheet_dict)
+post_observation(gsheet_dict, sheet_name=sheet[:3])
 
 move_to_archive()
 
