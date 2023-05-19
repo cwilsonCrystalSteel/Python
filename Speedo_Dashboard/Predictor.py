@@ -18,7 +18,7 @@ now = datetime.datetime.now()
 
 start_of_workday = now.date()
 if now.hour < 6:
-    start_of_workday += datetime.timedelta(day=-1)
+    start_of_workday += datetime.timedelta(days=-1)
 
 start_of_workday = datetime.datetime.combine(start_of_workday, datetime.time.min)
 start_of_workday = start_of_workday.replace(hour=6)
