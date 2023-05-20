@@ -55,7 +55,7 @@ gsheet_dict.update(timeclock_summary['TN'])
 
 post_observation(gsheet_dict, sheet_name=sheet[:3])
 
-move_to_archive()
+move_to_archive(shop=sheet[:3])
 
 # if gsheet_dict['Direct Hours']:
 #     post_observation(gsheet_dict)
