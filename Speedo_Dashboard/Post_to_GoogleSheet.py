@@ -138,9 +138,9 @@ def post_predictor():
 
 
 
-def move_to_archive():
+def move_to_archive(shop=None):
     
-    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive.csv'
+    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + '.csv'
     
     if os.path.exists(archive_file):
         archive = pd.read_csv(archive_file, index_col=0)
