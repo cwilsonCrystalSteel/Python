@@ -215,6 +215,9 @@ def get_information_for_clock_based_email_reports(start_date, end_date, exclude_
     
     times_df = get_clock_times_html_downloaded(start_date, end_date, exclude_terminated, download_folder, in_and_out_times=in_and_out_times)
     
+    
+    
+    
     if ei is None:
         ei = get_ei_csv_downloaded(exclude_terminated, download_folder)
     
