@@ -32,7 +32,21 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
         print('Getting Timeclock for: {}'.format(start_date_loop))
         basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
-        basis = basis_orig.copy()
+        # hokie work around
+        # on 5/28 there are no records at all so it was failing to create the times_df variable
+        # when there was no times_df, using the basis_orig.copy() was failing
+        # i am just setting it up to try and move one day forward
+        # this will still fail when the start of the week has no records until there the next day is available
+        # this sucks
+        # i need to implement some way to pass an empty times_df so that we can have a zero hour thing
+        try:
+            basis = basis_orig.copy()
+        except:
+            start_dt_loop = start_dt + datetime.timedelta(days=1)
+            start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
+            basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
+            basis = basis_orig.copy()
+            
         ei = basis['Employee Information']
         for i in range(1, (end_dt-start_dt).days):
             start_dt_loop = start_dt_loop + datetime.timedelta(days=1)
