@@ -361,7 +361,7 @@ def get_LOTS_log_eva_hours():
     
     ll = ll[['Job','Fabrication Site','LOTS Name','Tonnage','TOTAL MHRS']]
     ll = ll.rename(columns={'TOTAL MHRS':'LOT EVA Hours'})
-    ll['LOT EVA Hours'] = pd.to_numeric(ll['LOT EVA Hours'])
+    ll['LOT EVA Hours'] = pd.to_numeric(ll['LOT EVA Hours'], errors='coerce')
     ll = ll[~ll['LOT EVA Hours'].isna()]
     ll['Tonnage'] = pd.to_numeric(ll['Tonnage'])
     ll = ll[~ll['Tonnage'].isna()]

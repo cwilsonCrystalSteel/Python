@@ -36,6 +36,7 @@ timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=N
 
 fablisting_summary = {}
 for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
+    print(sheet)
     fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet)
 
 
