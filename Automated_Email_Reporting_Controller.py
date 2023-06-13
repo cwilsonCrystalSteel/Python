@@ -47,12 +47,7 @@ state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.ne
                     'DE':['cwilson@crystalsteel.net',  'vtalladivedula@crystalsteel.net',
                           'jmixon@crystalsteel.net', 'jturner@crystalsteel.net']}
 
-eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
-                      'ccox@crystalsteel.net','jcalosa@crystalsteel.net',
-                      'emohamed@crystalsteel.net', 'hjorvina@crystalsteel.net',
-                      'jtong@crystalsteel.net','nmarinduque@crystalsteel.net',
-                      'renasarias@crystalsteel.net','rrichard@crystalsteel.net',
-                      'rrivera@crystalsteel.net','wciocson@crystalsteel.net']
+eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net']
 
 
 ''' un-comment this when debugging 
