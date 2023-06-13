@@ -165,39 +165,51 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
        
         
     df = pd.DataFrame(data[1:], columns=data[0])
-    df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')
+    # fill any missing cost codes with the job code
+    no_cost_code = df[df['Cost Code'] == '']
+    no_cost_code['Cost Code'] = no_cost_code['Job Code']
+    df.loc[no_cost_code.index] = no_cost_code
+    # df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')
     try:
         df['Hours'] = pd.to_numeric(df['Hours'])
     except Exception:
+        # if we cant convert the hours then calculate them
         hour_minute = df['Hours'].str.split(':')
         df['Hours'] = hour_minute.str[0].astype(int) + hour_minute.str[1].astype(int)/60
         df['Hours'] = df['Hours'].round(2)
         
-    df['Job #'] = pd.to_numeric(df['Job Code'].str.split('-').str[0])
+        
+    # this is to remove the employee number from their name
     df['Name'] = df['Name'].str.split(' - ').str[1]
+
+
+
+
+        
+    # df['Job #'] = pd.to_numeric(df['Job Code'].str.split('-').str[0])
     
     
-    lot_ccs = df[df['Cost Code'].str[0] == '9']['Cost Code']
-    # get the lot cost codes ending in PAINT or LOAD
-    lot_ccs = lot_ccs[(lot_ccs.str[-5:] == 'PAINT') | (lot_ccs.str[-4:] == 'LOAD')]
-    # chop off the PAINT or LOAD & strip whitespace
-    new_lot_ccs = lot_ccs.str[:-5].str.strip()    
-    df.loc[new_lot_ccs.index, 'Cost Code'] = new_lot_ccs
+    # lot_ccs = df[df['Cost Code'].str[0] == '9']['Cost Code']
+    # # get the lot cost codes ending in PAINT or LOAD
+    # lot_ccs = lot_ccs[(lot_ccs.str[-5:] == 'PAINT') | (lot_ccs.str[-4:] == 'LOAD')]
+    # # chop off the PAINT or LOAD & strip whitespace
+    # new_lot_ccs = lot_ccs.str[:-5].str.strip()    
+    # df.loc[new_lot_ccs.index, 'Cost Code'] = new_lot_ccs
     df = df.rename(columns = {'Time in':'Time In', 'Time out':'Time Out'})
     # df = df[['Cost Code', 'Hours', 'Job #', 'Job Code', 'Name', 'Time In', 'Time Out']]
-    df = df[['Name','Job #','Job Code','Cost Code','Hours','Time In','Time Out']]
-    
+    # df = df[['Name','Job #','Job Code','Cost Code','Hours','Time In','Time Out']]
+    df = df[['Name','Job Code','Cost Code','Hours','Time In','Time Out']]  
     # fix the new job code / cost code stuff starting 3023-03-30
     # the Job code will be "'1 - N/A'"
     
-    # break out the records with the new style of timeclock 
-    new_jobcode_style = df[df['Job Code'] == '1 - N/A']
-    # keep the old ones - they have already been worked correctly
-    old_jobcode_style = df[df['Job Code'] != '1 - N/A'] 
-    # convert the new ones to the old format
-    new_jobcode_style_converted_back_to_old = turn_new_timeclock_into_old(new_jobcode_style)
-    # and remake df out of the 2 dfs
-    df = old_jobcode_style.append(new_jobcode_style_converted_back_to_old)
+    # # break out the records with the new style of timeclock 
+    # new_jobcode_style = df[df['Job Code'] == '1 - N/A']
+    # # keep the old ones - they have already been worked correctly
+    # old_jobcode_style = df[df['Job Code'] != '1 - N/A'] 
+    # # convert the new ones to the old format
+    # new_jobcode_style_converted_back_to_old = turn_new_timeclock_into_old(new_jobcode_style)
+    # # and remake df out of the 2 dfs
+    # df = old_jobcode_style.append(new_jobcode_style_converted_back_to_old)
     
     
     if not in_and_out_times:
