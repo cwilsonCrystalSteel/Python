@@ -42,7 +42,7 @@ def publish_dashboard(dashboard_name):
                                    'end_date':(today - datetime.timedelta(days=today.weekday() + 1 - 6)).strftime('%m/%d/%Y')}
     
     dashboard_options['Daily'] = {'sheet_key':'1bpb75pCrsRh7t4FZr1bMILCRzpVGyiOCws4oCh2nC5c',
-                                  'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-daily-1568a4c99f1f.json',
+                                  'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-daily-36537e626b7d.json',
                                   'download_folder': download_base + "Daily\\",
                                   'start_date':today.strftime('%m/%d/%Y'),
                                   'end_date':today.strftime('%m/%d/%Y')}
