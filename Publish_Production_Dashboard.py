@@ -24,19 +24,19 @@ def publish_dashboard(dashboard_name):
     dashboard_options = {}
     
     dashboard_options['Yearly'] = {'sheet_key':'1bEzy9UZdUrvdesdxMBum2NIHSm0ZooBYr3_5jLsjeOU',
-                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json',
+                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
                                    'download_folder': download_base + "Yearly\\",
                                    'start_date':datetime.date(today.year, 1, 1).strftime('%m/%d/%Y'),
                                    'end_date':datetime.date(today.year, 12, 31).strftime('%m/%d/%Y')}
     
     dashboard_options['Monthly'] = {'sheet_key':'1kwuWsOEEPcJWfl2EBkhOaSxAGl1vtPNtqoqIvsWjxmc',
-                                    'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json',
+                                    'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
                                     'download_folder': download_base + "Monthly\\",
                                     'start_date':datetime.date(today.year, today.month, 1).strftime('%m/%d/%Y'),
                                     'end_date':(datetime.date(today.year, today.month+1, 1) + datetime.timedelta(days=-1)).strftime('%m/%d/%Y')}
     
     dashboard_options['Weekly'] = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
-                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-890ed2bf828b.json',
+                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
                                    'download_folder': download_base + "Weekly\\",
                                    'start_date':(today - datetime.timedelta(days=today.weekday() + 1)).strftime('%m/%d/%Y'),
                                    'end_date':(today - datetime.timedelta(days=today.weekday() + 1 - 6)).strftime('%m/%d/%Y')}
