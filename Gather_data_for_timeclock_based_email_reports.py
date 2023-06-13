@@ -61,50 +61,60 @@ def clean_up_this_gunk(times_df, ei):
     # reset the index of times_df
     times_df = times_df.reset_index(drop=True)
     
-
+    #new way of getting direct / indirect
+    # 3 digit codes are indirect - except for recieving
+    # 5 digit codes are direct - except for CAPEX (idk how to tell if it is CAPEX)
     
-
-    code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
-    #incorporate the ffect of the new jobcode/costcode style in timeclock
-    for category in code_changes.keys():
-        # get the list of jobs/costcodes to be changed
-        changes = code_changes[category]
-        # strip out everything but the jobnumber - that is the new job code
-        alternate_style = [i.split(' ')[0] for i in changes]
-        # add the 2 lists together and set it back into the dict[key]
-        code_changes[category] = changes + alternate_style
+    # split the cost code on a space or a slash (idk why i have to do 4 slashes)
+    times_df['Job #'] = times_df['Cost Code'].str.split('\s|\\\\').str[0]
+    # get items where length of the job # is 5 or the cost code says recieving (or I could do job #  = 250)
+    direct = times_df[(times_df['Job #'].str.len() == 5) | (times_df['Cost Code'].str.contains('RECEIVING'))]
+    # inidirect is whatver is not in the direct dataframe (in this instance)
+    indirect = times_df.loc[~times_df.index.isin(direct.index)]
+    # now to convert the job number to the actual job number - only need to remove the first digit from the 5 digit jobs
+    direct['Job #'] = direct['Job #'].str[-4:]
+    
+    # code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
+    # #incorporate the ffect of the new jobcode/costcode style in timeclock
+    # for category in code_changes.keys():
+    #     # get the list of jobs/costcodes to be changed
+    #     changes = code_changes[category]
+    #     # strip out everything but the jobnumber - that is the new job code
+    #     alternate_style = [i.split(' ')[0] for i in changes]
+    #     # add the 2 lists together and set it back into the dict[key]
+    #     code_changes[category] = changes + alternate_style
         
-    hours = times_df[~times_df['Job Code'].isin(code_changes['Delete Job Codes'])]
-    # join the state to the hours df
-    hours = hours.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
-    # rename
-    hours = hours.rename(columns={'Productive':'Location'})
-    # create the indirect df starting with indirect cost codes
-    indirect = hours[hours['Cost Code'].isin(code_changes['Indirect Cost Codes'])]
-    # remove those indirect cost code items from the hours df now
-    hours = hours[~hours['Cost Code'].isin(code_changes['Indirect Cost Codes'])]
-    # append the indirect job codes
-    indirect = indirect.append(hours[hours['Job Code'].isin(code_changes['Indirect Job Codes'])])
-    # remove those from the hours df now
-    hours = hours[~hours['Job Code'].isin(code_changes['Indirect Job Codes'])]
-    # start with the things that appear to be indirect but are actually direct
-    direct = hours[hours['Job Code'].isin(code_changes['Direct Job Codes'])]
-    # remove those from the hours df now
-    hours = hours[~hours['Job Code'].isin(code_changes['Direct Job Codes'])]
-    # get the 3 digit items from hours df and move to indirect
-    # three_digit_indirects = hours[hours['Job #'].astype(str).str.len() < 4]
-    # get the job codes that are less than 1000
-    three_digit_indirects = hours[hours['Job #'] < 1000]
-    # append the 3digit jobs that are indirect into indirect df
-    indirect = indirect.append(three_digit_indirects)
-    # delete the 3digit jobs from hours
-    hours = hours[~hours.index.isin(three_digit_indirects.index)]
-    # append what is left of hours df to direct
-    direct = direct.append(hours)
-    # sort the direct dataframe
-    direct = direct.sort_values(['Name','Job #','Cost Code'])
-    # sort the indirect dataframe
-    indirect = indirect.sort_values(['Name','Job #','Cost Code'])        
+    # hours = times_df[~times_df['Job Code'].isin(code_changes['Delete Job Codes'])]
+    # # join the state to the hours df
+    # hours = hours.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
+    # # rename
+    # hours = hours.rename(columns={'Productive':'Location'})
+    # # create the indirect df starting with indirect cost codes
+    # indirect = hours[hours['Cost Code'].isin(code_changes['Indirect Cost Codes'])]
+    # # remove those indirect cost code items from the hours df now
+    # hours = hours[~hours['Cost Code'].isin(code_changes['Indirect Cost Codes'])]
+    # # append the indirect job codes
+    # indirect = indirect.append(hours[hours['Job Code'].isin(code_changes['Indirect Job Codes'])])
+    # # remove those from the hours df now
+    # hours = hours[~hours['Job Code'].isin(code_changes['Indirect Job Codes'])]
+    # # start with the things that appear to be indirect but are actually direct
+    # direct = hours[hours['Job Code'].isin(code_changes['Direct Job Codes'])]
+    # # remove those from the hours df now
+    # hours = hours[~hours['Job Code'].isin(code_changes['Direct Job Codes'])]
+    # # get the 3 digit items from hours df and move to indirect
+    # # three_digit_indirects = hours[hours['Job #'].astype(str).str.len() < 4]
+    # # get the job codes that are less than 1000
+    # three_digit_indirects = hours[hours['Job #'] < 1000]
+    # # append the 3digit jobs that are indirect into indirect df
+    # indirect = indirect.append(three_digit_indirects)
+    # # delete the 3digit jobs from hours
+    # hours = hours[~hours.index.isin(three_digit_indirects.index)]
+    # # append what is left of hours df to direct
+    # direct = direct.append(hours)
+    # # sort the direct dataframe
+    # direct = direct.sort_values(['Name','Job #','Cost Code'])
+    # # sort the indirect dataframe
+    # indirect = indirect.sort_values(['Name','Job #','Cost Code'])        
 
 
     direct['Is Direct'] = True
