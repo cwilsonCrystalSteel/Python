@@ -13,7 +13,7 @@ def init_google_sheet(key):
     
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     
-    json_file = 'C:\\Users\\cwilson\\Documents\\Python\\client_secret.json'
+    json_file = 'C:\\Users\\cwilson\\Documents\\Python\\read-daily-fab-c5ac66b791a1.json'
     
     creds = ServiceAccountCredentials.from_json_keyfile_name(json_file, scope)
     
