@@ -76,9 +76,9 @@ ei = ei[~ei['Productive'].str.contains('NON')]
 clock_raw_df = basis['Clocks Dataframe']
 
 direct = basis['Direct']
-direct['Is Direct'] = True
+# direct['Is Direct'] = True
 indirect = basis['Indirect']
-indirect['Is Direct'] = False
+# indirect['Is Direct'] = False
 
 # # replace 'no cost code' to be empty
 # clock_raw_df['Cost Code'] = clock_raw_df['Cost Code'].replace('no cost code', '')
@@ -95,11 +95,11 @@ clock_raw_df = clock_raw_df.reset_index(drop=True)
 
 
 # group direct - sum hours, average the job #
-direct_grouped = direct.groupby(by=['Name','Job Code','Cost Code']).agg({'Hours':'sum','Job #':'mean'})
+direct_grouped = direct.groupby(by=['Name','Job Code','Cost Code', 'Job #']).agg({'Hours':'sum'})
 # add a is direct tag
 direct_grouped['Is Direct'] = True
 # group the indirect
-indirect_grouped = indirect.groupby(by=['Name','Job Code','Cost Code']).agg({'Hours':'sum','Job #':'mean'})
+indirect_grouped = indirect.groupby(by=['Name','Job Code','Cost Code', 'Job #']).agg({'Hours':'sum'})
 # add a is direct tag
 indirect_grouped['Is Direct'] = False
 # append the grouped direct & grouped indirect

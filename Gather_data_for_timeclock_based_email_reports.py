@@ -67,6 +67,10 @@ def clean_up_this_gunk(times_df, ei):
     
     # split the cost code on a space or a slash (idk why i have to do 4 slashes)
     times_df['Job #'] = times_df['Cost Code'].str.split('\s|\\\\').str[0]
+    # get the shop site by taking the first 2 characters of the PRODUCTIVE tag from the EI dataframe
+    times_df = times_df.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
+    # rename that to location
+    times_df = times_df.rename(columns={'Productive':'Location'})
     # get items where length of the job # is 5 or the cost code says recieving (or I could do job #  = 250)
     direct = times_df[(times_df['Job #'].str.len() == 5) | (times_df['Cost Code'].str.contains('RECEIVING'))]
     # inidirect is whatver is not in the direct dataframe (in this instance)

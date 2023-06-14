@@ -87,7 +87,7 @@ def summarize_by_direct_indirect(grouped_clock):
     # determine the unique names in the dataframe
     names = pd.unique(grouped_clock['Name'])
     # create an empty list that will keep the summary data
-    clock_summary_df = []
+    clock_summary_list = []
     # go thru each employee in the df
     for name in names:
         # get only their portion of the df
@@ -109,10 +109,10 @@ def summarize_by_direct_indirect(grouped_clock):
         # sum up the indirect hours
         indirect_hours = indirect_chunk.sum()['Hours']
         # append all the data to a list 
-        clock_summary_df.append([name, location, jobs_count, lots_count, direct_hours, indirect_hours])
+        clock_summary_list.append([name, location, jobs_count, lots_count, direct_hours, indirect_hours])
        
     # create the dataframe from the list
-    clock_summary_df = pd.DataFrame(data=clock_summary_df, columns=['Name','Location','# Jobs','# Lots', 'Direct','Indirect'])
+    clock_summary_df = pd.DataFrame(data=clock_summary_list, columns=['Name','Location','# Jobs','# Lots', 'Direct','Indirect'])
     # calculate the total hours
     clock_summary_df['Total'] = clock_summary_df['Direct'] + clock_summary_df['Indirect']
     # calculate the percentage of direct hours
