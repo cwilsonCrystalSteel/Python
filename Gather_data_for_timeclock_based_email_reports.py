@@ -71,6 +71,15 @@ def clean_up_this_gunk(times_df, ei):
     times_df = times_df.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
     # rename that to location
     times_df = times_df.rename(columns={'Productive':'Location'})
+    
+    ''' remove CSM shop B employees here '''
+    # remove employee ids: 2001, 2015, 2029
+    # get the names of employees 2001, 2015, 2029
+    shop_b_employees = ei[ei['ID'].isin([2001,2015,2029])]
+    # drop those names from times_df
+    times_df = times_df[~times_df['Name'].isin(list(shop_b_employees['Name']))]
+    ''' end of removing shop B employees '''
+    
     # get items where length of the job # is 5 or the cost code says recieving (or I could do job #  = 250)
     direct = times_df[(times_df['Job #'].str.len() == 5) | (times_df['Cost Code'].str.contains('RECEIVING'))]
     # inidirect is whatver is not in the direct dataframe (in this instance)
