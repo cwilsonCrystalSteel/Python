@@ -17,7 +17,7 @@ state = 'TN'
 today = datetime.datetime.now()
 today_str = today.strftime("%m/%d/%Y")
 
-def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False):
+def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_list=None):
     if states == None:
         states = ['TN','MD','DE']
         
@@ -61,7 +61,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     
     
     
-    
+
     
     # give them an extra couple of hours for early clock ins
     # i doubt anyone is going to start 2nd shift after 3 a.m.
@@ -72,6 +72,11 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     
     direct = basis['Direct']
     indirect = basis['Indirect']
+    
+    if exclude_jobs_list != None:
+        for exclusion in exclude_jobs_list:
+            direct = direct[~direct['Cost Code'].str.contains(str(exclusion))]
+    
     hours = direct.append(indirect, ignore_index=True)
     # convert time in to a datetime
     hours['Time In'] = pd.to_datetime(hours['Time In'], errors='coerce')
