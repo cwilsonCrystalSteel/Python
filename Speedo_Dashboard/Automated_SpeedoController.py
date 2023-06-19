@@ -10,7 +10,7 @@ sys.path.append('C:\\Users\\cwilson\\documents\\python')
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
 from Pull_Fablisting_data import get_fablisting_plus_model_summary
 from Pull_TimeClock_data import get_timeclock_summary
-from Post_to_GoogleSheet import post_observation, post_predictor, move_to_archive
+from Post_to_GoogleSheet import post_observation, post_predictor, move_to_archive, get_shop_b_jobs
 import datetime
 # this will be the controller for automation?
 
@@ -31,13 +31,20 @@ end_dt = start_dt + datetime.timedelta(days=6)
 end_dt = end_dt.replace(hour=23, minute=59)
 print('running the speedo dashboard for {} to {}'.format(start_dt, end_dt))
 
+try:
+    exclude_jobs_list = get_shop_b_jobs()
+except:
+    exclude_jobs_list = [3122]
+
+
+
 # get the results of each states hours - a dict divied up by state
-timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False)
+timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_list=exclude_jobs_list)
 
 fablisting_summary = {}
 for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
     print(sheet)
-    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet)
+    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet, exclude_jobs_list=exclude_jobs_list)
 
 
 for state in ['TN','MD','DE']:
