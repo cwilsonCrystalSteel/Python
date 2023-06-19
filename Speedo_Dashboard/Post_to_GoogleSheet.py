@@ -40,8 +40,8 @@ def remove_empty_rows_between_data(worksheet):
     for row_index in reversed(empty_rows):
         worksheet.delete_rows(row_index)
 
-def get_gspread_worksheet(sheet_name):
-    sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
+def get_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'], json_file = google_sheet_info['json_file']):
+    sh = init_google_sheet(sheet_key, json_file)
     worksheet = sh.worksheet(sheet_name)
     remove_empty_rows_between_data(worksheet)
     worksheet = sh.worksheet(sheet_name)
@@ -173,3 +173,38 @@ def move_to_archive(shop=None):
     
     
     return None
+
+
+def get_shop_b_jobs():
+    # URL: https://docs.google.com/spreadsheets/d/1SyV3tqt7a0-tFRNWYNtmNajzjJ4KY9JC4isgHUkj7WU/edit#gid=616322759
+    # key = from d/ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /edit
+    weeklyshophourssheetkey = '1SyV3tqt7a0-tFRNWYNtmNajzjJ4KY9JC4isgHUkj7WU'
+
+    # get the sheet as a model.worksheet
+    jobsummary_worksheet = get_gspread_worksheet(sheet_name = 'Job Summary', sheet_key = weeklyshophourssheetkey)
+    # convert to list of lists
+    jobsummary_list = jobsummary_worksheet.get_all_values()
+    # convert to data frame
+    jobsummary_df = pd.DataFrame(jobsummary_list[1:], columns=jobsummary_list[0])
+    # keep only things from the Shop B title 'TN Misc Metals Productive Hours' onwards
+    shopB_start = list(jobsummary_df.columns).index('TN Misc Metals Productive Hours')
+    # get only from where the TN misc metals is and to the right. also only get from row 9 down
+    shopB = jobsummary_df.iloc[8:, shopB_start:]
+    # reset index
+    shopB = shopB.reset_index(drop=True)
+    # set columns to be the first row
+    shopB.columns = shopB.iloc[0]
+    # get rid of the columns row now
+    shopB = shopB.iloc[1:]
+    # get a list of the job codes
+    jobs_to_exclude = pd.unique(shopB['Job Code'])
+    # get rid of any empty values
+    jobs_to_exclude = [i for i in jobs_to_exclude if i != '']
+    # get the numbers only in case there are jobs with names
+    jobs_numbers_only = [i.split(' ')[0] for i in jobs_to_exclude]
+    # append the numbers to the original list
+    jobs_to_exclude += jobs_numbers_only
+    # get only unique occurences & back to a list again
+    jobs_to_exclude = list(set(jobs_to_exclude))
+    # return
+    return jobs_to_exclude
