@@ -19,7 +19,7 @@ import os
 
 
 
-sheet_name = 'CSM'
+# sheet_name = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
                      }
@@ -48,9 +48,9 @@ def get_gspread_worksheet(sheet_name):
     return worksheet
 
 
-def get_google_sheet_as_df(worksheet=None):
+def get_google_sheet_as_df(shop=None, worksheet=None):
     if worksheet == None:
-        worksheet = get_gspread_worksheet(sheet_name)
+        worksheet = get_gspread_worksheet(shop)
         
     worksheet_list_of_lists = worksheet.get_all_values()
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
@@ -72,7 +72,7 @@ def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
     now_str = now.strftime('%m/%d/%Y %H:%M')
     
     worksheet = get_gspread_worksheet(sheet_name)
-    df = get_google_sheet_as_df(worksheet)
+    df = get_google_sheet_as_df(worksheet=worksheet)
     
     
     # check to see if a formula exists
@@ -143,22 +143,25 @@ def move_to_archive(shop=None):
     archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + '.csv'
     
     if os.path.exists(archive_file):
-        archive = pd.read_csv(archive_file, index_col=0)
+        # archive = pd.read_csv(archive_file, index_col=0)
         
-        worksheet = get_google_sheet_as_df()
+        worksheet = get_google_sheet_as_df(shop, worksheet=None)
         # only archive if we have data & we have over 100 rows
         if worksheet.shape[0] and worksheet.shape[0] > 90:
+            # get the last row to archive
             to_archive = worksheet.iloc[:1,:]
             
             with open(archive_file, 'a', newline='') as f:
                 to_archive.to_csv(f, header=False, index=False, line_terminator='\n')
+            print('row appened to archive csv file')
                 
             sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
             # Get the first worksheet
-            worksheet = sh.worksheet(sheet_name)
+            worksheet = sh.worksheet(shop)
             
             # Delete the second row
-            worksheet.delete_row(2)
+            worksheet.delete_rows(2)
+            print('row 2 deleted from {} google sheet'.format(shop))
         
         
     else:
