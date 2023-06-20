@@ -12,27 +12,8 @@ import time
 import chromedriver_autoinstaller
 from TimeClock_scraping_functions import printwait, delete_range, enable_download, setting_chrome_options, newest_creation_time
 from selenium.webdriver.common.by import By
+from TimeClock_Credentials import returnTimeClockCredentials
 
-
-
-# def delete_range(web_element, x=20):
-#     web_element.click()
-#     for i in range(x):
-#         web_element.send_keys(Keys.BACKSPACE)
-#         web_element.send_keys(Keys.DELETE)
-
-
-
-# def enable_download(driver, download_folder):
-#     driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
-#     params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath':download_folder}}
-#     driver.execute("send_command", params)
-
-# def setting_chrome_options():
-#     chrome_options = Options()
-#     chrome_options.add_argument("--headless")
-#     chrome_options.add_argument('--no-sandbox')
-#     return chrome_options;
 
 
 
@@ -68,18 +49,18 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     time.sleep(6)
     # Find the username field
     userid = driver.find_element_by_id('LogOnUserId')
+    timeclockCreds = returnTimeClockCredentials()
     # Submit username
-    userid.send_keys('jturner')
-    print('Entered Username')
+    userid.send_keys(timeclockCreds['username'])
+    printwait('Entered Username', 1)
     # Find the password field
     password = driver.find_element_by_id('LogOnUserPassword')
     # Submit password
-    password.send_keys('Justin32!')
-    print('Entered Password')
+    password.send_keys(timeclockCreds['password'])
+    printwait('Entered Password', 1)
     # Press 'enter' to login
     password.send_keys(Keys.RETURN)
-    
-    time.sleep(5)
+    printwait('Submitted Login Detail', 5)
     
     tabularmenu = driver.find_element(By.CLASS_NAME, 'HeaderMenuIcon')
     printwait('Found Tabular menu', 3) 
