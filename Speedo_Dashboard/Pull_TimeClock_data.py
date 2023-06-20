@@ -117,5 +117,5 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         except:
             print('could not make TN productive like report')
 
-        
+    output['basis'] = basis
     return output
