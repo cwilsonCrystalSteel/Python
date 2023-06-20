@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 import time
 import glob
 import os
+from TimeClock_Credentials import returnTimeClockCredentials
 
 
 def delete_range(web_element, x=20):
@@ -62,13 +63,14 @@ def download_employee_hours(employee_names, start_date, end_date):
     time.sleep(6)
     # Find the username field
     userid = driver.find_element_by_id('LogOnUserId')
+    timeclockCreds = returnTimeClockCredentials()
     # Submit username
-    userid.send_keys('jturner')
+    userid.send_keys(timeclockCreds['username'])
     print('Entered Username')
     # Find the password field
     password = driver.find_element_by_id('LogOnUserPassword')
     # Submit password
-    password.send_keys('Justin32!')
+    password.send_keys(timeclockCreds['password'])
     print('Entered Password')
     # Press 'enter' to login
     password.send_keys(Keys.RETURN)
