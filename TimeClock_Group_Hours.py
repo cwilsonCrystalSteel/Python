@@ -13,7 +13,7 @@ from TimeClock_scraping_functions import printwait, delete_range, enable_downloa
 import datetime
 import chromedriver_autoinstaller
 from selenium.webdriver.common.by import By
-
+from TimeClock_Credentials import returnTimeClockCredentials
 
 
 def download_group_hours(start_date, end_date, download_folder="C:\\Users\\cwilson\\Downloads\\"):
@@ -46,7 +46,7 @@ def download_group_hours(start_date, end_date, download_folder="C:\\Users\\cwils
     # enable_download(driver, download_folder)
     
     
-
+    
     
     # navigate to timeclock website
     driver.get("https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509")
@@ -54,13 +54,15 @@ def download_group_hours(start_date, end_date, download_folder="C:\\Users\\cwils
 
     # Find the username field
     userid = driver.find_element_by_id('LogOnUserId')
+    # get the username & password dict
+    timeclockCreds = returnTimeClockCredentials()
     # Submit username
-    userid.send_keys('jturner')
+    userid.send_keys(timeclockCreds['username'])
     printwait('Entered Username', 1)
     # Find the password field
     password = driver.find_element_by_id('LogOnUserPassword')
     # Submit password
-    password.send_keys('Justin32!')
+    password.send_keys(timeclockCreds['password'])
     printwait('Entered Password', 1)
     # Press 'enter' to login
     password.send_keys(Keys.RETURN)
