@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
+from TimeClock_Credentials import returnTimeClockCredentials
 
 
 def delete_range(web_element, x=20):
@@ -60,13 +61,14 @@ def get_most_current_html(state='TN', start_date="03/06/2021", end_date="03/06/2
     time.sleep(4)
     # Find the username field
     userid = driver.find_element_by_id('LogOnUserId')
+    timeclockCreds = returnTimeClockCredentials()
     # Submit username
-    userid.send_keys('jturner')
+    userid.send_keys(timeclockCreds['username'])
     print('Entered Username')
     # Find the password field
     password = driver.find_element_by_id('LogOnUserPassword')
     # Submit password
-    password.send_keys('Justin32!')
+    password.send_keys(timeclockCreds['password'])
     print('Entered Password')
     # Press 'enter' to login
     password.send_keys(Keys.RETURN)
