@@ -73,9 +73,19 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     direct = basis['Direct']
     indirect = basis['Indirect']
     
+    # just make an empty dataframe of the same form as the direct dataframe
+    excluded = direct[direct['Name'] == 'Snoop Dogg']
+    # proceed if we have an exclusion list
     if exclude_jobs_list != None:
+        # convert the values to strings
+        exclude_jobs_list = [str(i) for i in exclude_jobs_list]
+        # loop thru each job to exclude
         for exclusion in exclude_jobs_list:
-            direct = direct[~direct['Cost Code'].str.contains(str(exclusion))]
+            # append to the excluded dataframe if the job matches
+            excluded = excluded.append(direct[direct['Cost Code'].str.contains(exclusion)])
+    
+        # remove all the records that need to be excluded from direct hours
+        direct = direct[~direct.index.isin(excluded.index)]
     
     hours = direct.append(indirect, ignore_index=True)
     # convert time in to a datetime
@@ -118,4 +128,5 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             print('could not make TN productive like report')
 
     output['basis'] = basis
+    output['excluded'] = excluded
     return output
