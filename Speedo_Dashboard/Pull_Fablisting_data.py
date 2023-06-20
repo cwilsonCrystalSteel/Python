@@ -58,7 +58,7 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_list
     joined.to_excel('c:\\users\\cwilson\\downloads\\withModel_vs_formResponses.xlsx')
     '''
     if exclude_jobs_list != None:
-        with_model = with_model[~with_model['job #'].isin(exclude_jobs_list)]
+        with_model = with_model[~with_model['Job #'].isin(exclude_jobs_list)]
     
     num_with_model = with_model['Has Model'].sum()
     num_without_model = with_model.shape[0] - num_with_model
