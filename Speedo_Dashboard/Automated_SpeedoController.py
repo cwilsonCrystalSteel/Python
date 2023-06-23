@@ -32,7 +32,8 @@ end_dt = end_dt.replace(hour=23, minute=59)
 print('running the speedo dashboard for {} to {}'.format(start_dt, end_dt))
 
 try:
-    exclude_jobs_list = get_shop_b_jobs()
+    # exclude_jobs_list = get_shop_b_jobs()
+    exclude_jobs_list = [3122]
 except:
     exclude_jobs_list = [3122]
 
