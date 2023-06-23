@@ -1,2 +1,0 @@
-DE
-local variable 'hours_list' referenced before assignment

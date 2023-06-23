@@ -1,2 +1,0 @@
-DE
-'NoneType' object is not iterable

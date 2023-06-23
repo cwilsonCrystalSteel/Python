@@ -1,2 +1,0 @@
-TN
-{'code': 429, 'message': "Quota exceeded for quota metric 'Read requests' and limit 'Read requests per minute per user' of service 'sheets.googleapis.com' for consumer 'project_number:785315594782'.", 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.ErrorInfo', 'reason': 'RATE_LIMIT_EXCEEDED', 'domain': 'googleapis.com', 'metadata': {'quota_metric': 'sheets.googleapis.com/read_requests', 'consumer': 'projects/785315594782', 'service': 'sheets.googleapis.com', 'quota_limit': 'ReadRequestsPerMinutePerUser'}}]}

@@ -1,2 +1,0 @@
-DE
-HTTPSConnectionPool(host='sheets.googleapis.com', port=443): Max retries exceeded with url: /v4/spreadsheets/1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k?includeGridData=false (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x00000220ABAD1AF0>: Failed to establish a new connection: [WinError 10060] A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond'))

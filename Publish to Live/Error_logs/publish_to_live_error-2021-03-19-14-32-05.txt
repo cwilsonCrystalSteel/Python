@@ -1,2 +1,0 @@
-DE
-'list' object is not callable

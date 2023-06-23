@@ -1,3 +1,0 @@
-DE
-Message: element click intercepted: Element <td colspan="2" ng-bind="category.getDescription()" ng-click="selectCategory(category)" class="ng-binding">...</td> is not clickable at point (181, 438). Other element would receive the click: <td colspan="2" ng-bind="category.getDescription()" ng-click="selectCategory(category)" class="ng-binding">...</td>
-  (Session info: headless chrome=89.0.4389.90)
