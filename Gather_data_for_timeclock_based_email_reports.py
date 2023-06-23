@@ -75,7 +75,7 @@ def clean_up_this_gunk(times_df, ei):
     ''' remove CSM shop B employees here '''
     # remove employee ids: 2001, 2015, 2029
     # get the names of employees 2001, 2015, 2029
-    shop_b_employees = ei[ei['ID'].isin([2001,2015,2029])]
+    shop_b_employees = ei[ei['ID'].isin([2001,2015,2029,2242,2261,2007,2241])]
     # drop those names from times_df
     times_df = times_df[~times_df['Name'].isin(list(shop_b_employees['Name']))]
     ''' end of removing shop B employees '''
