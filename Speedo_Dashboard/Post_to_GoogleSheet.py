@@ -208,3 +208,52 @@ def get_shop_b_jobs():
     jobs_to_exclude = list(set(jobs_to_exclude))
     # return
     return jobs_to_exclude
+
+
+
+
+def view_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'], json_file = google_sheet_info['json_file']):
+    sh = init_google_sheet(sheet_key, json_file)
+    worksheet = sh.worksheet(sheet_name)
+    return worksheet
+
+def get_production_worksheet_job_hours():
+    # URL: https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit?pli=1#gid=2095559050
+    # key = from d/ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /edit
+    productionworksheetkey = '1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4'
+
+    # get the sheet as a model.worksheet
+    production_worksheet = view_gspread_worksheet(sheet_name = 'Production Sheet', sheet_key = productionworksheetkey)
+    # convert to list of lists
+    production_worksheet_list = production_worksheet.get_all_values()
+    headers_row = 0
+    running = True
+    while running:
+        for headers_row in range(0,15):
+            try:
+                # convert to data frame
+                df = pd.DataFrame(production_worksheet_list[headers_row:], columns=production_worksheet_list[headers_row-1])
+                
+                if df.columns[0] == 'Job #':
+                    running = False
+                    break
+                else:
+                    print(headers_row)
+                    Exception()
+            except:
+                headers_row += 1
+    print('success on {}'.format(headers_row))
+    
+    #cut off the df at the marker 'Add new lines above here'
+    index = (df == 'Add new lines above here').idxmax().max()
+    df = df.iloc[:index,:]
+    # as of 2023-07-25: Job=0, Hours/Ton=1, shop=14
+    df =  df.iloc[:,[0,1,14]]
+    df = df.rename(columns={'Hrs./Ton':'HPT',' ':'Shop'})
+    # cleanup the shop
+    df['Shop']= df['Shop'].str.strip().str.upper()
+    df['Job #'] = pd.to_numeric(df['Job #'], errors='coerce')
+    df['HPT'] = pd.to_numeric(df['HPT'], errors='coerce')
+    df = df[~df['Job #'].isna()]
+    df = df[~df['HPT'].isna()]    
+    return df

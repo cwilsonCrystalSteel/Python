@@ -13,6 +13,7 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
+from Post_to_GoogleSheet import get_production_worksheet_job_hours
 
 # this one will pull the fablisting data
 state = 'TN'
@@ -37,26 +38,27 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_list
     with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
     # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
 
-    '''
-    with_model['date'] = with_model['Timestamp'].dt.date
-    with_model.to_excel('c:\\users\\cwilson\\downloads\\fablisting_with_model.xlsx')
-    with_model.groupby('date').sum().to_excel('c:\\users\\cwilson\\downloads\\fablisting_with_model_date_grouped.xlsx')
+    try:
+        no_earned_hours_1 = with_model[with_model['Earned Hours'].isna()]
+        production_worksheet_hpt = get_production_worksheet_job_hours()
     
-    
-    pieces = with_model.groupby(['Job #','Lot #', 'Piece Mark - REV','Has Model']).agg({'Weight':sum, 'Quantity':sum, 'Earned Hours':sum, 'Timestamp':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y %H:%M'))})
-    # go to the form responses tab of fablisting & just copy paste the rows you want (with header0 into excel file)
-    formresponses = pd.read_excel('c:\\users\\cwilson\\downloads\\formResponses.xlsx')
-    fr_pieces = formresponses[formresponses['Site'] == 'CSM'].groupby(['Job #','Lot #','Piecemark']).agg({'Weight':sum, 'Qty':sum, 'EVA':sum, 'Date':lambda x: ', '.join(x.dt.strftime('%m/%d/%Y'))})
-    pieces = pieces.reset_index()
-    fr_pieces = fr_pieces.reset_index()
-    pieces['Lot #'] = pieces['Lot #'].astype(str)
-    fr_pieces['Lot #'] = fr_pieces['Lot #'].astype(str)
-    joined = pd.merge(pieces.reset_index(), fr_pieces.reset_index(), left_on=['Job #','Lot #','Piece Mark - REV'], right_on=['Job #','Lot #','Piecemark'])
-    joined = joined[['Job #','Lot #','Piecemark','Has Model','Weight_x','Weight_y','Quantity','Qty','Earned Hours','EVA','Timestamp','Date']]
-    joined = joined.rename(columns={'Quantity':'Qty_x','Qty':'Qty_y','Earned Hours':'EVA_x','EVA':'EVA_y','Date':'FR Date'})
-    joined['Diff'] = joined['EVA_x'] - joined['EVA_y']
-    joined.to_excel('c:\\users\\cwilson\\downloads\\withModel_vs_formResponses.xlsx')
-    '''
+        # get horus based on shop & job
+        production_worksheet_hpt_shop = production_worksheet_hpt[production_worksheet_hpt['Shop'] == sheet[:3]]
+        nada_1 = pd.merge(no_earned_hours_1, production_worksheet_hpt_shop, on='Job #', how='left')
+        nada_1 = nada_1.set_index(no_earned_hours_1.index)
+        nada_1['Earned Hours'] = nada_1['HPT'] * nada_1['Weight']/2000
+        nada_1['Hours Per Pound'] = nada_1['HPT']
+        with_model.loc[nada_1.index,:] = nada_1
+        # get hours based on job if any remaining ones left 
+        no_earned_hours_2 = with_model[with_model['Earned Hours'].isna()]
+        nada_2 = pd.merge(no_earned_hours_2, production_worksheet_hpt, on='Job #', how='left')
+        nada_2 = nada_2.set_index(no_earned_hours_2.index)
+        nada_2['Earned Hours'] = nada_2['HPT'] * nada_1['Weight'] / 2000
+        nada_2['Hours Per Pound'] = nada_2['HPT']
+        with_model.loc[nada_2.index,:] = nada_2
+    except:
+        print('could not go to production worksheet for more hpt valeus')
+
     if exclude_jobs_list != None:
         with_model = with_model[~with_model['Job #'].isin(exclude_jobs_list)]
     
