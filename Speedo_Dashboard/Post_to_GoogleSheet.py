@@ -62,6 +62,8 @@ def get_google_sheet_as_df(shop=None, worksheet=None):
         
     df['IsReal'] = df['IsReal'].astype(int).astype(bool)   
     
+    df = df.replace('', 0)
+    
     df.iloc[:,3:] = df[df.columns[3:]].astype(float)
     
     return df
