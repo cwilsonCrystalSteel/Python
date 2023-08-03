@@ -15,7 +15,8 @@ from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 import sys
 sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 from attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
-
+sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
+from Post_to_GoogleSheet import get_production_worksheet_job_hours
 
 
 # shop = 'CSM'
@@ -189,8 +190,6 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         
         if fablisting_df.shape[0]:
             df = pd.DataFrame()
-            
-            
             
             jobs = pd.unique(joblots.index.get_level_values(level=0))
             try:
@@ -478,9 +477,7 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
     return df
 
 
-def fill_missing_model_earned_hours(fablisting_df, shop):
-    fablisting_df = fablisting_df.copy()
-    # this is the file that has the 
+def load_averages_excel(shop):
     averages = pd.read_excel('C:\\downloads\\averages.xlsx')
     # sort the averages by the horus per ton
     averages = averages.sort_values(by='Hours per Ton')
@@ -517,12 +514,50 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
             
     averages = averages.set_index('Job')
     
+    return averages
+
+
+def fill_missing_model_earned_hours(fablisting_df, shop):
+    fablisting_df = fablisting_df.copy()
+    # this is the file that has the 
+    averages = load_averages_excel(shop)
     
     # change the name for simplicity sake
     df = fablisting_df
     
+    
+    
+    
     if 'Has Model' in df.columns:
         # get the pieces without model hours
+        try:
+            production_worksheet_hpt = get_production_worksheet_job_hours()
+            
+            no_model_search_jobs_shops = df[~df['Has Model'] & df['Earned Hours'].isna()]
+            production_worksheet_hpt_shop = production_worksheet_hpt[production_worksheet_hpt['Shop'] == shop]
+            
+            nada_1 = pd.merge(no_model_search_jobs_shops, production_worksheet_hpt_shop, on='Job #', how='left')
+            nada_1 = nada_1.set_index(no_model_search_jobs_shops.index)
+            nada_1['Earned Hours'] = nada_1['HPT'] * nada_1['Weight']/2000
+            nada_1['Hours Per Pound'] = nada_1['HPT']
+            no_model_search_jobs_shops.loc[nada_1.index,:] = nada_1        
+            # update the df with the newfound HPT values
+            df.loc[no_model_search_jobs_shops.index] = no_model_search_jobs_shops
+            
+            # now try to get matches based on only the Job 
+            no_model_search_just_jobs = df[~df['Has Model'] & df['Earned Hours'].isna()]
+            nada_2 = pd.merge(no_model_search_just_jobs, production_worksheet_hpt, on='Job #', how='left')
+            nada_2 = nada_2.set_index(no_model_search_just_jobs.index)
+            nada_2['Earned Hours'] = nada_2['HPT'] * nada_1['Weight'] / 2000
+            nada_2['Hours Per Pound'] = nada_2['HPT']
+            no_model_search_just_jobs.loc[nada_2.index,:] = nada_2            
+            #update the df with the newfound HPT values
+            df.loc[no_model_search_just_jobs.index] = no_model_search_just_jobs
+        except:
+            print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the google sheet for fill_missing_model_earned_hours')
+        
+        
+        ''' Now we go back to try and fill in anything else from the Averages XLSX file '''
         no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]
         # join the hours per ton based on the job #
         no_model = no_model.join(averages['Hours per Ton'], on='Job #')
