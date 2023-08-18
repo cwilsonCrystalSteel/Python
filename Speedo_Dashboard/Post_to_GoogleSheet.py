@@ -54,7 +54,9 @@ def get_google_sheet_as_df(shop=None, worksheet=None):
         
     worksheet_list_of_lists = worksheet.get_all_values()
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
-
+    
+    df = df.replace('', 0)
+    
     try:
         df['Timestamp'] = pd.to_datetime(df['Timestamp'])
     except Exception:
