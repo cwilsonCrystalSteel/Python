@@ -54,9 +54,11 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
                 continue
             start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
             print('Getting Timeclock for: {}'.format(start_date_loop))
-            basis_additional = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=ei, in_and_out_times=True) 
-            basis['Direct'] = basis['Direct'].append(basis_additional['Direct'], ignore_index=True)
-            basis['Indirect'] = basis['Indirect'].append(basis_additional['Indirect'], ignore_index=True)
+            basis_additional = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=ei, in_and_out_times=True)
+            basis['Direct'] = pd.concat([basis['Direct'], basis_additional['Direct']])
+            basis['Indirect'] = pd.concat([basis['Indirect'], basis_additional['Indirect']])
+            # basis['Direct'] = basis['Direct'].append(basis_additional['Direct'], ignore_index=True)
+            # basis['Indirect'] = basis['Indirect'].append(basis_additional['Indirect'], ignore_index=True)
     
     
     
@@ -82,12 +84,14 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         # loop thru each job to exclude
         for exclusion in exclude_jobs_list:
             # append to the excluded dataframe if the job matches
-            excluded = excluded.append(direct[direct['Cost Code'].str.contains(exclusion)])
+            excluded = pd.concat([excluded, direct[direct['Cost Code'].str.contains(exclusion)]])
+            # excluded = excluded.append(direct[direct['Cost Code'].str.contains(exclusion)])
     
         # remove all the records that need to be excluded from direct hours
         direct = direct[~direct.index.isin(excluded.index)]
     
-    hours = direct.append(indirect, ignore_index=True)
+    hours = pd.concat([direct, indirect])
+    # hours = direct.append(indirect, ignore_index=True)
     # convert time in to a datetime
     hours['Time In'] = pd.to_datetime(hours['Time In'], errors='coerce')
     # get rid of any that don't convert

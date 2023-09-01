@@ -56,7 +56,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
                     chunk_job['Hours Per Piece'] = np.nan
-                    df = df.append(chunk_job)     
+                    df = pd.concat([df, chunk_job])
+                    # df = df.append(chunk_job)     
                     continue 
                 # try to get the job's eva database open
                 try:
@@ -67,7 +68,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     except Exception:
                         print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
                         chunk_job['Hours Per Piece'] = np.nan
-                        df = df.append(chunk_job)
+                        df = pd.concat([df, chunk_job])
+                        # df = df.append(chunk_job)
                         continue 
                 
                 lots = joblots.xs(job, level=0).index
@@ -83,7 +85,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     if not chunk.shape[0]:
                         print('no rows found for chunk: {}'.format(lot_name))
                         chunk['Hours Per Piece'] = np.nan
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                         continue
                     chunk = chunk.copy()
                     
@@ -123,7 +126,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
                         # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
                         chunk['Hours Per Piece'] = np.nan
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                         continue
                     
                     # group by the page
@@ -166,7 +170,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     
                     
                     # appends chunk to df, but now with 'Hours Per Piece' column
-                    df = df.append(chunk)
+                    df = pd.concat([df, chunk])
+                    # df = df.append(chunk)
 
         # if the fablisting_df is empty, then do this stuff
         else:
@@ -205,7 +210,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
                     chunk_job['Hours Per Pound'] = np.nan
-                    df = df.append(chunk_job)     
+                    df = pd.concat([df, chunk_job])
+                    # df = df.append(chunk_job)     
                     continue 
                 # try to get the job's eva database open
                 try:
@@ -229,7 +235,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     if not chunk.shape[0]:
                         print('no rows found for chunk: {}'.format(lot_name))
                         chunk['Hours Per Pound'] = np.nan
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                         continue
                     
                     chunk = chunk.copy()
@@ -247,7 +254,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
                         # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
                         chunk['Hours Per Pound'] = np.nan
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                         continue
                     
                     if xls_lot_from_main.shape[0]:
@@ -278,12 +286,14 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         # set the chunk index back 
                         chunk = chunk.set_index(current_index)
                         # appends chunk to df, but now with 'Hours Per Piece' column
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                     else:
                         ''' fill in missing values if fill_missing_values=True '''
                         
                         chunk['Hours Per Pound'] = np.nan
-                        df = df.append(chunk)
+                        df = pd.concat([df, chunk])
+                        # df = df.append(chunk)
                         continue
 
         # if the fablisting_df is empty, then do this stuff
@@ -453,7 +463,8 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
                     chunk['Hours Per Piece'] = np.nan
     
                 # appends chunk to df, but now with 'Hours Per Piece' column
-                df = df.append(chunk)
+                df = pd.concat([df, chunk])
+                # df = df.append(chunk)
         
         # if the fablisting_df is empty, then do this stuff
         else:
@@ -510,7 +521,8 @@ def load_averages_excel(shop):
                 chunk = chunk.drop_duplicates(subset='Job', keep='first')
             
             # put the chunk back into the averages df
-            averages = averages.append(chunk)
+            averages = pd.concat([averages, chunk])
+            # averages = averages.append(chunk)
             
     averages = averages.set_index('Job')
     

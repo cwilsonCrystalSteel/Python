@@ -10,7 +10,7 @@ from production_dashboards_google_credentials import init_google_sheet
 import pandas as pd
 import datetime
 import time
-from Predictor import get_prediction_dict
+# from Predictor import get_prediction_dict
 import numpy as np
 import os
 # this one will send TimeClock & Fablisting data to google sheet
@@ -54,7 +54,9 @@ def get_google_sheet_as_df(shop=None, worksheet=None):
         
     worksheet_list_of_lists = worksheet.get_all_values()
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
-
+    
+    df = df.replace('', 0)
+    
     try:
         df['Timestamp'] = pd.to_datetime(df['Timestamp'])
     except Exception:

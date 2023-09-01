@@ -14,6 +14,7 @@ import datetime
 import chromedriver_autoinstaller
 from selenium.webdriver.common.by import By
 from TimeClock_Credentials import returnTimeClockCredentials
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 def download_group_hours(start_date, end_date, download_folder="C:\\Users\\cwilson\\Downloads\\"):
@@ -24,7 +25,8 @@ def download_group_hours(start_date, end_date, download_folder="C:\\Users\\cwils
     
     # Navigate to TimeClock & login
     # start the browser in windowed mode
-    driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install())
+    # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install())
+    driver = webdriver.Chrome(ChromeDriverManager().install())
     
     # Start the browser headless
     # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), 

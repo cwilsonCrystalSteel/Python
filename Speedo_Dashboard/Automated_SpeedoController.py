@@ -51,23 +51,30 @@ for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
 
 for state in ['TN','MD','DE']:
     
-    if state == 'TN':
-       sheet = 'CSM QC Form'        
-    elif state == 'DE':
-       sheet = 'CSF QC Form'
-    elif state == 'MD':
-       sheet = 'FED QC Form'
-            
-    print(state, sheet, 'updating google sheet')
-    
-    run_for_date = start_dt.strftime('%m/%d/%Y')
-    gsheet_dict = {'Date':run_for_date}
-    gsheet_dict.update(fablisting_summary[sheet])
-    gsheet_dict.update(timeclock_summary[state])
-    
-    post_observation(gsheet_dict, sheet_name=sheet[:3])
-    
-    move_to_archive(shop=sheet[:3])
+    try:
+        if state == 'TN':
+           sheet = 'CSM QC Form'        
+        elif state == 'DE':
+           sheet = 'CSF QC Form'
+        elif state == 'MD':
+           sheet = 'FED QC Form'
+                
+        print(state, sheet, 'updating google sheet')
+        
+        run_for_date = start_dt.strftime('%m/%d/%Y')
+        gsheet_dict = {'Date':run_for_date}
+        gsheet_dict.update(fablisting_summary[sheet])
+        gsheet_dict.update(timeclock_summary[state])
+        
+        post_observation(gsheet_dict, sheet_name=sheet[:3])
+        
+        move_to_archive(shop=sheet[:3])
+    except Exception as e:
+        print(state)
+        print('\n\n')
+        print(e)
+        print('\n\n')
+        continue
 
 # if gsheet_dict['Direct Hours']:
 #     post_observation(gsheet_dict)
