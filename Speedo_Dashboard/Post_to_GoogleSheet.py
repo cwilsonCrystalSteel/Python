@@ -122,19 +122,19 @@ def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
 
 
 
-def post_predictor():
+# def post_predictor():
    
-    df = get_google_sheet_as_df()
+#     df = get_google_sheet_as_df()
     
-    gsheet_pred_dict = get_prediction_dict(df)
+#     gsheet_pred_dict = get_prediction_dict(df)
     
-    post_observation(gsheet_pred_dict, isReal=False)
-    
-    
+#     post_observation(gsheet_pred_dict, isReal=False)
     
     
-    # simply append a isReal=0 row
-    return None
+    
+    
+#     # simply append a isReal=0 row
+#     return None
 
 
 
@@ -156,7 +156,7 @@ def move_to_archive(shop=None):
             to_archive = worksheet.iloc[:1,:]
             
             with open(archive_file, 'a', newline='') as f:
-                to_archive.to_csv(f, header=False, index=False, line_terminator='\n')
+                to_archive.to_csv(f, header=False, index=False, lineterminator='\n')
             print('row appened to archive csv file')
                 
             sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])

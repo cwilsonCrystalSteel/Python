@@ -222,7 +222,8 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     except Exception:
                         print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
                         chunk_job['Hours Per Pound'] = np.nan
-                        df = df.append(chunk_job)
+                        df = pd.concat([df, chunk_job])
+                        # df = df.append(chunk_job)
                         continue 
                 
                 # get the second index level - which is the lots
