@@ -10,7 +10,7 @@ sys.path.append('C:\\Users\\cwilson\\documents\\python')
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
 from Pull_Fablisting_data import get_fablisting_plus_model_summary
 from Pull_TimeClock_data import get_timeclock_summary
-from Post_to_GoogleSheet import post_observation, post_predictor, move_to_archive, get_shop_b_jobs
+from Post_to_GoogleSheet import post_observation, move_to_archive, get_shop_b_jobs
 import datetime
 # this will be the controller for automation?
 
