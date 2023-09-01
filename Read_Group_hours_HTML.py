@@ -67,7 +67,8 @@ def turn_new_timeclock_into_old(df_with_jobcode_1na):
     remainder.loc[cmw_codes.index, 'Cost Code'] = cmw_codes 
     
     # join the dfs together into one 
-    output = haslot.append(hasslash).append(remainder)
+    output = pd.concat([haslot, hasslash, remainder])
+    # output = haslot.append(hasslash).append(remainder)
     # not putting errors='coerce' is gonna bite me in the butt later
     output['Job #'] = pd.to_numeric(output['Job Code'])
     
@@ -378,7 +379,8 @@ def output_each_clock_entry_job_and_costcode(html_file):
         
         # append all the times/hours/jobs to the employee key 
         cleansed_employees[name] = cleansed_data
-        times_df = times_df.append(cleansed_data)
+        times_df = pd.concat([times_df, cleansed_data])
+        # times_df = times_df.append(cleansed_data)
     
     # rename the columns to something meaningful
     times_df = times_df.rename(columns={0:'Name',1:'Start',2:'End',3:'Hours',4:'Job', 5:'Job #',6:'Cost Code'})  
@@ -436,7 +438,8 @@ def new_output_each_clock_entry_job_and_costcode(html_file, in_and_out_times=Fal
                 append_dict['Time In'] = clock[0]
                 append_dict['Time Out'] = clock[1]
             # append the new row to the df
-            times_df = times_df.append(append_dict, ignore_index=True)
+            times_df = pd.concat([times_df, append_dict])
+            # times_df = times_df.append(append_dict, ignore_index=True)
     
 
     ''' this tidbit removes the 'PAINT' or 'LOAD' portion of LOT COST CODES '''

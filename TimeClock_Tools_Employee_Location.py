@@ -13,7 +13,7 @@ import chromedriver_autoinstaller
 from TimeClock_scraping_functions import printwait, delete_range, enable_download, setting_chrome_options, newest_creation_time
 from selenium.webdriver.common.by import By
 from TimeClock_Credentials import returnTimeClockCredentials
-
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 
@@ -35,8 +35,10 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     # driver = webdriver.Chrome(executable_path='C:/Users/cwilson/Documents/Python/chromedriver.exe', 
     #                           options = setting_chrome_options())
     # Start the browser
-    driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), 
-                              options = setting_chrome_options())    
+    # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), 
+    #                           options = setting_chrome_options())    
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
+                               options = setting_chrome_options())    
     enable_download(driver, download_folder)
     
     # driver.implicitly_wait(5)

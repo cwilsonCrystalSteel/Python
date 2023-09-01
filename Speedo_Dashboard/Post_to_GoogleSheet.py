@@ -10,7 +10,7 @@ from production_dashboards_google_credentials import init_google_sheet
 import pandas as pd
 import datetime
 import time
-from Predictor import get_prediction_dict
+# from Predictor import get_prediction_dict
 import numpy as np
 import os
 # this one will send TimeClock & Fablisting data to google sheet
