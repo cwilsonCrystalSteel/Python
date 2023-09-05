@@ -156,7 +156,10 @@ def move_to_archive(shop=None):
             to_archive = worksheet.iloc[:1,:]
             
             with open(archive_file, 'a', newline='') as f:
-                to_archive.to_csv(f, header=False, index=False, lineterminator='\n')
+                try:
+                    to_archive.to_csv(f, header=False, index=False, lineterminator='\n')
+                except:
+                    to_archive.to_csv(f, header=False, index=False, line_terminator='\n')
             print('row appened to archive csv file')
                 
             sh = init_google_sheet(google_sheet_info['sheet_key'], google_sheet_info['json_file'])
