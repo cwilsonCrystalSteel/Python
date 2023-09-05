@@ -66,7 +66,9 @@ def groupby_unique_job_cost_code(raw_clock):
             # end = jcc_df.iloc[0]['End'].time().strftime("%I:%M %p")
             # append the name, job, costcode, jcc, and hours to the big list that will become a df later
             # clock_details_df.append([name, location, jobname, job, costcode, jcc, jcc_hours, start, end])
-            clock_details_df.append([name, location, job_number, job_code, costcode, jcc, jcc_hours])
+            clock_details_df = pd.concat([clock_details_df, 
+                                          [name, location, job_number, job_code, costcode, jcc, jcc_hours]])
+            # clock_details_df.append([name, location, job_number, job_code, costcode, jcc, jcc_hours])
     
     
     # convert the list of lists to a dataframe
@@ -153,9 +155,14 @@ def return_output_dictionary(filtered_summary_df, detail_df):
         deets = output_dict[state]['Detail']
         big_deet = pd.DataFrame()
         for df in deets.values():
-            big_deet = big_deet.append(df, ignore_index=True)
-            big_deet = big_deet.append(pd.Series(dtype=int), ignore_index=True)
-            big_deet = big_deet.append(pd.Series(dtype=int), ignore_index=True)
+            big_deet = pd.concat([big_deet, df])
+            # adds 2 empty rows after data
+            big_deet.loc[len(big_deet)] = pd.Series(dtype=int)
+            big_deet.loc[len(big_deet)] = pd.Series(dtype=int)
+            # big_deet = big_deet.append(df, ignore_index=True)
+            # big_deet = pd.concat([big_deet, pd.Series(dtype=int)], axis=1)
+            # big_deet = big_deet.append(pd.Series(dtype=int), ignore_index=True)
+            # big_deet = big_deet.append(pd.Series(dtype=int), ignore_index=True)
         big_deet = big_deet.drop(index=big_deet.index[-2:])
         output_dict[state]['Detail'] = big_deet    
 

@@ -186,6 +186,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         df['Has Model'] = ~df['Earned Hours'].isna()
         
         if fill_missing_values == True:
+            print('uno')
             df = fill_missing_model_earned_hours(df, shop)
     
     elif how == 'model but Justins dumb way of getting average hours':
@@ -333,11 +334,13 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             df.loc[df2_plus_ll.index] = df2_plus_ll
             
             # then try to backfilll with the old HPT way
+            print('dos')
             df = fill_missing_model_earned_hours(df, shop)
             
     
     
     elif how == 'old way':
+        print('tres')
         df = fill_missing_model_earned_hours(fablisting_df, shop)
     
     # sort the df back to original order
@@ -480,9 +483,11 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
         df['Has Model'] = ~df['Earned Hours'].isna()
         
         if fill_missing_values == True:
+            print('quatro')
             df = fill_missing_model_earned_hours(df, shop)
     
     elif how == 'old way':
+        print('cinco')
         df = fill_missing_model_earned_hours(fablisting_df, shop)
     
     # return the dataframe back out to the function caller
@@ -545,11 +550,14 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
         # get the pieces without model hours
         try:
             production_worksheet_hpt = get_production_worksheet_job_hours()
+            # production_worksheet_hpt = production_worksheet_hpt[~production_worksheet_hpt['Shop'].isin(['FED','CSF','CSM'])]
             
             no_model_search_jobs_shops = df[~df['Has Model'] & df['Earned Hours'].isna()]
             production_worksheet_hpt_shop = production_worksheet_hpt[production_worksheet_hpt['Shop'] == shop]
             
             nada_1 = pd.merge(no_model_search_jobs_shops, production_worksheet_hpt_shop, on='Job #', how='left')
+            nada_1 = nada_1.sort_values(['Job #','HPT'])
+            nada_1 = nada_1.drop_duplicates(subset = ['Job #','Lot #', 'Piece Mark - REV','Timestamp'], keep='first')
             nada_1 = nada_1.set_index(no_model_search_jobs_shops.index)
             nada_1['Earned Hours'] = nada_1['HPT'] * nada_1['Weight']/2000
             nada_1['Hours Per Pound'] = nada_1['HPT']
@@ -560,15 +568,17 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
             # now try to get matches based on only the Job 
             no_model_search_just_jobs = df[~df['Has Model'] & df['Earned Hours'].isna()]
             nada_2 = pd.merge(no_model_search_just_jobs, production_worksheet_hpt, on='Job #', how='left')
+            nada_2 = nada_2.sort_values(['Job #','HPT'])
+            nada_2 = nada_2.drop_duplicates(subset = ['Job #','Lot #', 'Piece Mark - REV', 'Timestamp'], keep='first')
             nada_2 = nada_2.set_index(no_model_search_just_jobs.index)
-            nada_2['Earned Hours'] = nada_2['HPT'] * nada_1['Weight'] / 2000
+            nada_2['Earned Hours'] = nada_2['HPT'] * nada_2['Weight'] / 2000
             nada_2['Hours Per Pound'] = nada_2['HPT']
             no_model_search_just_jobs.loc[nada_2.index,:] = nada_2            
             #update the df with the newfound HPT values
             df.loc[no_model_search_just_jobs.index] = no_model_search_just_jobs
+        
         except:
             print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the google sheet for fill_missing_model_earned_hours')
-        
         
         ''' Now we go back to try and fill in anything else from the Averages XLSX file '''
         no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]

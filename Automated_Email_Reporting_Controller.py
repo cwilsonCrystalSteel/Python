@@ -45,7 +45,8 @@ state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.ne
                     'MD':['cwilson@crystalsteel.net',  'lduchesne@crystalsteel.net ',
                           'jturner@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net',  'vtalladivedula@crystalsteel.net',
-                          'jmixon@crystalsteel.net', 'jturner@crystalsteel.net']}
+                          'jmixon@crystalsteel.net', 'jturner@crystalsteel.net'],
+                    'EC':['cwilson@crystalsteel.net']}
 
 eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
                       'nreed@crystalsteel.net','agagnon@crystalsteel.net',
@@ -105,7 +106,8 @@ indirect_grouped = indirect.groupby(by=['Name','Job Code','Cost Code', 'Job #'])
 # add a is direct tag
 indirect_grouped['Is Direct'] = False
 # append the grouped direct & grouped indirect
-clock_grouped_df = direct_grouped.append(indirect_grouped)
+clock_grouped_df = pd.concat([direct_grouped, indirect_grouped])
+# clock_grouped_df = direct_grouped.append(indirect_grouped)
 # reset the index but do not drop it
 clock_grouped_df = clock_grouped_df.reset_index(drop=False)
 # merge on the locaiton of the employee
@@ -139,7 +141,7 @@ if yesterday.weekday() != 6:
     
     output_absent = output_absent_dict(absent)
     
-    for state in state_recipients.keys():
+    for state in output_absent.keys():
         if output_absent:
             # assign the recipients
             output_absent[state]['Recipients'] = state_recipients[state]
@@ -154,7 +156,7 @@ if yesterday.weekday() != 6:
     output_sub80direct = return_output_dictionary(sub_80, clock_grouped_df)
     
     
-    for state in state_recipients.keys():
+    for state in output_sub80direct.keys():
         # assign the recipients    
         if output_sub80direct:
             output_sub80direct[state]['Recipients'] = state_recipients[state]
@@ -172,7 +174,7 @@ if yesterday.weekday() != 6:
     output_sub2lots = return_output_dictionary(sub_2_lots, clock_grouped_df)
     # email out each state's list of employees with <= 1 lot
  
-    for state in state_recipients.keys():
+    for state in output_sub2lots.keys():
         if output_sub2lots:
             # assign the recipients
             output_sub2lots[state]['Recipients'] = state_recipients[state]
@@ -183,7 +185,7 @@ if yesterday.weekday() != 6:
     
         
     # This one sends out the MDI stuff
-    for state in state_recipients.keys():
+    for state in [i for i in state_recipients.keys() if i != 'EC']:
         if basis['Direct'].shape[0]:
             # calculate the MDI stuff from the do_mdi function
             mdi_dict = do_mdi(basis, state, yesterday_str)
@@ -192,40 +194,43 @@ if yesterday.weekday() != 6:
             email_mdi(yesterday_str, state, copy.deepcopy(mdi_dict), state_recipients)
     
         
-    
-    day_pcs = eva_vs_hpt(yesterday_str, yesterday_str)
-    
-    ten_days = (yesterday - datetime.timedelta(days=10)).strftime("%m/%d/%Y")
-    
-    ten_day_lot = eva_vs_hpt(ten_days, yesterday_str)
-    
-    sixty_days = (yesterday - datetime.timedelta(days=60)).strftime("%m/%d/%Y")
-    
-    sixty_day_job = eva_vs_hpt(sixty_days, yesterday_str)
-    
-    # change it so you only run the sixty day timespan & then just portion out the 10 day & yesterday
-    
-    eva_vs_hpt_dict = {'Yesterday':day_pcs,
-                            '10 day':ten_day_lot,
-                            '60 day':sixty_day_job}
+    try:
+        day_pcs = eva_vs_hpt(yesterday_str, yesterday_str)
         
-    email_eva_vs_hpt(yesterday_str, eva_vs_hpt_dict, eva_hpt_recipients)
+        ten_days = (yesterday - datetime.timedelta(days=10)).strftime("%m/%d/%Y")
+        
+        ten_day_lot = eva_vs_hpt(ten_days, yesterday_str)
+        
+        sixty_days = (yesterday - datetime.timedelta(days=60)).strftime("%m/%d/%Y")
+        
+        sixty_day_job = eva_vs_hpt(sixty_days, yesterday_str)
+        
+        # change it so you only run the sixty day timespan & then just portion out the 10 day & yesterday
+        
+        eva_vs_hpt_dict = {'Yesterday':day_pcs,
+                                '10 day':ten_day_lot,
+                                '60 day':sixty_day_job}
+            
+        email_eva_vs_hpt(yesterday_str, eva_vs_hpt_dict, eva_hpt_recipients)
+    except Exception as e:
+        print('could not send the email eva_vs_hpt_dict')
+        print(e)
 
-# run on fridays?
-if yesterday.weekday() == 3:
-    print('Run weekly attendance hours report here')
+# # run on fridays?
+# if yesterday.weekday() == 3:
+#     print('Run weekly attendance hours report here')
     
-    for state in state_recipients.keys():
-        attendance_hours = run_attendance_hours_report(state)
-        filepath = attendance_hours['filepath']
-        weekstart = attendance_hours['weekstart']
+#     for state in state_recipients.keys():
+#         attendance_hours = run_attendance_hours_report(state)
+#         filepath = attendance_hours['filepath']
+#         weekstart = attendance_hours['weekstart']
         
         
-        # filepath = 'C:\\Users\\cwilson\\Documents\\Productive_Employees_Hours_Worked_Report\\week_by_week_hours_of_employees ' + state + '.xlsx'
-        # weekstart = '05/22/2022'
+#         # filepath = 'C:\\Users\\cwilson\\Documents\\Productive_Employees_Hours_Worked_Report\\week_by_week_hours_of_employees ' + state + '.xlsx'
+#         # weekstart = '05/22/2022'
         
         
-        emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
+#         emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
 
         
     
