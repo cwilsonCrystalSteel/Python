@@ -260,7 +260,8 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         if sheet == sheets[0]:
             all_fab = with_model
         else:
-            all_fab = all_fab.append(with_model, ignore_index=True)
+            all_fab = pd.concat([all_fab, with_model])
+            # all_fab = all_fab.append(with_model, ignore_index=True)
     
     try:
         all_fab['Weight'] = all_fab['Weight'].apply(pd.to_numeric, errors='coerce')
