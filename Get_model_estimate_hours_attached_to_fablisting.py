@@ -185,9 +185,38 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
         # figure out which pieces did not have a match for EVA hours in the .xls files
         df['Has Model'] = ~df['Earned Hours'].isna()
         
+#        if fill_missing_values == True:
+#            print('uno')
+#            df = fill_missing_model_earned_hours(df, shop)
+            
         if fill_missing_values == True:
-            print('uno')
-            df = fill_missing_model_earned_hours(df, shop)
+            # first try to infill usijng the LOTS LOG tab of production schedule - we will override any values already grabbed if possible
+            # grab the lots log google sheet
+            ll = get_LOTS_log_eva_hours()
+            
+            # create a copy of the df to work on for this exercise
+            df2 = df.copy()
+            # create the key to join to the LL with 
+            df2['LOTS Name'] = df2['Job #'].astype(int).astype(str) + '-' + df2['Lot Name']
+            # inner merge so that we only get records that match in the LL
+            df2_plus_ll = pd.merge(df2.reset_index(), ll, left_on=['LOTS Name'], right_on=['LOTS Name']).set_index('index')
+            print('We were able to match {} records with LOTS Log eva hours'.format(df2_plus_ll.shape[0]))
+            # calculate the number of earned horus of each piece
+            df2_plus_ll['Earned Hours'] = df2_plus_ll['Weight'] * df2_plus_ll['LOT EVA per lb']
+            # make sure the has model tag is correct
+            df2_plus_ll['Has Model'] = ~df2_plus_ll['Earned Hours'].isna()
+            # change the value of hours per pound to match that from LL
+            df2_plus_ll['Hours Per Pound'] = df2_plus_ll['LOT EVA per lb']
+            # cut down the columns in df to match those of df
+            df2_plus_ll = df2_plus_ll[list(df.columns)]     
+            # override values in df with values in df2 - hopefully with the EVA hours from LL
+            df.loc[df2_plus_ll.index] = df2_plus_ll
+            
+            # then try to backfilll with the old HPT way
+            print('dos')
+            df = fill_missing_model_earned_hours(df, shop)            
+            
+            
     
     elif how == 'model but Justins dumb way of getting average hours':
         # get the different job & lot combinations (and the count of # of records for each, but that doesn't matter)
@@ -353,6 +382,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
     
     else:
         return{'df':df, 'missing job lots':missing_job_lots}
+
 
 
 def get_LOTS_log_eva_hours():

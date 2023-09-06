@@ -212,6 +212,7 @@ if yesterday.weekday() != 6:
                                 '60 day':sixty_day_job}
             
         email_eva_vs_hpt(yesterday_str, eva_vs_hpt_dict, eva_hpt_recipients)
+        
     except Exception as e:
         print('could not send the email eva_vs_hpt_dict')
         print(e)
