@@ -33,7 +33,7 @@ from Post_to_GoogleSheet import get_production_worksheet_production_sheet
 
 try:
     df = get_production_worksheet_production_sheet(proper_headers=False)
-    df.to_csv('c:\\users\\cwilson\\\documents\\python\\speedo_dashboard\\production_worksheet.csv')
+    df.to_csv('c:\\users\\cwilson\\\documents\\python\\speedo_dashboard\\production_worksheet.csv', index=False)
 except:
     print('could not get the production_worksheet')
 
