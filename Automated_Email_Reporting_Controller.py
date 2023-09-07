@@ -28,7 +28,16 @@ from High_Indirect_Hours_Email_Report import email_eva_vs_hpt
 from High_Indirect_Hours_Email_Report import emaIL_attendance_hours_report
 from High_Indirect_Hours_Email_Report import email_delivery_calendar_changelog
 from Attendance_Hours_Per_week_v2 import run_attendance_hours_report
+from Post_to_GoogleSheet import get_production_worksheet_production_sheet
 #%%
+
+try:
+    df = get_production_worksheet_production_sheet(proper_headers=False)
+    df.to_csv('c:\\users\\cwilson\\\documents\\python\\speedo_dashboard\\production_worksheet.csv')
+except:
+    print('could not get the production_worksheet')
+
+
 
 # get today as a datetime
 today = datetime.datetime.now()
