@@ -224,7 +224,7 @@ def view_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'
     worksheet = sh.worksheet(sheet_name)
     return worksheet
 
-def get_production_worksheet_job_hours():
+def get_production_worksheet_production_sheet(proper_headers=True):
     # URL: https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit?pli=1#gid=2095559050
     # key = from d/ xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx /edit
     productionworksheetkey = '1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4'
@@ -233,23 +233,38 @@ def get_production_worksheet_job_hours():
     production_worksheet = view_gspread_worksheet(sheet_name = 'Production Sheet', sheet_key = productionworksheetkey)
     # convert to list of lists
     production_worksheet_list = production_worksheet.get_all_values()
-    headers_row = 0
-    running = True
-    while running:
-        for headers_row in range(0,15):
-            try:
-                # convert to data frame
-                df = pd.DataFrame(production_worksheet_list[headers_row:], columns=production_worksheet_list[headers_row-1])
-                
-                if df.columns[0] == 'Job #':
-                    running = False
-                    break
-                else:
-                    print(headers_row)
-                    Exception()
-            except:
-                headers_row += 1
-    print('success on {}'.format(headers_row))
+    if proper_headers:
+        
+        headers_row = 0
+        running = True
+        while running:
+            for headers_row in range(0,15):
+                try:
+                    # convert to data frame
+                    df = pd.DataFrame(production_worksheet_list[headers_row:], columns=production_worksheet_list[headers_row-1])
+                    
+                    if df.columns[0] == 'Job #':
+                        running = False
+                        break
+                    else:
+                        print(headers_row)
+                        Exception()
+                except:
+                    headers_row += 1
+        print('success on {}'.format(headers_row))
+        
+        return df
+    
+    else:
+        df = pd.DataFrame(production_worksheet_list)
+        return df
+
+
+
+
+    
+def get_production_worksheet_job_hours(df):
+    df = get_production_worksheet_production_sheet()
     
     #cut off the df at the marker 'Add new lines above here'
     index = (df == 'Add new lines above here').idxmax().max()
