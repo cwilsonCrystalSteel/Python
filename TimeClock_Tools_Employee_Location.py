@@ -9,12 +9,12 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
-import chromedriver_autoinstaller
+# import chromedriver_autoinstaller
 from TimeClock_scraping_functions import printwait, delete_range, enable_download, setting_chrome_options, newest_creation_time
 from selenium.webdriver.common.by import By
 from TimeClock_Credentials import returnTimeClockCredentials
-from webdriver_manager.chrome import ChromeDriverManager
-
+# from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service
 
 
 
@@ -25,23 +25,12 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     # date = the_day.strftime("%m/%d/%Y")
     print('Running Employee Location Export')
     
+    service = Service()
+    driver = webdriver.Chrome(service=service, options = setting_chrome_options())
     
-    
-    # Navigate to TimeClock & login
-
-    # driver = webdriver.Chrome(executable_path='C:/Users/cwilson/Documents/Python/chromedriver.exe')
-
-    # Start the browser
-    # driver = webdriver.Chrome(executable_path='C:/Users/cwilson/Documents/Python/chromedriver.exe', 
-    #                           options = setting_chrome_options())
-    # Start the browser
-    # driver = webdriver.Chrome(executable_path=chromedriver_autoinstaller.install(), 
-    #                           options = setting_chrome_options())    
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
-                               options = setting_chrome_options())    
+ 
     enable_download(driver, download_folder)
     
-    # driver.implicitly_wait(5)
     
     # navigate to timeclock website
     driver.get("https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509")
@@ -50,13 +39,13 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     # Pause to fully load the page - had some issues without this command
     time.sleep(6)
     # Find the username field
-    userid = driver.find_element_by_id('LogOnUserId')
+    userid = driver.find_element(By.ID, 'LogOnUserId')
     timeclockCreds = returnTimeClockCredentials()
     # Submit username
     userid.send_keys(timeclockCreds['username'])
     printwait('Entered Username', 1)
     # Find the password field
-    password = driver.find_element_by_id('LogOnUserPassword')
+    password = driver.find_element(By.ID, 'LogOnUserPassword')
     # Submit password
     password.send_keys(timeclockCreds['password'])
     printwait('Entered Password', 1)
@@ -73,66 +62,44 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     searchbox.send_keys(Keys.RETURN)
     printwait('Searched "export"', 3) 
     
-    # searchbox = driver.find_element_by_xpath("//input[@name='searchInput']")
-    # searchbox.send_keys('export')
-    # searchbox.send_keys(Keys.RETURN)
-    # print('Found Search Box - Searched for "export"')
     
     time.sleep(5)
     
-    toolsexport = driver.find_element_by_xpath("//*[contains(text(), 'Tools > Export')]")
+    toolsexport = driver.find_element(By.XPATH, "//*[contains(text(), 'Tools > Export')]")
     toolsexport.click()
     print('Found Tools > Export')
     
     time.sleep(2)
     
     
-    
-    # # Navigate to Tools, then to Export
-    # # tools = driver.find_elements_by_xpath("//*[contains(text(), 'Tools')]")
-    # tools = driver.find_element_by_id('Tools')
-    # tools.click()
-    # print('Found Tools')
-    
-    # time.sleep(2)
-    
-    # # Navigate to the export button after clicking tools
-    # export = driver.find_element_by_xpath("//*[contains(text(), 'Export')]")
-    # export.click()
-    # print('Found Export')
-    # time.sleep(2)
-    
     # Find the Export Type drowpdown menu
-    exporttype = driver.find_element_by_id('selExportType')
+    exporttype = driver.find_element(By.ID, 'selExportType')
     # type the name of the dropdown to select into the dropdown box
     exporttype.send_keys('Employee Information') # automatically selects once it finishes typing
     print('Found Export Type: Employee Information')
     time.sleep(2)
     
     # Navigate to Export Templates
-    exporttemplates = driver.find_element_by_xpath("//*[contains(text(), 'Export Templates')]")
+    exporttemplates = driver.find_element(By.XPATH, "//*[contains(text(), 'Export Templates')]")
     exporttemplates.click()
     print('Found Export Templates')
     time.sleep(2)
     
     # clicks on my custom report called "emplyee locations"
-    employeelocations = driver.find_element_by_xpath("//*[contains(text(), 'employee locations')]")
+    employeelocations = driver.find_element(By.XPATH, "//*[contains(text(), 'employee locations')]")
     employeelocations.click()
     print('Found custom tempalte: employee locations')
     time.sleep(2)
     
     
-
-    
-    
     if exclude_terminated == False:
-        employeefilter = driver.find_element_by_xpath("//input[@value='Employee Filter']")
+        employeefilter = driver.find_element(By.XPATH, "//input[@value='Employee Filter']")
         employeefilter.click()
         print('Found employee filter button')
         time.sleep(2)        
         
         
-        excludesuspended = driver.find_element_by_xpath("//input[@id='chkExcludeSuspended']")
+        excludesuspended = driver.find_element(By.XPATH, "//input[@id='chkExcludeSuspended']")
         print('Found the exclude suspended checkbox')
         # is_selected() = True if the box is checked to exclude suspended employees
         if excludesuspended.is_selected():
@@ -141,26 +108,26 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
         time.sleep(2)
         
         
-        excludeterminated = driver.find_element_by_xpath("//input[@id='chkExcludeTerminated']")
+        excludeterminated = driver.find_element(By.XPATH, "//input[@id='chkExcludeTerminated']")
         print('Found the exclude terminated checkbox')
         if excludeterminated.is_selected():
             excludeterminated.click()
             print('Un-checked the Exclude Terminated checkbox')
         time.sleep(2)
     
-        submitfilter = driver.find_element_by_xpath("//input[@value='Filter']")
+        submitfilter = driver.find_element(By.XPATH, "//input[@value='Filter']")
         submitfilter.click()
         print('Filtered the suspended & terminated')
         time.sleep(2)
     
     
-    generate = driver.find_element_by_xpath("//input[@value='Generate']")
+    generate = driver.find_element(By.XPATH, "//input[@value='Generate']")
     generate.click()
     print('Found Generate')
     time.sleep(10)
     
     # Navigate to and click the download button
-    download2 = driver.find_element_by_xpath("//input[@value='Download']")
+    download2 = driver.find_element(By.XPATH, "//input[@value='Download']")
     download2.click()
     print('Began File Download')
     
