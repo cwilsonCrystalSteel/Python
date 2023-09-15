@@ -40,20 +40,27 @@ def remove_empty_rows_between_data(worksheet):
     for row_index in reversed(empty_rows):
         worksheet.delete_rows(row_index)
 
-def get_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'], json_file = google_sheet_info['json_file']):
+def get_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'], json_file = google_sheet_info['json_file'], remove_empty_rows=True):
     sh = init_google_sheet(sheet_key, json_file)
     worksheet = sh.worksheet(sheet_name)
-    remove_empty_rows_between_data(worksheet)
+    if remove_empty_rows:
+        remove_empty_rows_between_data(worksheet)
     worksheet = sh.worksheet(sheet_name)
     return worksheet
 
+
+def convert_google_worksheet_to_dataframe(worksheet):
+    worksheet_list_of_lists = worksheet.get_all_values()
+    df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
+    return df
 
 def get_google_sheet_as_df(shop=None, worksheet=None):
     if worksheet == None:
         worksheet = get_gspread_worksheet(shop)
         
-    worksheet_list_of_lists = worksheet.get_all_values()
-    df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
+    df = convert_google_worksheet_to_dataframe(worksheet) 
+    # worksheet_list_of_lists = worksheet.get_all_values()
+    # df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
     
     df = df.replace('', 0)
     
@@ -180,6 +187,19 @@ def move_to_archive(shop=None):
     
     
     return None
+
+
+def get_jobs_to_exclude():
+    # get the worksheet and convert it to a datafarme
+    goals_df = convert_google_worksheet_to_dataframe(get_gspread_worksheet('Goals', remove_empty_rows=False))
+    # find the index where we have 'EXCLUDE JOB'
+    start_idx = goals_df.index[goals_df.iloc[:,0] == 'EXCLUDE JOB'][0]
+    # get only the part of the dataframe that has the jobs to exclude
+    exclude_df = goals_df.loc[start_idx:, :]
+    # get rid of the first column
+    exclude_df = exclude_df.iloc[:, 1:]
+    
+    return exclude_df.to_dict(orient='list')
 
 
 def get_shop_b_jobs():

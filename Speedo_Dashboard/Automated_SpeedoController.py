@@ -10,7 +10,7 @@ sys.path.append('C:\\Users\\cwilson\\documents\\python')
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
 from Pull_Fablisting_data import get_fablisting_plus_model_summary
 from Pull_TimeClock_data import get_timeclock_summary
-from Post_to_GoogleSheet import post_observation, move_to_archive, get_shop_b_jobs
+from Post_to_GoogleSheet import post_observation, move_to_archive, get_jobs_to_exclude
 import datetime
 # this will be the controller for automation?
 
@@ -32,21 +32,26 @@ end_dt = end_dt.replace(hour=23, minute=59)
 print('running the speedo dashboard for {} to {}'.format(start_dt, end_dt))
 
 try:
-    # exclude_jobs_list = get_shop_b_jobs()
-    exclude_jobs_list = [3122]
+    
+    exclude_jobs_dict = get_jobs_to_exclude()
+    exclude_jobs_dict['TN'] = exclude_jobs_dict['CSM']
+    exclude_jobs_dict['DE'] = exclude_jobs_dict['CSF']
+    exclude_jobs_dict['MD'] = exclude_jobs_dict['FED']
 except:
-    exclude_jobs_list = [3122]
+    exclude_jobs_list = [3122,2214]
+    exclude_jobs_dict = {'TN':exclude_jobs_list, 'MD':exclude_jobs_list, 'DE':exclude_jobs_list, 
+                         'CSM':exclude_jobs_list, 'FED':exclude_jobs_list, 'CSF':exclude_jobs_list}
 
 
 
 # get the results of each states hours - a dict divied up by state
-timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_list=exclude_jobs_list)
+timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_dict=exclude_jobs_dict)
 # timeclock_summary2 = get_timeclock_summary(start_dt, end_dt, states=None, basis=timeclock_summary['basis'], output_productive_report=False, exclude_jobs_list=exclude_jobs_list)
 
 fablisting_summary = {}
 for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
     print(sheet)
-    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet, exclude_jobs_list=exclude_jobs_list)
+    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet, exclude_jobs_dict=exclude_jobs_dict)
 
 
 for state in ['TN','MD','DE']:
