@@ -24,7 +24,7 @@ sheet = 'CSM QC Form'
 # end_dt = start_dt + datetime.timedelta(days=1)
 # end_date = end_dt.strftime('%m/%d/%Y')
 
-def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_list=None):
+def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_dict=None):
     
     start_date = start_dt.strftime('%m/%d/%Y')
     # format as the date string
@@ -39,14 +39,21 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_list
     # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
 
 
-    if exclude_jobs_list != None:
-        with_model = with_model[~with_model['Job #'].isin(exclude_jobs_list)]
+    if exclude_jobs_dict != None:
+        # get the jobs to exclude from the dict and shop name
+        excluded_jobs = exclude_jobs_dict[sheet[:3]]
+        # remove those pieces
+        with_model = with_model[~with_model['Job #'].isin(excluded_jobs)]
     
+    # count number of peices with model horus
     num_with_model = with_model['Has Model'].sum()
+    # count pieces without model  hours
     num_without_model = with_model.shape[0] - num_with_model
-    
+    # sum the number of earned hours
     earned_hours = np.round(with_model['Earned Hours'].sum(), 2)
+    # sum the weight into tons
     tonnage = np.round((with_model['Weight'].sum() / 2000), 2)
+    # get the quantity of pieces
     quantity = int(with_model['Quantity'].sum())
     
     

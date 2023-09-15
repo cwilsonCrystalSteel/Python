@@ -17,7 +17,7 @@ state = 'TN'
 today = datetime.datetime.now()
 today_str = today.strftime("%m/%d/%Y")
 
-def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_list=None):
+def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_dict=None):
     if states == None:
         states = ['TN','MD','DE']
         
@@ -57,8 +57,6 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             basis_additional = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=ei, in_and_out_times=True)
             basis['Direct'] = pd.concat([basis['Direct'], basis_additional['Direct']])
             basis['Indirect'] = pd.concat([basis['Indirect'], basis_additional['Indirect']])
-            # basis['Direct'] = basis['Direct'].append(basis_additional['Direct'], ignore_index=True)
-            # basis['Indirect'] = basis['Indirect'].append(basis_additional['Indirect'], ignore_index=True)
     
     
     
@@ -75,20 +73,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     direct = basis['Direct']
     indirect = basis['Indirect']
     
-    # just make an empty dataframe of the same form as the direct dataframe
-    excluded = direct[direct['Name'] == 'Snoop Dogg']
-    # proceed if we have an exclusion list
-    if exclude_jobs_list != None:
-        # convert the values to strings
-        exclude_jobs_list = [str(i) for i in exclude_jobs_list]
-        # loop thru each job to exclude
-        for exclusion in exclude_jobs_list:
-            # append to the excluded dataframe if the job matches
-            excluded = pd.concat([excluded, direct[direct['Cost Code'].str.contains(exclusion)]])
-            # excluded = excluded.append(direct[direct['Cost Code'].str.contains(exclusion)])
-    
-        # remove all the records that need to be excluded from direct hours
-        direct = direct[~direct.index.isin(excluded.index)]
+ 
     
     hours = pd.concat([direct, indirect])
     # hours = direct.append(indirect, ignore_index=True)
@@ -103,6 +88,8 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     # set the index to the employee name
     ei = ei.set_index('Name')
     
+       
+    
     # init the output dict so that we can have a dict of dicts
     output = {}
     
@@ -112,13 +99,19 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         ei_state = ei[ei['Productive'].str.contains(state)]
         # only get hours when there is an employee match
         hours_state = ei_state[['Productive','Shift']].join(hours.set_index('Name'), how='inner')
-        
+        # get the jobs to exclude
+        excluded_jobs = exclude_jobs_dict[state]
+        # filter those jobs out
+        hours_state = hours_state[~hours_state['Job #'].isin(excluded_jobs)]
+        # get the hours that are by productive employees 
         hours_productive = hours_state[~hours_state['Productive'].str.contains('NON')]
-        # hours_productive = hours
-        
+        # count the number of productive employees
         num_employees = pd.unique(hours_productive.index).shape[0]
+        # count number of direct hours
         num_direct = np.round(hours_productive[hours_productive['Is Direct']]['Hours'].sum(), 2)
+        # count number of indirect hours
         num_indirect = np.round(hours_productive[~hours_productive['Is Direct']]['Hours'].sum(), 2)
+        # put into the output dict
         output[state] = {'Number Employees':num_employees, 'Direct Hours':num_direct, 'Indirect Hours':num_indirect}
         
         try:
@@ -132,5 +125,4 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             print('could not make TN productive like report')
 
     output['basis'] = basis
-    output['excluded'] = excluded
     return output
