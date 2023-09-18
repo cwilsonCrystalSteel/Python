@@ -20,8 +20,9 @@ state = 'TN'
 sheet = 'CSM QC Form' 
 
 # start_dt = datetime.datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+# start_dt = datetime.datetime(year=2023, month=1, day=1, hour=1, minute=0, second=0)
 # start_date = start_dt.strftime('%m/%d/%Y')
-# end_dt = start_dt + datetime.timedelta(days=1)
+# end_dt = start_dt + datetime.timedelta(days=365)
 # end_date = end_dt.strftime('%m/%d/%Y')
 
 def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_dict=None):

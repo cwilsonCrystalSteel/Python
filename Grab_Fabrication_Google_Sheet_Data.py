@@ -10,13 +10,17 @@ import gspread
 from google_sheets_credentials_startup import init_google_sheet
 import datetime 
 
-def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997", start_hour=0):
+
+# daily_fab_listing_google_sheet_key = "1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
+
+
+def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997", start_hour=0, sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"):
     
     
     # key for the daily fab listing google sheet
-    daily_fab_listing_google_sheet_key = "1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
+    
     # open the daily fab listing google sheet
-    sh = init_google_sheet(daily_fab_listing_google_sheet_key)
+    sh = init_google_sheet(sheet_key)
 
 
     
@@ -27,6 +31,21 @@ def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997"
     # only takes the last 100 rows as data for the dataframe
     # df = pd.DataFrame(columns = all_values[0], data=all_values[-200:])
     df = pd.DataFrame(columns=all_values[0], data=all_values[2:])
+    if 'Timestamp' not in df.columns:
+        try:
+            columns = ['', 'Timestamp', 'Job #', 'Lot #', 'Quantity', 
+                       'Piece Mark - REV', 'Weight', 'Fitter', 'Fit QC', 
+                       'Welder', 'Weld QC', 'Does This Piece Have a Defect?', 
+                       'Date Found', 'Sequence Number', 'Quantity', 'Member Type'] 
+                       # 'Worked By', 'Inspected By', 'Description of Non-Conformance', 
+                       # 'Defect Category', 'Defect Sub Category', 'Defect Type', 
+                       # 'Disposition', 'Repaired By', 'Repair Inspected By', 
+                       # 'Rework Time', '', '']
+            if len(columns) < df.shape[1]:
+                columns = columns + [''] * (df.shape[1] - len(columns))
+            df = pd.DataFrame(columns = columns, data=all_values)
+        except:
+            return pd.DataFrame(data=all_values)
     # Convert entry time from string to datetime
     # the errors='coerce' makes it so times that don't conform to a datetime will be changed to NaT value
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
