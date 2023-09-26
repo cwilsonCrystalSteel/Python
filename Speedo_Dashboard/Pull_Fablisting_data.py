@@ -25,7 +25,7 @@ sheet = 'CSM QC Form'
 # end_dt = start_dt + datetime.timedelta(days=365)
 # end_date = end_dt.strftime('%m/%d/%Y')
 
-def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_dict=None):
+def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, output_fablisting_copy=False, exclude_jobs_dict=None):
     
     start_date = start_dt.strftime('%m/%d/%Y')
     # format as the date string
@@ -57,5 +57,7 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, exclude_jobs_dict
     # get the quantity of pieces
     quantity = int(with_model['Quantity'].sum())
     
-    
-    return {'Earned Hours':earned_hours, 'Tons':tonnage, 'Quantity Pieces':quantity}
+    if output_fablisting_copy:
+        return {'Earned Hours':earned_hours, 'Tons':tonnage, 'Quantity Pieces':quantity, 'Fablisting':with_model}
+    else:
+        return {'Earned Hours':earned_hours, 'Tons':tonnage, 'Quantity Pieces':quantity}

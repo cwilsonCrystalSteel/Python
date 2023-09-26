@@ -199,7 +199,14 @@ def get_jobs_to_exclude():
     # get rid of the first column
     exclude_df = exclude_df.iloc[:, 1:]
     
-    return exclude_df.to_dict(orient='list')
+    try:
+        exclude_df_numeric = exclude_df.apply(pd.to_numeric, axis=0)
+        
+        all_df = pd.concat([exclude_df, exclude_df_numeric], axis=0)
+    except:
+        all_df = exclude_df
+    
+    return all_df.to_dict(orient='list')
 
 
 def get_shop_b_jobs():
