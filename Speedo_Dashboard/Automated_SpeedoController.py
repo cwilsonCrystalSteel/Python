@@ -45,13 +45,13 @@ except:
 
 
 # get the results of each states hours - a dict divied up by state
-timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=False, exclude_jobs_dict=exclude_jobs_dict)
+timeclock_summary = get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_productive_report=True, exclude_jobs_dict=exclude_jobs_dict)
 # timeclock_summary2 = get_timeclock_summary(start_dt, end_dt, states=None, basis=timeclock_summary['basis'], output_productive_report=False, exclude_jobs_list=exclude_jobs_list)
 
 fablisting_summary = {}
 for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
     print(sheet)
-    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet, exclude_jobs_dict=exclude_jobs_dict)
+    fablisting_summary[sheet] = get_fablisting_plus_model_summary(start_dt, end_dt, sheet=sheet, exclude_jobs_dict=exclude_jobs_dict, output_fablisting_copy=True)
 
 
 for state in ['TN','MD','DE']:
