@@ -167,7 +167,7 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
         
     df = pd.DataFrame(data[1:], columns=data[0])
     # fill any missing cost codes with the job code
-    no_cost_code = df[df['Cost Code'] == '']
+    no_cost_code = df[df['Cost Code'] == ''].copy()
     no_cost_code['Cost Code'] = no_cost_code['Job Code']
     df.loc[no_cost_code.index] = no_cost_code
     # df['Cost Code'] = df['Cost Code'].replace('', 'no cost code')

@@ -81,11 +81,13 @@ def clean_up_this_gunk(times_df, ei):
     ''' end of removing shop B employees '''
     
     # get items where length of the job # is 5 or the cost code says recieving (or I could do job #  = 250)
-    direct = times_df[(times_df['Job #'].str.len() == 5) | (times_df['Cost Code'].str.contains('RECEIVING'))]
+    direct = times_df[(times_df['Job #'].str.len() == 5) | (times_df['Cost Code'].str.contains('RECEIVING'))].copy()
     # inidirect is whatver is not in the direct dataframe (in this instance)
-    indirect = times_df.loc[~times_df.index.isin(direct.index)]
+    indirect = times_df.loc[~times_df.index.isin(direct.index)].copy()
     # now to convert the job number to the actual job number - only need to remove the first digit from the 5 digit jobs
-    direct['Job #'] = direct['Job #'].str[-4:]
+    # direct['Job #'] = direct['Job #'].str[-4:]
+    # 2023-09-28: changing this to the 1st 4 digits b/c apparantly thats what it is 
+    direct['Job #'] = direct['Job #'].str[:4]
     
     # code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
     # #incorporate the ffect of the new jobcode/costcode style in timeclock
