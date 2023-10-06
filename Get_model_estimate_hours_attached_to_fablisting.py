@@ -406,7 +406,7 @@ def get_LOTS_log_eva_hours():
     ll = ll.rename(columns={'TOTAL MHRS':'LOT EVA Hours'})
     ll['LOT EVA Hours'] = pd.to_numeric(ll['LOT EVA Hours'], errors='coerce')
     ll = ll[~ll['LOT EVA Hours'].isna()]
-    ll['Tonnage'] = pd.to_numeric(ll['Tonnage'])
+    ll['Tonnage'] = pd.to_numeric(ll['Tonnage'], errors='coerce')
     ll = ll[~ll['Tonnage'].isna()]
     ll['LOT EVA per lb'] = ll['LOT EVA Hours'] / (ll['Tonnage'] * 2000)
     return ll
