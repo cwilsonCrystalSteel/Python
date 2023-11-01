@@ -55,7 +55,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                 # if for some reason the chunk returns no rows we have an issue!
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
-                    chunk_job['Hours Per Piece'] = np.nan
+                    chunk_job.loc[:, 'Hours Per Piece'] = np.nan
                     df = pd.concat([df, chunk_job])
                     # df = df.append(chunk_job)     
                     continue 
@@ -67,7 +67,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         xls_main = pd.read_excel('C://downloads//' + str(int(job)) + '.xlsx')  
                     except Exception:
                         print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
-                        chunk_job['Hours Per Piece'] = np.nan
+                        chunk_job.loc[:, 'Hours Per Piece'] = np.nan
                         df = pd.concat([df, chunk_job])
                         # df = df.append(chunk_job)
                         continue 
@@ -84,7 +84,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     chunk = chunk_job[chunk_job['Lot Name'] == lot_name]
                     if not chunk.shape[0]:
                         print('no rows found for chunk: {}'.format(lot_name))
-                        chunk['Hours Per Piece'] = np.nan
+                        chunk.loc[:, 'Hours Per Piece'] = np.nan
                         df = pd.concat([df, chunk])
                         # df = df.append(chunk)
                         continue
@@ -125,7 +125,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         print('Cannot open {}'.format(lot_name))
                         ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
                         # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
-                        chunk['Hours Per Piece'] = np.nan
+                        chunk.loc[:, 'Hours Per Piece'] = np.nan
                         df = pd.concat([df, chunk])
                         # df = df.append(chunk)
                         continue
@@ -178,7 +178,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             # just let df be a copy of fablisting_df -> basically just to keep the columns
             df = fablisting_df.copy()
             # just set the column of 'Hours Per Piece' to nan
-            df['Hours Per Piece'] = np.nan
+            df.loc[:, 'Hours Per Piece'] = np.nan
 
         # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
         df['Earned Hours'] = df['Quantity'] * df['Hours Per Piece']
@@ -235,11 +235,11 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             for job in jobs:
                 print(job)
                 
-                chunk_job = fablisting_df[fablisting_df['Job #'] == job]
+                chunk_job = fablisting_df[fablisting_df['Job #'] == job].copy()
                 # if for some reason the chunk returns no rows we have an issue!
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
-                    chunk_job['Hours Per Pound'] = np.nan
+                    chunk_job.loc[:, 'Hours Per Pound'] = np.nan
                     df = pd.concat([df, chunk_job])
                     # df = df.append(chunk_job)     
                     continue 
@@ -251,7 +251,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         xls_main = pd.read_excel('C://downloads//' + str(int(job)) + '.xlsx')  
                     except Exception:
                         print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
-                        chunk_job['Hours Per Pound'] = np.nan
+                        chunk_job.loc[:, 'Hours Per Pound'] = np.nan
                         df = pd.concat([df, chunk_job])
                         # df = df.append(chunk_job)
                         continue 
@@ -265,7 +265,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     chunk = chunk_job[chunk_job['Lot Name'] == lot_name]
                     if not chunk.shape[0]:
                         print('no rows found for chunk: {}'.format(lot_name))
-                        chunk['Hours Per Pound'] = np.nan
+                        chunk.loc[:, 'Hours Per Pound'] = np.nan
                         df = pd.concat([df, chunk])
                         # df = df.append(chunk)
                         continue
@@ -284,7 +284,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         print('Cannot open {}'.format(lot_name))
                         ''' THIS IS WHERE I WOULD INFILL WHEN I CANNOT GET THE LOT EVA HOURS '''
                         # missing_job_lots = missing_job_lots.append({'job':job, 'lot':lot_name, 'reason':'Cannot open file: ' + eva_destination,'shops':shops}, ignore_index=True)
-                        chunk['Hours Per Pound'] = np.nan
+                        chunk.loc[:, 'Hours Per Pound'] = np.nan
                         df = pd.concat([df, chunk])
                         # df = df.append(chunk)
                         continue
@@ -322,7 +322,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     else:
                         ''' fill in missing values if fill_missing_values=True '''
                         
-                        chunk['Hours Per Pound'] = np.nan
+                        chunk.loc[:, 'Hours Per Pound'] = np.nan
                         df = pd.concat([df, chunk])
                         # df = df.append(chunk)
                         continue
@@ -332,7 +332,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             # just let df be a copy of fablisting_df -> basically just to keep the columns
             df = fablisting_df.copy()
             # just set the column of 'Hours Per Piece' to nan
-            df['Hours Per Pound'] = np.nan
+            df.loc[:, 'Hours Per Pound'] = np.nan
 
         # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
         df['Earned Hours'] = df['Weight'] * df['Hours Per Pound']
@@ -494,7 +494,7 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
                 # if there are no job .xls files, just set the 'Hours per piece' to be NAN
                 else:
                     # setting the col to nan
-                    chunk['Hours Per Piece'] = np.nan
+                    chunk.loc[:, 'Hours Per Piece'] = np.nan
     
                 # appends chunk to df, but now with 'Hours Per Piece' column
                 df = pd.concat([df, chunk])
@@ -505,7 +505,7 @@ def apply_model_hours1(fablisting_df, how='model', fill_missing_values=False, sh
             # just let df be a copy of fablisting_df -> basically just to keep the columns
             df = fablisting_df.copy()
             # just set the column of 'Hours Per Piece' to nan
-            df['Hours Per Piece'] = np.nan
+            df.loc[:, 'Hours Per Piece'] = np.nan
             
         # calculate the 'Earned Hours' of the pieces based on the quantity in fablisting
         df['Earned Hours'] = df['Quantity'] * df['Hours Per Piece']
@@ -608,7 +608,7 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
             df.loc[no_model_search_just_jobs.index] = no_model_search_just_jobs
         
         except:
-            print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the google sheet for fill_missing_model_earned_hours')
+            print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the production worksheet google sheet for fill_missing_model_earned_hours')
         
         ''' Now we go back to try and fill in anything else from the Averages XLSX file '''
         no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]

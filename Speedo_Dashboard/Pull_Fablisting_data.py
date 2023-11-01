@@ -13,7 +13,6 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
-from Post_to_GoogleSheet import get_production_worksheet_job_hours
 
 # this one will pull the fablisting data
 state = 'TN'

@@ -270,7 +270,7 @@ def get_production_worksheet_production_sheet(proper_headers=True):
                     # convert to data frame
                     df = pd.DataFrame(production_worksheet_list[headers_row:], columns=production_worksheet_list[headers_row-1])
                     
-                    if df.columns[0] == 'Job #':
+                    if df.columns[0] == 'Job #' or df.columns[2] == 'Seq. #' or df.columns[3] =='Tonnage':
                         running = False
                         break
                     else:
@@ -290,9 +290,12 @@ def get_production_worksheet_production_sheet(proper_headers=True):
 
 
     
-def get_production_worksheet_job_hours(df):
+def get_production_worksheet_job_hours():
     df = get_production_worksheet_production_sheet()
-    
+    df_cols = list(df.columns)
+    df_cols[0] = 'Job #'
+    df_cols[1] = 'Hrs./Ton'
+    df.columns = df_cols
     #cut off the df at the marker 'Add new lines above here'
     index = (df == 'Add new lines above here').idxmax().max()
     df = df.iloc[:index,:]
