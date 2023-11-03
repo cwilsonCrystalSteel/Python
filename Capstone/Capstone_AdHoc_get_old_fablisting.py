@@ -12,34 +12,53 @@ from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
 
 
-
-for year in [2022,2021,2020]:
-    
-    
-    start_dt = datetime.datetime(year=year, month=1, day=1, hour=1, minute=0, second=0)
-    start_date = start_dt.strftime('%m/%d/%Y')
-    end_dt = start_dt + datetime.timedelta(days=365)
-    end_date = end_dt.strftime('%m/%d/%Y')
-    start_date = start_dt.strftime('%m/%d/%Y')
-    # format as the date string
-    end_date = end_dt.strftime('%m/%d/%Y')
-    
-    for shop in ['CSM','CSF','FED']:
-        print('Pulling fablisting for {}: {} to {}'.format(shop, start_date, end_date))
+def get_previous():
+    for year in [2022,2021,2020]:
         
-        sheet_name = shop + ' ' + str(year)
-        # get fablisting for all of start_date and all of end_date
-        fablisting = grab_google_sheet(sheet_name, start_date, end_date, sheet_key="1nyM3ocSMM4EeMrOmmh0UBEDGUM6L8lte5TPYXcLPa2s")
-        # get dates between yesterday at 6 am and today at 6 am
-        fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
-        # get the model hours attached to fablisting
-        with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=shop)
-        # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
+        
+        start_dt = datetime.datetime(year=year, month=1, day=1, hour=1, minute=0, second=0)
+        start_date = start_dt.strftime('%m/%d/%Y')
+        end_dt = start_dt + datetime.timedelta(days=365)
+        end_date = end_dt.strftime('%m/%d/%Y')
+        start_date = start_dt.strftime('%m/%d/%Y')
+        # format as the date string
+        end_date = end_dt.strftime('%m/%d/%Y')
+        
+        for shop in ['CSM','CSF','FED']:
+            print('Pulling fablisting for {}: {} to {}'.format(shop, start_date, end_date))
+            
+            sheet_name = shop + ' ' + str(year)
+            # get fablisting for all of start_date and all of end_date
+            fablisting = grab_google_sheet(sheet_name, start_date, end_date, sheet_key="1nyM3ocSMM4EeMrOmmh0UBEDGUM6L8lte5TPYXcLPa2s")
+            # get dates between yesterday at 6 am and today at 6 am
+            fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
+            # get the model hours attached to fablisting
+            with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=shop)
+            # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
+    
+            with_model.to_csv(".\\" + sheet_name + '.csv')
 
-        with_model.to_csv(".\\" + sheet_name + '.csv')
-
-
-
+def get_current():
+    for year in [2023]:
+        
+        
+        start_dt = datetime.datetime(year, 1, 1,0,0)
+        end_dt = datetime.datetime(year, 12, 31,0,0)
+        start_date = start_dt.strftime('%m/%d/%Y')
+        end_date = end_dt.strftime('%m/%d/%Y')
+        for sheet in ['CSM QC Form','CSF QC Form','FED QC Form']:
+            
+            fablisting = grab_google_sheet(sheet, start_date, end_date)
+            # get dates between yesterday at 6 am and today at 6 am
+            fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
+            # get the model hours attached to fablisting
+            with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
+            # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
+            
+            with_model.to_csv(".\\" + sheet[:3] + ' '+ str(year) + '.csv')
+    
+    
+    
 
 
 
