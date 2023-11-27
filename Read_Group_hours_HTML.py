@@ -437,8 +437,10 @@ def new_output_each_clock_entry_job_and_costcode(html_file, in_and_out_times=Fal
             if in_and_out_times == True:
                 append_dict['Time In'] = clock[0]
                 append_dict['Time Out'] = clock[1]
+                
+            append_df = pd.DataFrame.from_dict(append_dict, orient='index').T
             # append the new row to the df
-            times_df = pd.concat([times_df, append_dict])
+            times_df = pd.concat([times_df, append_df], ignore_index=True)
             # times_df = times_df.append(append_dict, ignore_index=True)
     
 
