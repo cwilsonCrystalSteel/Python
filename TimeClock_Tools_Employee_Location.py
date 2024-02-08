@@ -86,7 +86,7 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     time.sleep(2)
     
     # clicks on my custom report called "emplyee locations"
-    employeelocations = driver.find_element(By.XPATH, "//*[contains(text(), 'employee locations')]")
+    employeelocations = driver.find_element(By.XPATH, "//*[contains(text(), 'employee location')]")
     employeelocations.click()
     print('Found custom tempalte: employee locations')
     time.sleep(2)
