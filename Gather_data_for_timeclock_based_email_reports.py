@@ -214,9 +214,9 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
             # Grab all HTML files in downloads
             list_of_csvs = glob.glob(download_folder +"*.csv") # * means all if need specific format then *.csv
             # Create a list with only the states we want to look at
-            employe_info_csvs = [f for f in list_of_csvs if "Employee Information" in f]
+            employee_info_csvs = [f for f in list_of_csvs if "Employee Information" in f]
             # Get the most recent file for that state
-            latest_csv = max(employe_info_csvs, key=os.path.getctime)
+            latest_csv = max(employee_info_csvs, key=os.path.getctime)
             # get the file creation time as a datetime
             latest_csv_time = datetime.datetime.fromtimestamp(os.path.getctime(latest_csv))
             # if the file was created today, then use it, if not then throw error
