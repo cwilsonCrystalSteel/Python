@@ -32,6 +32,8 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
         print('Getting Timeclock for: {}'.format(start_date_loop))
         basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
+        
+        '''
         # hokie work around
         # on 5/28 there are no records at all so it was failing to create the times_df variable
         # when there was no times_df, using the basis_orig.copy() was failing
@@ -39,6 +41,8 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         # this will still fail when the start of the week has no records until there the next day is available
         # this sucks
         # i need to implement some way to pass an empty times_df so that we can have a zero hour thing
+        #
+        
         try:
             basis = basis_orig.copy()
         except:
@@ -46,6 +50,40 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
             basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
             basis = basis_orig.copy()
+         '''   
+        
+        # on 7/24 I started having troubles with timeclock when no records where found.
+        # it looks like the same issue as from 5/28, and I think it is
+        # but the TimeClock_Group_hours was not failing correctly?
+        # i'm going to loop for 2 days to try and move up the start date
+        #
+        if isinstance(basis_orig, bool):
+            print('The type of basis_orig is a bool! This only happens when the call to basis_orig errors out')
+            print('when I implemented this (2024-07-24), it was happeneing bc the timeclock was returning no records and still trying to click the disabled download button')
+            for i in range(0,3):
+                start_dt_loop += datetime.timedelta(days=1)
+                if start_dt_loop > end_dt:
+                    # we are trying to get a start date that is after the provided end_dt!
+                    print(f"Value of start_dt_loop {start_dt_loop} exceeds the passed end date {end_dt}")
+                    break
+                
+                start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
+                print('Getting Timeclock for: {}'.format(start_date_loop))
+                basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
+    
+                
+                if isinstance(basis_orig, bool):
+                    continue
+                else:
+                    # get out of the loop if we get a dict(?)
+                    break
+            
+        try:
+            basis = basis_orig.copy()
+        except:
+            print('Could not get the basis from basis_orig, because it was not a copyable type')
+            
+            
             
         ei = basis['Employee Information']
         for i in range(1, (end_dt-start_dt).days):

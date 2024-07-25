@@ -166,9 +166,16 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
     while count < 4:
         try:
             count += 1
-            downloadedSuccessful = download_group_hours(start_date, end_date, download_folder)
+            timeclocker = download_group_hours(start_date, end_date, download_folder)
+            # downloadedSuccessful.startup()
+            # downloadedSuccessful.navigate()
+            downloadedSuccessful = timeclocker.downloader()
+            if not downloadedSuccessful:
+                return False
+            
+            # deprecated
             if downloadedSuccessful is None:
-                return None
+                return False
             
             # Grab all HTML files in downloads
             list_of_htmls = glob.glob(download_folder +"*.html") # * means all if need specific format then *.csv
@@ -246,10 +253,10 @@ def get_information_for_clock_based_email_reports(start_date, end_date, exclude_
     if ei is None:
         ei = get_ei_csv_downloaded(exclude_terminated, download_folder)
     
-    if times_df is None:
-        return None
-    else:
+    if isinstance(times_df, pd.DataFrame) or isinstance(times_df, pd.Series):
         return clean_up_this_gunk(times_df, ei)
+    else:
+        return False
     
     
 
