@@ -15,10 +15,11 @@ from selenium.webdriver.common.by import By
 from TimeClock_Credentials import returnTimeClockCredentials
 # from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
+import os
 
 
 
-def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwilson\\Downloads", exclude_terminated=True):
+def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwilson\\Downloads\\EmployeeInformation", exclude_terminated=True):
     # from datetime import date, timedelta
     # today = date.today()
     # the_day = today - timedelta(days = 0)
@@ -28,8 +29,11 @@ def download_most_current_employee_location_csv(download_folder="C:\\Users\\cwil
     service = Service()
     driver = webdriver.Chrome(service=service, options = setting_chrome_options())
     
- 
-    enable_download(driver, download_folder)
+    if os.path.exists(download_folder):
+        enable_download(driver, download_folder)
+    else:
+        os.makedirs(download_folder)
+        enable_download(driver, download_folder)
     
     
     # navigate to timeclock website
