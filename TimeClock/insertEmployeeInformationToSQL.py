@@ -8,19 +8,13 @@ Created on Thu Jul 25 15:39:29 2024
 ''' Daily download of the employee information '''
 
 
-from sqlalchemy import create_engine, text
+from sqlalchemy import text
 import pandas as pd
-from sqlCredentials import returnSqlCredentials
 from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
+from initSQLConnectionEngine import yield_SQL_engine
 
 
-
-sql_creds = returnSqlCredentials()
-username = sql_creds['username']
-password = sql_creds['password']
-
-
-engine = create_engine(f'postgresql://{username}:{password}@localhost:5432/postgres')
+engine = yield_SQL_engine()
 
 def print_count_results(schema, engine, suffix_text):
     with engine.connect() as connection:
