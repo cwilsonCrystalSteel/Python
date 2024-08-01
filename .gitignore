@@ -25,3 +25,4 @@ read-daily-fab-c5ac66b791a1.json
 TimeClockCredentials.txt
 *.pyc
 sqlCredentials.txt
+/TimeClock/TimeClockCredentials.txt
