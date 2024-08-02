@@ -149,7 +149,7 @@ class download_group_hours():
             print('Uh oh! we found text saying "No Records Found" for the search criteria... Adios!')
             # self.driver.quit()
             printwait('Closing browser', 2) 
-            self.driver.close()
+            self.driver.quit()
             return False
         except:
             print('Good news, we did not find the text saying "No records found"')    
@@ -163,7 +163,7 @@ class download_group_hours():
             # I think we only see this value if it is true
             if self.download1aDisabled is not None:
                 print('we found that the attribute of the download1 box was DISABLED... Adios!')
-                self.driver.close()
+                self.driver.quit()
                 return False
         except:
             print('Good news, we found the download button but did not see the disabled tag')
@@ -189,7 +189,7 @@ class download_group_hours():
                 print(f"Attribute of self.download1b (in find_download): {self.download1bDisabled}")
                 
                 if self.download1bDisabled is not None:
-                    self.driver.close()
+                    self.driver.quit()
                     return False
                 
                 

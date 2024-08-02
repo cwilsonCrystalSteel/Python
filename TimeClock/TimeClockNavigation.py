@@ -16,7 +16,7 @@ from TimeClock_Credentials import returnTimeClockCredentials
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, ElementNotInteractableException
 
 
 def printwait(string='', waittime=0):
@@ -100,47 +100,84 @@ class TimeClockBase():
             
         print('Driver created...')
         
+        
+        
+        
+        
+        
     def kill(self):
+        print('Attempting to quit the browser...')
         self.driver.quit()
+        # self.driver.close()
+        print('Quitting browser completed!')
         
     def splashPage(self):
+        print('Navigating to splashpage!')
         # navigate to timeclock website
         self.driver.get("https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509")
+        print('Splashpage reached...')
         
             
     def startupBrowser(self):
-
-                
-
-        
+        self.splashPage()
         # printwait('Loading website', 6)
         try:
-            self.userid = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'LogOnUserId')))
+            self.usernameInput = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'LogOnUserId')))
             print('The login page was loaded in a timely manner - username box')
         except TimeoutException:
             print('Loading the login page took too long!')
             
         try:
-            self.password = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'LogOnUserPassword')))
-            print('The login page was loaded in a timely manner - password box')
+            self.passwordInput = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.ID, 'LogOnUserPassword')))
+            print('The login page was loaded in a timely manner - passwordInput box')
         except TimeoutException:
-            print('Loading the login page took too long!')      
+            print('Loading the login page took too long!')     
+            
+    def loginInteractable(self):
         
+        try:
+            self.usernameInput = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'LogOnUserId')))
+            print('The login page usernameInput box is clickable')
+        except TimeoutException:
+            print('Loading the login page usernameInput is not clickable!')  
+            
+        try:
+            self.passwordInput = WebDriverWait(self.driver, 10).until(EC.element_to_be_clickable((By.ID, 'LogOnUserPassword')))
+            print('The login page passwordInput box is clickable')
+        except TimeoutException:
+            print('Loading the login page passwordInput is not clickable!')         
         
     def login(self):
-        # userid = self.driver.find_element(By.ID, 'LogOnUserId')
+        # try and remove anything in the text boxes
+        delete_range(self.usernameInput)
+        delete_range(self.passwordInput)
+        
+        # usernameInput = self.driver.find_element(By.ID, 'LogOnUserId')
         # get the username & password dict
-        self.userid.send_keys(self.creds['username'])
+        self.usernameInput.send_keys(self.creds['username'])
         printwait('Entered Username', 0)
         # Find the password field
         # password = self.driver.find_element(By.ID, 'LogOnUserPassword')
         # Submit password
-        self.password.send_keys(self.creds['password'])
+        self.passwordInput.send_keys(self.creds['password'])
         printwait('Entered Password', 0)
         # Press 'enter' to login
-        self.password.send_keys(Keys.RETURN)
+        self.passwordInput.send_keys(Keys.RETURN)
         
-    def openTabularMenu_InitiateSearch(self, searchText=''):
+        
+    def tryLogin(self):
+        
+        try:
+            self.loginInteractable()
+            self.login()
+        except ElementNotInteractableException:
+            print('Elements of login() are not Interactable at this time, retrying startup..')
+            self.startupBrowser()
+        
+    def openTabularMenu(self):
+        
+        if not self.driver.current_url == 'https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509':
+            Exception('Cannot begin to open Tabular Menu b/c the URL is not correct')
         
         try:
             self.tabularMenu = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'HeaderMenuIcon')))
@@ -151,6 +188,12 @@ class TimeClockBase():
         # self.tabularmenu = self.driver.find_element(By.CLASS_NAME, 'HeaderMenuIcon')
         # printwait('Found Tabular menu', 3) 
         self.tabularMenu.click()
+        
+        
+    def searchFromTabularMenu(self, searchText=''):
+        # group hours:              searchText = 'Group Hours'
+        # employee information      searchText = 'export'
+        
         
         try:
             self.tabularMenuSearchBox = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'SearchInput')))
@@ -163,24 +206,47 @@ class TimeClockBase():
         # self.searchbox = self.driver.find_element(By.CLASS_NAME, 'SearchInput')
         self.tabularMenuSearchBox.send_keys(searchText)
         self.tabularMenuSearchBox.send_keys(Keys.RETURN)
-        printwait('Searched "Group Hours"', 0) 
+        printwait(f'Searched "{searchText}"', 0) 
+        
+    def clickTabularMenuSearchResults(self, findText=''):
+        # group hours:              findText = 'Hours > Group Hours'
+        # employee information:     findText = 'Tools > Export'
+        
+        self.clickTabularMenuSearchXPATH = f"//*[contains(text(), '{findText}')]"
+        
+        print(f'Attempting to find by.XPATH: {self.clickTabularMenuSearchXPATH}')
+        
+        try:
+            self.targetedItem = WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.clickTabularMenuSearchXPATH)))
+            print(f'Found {findText}')
+        except TimeoutException:
+            print(f'Timeout Exception for locating {findText}') 
+            
+        # find group hours link
+        # self.targetedItem = self.driver.find_element(By.XPATH, "//*[contains(text(), '{findText}')]")
+        self.targetedItem.click()
+        printwait(f'Clicked "{findText}"', 0)
+        
+        
+    # def employeeLocationFinale(self):
         
         
         
         
-        
-        
-        
-x = TimeClockBase(headless=True)     
-x.splashPage()  
+x = TimeClockBase(headless=False)     
 x.startupBrowser()
-x.login()
-x.openTabularMenu_InitiateSearch('Group Hours')
+x.tryLogin()
+x.openTabularMenu()
+x.searchFromTabularMenu('export')
+x.clickTabularMenuSearchResults('Tools > Export')
+# x.searchFromTabularMenu('Group Hours')
+# x.clickTabularMenuSearchResults('Hours > Group Hours')
+
 
   #%%      
-        
+x.kill()        
 
-        
+    
         
         
         
