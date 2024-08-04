@@ -8,9 +8,12 @@ Created on Mon Mar  6 19:35:31 2023
 # this one will pull the timeclock data
 import sys
 sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-import pandas as pd
-from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
+
+from TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
+import pandas as pd
 import numpy as np
 
 state = 'TN'
@@ -62,7 +65,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             print('when I implemented this (2024-07-24), it was happeneing bc the timeclock was returning no records and still trying to click the disabled download button')
             for i in range(0,3):
                 start_dt_loop += datetime.timedelta(days=1)
-                if start_dt_loop > end_dt:
+                if start_dt_loop >= end_dt:
                     # we are trying to get a start date that is after the provided end_dt!
                     print(f"Value of start_dt_loop {start_dt_loop} exceeds the passed end date {end_dt}")
                     break

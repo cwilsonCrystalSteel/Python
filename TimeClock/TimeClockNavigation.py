@@ -107,7 +107,7 @@ class TimeClockBase():
         if self.fullscreen:  
             print('Browser will be FULLSCREEN')
             # full screen cus this website sucks
-            self.driver.maximize_window()
+            self.maximizeWindow()
             
         
             
@@ -120,6 +120,10 @@ class TimeClockBase():
             os.makedirs(download_folder)
             enable_download(self.driver, self.download_folder)
    
+    
+    def maximizeWindow(self):
+        self.driver.maximize_window()
+    
     def zoom(self, percentage):
         self.percentage = percentage
         print(f'Browser will be at {self.percentage}% ZOOM')
@@ -284,19 +288,24 @@ class TimeClockBase():
         print(f"Searching for {fileType} with text {searchText} in {self.download_folder}")
         endTime = time.time() + waitTime
         while True:
-            
-            self.listOfFileTypes = glob.glob(self.download_folder + fileType) # * means all if need specific format then *.csv
-            # Create a list with only the states we want to look at
-            self.foundFiles = [f for f in self.listOfFileTypes if searchText in f]
-            # Get the most recent file for that state
-            self.newestFile = max(self.foundFiles, key=os.path.getctime)
-            # get the file creation time as a datetime
-            self.newestFileTime = datetime.datetime.fromtimestamp(os.path.getctime(self.newestFile))
-            
-            if self.newestFileTime > self.startTime:
-                print(f'File found: {self.newestFile}')
-                return self.newestFile
-            
+            try:
+                self.listOfFileTypes = glob.glob(self.download_folder + fileType) # * means all if need specific format then *.csv
+                # Create a list with only the states we want to look at
+                self.foundFiles = [f for f in self.listOfFileTypes if searchText in f]
+                # Get the most recent file for that state
+                self.newestFile = max(self.foundFiles, key=os.path.getctime)
+                # get the file creation time as a datetime
+                self.newestFileTime = datetime.datetime.fromtimestamp(os.path.getctime(self.newestFile))
+                
+                if self.newestFileTime > self.startTime:
+                    print(f'File found: {self.newestFile}')
+                    return self.newestFile
+            except Exception as e:
+                # mostly this will just be 'max() arg is an empty sequence' 
+                # becuase the file will not be downloaded yet
+                # print(e)
+                pass
+                
             if time.time() > endTime:
                 raise Exception('No reasonable download was found...')
     
@@ -381,7 +390,9 @@ class TimeClockBase():
             print('Good news, we did not find the text saying "No records found"')    
     
     
-        self.zoom(50)
+        # self.zoom(50)
+        
+        self.maximizeWindow()
     
         time.sleep(1)
     
@@ -392,34 +403,75 @@ class TimeClockBase():
         
         '''
         
-        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
+        # self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
+        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
             raise Exception('menuDownloadButtonDisabled')
 
 
-        
-        # self.menuDownloadButton.click()
-        self.menuDownloadButton.send_keys(Keys.RETURN)
-        
-        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
-        self.processingPopupDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
-        # self.processingPopupDownloadButton = self.driver.find_element(By.CLASS_NAME, "DownloadMenu")
-        self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
-        if self.processingPopupDownloadButton is not None:
-            raise Exception('processingPopupDownloadButtonDisabled')
+        endTime = time.time() + 5
+        while True:
+            try:
+                self.menuDownloadButton.click()
+                print('We were able to press the menuDownloadButton')
+                break
+            except Exception as e:
+                print(e)
+                
             
-        self.processingPopupDownloadButton.click()
-        print('Processing Popup Download Button Clicked!')
+            if time.time() > endTime:
+                raise Exception('We could not press the menuDownloadButton')
+            
+        # self.menuDownloadButton.click()
+        # self.menuDownloadButton.send_keys(Keys.RETURN)
+        
         
         # self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
         self.htmlOption = self.driver.find_elements(By.XPATH,  "//*[contains(text(), 'HTML')]")[0]
         self.htmlOption.click()
         printwait('Clicked HTML download type', 0)
         
+        
+        
+        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
+        # self.processingPopupDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+
+        endTime = time.time() + 15
+        while True:
+            try:
+                self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+                self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
+                if self.processingPopupDownloadButtonDisabled is not None:
+                    raise Exception('processingPopupDownloadButtonDisabled')    
+                else:
+                    self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+                    self.processingPopupDownloadButton.click()
+                    print('Processing Popup Download Button Clicked!')                    
+                    break
+                
+            except Exception as e:
+                print(e)
+                
+            
+            if time.time() > endTime:
+                raise Exception('We could not press the processingPopupDownloadButtonDisabled')
+                
+                
+        # self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
+        # if self.processingPopupDownloadButton is not None:
+        #     raise Exception('processingPopupDownloadButtonDisabled')
+            
+        # self.processingPopupDownloadButton.click()
+        # print('Processing Popup Download Button Clicked!')
+        
+        
+        # self.download2 = self.driver.find_element(By.XPATH, "//input[@value='Download']")
+        
+        
             
         
-        
+'''        
 x = TimeClockBase(headless=False)     
 x.startupBrowser()
 x.tryLogin()
@@ -431,14 +483,15 @@ x.openTabularMenu()
 
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')
-x.groupHoursFinale('08/01/2024')
-# filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
+x.groupHoursFinale('08/04/2024')
+filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
+print(filepath)
 
 
   #%%      
 x.kill()        
 
-    
+'''
         
         
         

@@ -21,6 +21,8 @@ now = datetime.datetime.now()
 
 
 now_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
+
+# now_dt += datetime.timedelta(days=-7)
 start_dt = now_dt
 # get start_dt as most recent monday
 while start_dt.weekday() != 6:
@@ -107,3 +109,5 @@ predictor = None
 #     gsheet_dict.update(fablisting_summary)
 #     gsheet_dict.update(timeclock_summary)    
 #     post_observation(gsheet_dict, isReal=True, sheet_name='Day Summary')
+
+quit()
