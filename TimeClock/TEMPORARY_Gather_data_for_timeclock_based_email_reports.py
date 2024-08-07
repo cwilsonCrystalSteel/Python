@@ -25,12 +25,13 @@ from TimeClock_Tools_Employee_Location import download_most_current_employee_loc
 from Read_Group_hours_HTML import new_output_each_clock_entry_job_and_costcode, new_and_imporved_group_hours_html_reader
 import json
 from TimeClockNavigation import TimeClockBase
-
+from pullEmployeeInformationFromSQL import return_sql_ei
 
 
 
 def clean_up_this_gunk(times_df, ei):
-
+    
+    
     # rename the columns b/c it makes it easier to work with
     ei = ei.rename(columns={'<NUMBER>':'ID',
                      '<FIRSTNAME>':'First',
@@ -39,7 +40,18 @@ def clean_up_this_gunk(times_df, ei):
                      '<CLASS>':'Shift',
                      '<SCHEDULEGROUP>':'Productive',
                      '<DEPARTMENT>':'Department'})
-    
+
+    ei = ei.rename(columns={'employeeidnumber':'ID',
+                     'firstname':'First',
+                     'lastname':'Last',
+                     'location':'Location',
+                     'classshift':'Shift',
+                     'schedulegroup':'Productive',
+                     'department':'Department'})    
+        
+        
+        
+    print('')
     # combine the name fields to a combined single field    
     ei['Name'] = ei['First'] + ' '+ ei['Last']  
     # get rid of any duplicate names & keep the last entry with the newest ID number
@@ -145,7 +157,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             x.clickTabularMenuSearchResults('Hours > Group Hours')
             try:
                 x.groupHoursFinale(start_date)
-                filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
+                filepath = x.retrieveDownloadedFile(15, '*.html', 'Hours')
                 print(filepath)
             except Exception as e:
                 print(f'Could not complete download of {start_date} because {e}')
@@ -230,6 +242,14 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
 
 
 def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilson\\downloads\\EmployeeInformation\\"):
+    
+    try:
+        ei = return_sql_ei()
+        return ei
+    except:
+        print('Could not retrieve ei from SQL')
+    
+    
     
     today = datetime.datetime.today().date()
     # latest_csv = "c://users//cwilson//downloads//f_this.csv"
