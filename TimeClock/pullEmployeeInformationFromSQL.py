@@ -12,30 +12,34 @@ from initSQLConnectionEngine import yield_SQL_engine
 import datetime
 
 
-engine = yield_SQL_engine()
-metadata = MetaData()
-log_table = Table('employeeinformation_log', metadata, autoload_with=engine, schema='dbo')
-
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# first up, we need to check for when the last completed merge proc was performed
-#select max(insertedat) from dbo.employeeinfomration_log
-# stmt = select()
-mostRecentMerge = session.query(func.max(log_table.c.insertedat)).scalar()
-
-# use this to check if the last merge was within valid time frame
-(datetime.datetime.now() - mostRecentMerge).seconds
-
-
-employee_table = Table('employeeinformation', metadata, autoload_with=engine, schema='dbo')
-query = session.query(employee_table)
-result = query.all()
-
-# Convert the query result to a list of dictionaries
-data = [row._asdict() for row in result]
-
-# Create a DataFrame from the list of dictionaries
-df = pd.DataFrame(data)
+def return_sql_ei():
+    engine = yield_SQL_engine()
+    metadata = MetaData()
+    log_table = Table('employeeinformation_log', metadata, autoload_with=engine, schema='dbo')
+    
+    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    
+    # first up, we need to check for when the last completed merge proc was performed
+    #select max(insertedat) from dbo.employeeinfomration_log
+    # stmt = select()
+    mostRecentMerge = session.query(func.max(log_table.c.insertedat)).scalar()
+    
+    # use this to check if the last merge was within valid time frame
+    if (datetime.datetime.now() - mostRecentMerge).seconds > 24*60*60*2: #greater than 2 days old:
+        raise Exception('EmployeeInformationOlderThan2days')
+    
+    
+    employee_table = Table('employeeinformation', metadata, autoload_with=engine, schema='dbo')
+    query = session.query(employee_table)
+    result = query.all()
+    
+    # Convert the query result to a list of dictionaries
+    data = [row._asdict() for row in result]
+    
+    # Create a DataFrame from the list of dictionaries
+    df = pd.DataFrame(data)
+    
+    return df
 
