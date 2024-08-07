@@ -246,14 +246,18 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
             x.clickTabularMenuSearchResults('Tools > Export')
             try:
                 x.employeeLocationFinale()
-                filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
+                filepath = x.retrieveDownloadedFile(20, '*.csv', 'Employee Information')
                 print(filepath)
             except Exception as e:
                 print(f'Could not complete download because {e}')
                 
+                
+                
             ei = pd.read_csv(filepath)
             # Delete the Employee Information CSV file from the downloads folder
             os.remove(filepath)  
+            # be done with the browser 
+            x.kill()
             
             return ei
             
