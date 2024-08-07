@@ -10,8 +10,10 @@ Created on Thu Jul 25 15:39:29 2024
 
 from sqlalchemy import text
 import pandas as pd
-from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
+from TimeClockNavigation import TimeClockBase
 from initSQLConnectionEngine import yield_SQL_engine
+from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
+
 
 
 engine = yield_SQL_engine()
@@ -27,8 +29,22 @@ def print_count_results(schema, engine, suffix_text):
 
 def import_employee_information_to_SQL():
 
-    ei = get_ei_csv_downloaded(False)
     
+
+    x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)     
+    x.startupBrowser()
+    x.tryLogin()
+    x.openTabularMenu()
+    x.searchFromTabularMenu('export')
+    x.clickTabularMenuSearchResults('Tools > Export')
+    try:
+        x.employeeLocationFinale()
+        filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
+        print(filepath)
+    except Exception as e:
+        print(f'Could not complete download because {e}')
+        
+    ei = pd.read_csv(filepath)
     
     # get count of table before insert --> should be 0
     print_count_results('live', engine, 'before importing')
