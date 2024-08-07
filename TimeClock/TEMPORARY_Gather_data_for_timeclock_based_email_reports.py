@@ -229,7 +229,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
     return False
 
 
-def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilson\\downloads\\"):
+def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilson\\downloads\\EmployeeInformation\\"):
     
     today = datetime.datetime.today().date()
     # latest_csv = "c://users//cwilson//downloads//f_this.csv"

@@ -58,18 +58,20 @@ def newest_creation_time(download_folder):
 
 
 
-def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, checkClickable=True, timeoutLimit=10):
+def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, checkClickable=True, timeoutLimit=10, verbosity=0):
     if checkPresence:
         try:
             elem = WebDriverWait(driver, timeoutLimit).until(EC.presence_of_element_located(findElementArg))
-            print(f'The element is present:   {elemOutputName}')
+            if verbosity >= 2:
+                print(f'The element is present:   {elemOutputName}')
         except TimeoutException:
             print(f'Timeout Error for presence: {elemOutputName}')  
     
     if checkClickable:
         try:
             elem = WebDriverWait(driver, timeoutLimit).until(EC.element_to_be_clickable(findElementArg))
-            print(f'The element is clickable: {elemOutputName}')
+            if verbosity >= 2:
+                print(f'The element is clickable: {elemOutputName}')
         except TimeoutException:
             print(f'Timeout Error for clickability: {elemOutputName}')  
             
@@ -80,6 +82,12 @@ def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, 
 #%%
 class TimeClockBase():
     def __init__(self, download_folder='c:\\users\\cwilson\\downloads\\', headless=True, fullscreen=False):
+        self.verbosity = 1
+        '''
+        verbosity = 0: only get messages about browser starting & download 
+        verbosity = 1: get text on actions being clicked / strings entered / etc.
+        verbosity = 2: get text on all element validation efforts plus verbosity = 1
+        '''
         
         self.creds = returnTimeClockCredentials()
         self.download_folder = download_folder
@@ -120,13 +128,16 @@ class TimeClockBase():
             os.makedirs(download_folder)
             enable_download(self.driver, self.download_folder)
    
-    
+    def printverbosity(self, string):
+        if self.verbosity >= 1:
+            print(string)
+   
     def maximizeWindow(self):
         self.driver.maximize_window()
     
     def zoom(self, percentage):
         self.percentage = percentage
-        print(f'Browser will be at {self.percentage}% ZOOM')
+        self.printverbosity(f'Browser will be at {self.percentage}% ZOOM')
         self.driver.execute_script(f"document.body.style.zoom='{self.percentage}%'")    
        
     def kill(self):
@@ -136,17 +147,17 @@ class TimeClockBase():
         print('Quitting browser completed!')
         
     def splashPage(self):
-        print('Navigating to splashpage!')
+        self.printverbosity('Navigating to splashpage!')
         # navigate to timeclock website
         self.driver.get("https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509")
-        print('Splashpage reached...')
+        self.printverbosity('Splashpage reached...')
         
             
     def startupBrowser(self):
         self.splashPage()
         
-        self.usernameInput = validateElement(self.driver, (By.ID, 'LogOnUserId'), 'usernameInput', checkPresence=True, checkClickable=True)
-        self.passwordInput = validateElement(self.driver, (By.ID, 'LogOnUserPassword'), 'passwordInput', checkPresence=True, checkClickable=True)
+        self.usernameInput = validateElement(self.driver, (By.ID, 'LogOnUserId'), 'usernameInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
+        self.passwordInput = validateElement(self.driver, (By.ID, 'LogOnUserPassword'), 'passwordInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
             
         
     def login(self):
@@ -156,12 +167,12 @@ class TimeClockBase():
         
         # enter the username
         self.usernameInput.send_keys(self.creds['username'])
-        print('Entered Username')
+        self.printverbosity('Entered Username')
         
         
         # enter password
         self.passwordInput.send_keys(self.creds['password'])
-        print('Entered Password')
+        self.printverbosity('Entered Password')
         
         # Press 'enter' to login
         self.passwordInput.send_keys(Keys.RETURN)
@@ -180,23 +191,23 @@ class TimeClockBase():
         if not self.driver.current_url == 'https://136509.tcplusondemand.com/app/manager/#/ManagerLogOn/136509':
             Exception('Cannot begin to open Tabular Menu b/c the URL is not correct')
         
-        self.tabularMenu = validateElement(self.driver, (By.CLASS_NAME, 'HeaderMenuIcon'), 'tabularMenu', checkPresence=True, checkClickable=True)
+        self.tabularMenu = validateElement(self.driver, (By.CLASS_NAME, 'HeaderMenuIcon'), 'tabularMenu', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         
         # click the tabular Menu
         self.tabularMenu.click()
-        print('Tabular Menu Clicked on...')
+        self.printverbosity('Tabular Menu Clicked on...')
         
         
     def searchFromTabularMenu(self, searchText=''):
         # group hours:              searchText = 'Group Hours'
         # employee information      searchText = 'export'
         
-        self.tabularMenuSearchBox = validateElement(self.driver, (By.CLASS_NAME, 'SearchInput'), 'tabularMenuSearchBox', checkPresence=True, checkClickable=True)
+        self.tabularMenuSearchBox = validateElement(self.driver, (By.CLASS_NAME, 'SearchInput'), 'tabularMenuSearchBox', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         
         
         self.tabularMenuSearchBox.send_keys(searchText)
         self.tabularMenuSearchBox.send_keys(Keys.RETURN)
-        print(f'Searched "{searchText}"') 
+        self.printverbosity(f'Searched "{searchText}"') 
         
     def clickTabularMenuSearchResults(self, findText=''):
         # group hours:              findText = 'Hours > Group Hours'
@@ -206,58 +217,58 @@ class TimeClockBase():
         
         # print(f'Attempting to find by.XPATH: {self.clickTabularMenuSearchXPATH}')
         
-        self.targetedItem = validateElement(self.driver, (By.XPATH, self.clickTabularMenuSearchXPATH), findText, checkPresence=True, checkClickable=True)
+        self.targetedItem = validateElement(self.driver, (By.XPATH, self.clickTabularMenuSearchXPATH), findText, checkPresence=True, checkClickable=True, verbosity=self.verbosity)
             
         # Click on the desired Group Hours or Employee Information
         self.targetedItem.click()
-        print(f'Clicked "{findText}"')
+        self.printverbosity(f'Clicked "{findText}"')
     
         
     
     def includeTerminatedSuspendedEmployees(self):
-        self.employeeFiltersMenu = validateElement(self.driver, (By.XPATH, "//input[@value='Employee Filter']"), 'employeeFiltersMenu', checkPresence=True, checkClickable=True)
+        self.employeeFiltersMenu = validateElement(self.driver, (By.XPATH, "//input[@value='Employee Filter']"), 'employeeFiltersMenu', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.employeeFiltersMenu.click()
-        print('Found employee filter button')
+        self.printverbosity('Found employee filter button')
         
-        self.excludeSuspendedButton = validateElement(self.driver, (By.XPATH, "//input[@id='chkExcludeSuspended']"), 'excludeSuspendedButton', checkPresence=True, checkClickable=True)              
+        self.excludeSuspendedButton = validateElement(self.driver, (By.XPATH, "//input[@id='chkExcludeSuspended']"), 'excludeSuspendedButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)              
         # is_selected() = True if the box is checked to exclude suspended employees
         if self.excludeSuspendedButton.is_selected():
             self.excludeSuspendedButton.click()
-            print('Un-checked the Exclude Suspended checkbox')
+            self.printverbosity('Un-checked the Exclude Suspended checkbox')
         
         
-        self.excludeTerminatedButton = validateElement(self.driver, (By.XPATH, "//input[@id='chkExcludeTerminated']"), 'excludeTerminatedButton', checkPresence=True, checkClickable=True)               
+        self.excludeTerminatedButton = validateElement(self.driver, (By.XPATH, "//input[@id='chkExcludeTerminated']"), 'excludeTerminatedButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         if self.excludeTerminatedButton.is_selected():
             self.excludeTerminatedButton.click()
-            print('Un-checked the Exclude Terminated checkbox')
+            self.printverbosity('Un-checked the Exclude Terminated checkbox')
     
 
-        self.submitFilterButton = validateElement(self.driver, (By.XPATH, "//input[@value='Filter']"), 'submitExclusionsFilterButton', checkPresence=True, checkClickable=True)               
+        self.submitFilterButton = validateElement(self.driver, (By.XPATH, "//input[@value='Filter']"), 'submitExclusionsFilterButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         self.submitFilterButton.click()
-        print('Filtered the suspended & terminated')
+        self.printverbosity('Filtered the suspended & terminated')
         
         
     def employeeLocationFinale(self, exclude_terminated=False):
         # we want a time to base our download window from
         self.startTime = datetime.datetime.now()
         
-        self.exportType = validateElement(self.driver, (By.ID, 'selExportType'), 'exportType', checkPresence=True, checkClickable=True)
+        self.exportType = validateElement(self.driver, (By.ID, 'selExportType'), 'exportType', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         
         # creates a selectable(?) from the dropdown
         selectedExportType = Select(self.exportType)
         # this is much better approach then typing in the text and hoping for the best
         selectedExportType.select_by_visible_text('Employee Information')
-        print('Found Export Type: Employee Information')
+        self.printverbosity('Found Export Type: Employee Information')
         
         # Navigate to Export Templates
-        self.exportTemplatesDropdown = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'Export Templates')]"), 'exportTemplatesDropdown', checkPresence=True, checkClickable=True)
+        self.exportTemplatesDropdown = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'Export Templates')]"), 'exportTemplatesDropdown', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.exportTemplatesDropdown.click()
-        print('Found Export Templates')
+        self.printverbosity('Found Export Templates')
         
         # clicks on my custom report called "emplyee locations"
-        self.employeeLocationsDropdownItem = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'employee location')]"), 'employeeLocationsDropdownItem', checkPresence=True, checkClickable=True)
+        self.employeeLocationsDropdownItem = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'employee location')]"), 'employeeLocationsDropdownItem', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.employeeLocationsDropdownItem.click()
-        print('Found custom tempalte: employee locations')
+        self.printverbosity('Found custom tempalte: employee locations')
         
         # termianted & suspended employees are automatically excluded
         if exclude_terminated == False:
@@ -266,17 +277,17 @@ class TimeClockBase():
            
         
         
-        self.generateButton = validateElement(self.driver, (By.XPATH, "//input[@value='Generate']"), 'generateButton', checkPresence=True, checkClickable=True)               
+        self.generateButton = validateElement(self.driver, (By.XPATH, "//input[@value='Generate']"), 'generateButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         try:
             self.generateButton.click()
         except ElementClickInterceptedException:
             self.generatedButton.send_keys(Keys.TAB)
             self.generateButton.click()
-        print('Found Generate')
+        self.printverbosity('Found Generate')
         
-        self.downloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'downloadButton', checkPresence=True, checkClickable=True)               
+        self.downloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'downloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         self.downloadButton.click()
-        print('Began File Download')       
+        self.printverbosity('Began File Download')       
         
         
     def retrieveDownloadedFile(self, waitTime, fileType, searchText):
@@ -285,7 +296,7 @@ class TimeClockBase():
         # Employee Information:     fileType = '*.csv'
         #                           searchText = 'Employee Information'
         
-        print(f"Searching for {fileType} with text {searchText} in {self.download_folder}")
+        self.printverbosity(f"Searching for {fileType} with text {searchText} in {self.download_folder}")
         endTime = time.time() + waitTime
         while True:
             try:
@@ -312,7 +323,7 @@ class TimeClockBase():
                 
     def waitForProcessingPopup(self):
         # need to find the processing popup
-        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
+        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)               
         # then need to wait til its gone
         
         # give it 15 seconds or until the popup box is not available, just rapid fire check
@@ -321,7 +332,7 @@ class TimeClockBase():
             try:
                 self.processingPopupStillAvailable = self.driver.find_element(By.CLASS_NAME, 'ProgressIndicatorModal')
             except NoSuchElementException:
-                print('The processingPopup box has disappeared!')
+                self.printverbosity('The processingPopup box has disappeared!')
                 break
             
             if time.time() > endTime:
@@ -340,54 +351,46 @@ class TimeClockBase():
         
         
         # Find the stop date box
-        self.endDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodEnd'), 'endDateInput', checkPresence=True, checkClickable=True)               
+        self.endDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodEnd'), 'endDateInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         # find the start date box
-        self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True)               
+        self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         
         
         
         # Clear the field
         delete_range(self.endDateInput)
-        print('Deleted End Date')
+        self.printverbosity('Deleted End Date')
         # Enter in date
         self.endDateInput.send_keys(dateString)
-        print(f'Entered End Date: {dateString}')
-        # print('Entered End Date')
+        self.printverbosity(f'Entered End Date: {dateString}')
         
         
         delete_range(self.startDateInput)
-        print('Deleted Start Date')
+        self.printverbosity('Deleted Start Date')
         # Enter in date
-        self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True)               
+        self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         self.startDateInput.send_keys(dateString)
-        # self.startDateInput.send_keys(Keys.TAB)
-        # Find the start date box
-        # self.startDateInput = self.driver.find_element(By.NAME, 'dpPeriodStart')
-        # scroll to top of page b/c it didn't want to deal with the box without doing this 
-        # self.startDateInput.send_keys(Keys.CONTROL + Keys.HOME)
-        # Clear the field
-        print(f'Entered Start Date: {dateString}')
-        # print('Entered Start Date')
+        self.printverbosity(f'Entered Start Date: {dateString}')
 
         
      
-        self.updateButton = validateElement(self.driver, (By.XPATH, "//input[@value='Update']"), 'updateButton', checkPresence=True, checkClickable=True)               
+        self.updateButton = validateElement(self.driver, (By.XPATH, "//input[@value='Update']"), 'updateButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         # self.updateButton = self.driver.find_element(By.XPATH, "//input[@value='Update']")
         self.updateButton.click()
-        print('Clicked update button')
+        self.printverbosity('Clicked update button')
         
         self.waitForProcessingPopup()
         
         try:
-            self.noRecordsFoundText = validateElement(self.driver, (By.CLASS_NAME, 'NoDataListItem'), 'noRecordsFoundText', checkPresence=True, checkClickable=False)               
+            self.noRecordsFoundText = validateElement(self.driver, (By.CLASS_NAME, 'NoDataListItem'), 'noRecordsFoundText', checkPresence=True, checkClickable=False, verbosity=self.verbosity)               
             # if this works, then it will close the browser. If it does not, it will error and hit the exception
             # self.noRecordsFoundText = self.driver.find_element(By.CLASS_NAME, 'NoDataListItem')
-            print('Uh oh! we found text saying "No Records Found" for the search criteria...')
+            self.printverbosity('Uh oh! we found text saying "No Records Found" for the search criteria...')
             
             # throw excpetion if we find the no records
             raise Exception('NoRecordsFoundException')
         except:
-            print('Good news, we did not find the text saying "No records found"')    
+            self.printverbosity('Good news, we did not find the text saying "No records found"')    
     
     
         # self.zoom(50)
@@ -404,7 +407,7 @@ class TimeClockBase():
         '''
         
         # self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
-        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
+        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
             raise Exception('menuDownloadButtonDisabled')
@@ -414,7 +417,7 @@ class TimeClockBase():
         while True:
             try:
                 self.menuDownloadButton.click()
-                print('We were able to press the menuDownloadButton')
+                self.printverbosity('We were able to press the menuDownloadButton')
                 break
             except Exception as e:
                 print(e)
@@ -434,20 +437,20 @@ class TimeClockBase():
         
         
         
-        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
+        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)               
         # self.processingPopupDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
 
         endTime = time.time() + 15
         while True:
             try:
-                self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+                self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                 self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
                 if self.processingPopupDownloadButtonDisabled is not None:
                     raise Exception('processingPopupDownloadButtonDisabled')    
                 else:
-                    self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+                    self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                     self.processingPopupDownloadButton.click()
-                    print('Processing Popup Download Button Clicked!')                    
+                    self.printverbosity('Processing Popup Download Button Clicked!')                    
                     break
                 
             except Exception as e:
@@ -472,14 +475,15 @@ class TimeClockBase():
             
         
 '''        
-x = TimeClockBase(headless=False)     
+x = TimeClockBase(headless=False)  
+x.verbosity=2
 x.startupBrowser()
 x.tryLogin()
 x.openTabularMenu()
-# x.searchFromTabularMenu('export')
-# x.clickTabularMenuSearchResults('Tools > Export')
-# x.employeeLocationFinale()
-# filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
+x.searchFromTabularMenu('export')
+x.clickTabularMenuSearchResults('Tools > Export')
+x.employeeLocationFinale()
+filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
 
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')
