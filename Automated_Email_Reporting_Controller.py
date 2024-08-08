@@ -154,6 +154,8 @@ if yesterday.weekday() != 6:
     output_absent = output_absent_dict(absent)
     
     for state in output_absent.keys():
+        if state == 'EC':
+            continue
         if output_absent:
             # assign the recipients
             output_absent[state]['Recipients'] = state_recipients[state]
@@ -245,7 +247,7 @@ if yesterday.weekday() != 6:
         
 #         emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
 
-        
+ #%%       
     
 quit()
 
