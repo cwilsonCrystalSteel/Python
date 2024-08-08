@@ -10,12 +10,15 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
 sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 sys.path.append('c://users//cwilson//documents//python//Lots_schedule_calendar//')
+sys.path.append('c://users//cwilson//documents//python//TimeClock//')
 import pandas as pd
 import os
 import datetime
 import numpy as np
 import copy
-from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+from TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+
 from Automate_MDI import do_mdi, eva_vs_hpt
 from High_Indirect_Hours_Email_Report import summarize_by_direct_indirect
 from High_Indirect_Hours_Email_Report import output_absent_dict
