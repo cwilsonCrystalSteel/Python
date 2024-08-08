@@ -52,6 +52,8 @@ def clean_up_this_gunk(times_df, ei):
         
         
     print('')
+    # get active employees only for this 
+    ei = ei[ei['terminated'] == False]
     # combine the name fields to a combined single field    
     ei['Name'] = ei['First'] + ' '+ ei['Last']  
     # get rid of any duplicate names & keep the last entry with the newest ID number
@@ -242,7 +244,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
 
 
 def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilson\\downloads\\EmployeeInformation\\"):
-    
+    ''' try to get from sql first! '''
     try:
         ei = return_sql_ei()
         return ei
@@ -250,7 +252,7 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
         print('Could not retrieve ei from SQL')
     
     
-    
+    ''' cant get it from sql? use timeclock '''
     today = datetime.datetime.today().date()
     # latest_csv = "c://users//cwilson//downloads//f_this.csv"
     count = 0
