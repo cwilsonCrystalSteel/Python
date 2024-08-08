@@ -155,10 +155,10 @@ def return_output_dictionary(filtered_summary_df, detail_df):
         deets = output_dict[state]['Detail']
         big_deet = pd.DataFrame()
         for df in deets.values():
-            big_deet = pd.concat([big_deet, df])
+            big_deet = pd.concat([big_deet, df.reset_index(drop=True)])
             # adds 2 empty rows after data
-            big_deet.loc[len(big_deet)] = pd.Series(dtype=int)
-            big_deet.loc[len(big_deet)] = pd.Series(dtype=int)
+            big_deet.loc[big_deet.shape[0]] = pd.Series(dtype=int)
+            big_deet.loc[big_deet.shape[0]] = pd.Series(dtype=int)
             # big_deet = big_deet.append(df, ignore_index=True)
             # big_deet = pd.concat([big_deet, pd.Series(dtype=int)], axis=1)
             # big_deet = big_deet.append(pd.Series(dtype=int), ignore_index=True)
@@ -319,7 +319,7 @@ def email_sub80_results(date_str, state, state_dict):
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(filename)))
         msg.attach(part)
     
-    msg.attach(part1)
+    # msg.attach(part1)
     
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     create_message = {
@@ -399,7 +399,7 @@ def email_sub2lots_results(date_str, state, state_dict):
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(filename)))
         msg.attach(part)
 
-    msg.attach(part1)
+    # msg.attach(part1)
     
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     create_message = {
@@ -625,7 +625,7 @@ def email_mdi(date_str, state, state_dict, email_dict):
     msg.attach(part)
     
     
-    msg.attach(part1)
+    # msg.attach(part1)
     
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     create_message = {
@@ -745,7 +745,7 @@ def email_eva_vs_hpt(date_str, eva_vs_hpt_dict, email_recipients):
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(file_name)))
         msg.attach(part)
     
-    msg.attach(part1)
+    # msg.attach(part1)
     
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     create_message = {

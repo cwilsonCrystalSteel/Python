@@ -69,7 +69,8 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
 
 state_recipients = {'TN':['cwilson@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net'],
-                    'DE':['cwilson@crystalsteel.net'],}
+                    'DE':['cwilson@crystalsteel.net'],
+                    'EC':['cwilson@crystalsteel.net'],}
 eva_hpt_recipients = ['cwilson@crystalsteel.net']
 
 '''
@@ -154,8 +155,7 @@ if yesterday.weekday() != 6:
     output_absent = output_absent_dict(absent)
     
     for state in output_absent.keys():
-        if state == 'EC':
-            continue
+        
         if output_absent:
             # assign the recipients
             output_absent[state]['Recipients'] = state_recipients[state]
