@@ -133,6 +133,7 @@ class TimeClockBase():
             print(string)
    
     def maximizeWindow(self):
+        self.printverbosity('Maximizing window')
         self.driver.maximize_window()
     
     def zoom(self, percentage):
@@ -395,7 +396,7 @@ class TimeClockBase():
     
         # self.zoom(50)
         
-        self.maximizeWindow()
+        # self.maximizeWindow()
     
         time.sleep(1)
     
@@ -408,6 +409,17 @@ class TimeClockBase():
         
         # self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
         self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
+        # trying to get it into view
+        ''' attempt 1
+        1) scroll to the element -> not working b/c its not scrolled UP enough, but is far enough to the right
+        self.driver.execute_script("return arguments[0].scrollIntoView(true);", self.menuDownloadButton)
+        2) try and scroll up now -> this one is reseting the right scroll
+        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        
+        3) scroll to the right (x,y) and up
+        )       
+        '''
+        self.driver.execute_script("window.scrollBy(10000,-1000);")
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
             raise Exception('menuDownloadButtonDisabled')
@@ -476,14 +488,15 @@ class TimeClockBase():
         
 '''        
 x = TimeClockBase(headless=False)  
+# x.maximizeWindow()
 x.verbosity=2
 x.startupBrowser()
 x.tryLogin()
 x.openTabularMenu()
-x.searchFromTabularMenu('export')
-x.clickTabularMenuSearchResults('Tools > Export')
-x.employeeLocationFinale()
-filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
+# x.searchFromTabularMenu('export')
+# x.clickTabularMenuSearchResults('Tools > Export')
+# x.employeeLocationFinale()
+# filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
 
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')

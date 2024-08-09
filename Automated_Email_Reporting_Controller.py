@@ -52,10 +52,10 @@ yesterday_str = yesterday.strftime("%m/%d/%Y")
 
 # this is the actual email list 
 state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.net',
-                          'jgromadzki@crystalsteel.net','rhagins@crystalsteel.net'],
-                    'MD':['cwilson@crystalsteel.net',  'lduchesne@crystalsteel.net'],
-                    'DE':['cwilson@crystalsteel.net',  'vtalladivedula@crystalsteel.net',
-                          'jmixon@crystalsteel.net'],
+                          'jshade@crystalsteel.net','rhagins@crystalsteel.net'],
+                    'MD':['cwilson@crystalsteel.net',  'mmishler@crystalsteel.net',
+                          'jkeith@crystalsteel.net','jlaird@crystalsteel.net'],
+                    'DE':['cwilson@crystalsteel.net',  'jrodriguez@crystalsteel.net'],
                     'EC':['cwilson@crystalsteel.net']}
 
 eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
@@ -143,7 +143,8 @@ if os.path.exists(yesterday_lots_calendar_changelog):
                                           recipient_list = ['cwilson@crystalsteel.net', 'jturner@crystalsteel.net'])
     except:
         print('email_delivery_calendar_changelog failed')
-
+else:
+    print(f'Trying to update calendar changes but no file found {yesterday_lots_calendar_changelog}')
 
 
 # only run if yesterday was not sunday
@@ -205,7 +206,9 @@ if yesterday.weekday() != 6:
             # this funtion also adds rrichard@crystalsteel.net & emohamed@crystalsteel.net 
             email_mdi(yesterday_str, state, copy.deepcopy(mdi_dict), state_recipients)
     
-        
+# only send EVA once a week - so on sundays        
+else:
+    
     try:
         day_pcs = eva_vs_hpt(yesterday_str, yesterday_str)
         
@@ -220,8 +223,8 @@ if yesterday.weekday() != 6:
         # change it so you only run the sixty day timespan & then just portion out the 10 day & yesterday
         
         eva_vs_hpt_dict = {'Yesterday':day_pcs,
-                                '10 day':ten_day_lot,
-                                '60 day':sixty_day_job}
+                           '10 day':ten_day_lot,
+                           '60 day':sixty_day_job}
             
         email_eva_vs_hpt(yesterday_str, eva_vs_hpt_dict, eva_hpt_recipients)
         
