@@ -57,6 +57,8 @@ def import_employee_information_to_SQL():
         
     ei = pd.read_csv(filepath)
     
+    x.kill()
+    
     print_count_results('live', engine, 'before truncating')
     
     connection = engine.connect()
