@@ -8,7 +8,7 @@ Created on Thu Aug  8 15:40:04 2024
 
 from sqlalchemy import text
 import pandas as pd
-from TimeClockNavigation import TimeClockBase
+from TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours
 from initSQLConnectionEngine import yield_SQL_engine
 
 engine = yield_SQL_engine()
