@@ -149,7 +149,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
         try:
             count += 1
             
-            x = TimeClockBase(download_folder, headless=False)     
+            x = TimeClockBase(download_folder, offscreen=True)     
             x.startupBrowser()
             x.tryLogin()
             x.openTabularMenu()
