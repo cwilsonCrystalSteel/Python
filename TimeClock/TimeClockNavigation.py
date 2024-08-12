@@ -81,7 +81,7 @@ def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, 
 
 #%%
 class TimeClockBase():
-    def __init__(self, download_folder='c:\\users\\cwilson\\downloads\\', headless=True, fullscreen=False):
+    def __init__(self, download_folder='c:\\users\\cwilson\\downloads\\', headless=False, fullscreen=False, offscreen=False):
         self.verbosity = 1
         '''
         verbosity = 0: only get messages about browser starting & download 
@@ -93,6 +93,7 @@ class TimeClockBase():
         self.download_folder = download_folder
         self.headless = headless
         self.fullscreen = fullscreen
+        self.offscreen = offscreen
         
         if self.fullscreen and self.headless:
             Exception('Both options fullscreen & headless are enabled, only one can be enabled at a time')
@@ -110,6 +111,11 @@ class TimeClockBase():
         # init dirver with headless/options
         self.driver = webdriver.Chrome(service=self.service, options = options)
         print('Driver created...')
+        
+        if self.offscreen:
+            print('moving offscreen')
+            self.driver.set_window_position(-1920,0)
+            
             
         # go fullscreen - when not headless!
         if self.fullscreen:  
@@ -398,7 +404,7 @@ class TimeClockBase():
         
         # self.maximizeWindow()
     
-        time.sleep(1)
+        # time.sleep(1)
     
         ''' THIS IS WHERE I AM LEAVING OFF
         
@@ -408,24 +414,15 @@ class TimeClockBase():
         '''
         
         # self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
-        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
-        # trying to get it into view
-        ''' attempt 1
-        1) scroll to the element -> not working b/c its not scrolled UP enough, but is far enough to the right
-        self.driver.execute_script("return arguments[0].scrollIntoView(true);", self.menuDownloadButton)
-        2) try and scroll up now -> this one is reseting the right scroll
-        self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        
-        3) scroll to the right (x,y) and up
-        )       
-        '''
+        # trying to get it into view  
         self.driver.execute_script("window.scrollBy(10000,-1000);")
+        self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
             raise Exception('menuDownloadButtonDisabled')
 
 
-        endTime = time.time() + 5
+        endTime = time.time() + 15
         while True:
             try:
                 self.menuDownloadButton.click()
@@ -487,8 +484,9 @@ class TimeClockBase():
             
         
 '''        
-x = TimeClockBase(headless=False)  
+x = TimeClockBase(offscreen=True)  
 # x.maximizeWindow()
+# x.driver.set_window_position(-1920,0)
 x.verbosity=2
 x.startupBrowser()
 x.tryLogin()
