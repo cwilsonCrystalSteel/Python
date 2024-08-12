@@ -113,8 +113,7 @@ class TimeClockBase():
         print('Driver created...')
         
         if self.offscreen:
-            print('moving offscreen')
-            self.driver.set_window_position(-1920,0)
+            self.moveOffscreen()
             
             
         # go fullscreen - when not headless!
@@ -137,6 +136,14 @@ class TimeClockBase():
     def printverbosity(self, string):
         if self.verbosity >= 1:
             print(string)
+            
+    def moveOffscreen(self):
+        print('moving offscreen')
+        self.driver.set_window_position(-1920,0)
+        
+    def moveOnscreen(self):
+        print('moving onscreen')
+        self.driver.set_window_position(10,10)        
    
     def maximizeWindow(self):
         self.printverbosity('Maximizing window')
@@ -481,12 +488,43 @@ class TimeClockBase():
         # self.download2 = self.driver.find_element(By.XPATH, "//input[@value='Download']")
         
         
-            
+class TimeClockEZGroupHours(TimeClockBase):
+    def __init__(self, date_str):
+        
+        
+        self.date_str = date_str
+        
+    def get_filepath(self):
+        self.tcb = TimeClockBase(offscreen=True)
+        self.tcb.verbosity=1
+        self.tcb.startupBrowser()
+        self.tcb.tryLogin()
+        self.tcb.openTabularMenu()
+        self.tcb.searchFromTabularMenu('Group Hours')
+        self.tcb.clickTabularMenuSearchResults('Hours > Group Hours')
+        self.tcb.groupHoursFinale(self.date_str)
+        
+        self.filepath = self.tcb.retrieveDownloadedFile(10, '*.html', 'Hours')
+        
+        
+        
+        return self.filepath
+    
+    def kill(self):
+        self.tcb.kill()
+        
+        
+'''
+x = TimeClockEZGroupHours('08/04/2024')
+filepath = x.get_filepath()
+'''        
+        
+        
         
 '''        
 x = TimeClockBase(offscreen=True)  
 # x.maximizeWindow()
-# x.driver.set_window_position(-1920,0)
+# x.moveOnscreen()
 x.verbosity=2
 x.startupBrowser()
 x.tryLogin()
