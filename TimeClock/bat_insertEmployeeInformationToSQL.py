@@ -13,6 +13,12 @@ from insertEmployeeInformationToSQL import import_employee_information_to_SQL, d
 
 print('Running import_employee_information_to_SQL...')
 
-import_employee_information_to_SQL()
+try:
+    import_employee_information_to_SQL()
+except Exception as e:
+    print(f'Could not complete import_employee_information_to_SQL because of \n {e}')
 
-determine_termianted_employees()
+try:
+    determine_termianted_employees()
+except Exception as e:
+    print(f'Could not complete determine_termianted_employees because of \n {e}')

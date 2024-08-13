@@ -17,13 +17,13 @@ import datetime
 engine = yield_SQL_engine()
 
 
-def print_count_results(table_name, engine, suffix_text):
+def print_count_results(schema, table_name, engine, suffix_text):
     with engine.connect() as connection:
-        result = connection.execute(text(f"select count(*) from live.{table_name}"))
+        result = connection.execute(text(f"select count(*) from {schema}.{table_name}"))
         for row in result:
             continue
     
-    print(f"There are {row[0]} rows in live.{table_name} {suffix_text}")
+    print(f"There are {row[0]} rows in {schema}.{table_name} {suffix_text}")
     
 
 def getDatesTimesDF(date_str):
@@ -64,13 +64,18 @@ def insertRemediated(remediation_days=1):
     date_str = (now - datetime.timedelta(days=remediation_days)).strftime('%m/%d/%Y')
     times_df = getDatesTimesDF(date_str)
     
+    if times_df is None:
+        print(f'The date {date_str} returned results that wont be processed...')
+        return None
+    
+    
     table_name = 'clocktimes_remediation'
     
-    print_count_results(table_name, engine, 'before truncating')
+    print_count_results('live', table_name, engine, 'before truncating')
     connection = engine.connect()
     connection.execute(f"TRUNCATE TABLE live.{table_name}")
     connection.close()
-    print_count_results(table_name, engine, 'after truncating')
+    print_count_results('live', table_name, engine, 'after truncating')
     
     times_df = times_df.rename(columns={'Name':'name', 
                                         'Job Code':'jobcode',
@@ -78,13 +83,15 @@ def insertRemediated(remediation_days=1):
                                         'Hours': 'hours',
                                         'Time In': 'timein', 
                                         'Time Out': 'timeout'})
+    
     times_df['timeout'] = pd.to_datetime(times_df['timeout'], errors='coerce')
+    times_df['isclockedin'] = times_df['timeout'].isna()
     
     
     # NEED TO FIGURE OUT WHAT TO DO IF WE HAVE REMEDIATED HORUS THAT ARE CLOCKED IN #???
-    times_df = times_df[~times_df['timeout'].isna()]
+    # times_df = times_df[~times_df['timeout'].isna()]
     
-    times_df = times_df[~times_df['timein'].isna()]
+    # times_df = times_df[~times_df['timein'].isna()]
     
     times_df.loc[:,'remediationtype'] = remediation_days
     
@@ -92,25 +99,26 @@ def insertRemediated(remediation_days=1):
     
     times_df.to_sql(table_name, engine, schema='live', if_exists='append', index=False)
     
-    print_count_results(table_name, engine, 'after inserting')
+    print_count_results('live', table_name, engine, 'after inserting')
         
     
-    
+    print_count_results('dbo', 'clocktimes', engine, 'before merge proc') # should be 0
     
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    cursor.execute("call dbo.mergeclocktimes()")
+    cursor.execute("call dbo.merge_clocktimes()")
     connection.commit()
     connection.close()
     
     
-    print_count_results(table_name, engine, 'after merge proc') # should be 0
+    print_count_results('live', table_name, engine, 'after merge proc') # should be 0
+    print_count_results('dbo', 'clocktimes', engine, 'after merge proc') # should be 0
     
     return None
 
 
 def get_a_bunch_thisisaoneoff():
-    daysback = 2
+    daysback = 17
     daysbacktoo = 100
     for i in range(daysback, daysbacktoo):
         insertRemediated(remediation_days=i)
