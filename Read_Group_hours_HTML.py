@@ -76,7 +76,7 @@ def turn_new_timeclock_into_old(df_with_jobcode_1na):
     
 
 
-def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
+def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False, verbosity=1):
     
     # I Dont know what I did but this gets all the rows of the html table
     data = []
@@ -123,9 +123,11 @@ def new_and_imporved_group_hours_html_reader(html_file, in_and_out_times=False):
                 print('{}: This is the employee name row for {}'.format(i, id_name))
             # the only other tie there is only one 'td' is when there is a blank row
             elif len(cols) == 1:
-                print('{}: this is an empty row'.format(i))
+                if verbosity > 0:
+                    print('{}: this is an empty row'.format(i))
             else:
-                print('{}: this is a record row'.format(i))
+                if verbosity > 0:
+                    print('{}: this is a record row'.format(i))
                 col_texts = [ele.text.strip() for ele in cols]
                 
                 first_non_blank = next(sub for sub in col_texts if sub)

@@ -33,7 +33,12 @@ def getDatesTimesDF(date_str):
             x = TimeClockEZGroupHours(date_str)
             filepath = x.get_filepath()
             x.kill()
-            times_df = new_and_imporved_group_hours_html_reader(filepath, in_and_out_times=True)
+            if isinstance(filepath, Exception):
+                print(f'The group hours of {date_str} is non-downloadable')
+                times_df = None
+                break
+            
+            times_df = new_and_imporved_group_hours_html_reader(filepath, in_and_out_times=True, verbosity=0)
             
             os.remove(filepath)
             break
@@ -118,7 +123,7 @@ def insertRemediated(remediation_days=1):
 
 
 def get_a_bunch_thisisaoneoff():
-    daysback = 17
+    daysback = 23
     daysbacktoo = 100
     for i in range(daysback, daysbacktoo):
         insertRemediated(remediation_days=i)
