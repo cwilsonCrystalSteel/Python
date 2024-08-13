@@ -78,6 +78,23 @@ def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, 
     return elem
 
 
+class NoRecordsFoundException(Exception):
+    def __init__(self, message='The text "No Records Found" was observered'):
+        # Call the base class constructor with the parameters it needs
+        super(NoRecordsFoundException, self).__init__(message)
+        
+
+class DownloadButtonDisabledException(Exception):
+    def __init__(self, message=''):
+        # Call the base class constructor with the parameters it needs
+        super(DownloadButtonDisabledException, self).__init__(message)
+
+
+class WhileTimerTimeoutExcpetion(Exception):
+    def __init__(self, message=''):
+        # Call the base class constructor with the parameters it needs
+        super(WhileTimerTimeoutExcpetion, self).__init__(message)
+
 
 #%%
 class TimeClockBase():
@@ -332,7 +349,8 @@ class TimeClockBase():
                 pass
                 
             if time.time() > endTime:
-                raise Exception('No reasonable download was found...')
+                # raise Exception('No reasonable download was found...')
+                raise WhileTimerTimeoutExcpetion(f'No filetype {fileType} was found downloaded.')
     
                 
     def waitForProcessingPopup(self):
@@ -350,7 +368,8 @@ class TimeClockBase():
                 break
             
             if time.time() > endTime:
-                raise Exception('The processingPopup box never went away!')
+                # raise Exception('The processingPopup box never went away!')
+                raise WhileTimerTimeoutExcpetion('The processingPopup box never went away!')
                 
     def groupHoursFinale(self, dateString, exclude_terminated=False):
         self.startTime = datetime.datetime.now()
@@ -401,11 +420,21 @@ class TimeClockBase():
             # self.noRecordsFoundText = self.driver.find_element(By.CLASS_NAME, 'NoDataListItem')
             self.printverbosity('Uh oh! we found text saying "No Records Found" for the search criteria...')
             
-            # throw excpetion if we find the no records
-            raise Exception('NoRecordsFoundException')
         except:
             self.printverbosity('Good news, we did not find the text saying "No records found"')    
     
+    
+        try:
+            self.noRecordsFoundText
+        except AttributeError:
+            self.noRecordsFoundTextExists = False
+            # throw excpetion if we find the no records
+        else:
+            self.noRecordsFoundTextEsists = True
+        
+            # raise Exception('NoRecordsFoundException')
+            raise NoRecordsFoundException()
+            
     
         # self.zoom(50)
         
@@ -426,7 +455,8 @@ class TimeClockBase():
         self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
-            raise Exception('menuDownloadButtonDisabled')
+            # raise Exception('menuDownloadButtonDisabled')
+            raise DownloadButtonDisabledException('menuDownloadButton')
 
 
         endTime = time.time() + 15
@@ -440,7 +470,8 @@ class TimeClockBase():
                 
             
             if time.time() > endTime:
-                raise Exception('We could not press the menuDownloadButton')
+                # raise Exception('We could not press the menuDownloadButton')
+                raise WhileTimerTimeoutExcpetion('We could not press the menuDownloadButton')
             
         # self.menuDownloadButton.click()
         # self.menuDownloadButton.send_keys(Keys.RETURN)
@@ -462,7 +493,8 @@ class TimeClockBase():
                 self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                 self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
                 if self.processingPopupDownloadButtonDisabled is not None:
-                    raise Exception('processingPopupDownloadButtonDisabled')    
+                    # raise Exception('processingPopupDownloadButtonDisabled')    
+                    raise DownloadButtonDisabledException('processsingPopupDownloadButton')
                 else:
                     self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                     self.processingPopupDownloadButton.click()
@@ -474,7 +506,8 @@ class TimeClockBase():
                 
             
             if time.time() > endTime:
-                raise Exception('We could not press the processingPopupDownloadButtonDisabled')
+                # raise Exception('We could not press the processingPopupDownloadButton')
+                raise WhileTimerTimeoutExcpetion('We could not press the processingPopupDownloadButton')
                 
                 
         # self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
@@ -502,9 +535,17 @@ class TimeClockEZGroupHours(TimeClockBase):
         self.tcb.openTabularMenu()
         self.tcb.searchFromTabularMenu('Group Hours')
         self.tcb.clickTabularMenuSearchResults('Hours > Group Hours')
-        self.tcb.groupHoursFinale(self.date_str)
+        try:
+            self.tcb.groupHoursFinale(self.date_str)
+            self.filepath = self.tcb.retrieveDownloadedFile(10, '*.html', 'Hours')
+        except (DownloadButtonDisabledException, NoRecordsFoundException)  as e:
+            print(f'Could not accomplish {self.date_str} because of {e}')
+            self.filepath = e
+        except WhileTimerTimeoutExcpetion as e:
+            print(f'Could not accomplish {self.date_str} because of {e}')
+            print('perhaps you should try again')
+            self.filepath = None
         
-        self.filepath = self.tcb.retrieveDownloadedFile(10, '*.html', 'Hours')
         
         
         
@@ -515,14 +556,15 @@ class TimeClockEZGroupHours(TimeClockBase):
         
         
 '''
-x = TimeClockEZGroupHours('08/04/2024')
+x = TimeClockEZGroupHours('07/21/2024')
 filepath = x.get_filepath()
+x.kill()
 '''        
         
         
         
 '''        
-x = TimeClockBase(offscreen=True)  
+x = TimeClockBase(offscreen=False)  
 # x.maximizeWindow()
 # x.moveOnscreen()
 x.verbosity=2
@@ -536,7 +578,7 @@ x.openTabularMenu()
 
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')
-x.groupHoursFinale('08/04/2024')
+x.groupHoursFinale('07/21/2024')
 filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
 print(filepath)
 
