@@ -17,8 +17,11 @@ log_path = 'C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Last_day_retrieved_l
 def write_to_logfile(dt, status):
     dt_log_string = dt.strftime('%Y-%m-%d')
     log = pd.read_csv(log_path)
-    log = log.append({'date':dt_log_string, 'status':status}, ignore_index=True)
+    this_df = pd.DataFrame([{'date':dt_log_string, 'status':status}])
+    log = pd.concat([log, this_df], ignore_index=True)
     log.to_csv(log_path, index=False)
+    
+
 
 
 critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
@@ -51,7 +54,7 @@ delta = (yesterday - last_successful_dt).days
 
 
 
-
+#%%
 
 
 for i in range(0,delta):
@@ -166,7 +169,9 @@ for i in range(0,delta):
                 
             else:
                 print('This lot does not fill other criteria')
-                5 + '5'
+                write_to_logfile(day_dt, f'{lot} is does not match expected criterias ')
+                # 5 + '5'
+                # raise Exception('This lot does not fill other criteria')
                 
             
             # we are going to iterate thru the sheet_names as numbers to find the right one b/c calling by name results in a lot of failures
@@ -237,7 +242,8 @@ for i in range(0,delta):
                 #
                     
                 # append the lot's pieces to that main file 
-                xls_main = xls_main.append(xls_lot)
+                # xls_main = xls_main.append(xls_lot)
+                xls_main = pd.concat([xls_main, xls_lot])
                 # send back to excel
                 xls_main.to_excel(xls_main_name , index=False)
                 
