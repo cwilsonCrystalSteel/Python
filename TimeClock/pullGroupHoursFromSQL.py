@@ -7,13 +7,13 @@ Created on Wed Aug 14 15:34:12 2024
 
 
 import pandas as pd
-from sqlalchemy import MetaData, Table, func, text
+from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateTime
 from sqlalchemy.orm import sessionmaker
 from initSQLConnectionEngine import yield_SQL_engine
 import datetime
 
 
-
+'''
 def return_sql_times_df(date_str):
     engine = yield_SQL_engine()
     metadata = MetaData()
@@ -52,3 +52,54 @@ def return_sql_times_df(date_str):
     df = pd.DataFrame(data)
     
     return df
+'''
+
+
+
+def return_sql_times_df(date_str):
+    engine = yield_SQL_engine()
+    
+    # Reflect the table from the database
+    metadata = MetaData()
+    clocktimes_table = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
+    
+    # Create a session
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    
+    # Define your date string
+    date_str = '2024-08-13'
+    
+    # Create the subquery
+    subquery = (
+        session.query(
+            func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime).label('indate'),
+            func.max(clocktimes_table.c.remediationtype).label('maxremediation')
+        )
+        .group_by(func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime))
+        .subquery()
+    )
+    
+    # Main query
+    query = (
+        session.query(clocktimes_table)
+        .join(
+            subquery,
+            and_(
+                subquery.c.indate == func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime),
+                subquery.c.maxremediation == clocktimes_table.c.remediationtype
+            )
+        )
+        .filter(func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime) == date_str)
+        .order_by(clocktimes_table.c.name, clocktimes_table.c.timein)
+    )
+    
+    # Convert the query to a SQL string
+    sql_query = query.statement
+    
+    # Load the results into a Pandas DataFrame
+    df = pd.read_sql(sql_query, con=engine)
+    
+    # Display the DataFrame
+    print(df)    
+    
