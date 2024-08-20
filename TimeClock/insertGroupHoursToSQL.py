@@ -8,7 +8,7 @@ Created on Thu Aug  8 15:40:04 2024
 
 from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateTime, text
 import pandas as pd
-from TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours
+from TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours, NoRecordsFoundException
 from initSQLConnectionEngine import yield_SQL_engine
 from Read_Group_hours_HTML import new_and_imporved_group_hours_html_reader
 import os
@@ -35,8 +35,9 @@ class CheckpointNotReachedException(Exception):
 
 
 '''
-x = insertGroupHours('08/13/2024')
-x.getDatesTimesDF()
+x = insertGroupHours('08/10/2024')
+x.getFilepath()
+x.html_to_times_df()
 x.check_job_costcodes()
 x.insertGroupHours()
 
@@ -70,16 +71,21 @@ class insertGroupHours():
         
         if date_dt == today_dt:
             self.mergeTodayAvailable = True
+            print(f'The date {date_str} is good for Today!')
+            
         elif date_dt == yesterday_dt:
             self.mergeYesterdayAvailable = True
+            print(f'The date {date_str} is good for Yesterday!')
         elif date_dt < yesterday_dt:
             self.mergeRemediationAvailable = True
             self.remediationtype = (today_dt - date_dt).days
+            print(f'The date {date_str} is good for Remediation {self.remediationtype} days back!')
             
         
     def doStuff(self):
         
-        self.getDatesTimesDF()
+        self.getFilepath()
+        self.html_to_times_df()
         self.check_job_costcodes()
         self.insertGroupHours()
         
@@ -95,7 +101,8 @@ class insertGroupHours():
         '''
         
         # get a fresh run of the date from timeclock
-        self.getDatesTimesDF()
+        self.getFilepath()
+        self.html_to_times_df()
         self.timeclock = self.times_df.copy()
         
         # query and get the best result
@@ -109,29 +116,53 @@ class insertGroupHours():
         
       
 
-    def getDatesTimesDF(self):
+    def getFilepath(self):
         i = 0
         while i < 5:
             try:
-                x = TimeClockEZGroupHours(self.date_str)
-                filepath = x.get_filepath()
-                x.kill()
-                if isinstance(filepath, Exception):
-                    print(f'The group hours of {self.date_str} is non-downloadable')
-                    self.times_df = None
+                tc = TimeClockEZGroupHours(self.date_str)
+                self.filepath = tc.get_filepath()
+                tc.kill()
+                print(self.filepath)
+                if isinstance(self.filepath, NoRecordsFoundException):
+                        
                     break
                 
-                self.times_df = new_and_imporved_group_hours_html_reader(filepath, in_and_out_times=True, verbosity=0)
+                elif self.filepath is not None:
+                    break
                 
-                os.remove(filepath)
-                break
             except:
-                print('oh no we failed on this attemp')
+                print('oh no we failed on this attempt')
                 i += 1
                 try: 
-                    x.kill()
+                    tc.kill()
                 except:
-                    print('no x to kill')
+                    print('no tc to kill')
+    
+             
+    
+    def html_to_times_df(self):
+        
+        # we get tiems_df == None when we dont have a filepath - normall yb/c 'No Records Found'
+        if isinstance(self.filepath, NoRecordsFoundException):
+            
+            if self.mergeTodayAvailable:
+                print("Don't have anything to insert into today, but still truncating today's table")
+                self.truncate_table('dbo','clocktimes_today')
+                
+            elif self.mergeYesterdayAvailable:
+                print("Don't have anything to insert into for yesterday, but still truncating yesterday's table")  
+                self.truncate_table('dbo','clocktimes_yesterday')
+                
+            raise CheckpointNotReachedException('times_df is None!')
+            
+        elif isinstance(self.filepath, Exception):
+            raise CheckpointNotReachedException('Filepath indicates some Error {self.filepath}')
+            
+        else:
+            self.times_df = new_and_imporved_group_hours_html_reader(self.filepath, in_and_out_times=True, verbosity=0)
+            
+            os.remove(self.filepath)
                     
     def rename_df_to_sql_columns(self):
         self.times_df_orig = self.times_df.copy()
@@ -147,6 +178,9 @@ class insertGroupHours():
         
      
     def insertToLiveTable(self, table_name, df):
+        
+        if df is None:
+            raise CheckpointNotReachedException('df passed is none')
         
         # get table metadata
         metadata = MetaData()
@@ -168,25 +202,25 @@ class insertGroupHours():
         
         
         
+        #truncate table       
+        self.truncate_table('live', table_name)
         
-        # check size of table before clearing it
-        print_count_results('live', table_name, self.engine, 'before truncating')
-        
-        #truncate table
-        connection = self.engine.connect()
-        connection.execute(f"TRUNCATE TABLE live.{table_name}")
-        connection.close()
-        
-        # check size after truncating to double check it worked
-        print_count_results('live', table_name, self.engine, 'after truncating')
         
         # insert results
         df.to_sql(table_name, self.engine, schema='live', if_exists='append', index=False)
         
         # check size after inserting 
         print_count_results('live', table_name, self.engine, 'after inserting')
+    
         
+    def truncate_table(self, schema, table_name):
+        print_count_results(schema, table_name, self.engine, 'before truncating')
         
+        connection = self.engine.connect()
+        connection.execute(f"TRUNCATE TABLE {schema}.{table_name}")
+        connection.close()       
+        
+        print_count_results(schema, table_name, self.engine, 'after truncating')
         
         
     def callMergeProc(self, proc_name, table_name):
@@ -253,6 +287,7 @@ class insertGroupHours():
             proc_name = 'merge_clocktimes'
             table_name = 'clocktimes'
             self.times_df.loc[:,'remediationtype'] = self.remediationtype
+            self.times_df.loc[:,'targetdate'] = self.date_str
         
         
         # check to make sure we have the right names
@@ -357,4 +392,8 @@ def get_a_bunch_thisisaoneoff():
     for i in range(daysback, daysbacktoo):
         date_str = (datetime.datetime.now() - datetime.timedelta(days=365 - i)).strftime('%m/%d/%Y')
         x = insertGroupHours(date_str)
-        x.doStuff()
+        try:
+            x.doStuff()
+        except CheckpointNotReachedException as e:
+            print(f'could not do this date!\n{e}')
+                
