@@ -527,8 +527,10 @@ class TimeClockEZGroupHours(TimeClockBase):
         
         self.date_str = date_str
         
+        self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
+        
     def get_filepath(self):
-        self.tcb = TimeClockBase(download_folder="C:\\users\\cwilson\\downloads\\GroupHours\\", offscreen=True)
+        self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=True)
         self.tcb.verbosity=1
         self.tcb.startupBrowser()
         self.tcb.tryLogin()

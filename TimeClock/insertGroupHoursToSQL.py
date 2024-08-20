@@ -121,6 +121,7 @@ class insertGroupHours():
         while i < 5:
             try:
                 tc = TimeClockEZGroupHours(self.date_str)
+                tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"
                 self.filepath = tc.get_filepath()
                 tc.kill()
                 print(self.filepath)
@@ -155,6 +156,10 @@ class insertGroupHours():
                 self.truncate_table('dbo','clocktimes_yesterday')
                 
             raise CheckpointNotReachedException('times_df is None!')
+            
+        elif not os.path.exists(self.filepath):
+            print('It looks like the filepath got deleted! trying to get filepath again')
+            self.getFilepath()
             
         elif isinstance(self.filepath, Exception):
             raise CheckpointNotReachedException('Filepath indicates some Error {self.filepath}')
@@ -387,7 +392,7 @@ class insertGroupHours():
 
 
 def get_a_bunch_thisisaoneoff():
-    daysback = 0
+    daysback = 10
     daysbacktoo = 365
     for i in range(daysback, daysbacktoo):
         date_str = (datetime.datetime.now() - datetime.timedelta(days=365 - i)).strftime('%m/%d/%Y')
