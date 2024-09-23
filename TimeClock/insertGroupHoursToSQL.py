@@ -7,6 +7,7 @@ Created on Thu Aug  8 15:40:04 2024
 
 
 from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateTime, text
+from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours, NoRecordsFoundException
 from initSQLConnectionEngine import yield_SQL_engine
@@ -221,9 +222,16 @@ class insertGroupHours():
     def truncate_table(self, schema, table_name):
         print_count_results(schema, table_name, self.engine, 'before truncating')
         
-        connection = self.engine.connect()
-        connection.execute(f"TRUNCATE TABLE {schema}.{table_name}")
-        connection.close()       
+        # connection = self.engine.connect()
+        # connection.execute(f"TRUNCATE TABLE {schema}.{table_name}")
+        # connection.close()    
+        
+        
+        Session = sessionmaker(bind=self.engine)
+        session = Session()
+        session.execute(text(f'TRUNCATE TABLE {schema}.{table_name}'))
+        session.commit()
+        session.close()
         
         print_count_results(schema, table_name, self.engine, 'after truncating')
         
