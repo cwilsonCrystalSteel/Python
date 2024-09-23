@@ -8,7 +8,7 @@ import sys
 sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
-from insertEmployeeInformationToSQL import import_employee_information_to_SQL, determine_termianted_employees
+from insertEmployeeInformationToSQL import import_employee_information_to_SQL, determine_terminated_employees
 
 
 print('Running import_employee_information_to_SQL...')
@@ -19,6 +19,6 @@ except Exception as e:
     print(f'Could not complete import_employee_information_to_SQL because of \n {e}')
 
 try:
-    determine_termianted_employees()
+    determine_terminated_employees()
 except Exception as e:
-    print(f'Could not complete determine_termianted_employees because of \n {e}')
+    print(f'Could not complete determine_terminated_employees because of \n {e}')

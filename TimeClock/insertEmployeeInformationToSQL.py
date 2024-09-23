@@ -9,6 +9,7 @@ Created on Thu Jul 25 15:39:29 2024
 
 
 from sqlalchemy import text
+from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from TimeClockNavigation import TimeClockBase
 from initSQLConnectionEngine import yield_SQL_engine
@@ -61,9 +62,13 @@ def import_employee_information_to_SQL():
     
     print_count_results('live', engine, 'before truncating')
     
-    connection = engine.connect()
-    connection.execute("TRUNCATE TABLE live.employeeinformation")
-    connection.close()
+    
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    session.execute(text('''TRUNCATE TABLE live.employeeinformation'''))
+    session.commit()
+    session.close()
+    
     
     # get count of table before insert --> should be 0
     print_count_results('live', engine, 'before importing')
@@ -86,7 +91,7 @@ def import_employee_information_to_SQL():
 
        
 
-def determine_termianted_employees():
+def determine_terminated_employees():
     # Get the employee information for all employees
     x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)     
     x.verbosity=0
@@ -140,9 +145,11 @@ def determine_termianted_employees():
     print('RUNNING UPDATES FOR TERMINATED EMPLOYEES')
     print_count_results('live', engine, 'before truncating')
     
-    connection = engine.connect()
-    connection.execute("TRUNCATE TABLE live.employeeinformation")
-    connection.close()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    session.execute(text('''TRUNCATE TABLE live.employeeinformation'''))
+    session.commit()
+    session.close()
     
     print_count_results('live', engine, 'before importing')
     
@@ -169,9 +176,11 @@ def determine_termianted_employees():
     print('RUNNING UPDATES FOR NON-TERMINATED EMPLOYEES')
     print_count_results('live', engine, 'before truncating')
     
-    connection = engine.connect()
-    connection.execute("TRUNCATE TABLE live.employeeinformation")
-    connection.close()
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    session.execute(text('''TRUNCATE TABLE live.employeeinformation'''))
+    session.commit()
+    session.close()
     
     print_count_results('live', engine, 'before importing')
     
