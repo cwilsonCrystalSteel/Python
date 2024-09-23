@@ -86,7 +86,7 @@ def import_employee_information_to_SQL():
 
        
 
-def determine_termianted_employees():
+def determine_terminated_employees():
     # Get the employee information for all employees
     x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)     
     x.verbosity=0

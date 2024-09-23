@@ -19,6 +19,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, ElementClickInterceptedException, NoSuchElementException
+import signal
+from psutil import Process, NoSuchProcess
 
 
 def printwait(string='', waittime=0):
@@ -149,6 +151,9 @@ class TimeClockBase():
         else:
             os.makedirs(download_folder)
             enable_download(self.driver, self.download_folder)
+            
+            
+        self.pid = self.driver.service.process.pid
    
     def printverbosity(self, string):
         if self.verbosity >= 1:
@@ -172,10 +177,33 @@ class TimeClockBase():
         self.driver.execute_script(f"document.body.style.zoom='{self.percentage}%'")    
        
     def kill(self):
+        
+        
+        # try:
+        #     os.kill(int(self.pid), signal.SIGTERM)
+        #     print(f"Killed chrome using process: {int(self.pid)}")
+        # except ProcessLookupError as ex:
+        #     print(ex)
+        #     pass
+    
+    
+        
+        self.p = Process(self.pid)
+        print(self.p)
+        print(f"Killing PID {self.pid}")
+        
+        self.driver.close()
         print('Attempting to quit the browser...')
         self.driver.quit()
+        
         # self.driver.close()
         print('Quitting browser completed!')
+        try:
+            self.p.terminate()
+        except NoSuchProcess:
+            print(f'Could not kill PID {self.pid} b/c it is already gone')
+        
+        
         
     def splashPage(self):
         self.printverbosity('Navigating to splashpage!')
