@@ -348,6 +348,8 @@ class TimeClockBase():
         self.downloadButton.click()
         self.printverbosity('Began File Download')       
         
+           
+        
         
     def retrieveDownloadedFile(self, waitTime, fileType, searchText):
         # Group Hours:              fileType = '*.html'
@@ -359,7 +361,7 @@ class TimeClockBase():
         endTime = time.time() + waitTime
         while True:
             try:
-                self.listOfFileTypes = glob.glob(self.download_folder + fileType) # * means all if need specific format then *.csv
+                self.listOfFileTypes = glob.glob(os.path.join(self.download_folder, fileType)) # * means all if need specific format then *.csv
                 # Create a list with only the states we want to look at
                 self.foundFiles = [f for f in self.listOfFileTypes if searchText in f]
                 # Get the most recent file for that state
@@ -505,6 +507,7 @@ class TimeClockBase():
         # self.menuDownloadButton.send_keys(Keys.RETURN)
         
         
+        
         # self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
         self.htmlOption = self.driver.find_elements(By.XPATH,  "//*[contains(text(), 'HTML')]")[0]
         self.htmlOption.click()
@@ -537,6 +540,7 @@ class TimeClockBase():
                 # raise Exception('We could not press the processingPopupDownloadButton')
                 raise WhileTimerTimeoutExcpetion('We could not press the processingPopupDownloadButton')
                 
+       
                 
         # self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
         # if self.processingPopupDownloadButton is not None:
@@ -550,15 +554,16 @@ class TimeClockBase():
         
         
 class TimeClockEZGroupHours(TimeClockBase):
-    def __init__(self, date_str):
+    def __init__(self, date_str, offscreen=True):
         
         
         self.date_str = date_str
+        self.offscreen = offscreen
         
         self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
         
     def get_filepath(self):
-        self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=True)
+        self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=self.offscreen)
         self.tcb.verbosity=1
         self.tcb.startupBrowser()
         self.tcb.tryLogin()
@@ -568,6 +573,7 @@ class TimeClockEZGroupHours(TimeClockBase):
         try:
             self.tcb.groupHoursFinale(self.date_str)
             self.filepath = self.tcb.retrieveDownloadedFile(10, '*.html', 'Hours')
+            # self.filepath = self.tcb.filepath
         except (DownloadButtonDisabledException, NoRecordsFoundException)  as e:
             print(f'Could not accomplish {self.date_str} because of {e}')
             self.filepath = e
