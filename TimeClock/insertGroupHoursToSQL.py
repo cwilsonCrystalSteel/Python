@@ -47,9 +47,11 @@ x.doStuff()
 '''
 
 class insertGroupHours():
-    def __init__(self, date_str, remediationtype=1):
+    def __init__(self, date_str, download_folder=None, offscreen=True):
         self.date_str = date_str
-        self.remediationtype = remediationtype
+        # self.remediationtype = remediationtype
+        self.download_folder = download_folder
+        self.offscreen = offscreen
         self.df_renamed_toggle = False
         
         self.engine = yield_SQL_engine()
@@ -121,23 +123,31 @@ class insertGroupHours():
         i = 0
         while i < 5:
             try:
-                tc = TimeClockEZGroupHours(self.date_str)
-                tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"
-                self.filepath = tc.get_filepath()
-                tc.kill()
+                self.tc = TimeClockEZGroupHours(self.date_str, offscreen=self.offscreen)
+                
+                if self.download_folder is None:
+                    self.tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"
+                else:
+                    self.tc.download_folder = self.download_folder
+                    
+                self.filepath = self.tc.get_filepath()
+                self.tc.kill()
                 print(self.filepath)
                 if isinstance(self.filepath, NoRecordsFoundException):
-                        
+                    print('Filepath is a NoRecordsFoundException!')   
                     break
                 
                 elif self.filepath is not None:
+                    print('Filepath is not None')
                     break
+                
+                # i += 1
                 
             except:
                 print('oh no we failed on this attempt')
                 i += 1
                 try: 
-                    tc.kill()
+                    self.tc.kill()
                 except:
                     print('no tc to kill')
     
@@ -400,10 +410,10 @@ class insertGroupHours():
 
 
 def get_a_bunch_thisisaoneoff():
-    daysback = 10
-    daysbacktoo = 365
+    daysback = 3
+    daysbacktoo = 50
     for i in range(daysback, daysbacktoo):
-        date_str = (datetime.datetime.now() - datetime.timedelta(days=365 - i)).strftime('%m/%d/%Y')
+        date_str = (datetime.datetime.now() - datetime.timedelta(days=50 - i)).strftime('%m/%d/%Y')
         x = insertGroupHours(date_str)
         try:
             x.doStuff()

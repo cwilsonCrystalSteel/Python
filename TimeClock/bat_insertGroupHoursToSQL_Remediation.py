@@ -20,23 +20,25 @@ two_day = (now - datetime.timedelta(days=2)).strftime('%m/%d/%Y')
 four_day = (now - datetime.timedelta(days=4)).strftime('%m/%d/%Y')
 ten_day =  (now - datetime.timedelta(days=10)).strftime('%m/%d/%Y')
 
+source = 'bat_insertGroupHoursToSQL_Remediation'
+
 
 try:
-    x = insertGroupHours(two_day)
+    x = insertGroupHours(date_str=two_day, download_folder=r'c:\users\cwilson\downloads\GroupHours_2DayRemediation')
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{two_day}") \n {e}')
     
     
 try:
-    x = insertGroupHours(four_day)
+    x = insertGroupHours(date_str=four_day, download_folder=r'c:\users\cwilson\downloads\GroupHours_4DayRemediation')
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{four_day}") \n {e}')
     
 
 try:
-    x = insertGroupHours(ten_day)
+    x = insertGroupHours(date_str=ten_day, download_folder=r'c:\users\cwilson\downloads\GroupHours_10DayRemediation')
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{ten_day}") \n {e}')

@@ -18,9 +18,12 @@ print('Running insertGroupHoursToSQL_TODAY...')
 now = datetime.datetime.now()
 today_str = now.strftime('%m/%d/%Y')
 
+source = 'bat_insertGroupHoursToSQL_Today'
+
+
 
 try:
-    x = insertGroupHours(today_str)
+    x = insertGroupHours(date_str=today_str, download_folder=r'c:\users\cwilson\downloads\GroupHours_Today')
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{today_str}") \n {e}')
