@@ -33,6 +33,10 @@ class CheckpointNotReachedException(Exception):
         # Call the base class constructor with the parameters it needs
         super(CheckpointNotReachedException, self).__init__(message)
 
+class GroupHoursIsNoneException(Exception):
+    def __init__(self, message=''):
+        # Call the base class constructor with the parameters it needs
+        super(GroupHoursIsNoneException, self).__init__(message)
 
 
 '''
@@ -89,6 +93,7 @@ class insertGroupHours():
         
         self.getFilepath()
         self.html_to_times_df()
+        
         self.check_job_costcodes()
         self.insertGroupHours()
         
@@ -178,7 +183,10 @@ class insertGroupHours():
         else:
             self.times_df = new_and_imporved_group_hours_html_reader(self.filepath, in_and_out_times=True, verbosity=0)
             
-            os.remove(self.filepath)
+            if self.times_df is None:
+                raise GroupHoursIsNoneException(f'times_df is None: {self.filepath}')
+            else:
+                os.remove(self.filepath)
                     
     def rename_df_to_sql_columns(self):
         self.times_df_orig = self.times_df.copy()
@@ -410,7 +418,7 @@ class insertGroupHours():
 
 
 def get_a_bunch_thisisaoneoff():
-    daysback = 3
+    daysback = 13
     daysbacktoo = 50
     for i in range(daysback, daysbacktoo):
         date_str = (datetime.datetime.now() - datetime.timedelta(days=50 - i)).strftime('%m/%d/%Y')
@@ -418,5 +426,8 @@ def get_a_bunch_thisisaoneoff():
         try:
             x.doStuff()
         except CheckpointNotReachedException as e:
+            print(f'could not do this date!\n{e}')
+            
+        except GroupHoursIsNoneException as e:
             print(f'could not do this date!\n{e}')
                 
