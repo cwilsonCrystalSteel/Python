@@ -387,8 +387,8 @@ def lots_log_cleaner_of_bad_job_number(ll, shop, send_emails=False):
 def lots_log_cleaner_of_bad_dates(ll, shop, send_emails=False):
     ll2 = ll.copy()
     # convert delivery to a datetime
-    ll2['Fab Release Date'] = pd.to_datetime(ll2['Fab Release Date'].copy(), errors='coerce').dt.date
-    ll2['LL Delivery Date'] = pd.to_datetime(ll2['LL Delivery Date'].copy(), errors='coerce').dt.date
+    ll2.loc[:,'Fab Release Date'] = pd.to_datetime(ll2['Fab Release Date'].copy(), errors='coerce').dt.date
+    ll2.loc[:,'LL Delivery Date'] = pd.to_datetime(ll2['LL Delivery Date'].copy(), errors='coerce').dt.date
     # get those rows with dates that dont convert from ll2
     bad_dates = ll2[ll2['Fab Release Date'].isna()]
     # get the originial rows of the bad dates
@@ -396,8 +396,8 @@ def lots_log_cleaner_of_bad_dates(ll, shop, send_emails=False):
     # drop the rows with bad dates
     ll = ll[~ll.index.isin(bad_dates.index)]
     # convert the remaining items to a date
-    ll['Fab Release Date'] = pd.to_datetime(ll['Fab Release Date'].copy(), errors='coerce').dt.date
-    ll['LL Delivery Date'] = pd.to_datetime(ll['LL Delivery Date'].copy(), errors='coerce').dt.date
+    ll.loc[:,'Fab Release Date'] = pd.to_datetime(ll['Fab Release Date'].copy(), errors='coerce').dt.date
+    ll.loc[:,'LL Delivery Date'] = pd.to_datetime(ll['LL Delivery Date'].copy(), errors='coerce').dt.date
     # only generate errors if there are bad dates present
     if bad_dates.shape[0] != 0:
         error_name = 'Lots Log - Fab Release Date Not A Date'
@@ -419,7 +419,7 @@ def lots_log_cleaner_of_invalid_lots_name(ll, shop, send_emails=False):
     ll4 = ll.copy()
     ll4 = ll4[~ll4['LOTS Name'].str[:4].str.isnumeric()]    
     # add up all of ll2, ll3, and ll4
-    bad_names = ll2.append(ll3).append(ll4)
+    bad_names = pd.concat([ll2, ll3, ll4], axis=0)
     # get rid of those lots with invalid names
     ll = ll[~ll.index.isin(bad_names.index)]
     # ONLY generate error if there are invalid lot names still present
@@ -495,16 +495,16 @@ def lots_log_cleaner_of_duplicate_lots(ll):
                 sequences_list.append(i)
         
         # only get the first appearance of the duplicated lot name
-        output_chunk = chunk.iloc[0,:].copy()
+        output_chunk = chunk.iloc[[0]].copy()
         # set the sequence value ot be the new list of all the sequences
-        output_chunk.loc['Seq. #'] = list(pd.unique(pd.Series(sequences_list)))
+        output_chunk.at[output_chunk.index[0],'Seq. #'] = list(set(sequences_list))
         # append it to the condensed df -> this gets put back onto ll
-        condensed = condensed.append(output_chunk)
+        condensed = pd.concat([condensed, output_chunk], axis=0)
         
     # get rid of all the duplicated lots names rows 
     ll = ll[~ll.index.isin(dupes.index)]
     # put back the condensed versions 
-    ll = ll.append(condensed)
+    ll = pd.concat([ll, condensed], axis=0)
     # put it back in about the same order it started 
     ll = ll.sort_index()
     return ll
@@ -582,6 +582,8 @@ def draw_the_rest_of_the_horse(shop, send_emails=False):
         # pulling values out as variables to make life easy
         job = chunk['Job']
         sequences = chunk['Seq. #']
+        if isinstance(sequences, str):
+            sequences = [sequences]
         fab_release_date = chunk['Fab Release Date']      
         ll_delivery_date = chunk['LL Delivery Date']
         

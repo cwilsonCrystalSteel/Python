@@ -352,13 +352,17 @@ for shop in shop_dict.keys():
             ''' delete events that are older then 8 week before today '''
             to_delete = events_df[events_df['date'] < now - datetime.timedelta(days=7*8)]
             # if there is no description in the calendar even tthen we cannot use it and it will cause an error so delete it
-            to_delete = to_delete.append( events_df[events_df['description'].isna()] )
+            to_delete_na_desc = events_df[events_df['description'].isna()]
+            # add the events to be deleted together
+            to_delete = pd.concat([to_delete, to_delete_na_desc], axis=0)
             # group by item/ticket/buyout name & count number of entries
             duplicates_to_delete = events_df[[type_of_work, 'id']].groupby([type_of_work]).count()
             # get the ones with > 1 entry
             duplicates_to_delete = duplicates_to_delete[duplicates_to_delete['id'] > 1]
             # add those duplicates to the list to be deleted
-            to_delete = to_delete.append(events_df[events_df[type_of_work].isin(list(duplicates_to_delete.index))])
+            to_delete_duplicates = events_df[events_df[type_of_work].isin(list(duplicates_to_delete.index))]
+            to_delete = pd.concat([to_delete, to_delete_duplicates], axis=0)
+
             
             if to_delete.shape[0] == 0:
                 print('No {}s need deleting from the calendar'.format(type_of_work))
@@ -575,6 +579,7 @@ for shop in shop_dict.keys():
                 
         except Exception as e:
             error_name = 'Misc Work Type Calendar Updating Error'
+            print(e)
             
             produce_error_file(exception_as_e = e,
                                 shop = shop,
@@ -609,13 +614,15 @@ for shop in shop_dict.keys():
         # get the earliest delivery date in LOTS_df
         earliest_lots_df_date = min(lots_df['Earliest Delivery'])
         # get the calendar events 2 months older than that event
-        to_delete = to_delete.append(events_df[events_df['date'] < earliest_lots_df_date - datetime.timedelta(days=3*7)])
+        to_delete_old = events_df[events_df['date'] < earliest_lots_df_date - datetime.timedelta(days=3*7)]
+        to_delete = pd.concat([to_delete, to_delete_old], axis=0)
         
         duplicates_to_delete = events_df[['LOT', 'id']].groupby(['LOT']).count()
         # get the ones with > 1 entry
         duplicates_to_delete = duplicates_to_delete[duplicates_to_delete['id'] > 1]
         # add those duplicates to the list to be deleted
-        to_delete = to_delete.append(events_df[events_df['LOT'].isin(list(duplicates_to_delete.index))])
+        to_delete_dupes = events_df[events_df['LOT'].isin(list(duplicates_to_delete.index))]
+        to_delete = pd.concat([to_delete, to_delete_dupes], axis=0)
                
         # delete each of those events
         for event_id in to_delete['id']:
@@ -843,73 +850,73 @@ for shop in shop_dict.keys():
             print('No LOTS need the dates updated')
         else:
             print('{} LOT(s) need their dates udpated'.format(updated_dates.shape[0]))
-        # go thru each lot in the updated_lots df
-        for lot in updated_dates.index:
-            # get the current event information for that lot
-            calendar_slice = events_df[events_df['LOT'] == lot].squeeze()
-            # get the current calendar date as iso-format
-            cal_date_str = calendar_slice['date'].date().strftime('%m/%d/%Y')
-            # get the date from the lots_df AKA the production schedule
-            ps_date = lots_df[lots_df['LOT'] == lot].squeeze()['Earliest Delivery'].date()
-            # conver the production schedule date to a iso-format
-            ps_date_str = ps_date.strftime('%m/%d/%Y')
-
-            # the string that gets added to the description so that you can see a history of the change
-            append_to_desc = now_timestamp + ' Delivery date changed from ' + cal_date_str + ' to ' + ps_date_str            
-            # get the description that is currently in the calendar event
-            calendar_desc = calendar_slice['description']
-            
-            this_lot = lots_df[lots_df['LOT'] == lot].squeeze()
-            # get the sequences for the lot
-            seqs = this_lot['Sequences']
-            # generate the hyperlink text
-            sequences_str = 'Sequences: ' + seqs
-            if ',' in seqs:
-                sequences_str += ' (link goes to earliest delivery)'
-            # generate the html for hyperlink
-            desc_first_line = '<a href="' + this_lot['URL'] + '">' + sequences_str + "</a>"            
-            # split the description based on the linebreak
-            calendar_desc_list = calendar_desc.split('<br>')
-            # change the hyperlink
-            calendar_desc_list[0] = desc_first_line
-            # join the description back with linebreaks
-            calendar_desc = '<br>'.join(calendar_desc_list)
-            
-            # if there is no descirption (unlikely) then just set the append_to_desc as the desc
-            if pd.isna(calendar_desc):
-                new_desc = desc_first_line + '<br>' + append_to_desc
-            # if there is a description already on the event, then append the append_to_desc
-            else:
-                new_desc = calendar_desc + '<br>' + append_to_desc
-            
-            
-            
-            # udpate the event with the new date (ps_date) & desc (new_desc), maintain everything else 
-            update_event(calendar_id = cal_id, 
-                         event_id = calendar_slice['id'], 
-                         summary = calendar_slice['summary'],
-                         date = ps_date,
-                         description = new_desc,
-                         color_id = get_color(calendar_slice))        
-            
-            
-            # create a string of details for the change file
-            change_details = calendar_slice['id'] + '\n' + calendar_slice['summary'] + '\n' + new_desc
-            # create a file to denote the change of dates
-            produce_change_file(change_details, shop, lot, 'Date Change')
-            add_to_change_log_v2(shop = shop, 
-                                job = lot.split('-')[0],
-                                type_of_work = 'LOT',
-                                number = lot,
-                                action = 'Change Event Date',
-                                description = cal_date_str + ' -> ' + ps_date_str)            
-            
-            if _SendEmails:
-                # send out an email regarding the change in dates
-                send_date_change_notice_email(shop, 'LOT', lot, ps_date.strftime('%m/%d/%Y'), new_desc, 
-                                          calendar_slice['htmlLink'], recipients_list)
-            
-            time.sleep(1)
+            # go thru each lot in the updated_lots df
+            for lot in updated_dates.index:
+                # get the current event information for that lot
+                calendar_slice = events_df[events_df['LOT'] == lot].squeeze()
+                # get the current calendar date as iso-format
+                cal_date_str = calendar_slice['date'].date().strftime('%m/%d/%Y')
+                # get the date from the lots_df AKA the production schedule
+                ps_date = lots_df[lots_df['LOT'] == lot].squeeze()['Earliest Delivery'].date()
+                # conver the production schedule date to a iso-format
+                ps_date_str = ps_date.strftime('%m/%d/%Y')
+    
+                # the string that gets added to the description so that you can see a history of the change
+                append_to_desc = now_timestamp + ' Delivery date changed from ' + cal_date_str + ' to ' + ps_date_str            
+                # get the description that is currently in the calendar event
+                calendar_desc = calendar_slice['description']
+                
+                this_lot = lots_df[lots_df['LOT'] == lot].squeeze()
+                # get the sequences for the lot
+                seqs = this_lot['Sequences']
+                # generate the hyperlink text
+                sequences_str = 'Sequences: ' + seqs
+                if ',' in seqs:
+                    sequences_str += ' (link goes to earliest delivery)'
+                # generate the html for hyperlink
+                desc_first_line = '<a href="' + this_lot['URL'] + '">' + sequences_str + "</a>"            
+                # split the description based on the linebreak
+                calendar_desc_list = calendar_desc.split('<br>')
+                # change the hyperlink
+                calendar_desc_list[0] = desc_first_line
+                # join the description back with linebreaks
+                calendar_desc = '<br>'.join(calendar_desc_list)
+                
+                # if there is no descirption (unlikely) then just set the append_to_desc as the desc
+                if pd.isna(calendar_desc):
+                    new_desc = desc_first_line + '<br>' + append_to_desc
+                # if there is a description already on the event, then append the append_to_desc
+                else:
+                    new_desc = calendar_desc + '<br>' + append_to_desc
+                
+                
+                
+                # udpate the event with the new date (ps_date) & desc (new_desc), maintain everything else 
+                update_event(calendar_id = cal_id, 
+                             event_id = calendar_slice['id'], 
+                             summary = calendar_slice['summary'],
+                             date = ps_date,
+                             description = new_desc,
+                             color_id = get_color(calendar_slice))        
+                
+                
+                # create a string of details for the change file
+                change_details = calendar_slice['id'] + '\n' + calendar_slice['summary'] + '\n' + new_desc
+                # create a file to denote the change of dates
+                produce_change_file(change_details, shop, lot, 'Date Change')
+                add_to_change_log_v2(shop = shop, 
+                                    job = lot.split('-')[0],
+                                    type_of_work = 'LOT',
+                                    number = lot,
+                                    action = 'Change Event Date',
+                                    description = cal_date_str + ' -> ' + ps_date_str)            
+                
+                if _SendEmails:
+                    # send out an email regarding the change in dates
+                    send_date_change_notice_email(shop, 'LOT', lot, ps_date.strftime('%m/%d/%Y'), new_desc, 
+                                              calendar_slice['htmlLink'], recipients_list)
+                
+                time.sleep(1)
             
         
         ''' update the hyperlinks '''
@@ -960,6 +967,8 @@ for shop in shop_dict.keys():
     
     except Exception as e:
         error_name = 'LOT Calendar Updating Error'
+        
+        print(e)
         
         produce_error_file(exception_as_e = e,
                            shop = shop,
