@@ -980,7 +980,7 @@ for shop in shop_dict.keys():
 
 #%% manila calendar
 
-manila_calendar_function()
+# manila_calendar_function()
 
 
 #%%

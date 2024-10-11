@@ -597,7 +597,7 @@ def draw_the_rest_of_the_horse(shop, send_emails=False):
 
         # skip the rest of the loop if there is nothing left in ss_open_job
         if ss_open_job.shape[0] == 0:
-            print('No open sequences for: ' + lot)
+            # print('No open sequences for: ' + lot)
             continue
        
         # get all of the sequence information from the complete shipping schedule
