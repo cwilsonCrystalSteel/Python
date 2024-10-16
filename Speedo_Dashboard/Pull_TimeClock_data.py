@@ -15,6 +15,8 @@ from TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_informat
 import datetime
 import pandas as pd
 import numpy as np
+from pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
 
 state = 'TN'
 today = datetime.datetime.now()
@@ -26,17 +28,28 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         
         
     now = datetime.datetime.now()
-    end_date = end_dt.strftime('%m/%d/%Y')
     start_date = start_dt.strftime('%m/%d/%Y')
-            
+    end_date = end_dt.strftime('%m/%d/%Y')
     
+    
+    '''
+    Code Refactor! 
+    1014-10-16: we have database up & running, imports seem to be firing off.
+        Need to ensure the remediation bat file is scheduled at an appropriate time
+        2 lines of code will replace spaghetti
+    '''
+    
+    times_df = get_date_range_timesdf_controller(start_date, end_date)
+    basis = return_information_on_clock_data(times_df)
+            
+    '''
     if basis == None:
         start_dt_loop = start_dt
         start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
         print('Getting Timeclock for: {}'.format(start_date_loop))
         basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
         
-        '''
+        #
         # hokie work around
         # on 5/28 there are no records at all so it was failing to create the times_df variable
         # when there was no times_df, using the basis_orig.copy() was failing
@@ -53,7 +66,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             start_date_loop = start_dt_loop.strftime('%m/%d/%Y')
             basis_orig = get_information_for_clock_based_email_reports(start_date_loop, start_date_loop, exclude_terminated=False, ei=None, in_and_out_times=True) 
             basis = basis_orig.copy()
-         '''   
+         #  
         
         # on 7/24 I started having troubles with timeclock when no records where found.
         # it looks like the same issue as from 5/28, and I think it is
@@ -100,7 +113,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
             basis['Indirect'] = pd.concat([basis['Indirect'], basis_additional['Indirect']])
     
     
-    
+    '''
     
 
     

@@ -1,1 +1,0 @@
-start-process C:\Users\cwilson\Documents\Python\TimeClock\insertGroupHoursToSQL_YESTERDAY.bat

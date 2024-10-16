@@ -12,94 +12,284 @@ from sqlalchemy.orm import sessionmaker
 from initSQLConnectionEngine import yield_SQL_engine
 import datetime
 
+from insertGroupHoursToSQL import insertGroupHours
 
-'''
-def return_sql_times_df(date_str):
+
+    
+def get_today_or_yesterdays_timesdf(today_or_yesterday):
+    if today_or_yesterday == 'today':
+        tablename = 'clocktimes_today'
+    elif today_or_yesterday == 'yesterday':
+        tablename = 'clocktimes_yesterday'
+        
+    engine = yield_SQL_engine()
+    
+    times_df = pd.read_sql_table(table_name = tablename, schema='dbo', con=engine)
+    
+    return times_df
+
+
+
+def date_str_handler(date_str):
+    
+    try:
+        d = datetime.datetime.strptime(date_str, '%m/%d/%Y')
+        # print('Date passed with format %m/%d/%Y')
+        return d.strftime('%Y-%m-%d')
+    except ValueError:
+        pass
+        # print('Date was not format %m/%d/%Y')
+        
+        
+    try:
+        d = datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        return date_str
+    except Exception as e:
+        print(f'Could not determine date_str format with error: {e}')
+
+def check_remediated_availability(date_str):
+    """
+    This will query dbo.clocktimes to ensure we have atleast some records
+    for the targetdate = date_str
+    
+    Parameters
+    ----------
+    date_str : str %Y-%m-%d or %m/%d/%Y
+        select * from dbo.clocktimes where targetdate = date_str
+
+    Returns
+    -------
+    bool
+        can we proceed with the provided date? bool.
+
+    """
+    date_str_for_sql = date_str_handler(date_str)
+    
     engine = yield_SQL_engine()
     metadata = MetaData()
-    # log_table = Table('employeeinformation_log', metadata, autoload_with=engine, schema='dbo')
-    
-    
+    clocktimes = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
     Session = sessionmaker(bind=engine)
-    session = Session()
+    session = Session()   
     
-    # # first up, we need to check for when the last completed merge proc was performed
-    # #select max(insertedat) from dbo.employeeinfomration_log
-    # # stmt = select()
-    # mostRecentMerge = session.query(func.max(log_table.c.insertedat)).scalar()
-    
-    # with engine.connect() as connection:
-    #     result = connection.execute(text(f"select name, jobcode, costcode, hours, timein, timeout, isclockedin from dbo.clocktimes where timein::timestamp::date={date_str}"))
-    #     for row in result:
-    #         continue
-    
-    # mostRecentMerge = row[0]
-    
-    
-    # # use this to check if the last merge was within valid time frame
-    # if (datetime.datetime.now() - mostRecentMerge).seconds > 24*60*60*2: #greater than 2 days old:
-    #     raise Exception('EmployeeInformationOlderThan2days')
-    
-    
-    clocktimes_table = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
-    query = session.query(clocktimes_table)
-    result = query.all()
-    
-    # Convert the query result to a list of dictionaries
-    data = [row._asdict() for row in result]
-    
-    # Create a DataFrame from the list of dictionaries
-    df = pd.DataFrame(data)
-    
-    return df
-'''
+    query = (
+        select(clocktimes)  # No square brackets around clocktimes
+        .where(clocktimes.c.targetdate == date_str_for_sql)
+    )
+    # Execute the query
+    result = session.execute(query)
+    # Convert to DataFrame
+    df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+        
+    return bool(df.shape[0])
 
 
 
-def return_sql_times_df(date_str):
+def format_remediated_like_YesterdayOrToday_tables(times_df):
+    """
+    This is an easy way to make sure the columns from dbo.clocktimes
+    match results returned from dbo.clocktimes_today and dbo.clocktimes_yesterday
+
+    Parameters
+    ----------
+    times_df : Pandas DataFrame
+        an output of the sql table dbo.clocktimes.
+
+    Returns
+    -------
+    times_df : Pandas DataFrame
+        returns only select columns.
+
+    """
+    
+    
+    times_df = times_df[['employeeidnumber', 'job_costcode_id', 'hours', 'timein', 'timeout','isclockedin']]
+    
+    return times_df
+    
+ 
+def get_date_range_timesdf_controller(start_date, end_date):
+    # determine the date range if it passes into yesterday and today
+    # determine if date range exceeds into the future
+    start_date_sql = date_str_handler(start_date)
+    end_date_sql = date_str_handler(end_date)
+
+    start_dt = datetime.datetime.strptime(start_date_sql, '%Y-%m-%d')
+    end_dt = datetime.datetime.strptime(end_date_sql, '%Y-%m-%d')
+    
+    number_days = (end_dt - start_dt).days
+    
+    table_decider = {'clocktimes':[],
+                     'clocktimes_yesterday':None,
+                     'clocktimes_today':None,
+                     'future':[]}
+    
+    today_dt = datetime.datetime.now().date()
+    yesterday_dt = today_dt - datetime.timedelta(days=1)
+    
+    for i in range(0,number_days):
+        checker_dt = (start_dt + datetime.timedelta(days=i)).date()
+        if checker_dt == today_dt:
+            table_decider['clocktimes_today'] = checker_dt
+        elif checker_dt == yesterday_dt:
+            table_decider['clocktimes_yesterday'] = checker_dt
+        elif checker_dt > today_dt:
+            table_decider['future'].append(checker_dt)
+        else:
+            table_decider['clocktimes'].append(checker_dt)
+        
+    
+    
+    to_union = []
+    
+    if len(table_decider['clocktimes']):
+        range_start_date_str = min(table_decider['clocktimes']).strftime('%Y-%m-%d')
+        range_end_date_str = max(table_decider['clocktimes']).strftime('%Y-%m-%d')
+        
+        range_df = get_date_range_timesdf_REMEDIATEDONLY(range_start_date_str, range_end_date_str)
+        
+        range_df = format_remediated_like_YesterdayOrToday_tables(range_df)
+        
+        to_union.append(range_df)
+        
+    if table_decider['clocktimes_yesterday'] is not None:
+        yesterday_df = get_today_or_yesterdays_timesdf('yesterday')
+        
+        to_union.append(yesterday_df)
+    
+    if table_decider['clocktimes_today'] is not None:
+        today_df = get_today_or_yesterdays_timesdf('today') 
+        
+        to_union.append(today_df)
+        
+    if len(table_decider['future']):
+        future_min = min(table_decider['future']).strftime('%Y-%m-%d')
+        future_max = max(table_decider['future']).strftime('%Y-%m-%d')
+        print(f"Could not retrieve dates {future_min} to {future_max} because they're in the future!")
+
+
+    output_df = pd.concat(to_union, axis=0)
+    
+    output_df['hours'] = pd.to_numeric(output_df['hours'], errors='coerce')
+            
+    return output_df
+
+        
+    
+def get_date_range_timesdf_REMEDIATEDONLY(start_date, end_date):
+    
+    start_date_sql = date_str_handler(start_date)
+    end_date_sql = date_str_handler(end_date)
+    
+    
     engine = yield_SQL_engine()
-    
-    # Reflect the table from the database
     metadata = MetaData()
-    clocktimes_table = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
+    clocktimes = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
     
     # Create a session
     Session = sessionmaker(bind=engine)
-    session = Session()
+    session = Session() 
     
-    # Define your date string
-    date_str = '2024-08-13'
-    
-    # Create the subquery
     subquery = (
-        session.query(
-            func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime).label('indate'),
-            func.max(clocktimes_table.c.remediationtype).label('maxremediation')
+        select(
+            clocktimes.c.targetdate,
+            func.max(clocktimes.c.remediationtype).label('remediationtype')
         )
-        .group_by(func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime))
-        .subquery()
-    )
-    
-    # Main query
+        .group_by(clocktimes.c.targetdate)
+    ).alias('z')
+
+    # Create the main query
     query = (
-        session.query(clocktimes_table)
-        .join(
-            subquery,
-            and_(
-                subquery.c.indate == func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime),
-                subquery.c.maxremediation == clocktimes_table.c.remediationtype
-            )
-        )
-        .filter(func.cast(func.date_trunc('day', clocktimes_table.c.timein), DateTime) == date_str)
-        .order_by(clocktimes_table.c.name, clocktimes_table.c.timein)
+        select(clocktimes)
+        .select_from(clocktimes.join(subquery, 
+            (subquery.c.remediationtype == clocktimes.c.remediationtype) &
+            (clocktimes.c.targetdate == subquery.c.targetdate)
+        ))
+        .where(clocktimes.c.targetdate >= start_date_sql, clocktimes.c.targetdate <= end_date_sql)
+    )    
+    
+    
+    result = session.execute(query)
+    
+    # Convert to DataFrame
+    times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+
+    return times_df
+    
+    
+
+def get_specific_dates_timesdf(date_str):
+    
+    date_str_for_sql = date_str_handler(date_str)
+    
+    if not check_remediated_availability(date_str):
+        print(f'Trying to pull TimeClock for: {date_str} now...')
+        try:
+            x = insertGroupHours(date_str=date_str, download_folder=r'c:\users\cwilson\downloads\GroupHours')
+            x.doStuff()
+            if check_remediated_availability(date_str):
+                print(f'Good news, we alleviated missing data on {date_str}')
+            else:
+                print(f'Bad news, we could not infill data for {date_str}')
+        except Exception as e:
+            print(f'Could not complete insertGroupHours("{date_str}") \n {e}')
+            
+        
+        
+    
+    
+    engine = yield_SQL_engine()
+    metadata = MetaData()
+    clocktimes = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
+    
+    # Create a session
+    Session = sessionmaker(bind=engine)
+    session = Session()    
+    
+    subquery = (
+        select(func.max(clocktimes.c.remediationtype).label('remediationtype'))
+        .where(clocktimes.c.targetdate == date_str_for_sql)
+        .group_by(clocktimes.c.targetdate)
+    ).alias('z')
+    
+ 
+    # Create the main query
+    query = (
+        select(clocktimes)  # No square brackets around clocktimes
+        .select_from(clocktimes.join(subquery, subquery.c.remediationtype == clocktimes.c.remediationtype))
+        .where(clocktimes.c.targetdate == date_str_for_sql)
     )
+        
+        
+    # Execute the query
+    result = session.execute(query)
     
-    # Convert the query to a SQL string
-    sql_query = query.statement
+    # Convert to DataFrame
+    times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+
+    return times_df
     
-    # Load the results into a Pandas DataFrame
-    df = pd.read_sql(sql_query, con=engine)
     
-    # Display the DataFrame
-    print(df)    
+def get_timesdf_from_sql(date_str):
+    
+    now = datetime.datetime.now().date()
+    
+    date_dt = datetime.datetime.strptime(date_str, '%m/%d/%Y').date()
+    
+    if date_dt == now:
+        print("Querying the data from today's table")
+        times_df = get_today_or_yesterdays_timesdf('today')
+        
+    elif (now - date_dt).days == 1:
+        print("Querying the data from yesterday's table")
+        times_df = get_today_or_yesterdays_timesdf('yesterday')
+        
+    else:
+        print(f"Querying the data from the remediation table for date: {date_str}")
+        times_df = get_specific_dates_timesdf(date_str)
+    
+    return times_df
+
+
+
+
     
