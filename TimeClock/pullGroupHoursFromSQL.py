@@ -23,10 +23,21 @@ def get_today_or_yesterdays_timesdf(today_or_yesterday):
         tablename = 'clocktimes_yesterday'
         
     engine = yield_SQL_engine()
+    metadata = MetaData()
+    today_or_yesterday_table = Table(tablename, metadata, autoload_with=engine, schema='dbo')
+    Session = sessionmaker(bind=engine)
+    session = Session()   
     
-    times_df = pd.read_sql_table(table_name = tablename, schema='dbo', con=engine)
+    query = (
+        select(today_or_yesterday_table)  # No square brackets around clocktimes
+    )
+    # Execute the query
+    result = session.execute(query)
+    # Convert to DataFrame
+    df = pd.DataFrame(result.fetchall(), columns=result.keys())
     
-    return times_df
+    
+    return df
 
 
 
