@@ -16,13 +16,16 @@ import os
 # this one will send TimeClock & Fablisting data to google sheet
 
 
-
+monthly_dashboard_key = '1hbF775EzjMp80HrUTTWu5JJabzMZSx0e5wb_xHt49R0'
+weekly_dashboard_key = '1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs'
 
 
 # sheet_name = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
                      'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
                      }
+
+
 
 def remove_empty_rows_between_data(worksheet):
         
@@ -40,7 +43,10 @@ def remove_empty_rows_between_data(worksheet):
     for row_index in reversed(empty_rows):
         worksheet.delete_rows(row_index)
 
-def get_gspread_worksheet(sheet_name, sheet_key = google_sheet_info['sheet_key'], json_file = google_sheet_info['json_file'], remove_empty_rows=True):
+def get_gspread_worksheet(sheet_name, google_sheet_info_dict, remove_empty_rows=True):
+    sheet_key = google_sheet_info_dict['sheet_key']
+    json_file = google_sheet_info_dict['json_file']
+    
     sh = init_google_sheet(sheet_key, json_file)
     worksheet = sh.worksheet(sheet_name)
     if remove_empty_rows:
@@ -54,9 +60,9 @@ def convert_google_worksheet_to_dataframe(worksheet):
     df = pd.DataFrame(worksheet_list_of_lists[1:], columns=worksheet_list_of_lists[0])
     return df
 
-def get_google_sheet_as_df(shop=None, worksheet=None):
+def get_google_sheet_as_df(google_sheet_info_dict, shop=None, worksheet=None):
     if worksheet == None:
-        worksheet = get_gspread_worksheet(shop)
+        worksheet = get_gspread_worksheet(sheet_name=shop, google_sheet_info_dict=google_sheet_info_dict)
         
     df = convert_google_worksheet_to_dataframe(worksheet) 
     # worksheet_list_of_lists = worksheet.get_all_values()
@@ -78,12 +84,12 @@ def get_google_sheet_as_df(shop=None, worksheet=None):
     return df
 
 
-def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
+def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_name='CSM'):
     now = datetime.datetime.now()
     now_str = now.strftime('%m/%d/%Y %H:%M')
     
-    worksheet = get_gspread_worksheet(sheet_name)
-    df = get_google_sheet_as_df(worksheet=worksheet)
+    worksheet = get_gspread_worksheet(sheet_name=sheet_name, google_sheet_info_dict=google_sheet_info_dict)
+    df = get_google_sheet_as_df(worksheet=worksheet, google_sheet_info_dict=google_sheet_info_dict)
     
     
     # check to see if a formula exists
@@ -149,14 +155,14 @@ def post_observation(gsheet_dict, isReal=True, sheet_name='CSM'):
 
 
 
-def move_to_archive(shop=None):
+def move_to_archive(google_sheet_info_dict, shop=None, dashboard_name=''):
     
-    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + '.csv'
+    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + "_" + dashboard_name + '.csv'
     
+    worksheet = get_google_sheet_as_df(google_sheet_info_dict=google_sheet_info_dict, shop=shop, worksheet=None)
     if os.path.exists(archive_file):
         # archive = pd.read_csv(archive_file, index_col=0)
         
-        worksheet = get_google_sheet_as_df(shop, worksheet=None)
         # only archive if we have data & we have over 100 rows
         if worksheet.shape[0] and worksheet.shape[0] > 90:
             # get the last row to archive
@@ -180,7 +186,7 @@ def move_to_archive(shop=None):
         
     else:
         print('create the archive')
-        worksheet = get_google_sheet_as_df()
+        # worksheet = get_google_sheet_as_df(google_sheet_info_dict=google_sheet_info_dict)
         worksheet = worksheet.iloc[:worksheet.shape[0]-100]
         worksheet.to_csv(archive_file, index=False)
         
@@ -189,9 +195,10 @@ def move_to_archive(shop=None):
     return None
 
 
-def get_jobs_to_exclude():
+def get_jobs_to_exclude(google_sheet_info_dict):
+    worksheet = get_gspread_worksheet('Goals', google_sheet_info_dict=google_sheet_info_dict,remove_empty_rows=False)
     # get the worksheet and convert it to a datafarme
-    goals_df = convert_google_worksheet_to_dataframe(get_gspread_worksheet('Goals', remove_empty_rows=False))
+    goals_df = convert_google_worksheet_to_dataframe(worksheet)
     # find the index where we have 'EXCLUDE JOB'
     start_idx = goals_df.index[goals_df.iloc[:,0] == 'EXCLUDE JOB'][0]
     # get only the part of the dataframe that has the jobs to exclude
