@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Mar  6 19:37:10 2023
+Created on Thu Oct 17 10:38:23 2024
 
 @author: CWilson
 """
+
 import sys
 sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 sys.path.append('C:\\Users\\cwilson\\documents\\python')
@@ -13,7 +14,7 @@ from Pull_TimeClock_data import get_timeclock_summary
 from Post_to_GoogleSheet import post_observation, move_to_archive, get_jobs_to_exclude
 import datetime
 
-weekly_sheet_info_dict = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
+monthly_sheet_info_dict = {'sheet_key':'1hbF775EzjMp80HrUTTWu5JJabzMZSx0e5wb_xHt49R0',
                           'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
                           }
 '''
@@ -25,17 +26,22 @@ sheet = 'CSM QC Form'
 now = datetime.datetime.now()
 # set the time to 6 am
 now_dt = now.replace(hour=6, minute=0, second=0, microsecond=0)
-# get start_dt as most recent sunday
-start_dt = now_dt - datetime.timedelta(days=now_dt.weekday()+1)
-# set end_dt to saturday
-end_dt = start_dt + datetime.timedelta(days=6)
+# get start_dt as first day of the month
+start_dt = now_dt.replace(day=1)
+# init end_dt as one day ahead
+end_dt = start_dt + datetime.timedelta(days=1)
+# add one day to end_dt until we get to the first of the next month
+while end_dt.month == start_dt.month:
+    end_dt += datetime.timedelta(days=1)
+# sNow go back one day so we have the last day of the current month
+end_dt -= datetime.timedelta(days=1)
 # change time of end_dt to midnight on saturday
 end_dt = end_dt.replace(hour=23, minute=59)
 print('running the speedo dashboard for {} to {}'.format(start_dt, end_dt))
 
 try:
     
-    exclude_jobs_dict = get_jobs_to_exclude(weekly_sheet_info_dict)
+    exclude_jobs_dict = get_jobs_to_exclude(monthly_sheet_info_dict)
     exclude_jobs_dict['TN'] = exclude_jobs_dict['CSM']
     exclude_jobs_dict['DE'] = exclude_jobs_dict['CSF']
     exclude_jobs_dict['MD'] = exclude_jobs_dict['FED']
@@ -73,9 +79,9 @@ for state in ['TN','MD','DE']:
         gsheet_dict.update(fablisting_summary[sheet])
         gsheet_dict.update(timeclock_summary[state])
         
-        post_observation(gsheet_dict, sheet_name=sheet[:3], google_sheet_info_dict=weekly_sheet_info_dict)
+        post_observation(gsheet_dict, sheet_name=sheet[:3], google_sheet_info_dict=monthly_sheet_info_dict)
         
-        move_to_archive(shop=sheet[:3], google_sheet_info_dict=weekly_sheet_info_dict, dashboard_name = 'weekly')
+        move_to_archive(shop=sheet[:3], google_sheet_info_dict=monthly_sheet_info_dict, dashboard_name = 'monthly')
 
     except Exception as e:
         print(state)
