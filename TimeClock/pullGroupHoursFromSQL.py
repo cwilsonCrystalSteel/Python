@@ -126,6 +126,13 @@ def get_date_range_timesdf_controller(start_date, end_date):
 
     start_dt = datetime.datetime.strptime(start_date_sql, '%Y-%m-%d')
     end_dt = datetime.datetime.strptime(end_date_sql, '%Y-%m-%d')
+
+    if start_date_sql == end_date_sql:
+        # move the end date up one day if we get the same day for start & end date
+        end_dt = end_dt + datetime.timedelta(days=1)
+        end_date_sql = datetime.datetime.strftime(end_dt, '%Y-%m-%d')
+        
+        
     
     number_days = (end_dt - start_dt).days
     
