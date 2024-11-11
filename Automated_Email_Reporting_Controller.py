@@ -32,6 +32,8 @@ from High_Indirect_Hours_Email_Report import emaIL_attendance_hours_report
 from High_Indirect_Hours_Email_Report import email_delivery_calendar_changelog
 from Attendance_Hours_Per_week_v2 import run_attendance_hours_report
 from Post_to_GoogleSheet import get_production_worksheet_production_sheet
+from pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
 #%%
 
 try:
@@ -75,8 +77,10 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net']
 #%%
 
 # get the data from TIMECLOCK then do basic transformations to it
-basis = get_information_for_clock_based_email_reports(yesterday_str, yesterday_str, exclude_terminated=True)
+# basis = get_information_for_clock_based_email_reports(yesterday_str, yesterday_str, exclude_terminated=True)
 
+times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
+basis = return_information_on_clock_data(times_df)
 
 # gets all of the absent shop employees who did not clock in by comparing 
 # employee information list to names in the clocked in list
@@ -207,7 +211,7 @@ if yesterday.weekday() != 6:
             email_mdi(yesterday_str, state, copy.deepcopy(mdi_dict), state_recipients)
     
 # only send EVA once a week - so on sundays        
-else:
+# else:
     
     try:
         day_pcs = eva_vs_hpt(yesterday_str, yesterday_str)
