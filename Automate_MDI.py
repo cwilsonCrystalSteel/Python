@@ -10,6 +10,10 @@ from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2, 
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
 import pandas as pd
+import sys
+sys.path.append('c://users//cwilson//documents//python//TimeClock//')
+from pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
 
 # start_date = "07/01/2021"
 # end_date = "07/31/2021"
@@ -39,7 +43,9 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     
     # error handling -> can call the do_mdi without basis already generated
     if basis == None:
-        basis = get_information_for_clock_based_email_reports(start_date, start_date)
+        # basis = get_information_for_clock_based_email_reports(start_date, start_date)
+        times_df = get_date_range_timesdf_controller(start_date, start_date)
+        basis = return_information_on_clock_data(times_df)
     
     
     # get the employee information df & sest the index to the employee name
@@ -120,11 +126,17 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     pieces_hours_difference =  pieces_hours_difference.sort_values(by = 'Percent Diff.', ascending=False)
        
     ''' '''
-    direct_df = basis['Direct']
+    direct_df = basis['Direct'].copy()
     
     direct_df = direct_df[direct_df['Location'] == state]
     
     direct_df = direct_df.join(ei['Department'], on='Name')
+    
+    if 'Time In' in direct_df.columns:
+        direct_df = direct_df.drop(columns='Time In')
+        
+    if 'Time Out' in direct_df.columns:
+        direct_df = direct_df.drop(columns='Time Out')
     
     direct_df_departments = direct_df.groupby(['Job #','Cost Code','Department']).sum()
     
