@@ -51,7 +51,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             for job in jobs:
                 print(job)
                 
-                chunk_job = fablisting_df[fablisting_df['Job #'] == job]
+                chunk_job = fablisting_df[fablisting_df['Job #'] == job].copy()
                 # if for some reason the chunk returns no rows we have an issue!
                 if not chunk_job.shape[0]:
                     print('No rows found for chunk_job: {}'.format(job))
