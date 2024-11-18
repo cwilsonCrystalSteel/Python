@@ -11,7 +11,6 @@ sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFou
 # from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
 
-from TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
 import pandas as pd
 import numpy as np

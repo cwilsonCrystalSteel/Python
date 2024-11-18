@@ -22,6 +22,12 @@ def unsplit_shared_pieces_defect_log(df1, col_num, multiple_employee_split_key):
     col_name = df1.columns[col_num]
     # get only pieces with multiple fitters
     shared_pieces = df1[df1[col_name].str.contains(multiple_employee_split_key)]
+    
+    # don't bother doing anythign if we dont have any shared pieces
+    if not shared_pieces.shape[0]:
+        print(f'no pieces found with the splitter: {multiple_employee_split_key}')
+        return df1
+    
     # create a new dataframe which will hold the broken apart entries
     split_pieces = pd.DataFrame(columns=shared_pieces.columns)
     for row in shared_pieces.index:
@@ -37,6 +43,7 @@ def unsplit_shared_pieces_defect_log(df1, col_num, multiple_employee_split_key):
             try:
                 int(emp)
             except:
+                print(emp)
                 continue
             
             # create a copy of the df/series
@@ -52,13 +59,21 @@ def unsplit_shared_pieces_defect_log(df1, col_num, multiple_employee_split_key):
             # rename whoever the fitter is 
             split_piece[col_name] = emp
             # append it to a new dataframe
-            split_pieces = split_pieces.append(split_piece)
+            # split_pieces = split_pieces.append(split_piece)
+            # make it a df not a series
+            split_piece = split_piece.to_frame()
+            # if the df is long and not wide - transpose it 
+            if split_piece.shape[0] > split_piece.shape[1]:
+                split_piece = split_piece.transpose()
+            # append the new row
+            split_pieces = pd.concat([split_pieces, split_piece], axis=0, ignore_index=True)
     
     
     # remove those shared pieces rows from the original dataframe
     df1 = df1[~df1[col_name].str.contains(multiple_employee_split_key)]
     # add in the split_pieces to replace the shared_pieces
-    df1 = df1.append(split_pieces)
+    # df1 = df1.append(split_pieces)
+    df1 = pd.concat([df1, split_pieces], axis=0, ignore_index=True)
     # puts the pieces back in place where they belong
     df1 = df1.sort_index()
     
@@ -186,7 +201,8 @@ def grab_defect_log(state, start_date="03/06/1997", end_date="03/06/1997", worke
     # if you are keeping the other 'Worked by' categories then it will append those to the main df
     if not worked_by_employeeIDs_only:
         # add the pieces that are not worked by employee IDs back to the df
-        df = df.append(df1)
+        # df = df.append(df1)
+        df = pd.concat([df, df1], axis=0)
         
     # sort it by the index
     df = df.sort_index(ascending=True)

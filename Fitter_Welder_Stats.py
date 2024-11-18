@@ -7,6 +7,9 @@ Created on Tue Apr 20 09:18:43 2021
 
 import sys
 sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
+sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
+from pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
 # from TimeClock_Tools_Employee_Department import download_most_current_employee_department_csv
 # from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Grab_Defect_Log_Google_Sheet_Data import grab_defect_log
@@ -27,8 +30,8 @@ from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
 
 
 state = 'TN'
-start_date = "01/01/2023"
-end_date = "01/31/2023"
+start_date = "09/01/2024"
+end_date = "09/30/2024"
 states = ['TN','MD','DE']
 
 
@@ -40,55 +43,58 @@ states = ['TN','MD','DE']
 # basis = get_information_for_clock_based_email_reports(start_date, end_date, exclude_terminated=False)
 
 
-
-ei = get_ei_csv_downloaded(exclude_terminated=False)
+times_df = get_date_range_timesdf_controller(start_date, end_date)
+basis = return_information_on_clock_data(times_df)
+ei = basis['Employee Information']
+# ei = get_ei_csv_downloaded(exclude_terminated=False)
 
 start_dt = datetime.datetime.strptime(start_date, '%m/%d/%Y')
 end_dt = datetime.datetime.strptime(end_date, '%m/%d/%Y')
 
 
-clock_df, direct, indirect = None, None, None
+# clock_df, direct, indirect = None, None, None
 
 
-for num_day in range(0, (end_dt-start_dt).days + 1):
-# for num_day in range(0,7):
+# for num_day in range(0, (end_dt-start_dt).days + 1):
+# # for num_day in range(0,7):
     
-    day_str = (start_dt + datetime.timedelta(days=num_day)).strftime('%m/%d/%Y')
+#     day_str = (start_dt + datetime.timedelta(days=num_day)).strftime('%m/%d/%Y')
     
-    try:
-        this_day = get_information_for_clock_based_email_reports(day_str, day_str, exclude_terminated=False, ei=ei)
-        if this_day is None:
-            continue
-    except:
-        continue
-    
-
-    
-    # should not hit this part if this_day is none
-    loop_clock_df = this_day['Clocks Dataframe']
-    loop_direct_df = this_day['Direct']
-    loop_indirect_df = this_day['Indirect']
-    
-    
-    #iteratively add each days data to a main dataframe
-    if clock_df is None:
-        clock_df = loop_clock_df
-    else:
-        clock_df = clock_df.append(loop_clock_df, ignore_index=True)
-    if direct is None:
-        direct = loop_direct_df
-    else:
-        direct = direct.append(loop_direct_df, ignore_index=True)
-    if indirect is None:
-        indirect = loop_indirect_df
-    else:
-        indirect = indirect.append(loop_indirect_df, ignore_index=True)        
+#     try:
+#         this_day = get_information_for_clock_based_email_reports(day_str, day_str, exclude_terminated=False, ei=ei)
+        
+#         if this_day is None:
+#             continue
+#     except:
+#         continue
     
 
+    
+#     # should not hit this part if this_day is none
+#     loop_clock_df = this_day['Clocks Dataframe']
+#     loop_direct_df = this_day['Direct']
+#     loop_indirect_df = this_day['Indirect']
+    
+    
+#     #iteratively add each days data to a main dataframe
+#     if clock_df is None:
+#         clock_df = loop_clock_df
+#     else:
+#         clock_df = clock_df.append(loop_clock_df, ignore_index=True)
+#     if direct is None:
+#         direct = loop_direct_df
+#     else:
+#         direct = direct.append(loop_direct_df, ignore_index=True)
+#     if indirect is None:
+#         indirect = loop_indirect_df
+#     else:
+#         indirect = indirect.append(loop_indirect_df, ignore_index=True)        
+    
 
 
-hours_df = clock_df
 
+# hours_df = clock_df
+hours_df = times_df.copy()
 
 
 
