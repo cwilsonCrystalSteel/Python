@@ -45,7 +45,7 @@ def replace_ids_with_columns(times_df, ei=None):
 
 
 
-def return_information_on_clock_data(times_df):
+def return_information_on_clock_data(times_df, include_terminated=False):
     
     ei = return_sql_ei()
     
@@ -72,9 +72,9 @@ def return_information_on_clock_data(times_df):
                      'fullname':'Name'})    
         
         
-        
-    # get active employees only for this 
-    ei = ei[ei['terminated'] == False]
+    if not include_terminated:
+        # get active employees only for this 
+        ei = ei[ei['terminated'] == False]
     # get rid of any duplicate names & keep the last entry with the newest ID number
     ei = ei.loc[~ei['Name'].duplicated(keep='last')]
     # remove employees without a productive/nonproductive grouping
