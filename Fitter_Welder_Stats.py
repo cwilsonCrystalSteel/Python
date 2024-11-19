@@ -30,8 +30,8 @@ from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
 
 
 state = 'TN'
-start_date = "09/01/2024"
-end_date = "09/30/2024"
+start_date = "01/01/2024"
+end_date = "12/30/2024"
 states = ['TN','MD','DE']
 
 
@@ -44,7 +44,7 @@ states = ['TN','MD','DE']
 
 
 times_df = get_date_range_timesdf_controller(start_date, end_date)
-basis = return_information_on_clock_data(times_df)
+basis = return_information_on_clock_data(times_df, include_terminated=True)
 ei = basis['Employee Information']
 # ei = get_ei_csv_downloaded(exclude_terminated=False)
 
@@ -95,7 +95,8 @@ end_dt = datetime.datetime.strptime(end_date, '%m/%d/%Y')
 
 # hours_df = clock_df
 hours_df = times_df.copy()
-
+direct = basis['Direct']
+indirect = basis['Indirect']
 
 
 
@@ -122,11 +123,9 @@ for state in states:
     ''' IF EITHER OF THE FITTER_DATA OR WELDER_DATA THROWS AN ERROR REFER TO THE DEFINED FUNCTION '''
     ''' Or you can just run from line 72 down to these functions and look at the printed output '''
     # get only the fitter information retrieved form the dataframe
-    fitter_data = return_sorted_and_ranked(df, ei, fitters, "Fitter", defect_log, state, 
-                                           start_date, end_date)
+    fitter_data = return_sorted_and_ranked(df, ei, fitters, "Fitter", defect_log, state, start_date, end_date)
     # get only the welder information retrieved form the dataframe
-    welder_data = return_sorted_and_ranked(df, ei, welders, "Welder", defect_log, state, 
-                                           start_date, end_date)
+    welder_data = return_sorted_and_ranked(df, ei, welders, "Welder", defect_log, state, start_date, end_date)
     
     # fitter_data = convert_weight_to_earned_hours(state, fitter_data, drop_job_weights=True)
     # welder_data = convert_weight_to_earned_hours(state, welder_data, drop_job_weights=True)
@@ -140,8 +139,8 @@ for state in states:
         all_welders = welder_data.copy().reset_index(drop=True)
     # if it is not the first state, jsut append the data to the company wide dataframe
     else:
-        all_fitters = all_fitters.append(fitter_data, ignore_index=True)
-        all_welders = all_welders.append(welder_data, ignore_index=True)
+        all_fitters = pd.concat([all_fitters, fitter_data], ignore_index=True)
+        all_welders = pd.concat([all_welders, welder_data], ignore_index=True)
         
     
         
@@ -166,7 +165,7 @@ all_welders_grouped = get_employee_hours(all_welders, direct, indirect)
 all_welders_grouped = all_welders_grouped.round(3)
 
 # combine
-all_both = all_fitters_grouped.append(all_welders_grouped)
+all_both = pd.concat([all_fitters, all_welders], axis=0)
 all_both = all_both.sort_values(by=['Classification','Weight'], ascending=False)
 all_both.to_csv(directory + 'all_both' + file_name_end)
 

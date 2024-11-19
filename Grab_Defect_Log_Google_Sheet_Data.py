@@ -195,6 +195,8 @@ def grab_defect_log(state, start_date="03/06/1997", end_date="03/06/1997", worke
     df = unsplit_shared_pieces_defect_log(df, 6, '-')
     
     df = unsplit_shared_pieces_defect_log(df, 6, ';')
+    
+    df = unsplit_shared_pieces_defect_log(df, 6, ' ')
 
     # convert employee IDs to numbers
     df['Worked by'] = df['Worked by'].apply(pd.to_numeric)

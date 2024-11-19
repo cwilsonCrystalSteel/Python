@@ -85,8 +85,8 @@ def download_employee_group_hours(start_date, end_date):
 
 def get_employee_hours(all_df, direct_df, indirect_df):
     
-    grouped_direct = direct_df.groupby(by='Name').sum()
-    grouped_indirect = indirect_df.groupby(by='Name').sum()
+    grouped_direct = direct_df[['Name','Hours']].groupby(by='Name').sum()
+    grouped_indirect = indirect_df[['Name','Hours']].groupby(by='Name').sum()
         
     # create a new dataframe which gets its columns appended
     # append_df = pd.DataFrame(columns=['Direct Hours','Indirect Hours','Total Hours'], index=grouped_direct.index)
@@ -177,14 +177,22 @@ def unsplit_shared_pieces(df1, col_name, multiple_employee_split_key, index_divi
             # rename whoever the fitter is 
             split_piece[col_name] = emp
             # append it to a new dataframe
-            split_pieces = split_pieces.append(split_piece)
+            # split_pieces = split_pieces.append(split_piece)
+            # make it a df not a series
+            split_piece = split_piece.to_frame()
+            # if the df is long and not wide - transpose it 
+            if split_piece.shape[0] > split_piece.shape[1]:
+                split_piece = split_piece.transpose()
+            # append the new row
+            split_pieces = pd.concat([split_pieces, split_piece], axis=0, ignore_index=True)            
     
     
     
     # remove those shared pieces rows from the original dataframe
     df1 = df1.drop(index = shared_pieces_original_idx)
     # add in the split_pieces to replace the shared_pieces
-    df1 = df1.append(split_pieces)
+    # df1 = df1.append(split_pieces)
+    df1 = pd.concat([df1, split_pieces], axis=0, ignore_index=True)
     # puts the pieces back in place where they belong
     df1 = df1.sort_index()
     
@@ -209,9 +217,9 @@ def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_h
     df = apply_model_hours2(df, how=earned_hours, fill_missing_values=True, shop=fab_google_sheet_name[:3])
     
     # fix the split up pieces for multiple fitters -> column 6
-    df = unsplit_shared_pieces(df, "Fitter", multiple_employee_split_key, index_divider=10)
+    df = unsplit_shared_pieces(df, col_name="Fitter", multiple_employee_split_key=multiple_employee_split_key, index_divider=10)
     # fix the split up pieces for multiple welders -> column 8
-    df = unsplit_shared_pieces(df, "Welder", multiple_employee_split_key, index_divider=100)
+    df = unsplit_shared_pieces(df, col_name="Welder", multiple_employee_split_key=multiple_employee_split_key, index_divider=100)
     # convert Job #, Fitter, Fitter QC, Welder, Welder QC to numbers
     df["Job #"] = df["Job #"].apply(pd.to_numeric, errors='coerce')
     df["Fitter"] = df["Fitter"].apply(pd.to_numeric, errors='coerce')
@@ -250,13 +258,13 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     
     
     ei_copy = ei.copy()
-    ei_copy['Name'] = ei_copy['<FIRSTNAME>'] + ' ' + ei_copy['<LASTNAME>']
-    ei_names = ei_copy[['<NUMBER>','Name']]
+    # ei_copy['Name'] = ei_copy['<FIRSTNAME>'] + ' ' + ei_copy['<LASTNAME>']
+    ei_names = ei_copy[['ID','Name']]
     
     
     # create a dataframe out of the employee IDs
     employees = pd.DataFrame(columns=['ID'], data=array_of_ids)
-    employees = employees.set_index('ID').join(ei_names.set_index('<NUMBER>'), how='inner')
+    employees = employees.set_index('ID').join(ei_names.set_index('ID'), how='inner')
     employees = employees.reset_index(drop=False)
     employees = employees.rename(axis=1, mapper={'index':'ID'})
     
@@ -286,14 +294,16 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # iterate through the ids in the array_of_ids
     for id_num in array_of_ids:
         # get the row that partains to the employee id number
-        x = ei[ei[ei.columns[0]] == id_num]
+        x = ei[ei['ID'] == id_num]
         # verify that there is data in that row
         if not x.empty:
             # combine the first and last names
-            name = x.iloc[0,1] + ' ' + x.iloc[0,2]
+            name = x['Name'].iloc[0]
             # append the name to the list of names
             names.append(name)
             troubleshooter.append(int(id_num))
+        else:
+            print(id_num)
     
    
     if len(array_of_ids) != len(troubleshooter):
@@ -310,6 +320,8 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
         variable get fixed 
         Now I just use a join b/c i am a little less of a dummy
         signed -Cody 2022-09-23'''
+        
+        
     # get the list of names and put it in a column
     # employees['Name'] = names
     
@@ -333,30 +345,38 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # set the state location
     employees['Location'] = state
     # groups by the col_name to sum all values and then only keep quantity, weight, earned hours
-    employees = employees.join(df.groupby([col_name]).sum()[['Quantity','Weight','Earned Hours']])
-    
+    df_grouped = df[[col_name, 'Quantity','Weight','Earned Hours']].groupby(col_name).sum()
+    # covnert them to numbers?
+    df_grouped = df_grouped.apply(pd.to_numeric)
+    # join the grouped data onto the  dataframe
+    employees = pd.merge(left=df_grouped, right=employees, how='left', left_index=True, right_index=True)
     
     
     # get FIT/WEL to know whether to grab defects that are FIT/WELD, based off the col_name
     employee_type = col_name[:3]      
     if defect_log.shape[0]:
-        defect_log_grouped = defect_log.groupby(['Worked by','Defect Category']).sum()['Qty.']
-        defect_log_grouped = defect_log_grouped.reset_index()
-        defect_log_grouped = defect_log_grouped[defect_log_grouped['Defect Category'].str.contains(employee_type)]
-        defect_log_grouped = defect_log_grouped.groupby(['Worked by']).sum()
-        # defect_log_grouped = defect_log_grouped.set_index('Worked by')
-        employees = employees.join(defect_log_grouped['Qty.'], how='left')
-        employees = employees.rename(axis=1, mapper={'Qty.':'Defect Quantity'})
+        # only get the columns we are grouping by to avoid errors
+        defect_log_to_group = defect_log[['Worked by','Defect Category','Qty.']]
+        # only get the pertinent defects categories
+        defect_log_to_group = defect_log_to_group[defect_log_to_group['Defect Category'].str.contains(employee_type)]
+        # group by employee & category- sum
+        defect_log_grouped = defect_log_to_group.groupby(['Worked by']).sum()['Qty.']
+        # rename the column to what we wnat it to be called in the employees df
+        defect_log_grouped.name = 'Defect Quantity'
+        # now join these onto the employees dataframe
+        employees = pd.merge(left=employees, right=defect_log_grouped, how='left', left_index=True, right_index=True)
+        # set the missing values to zero after our join
         employees['Defect Quantity'] = employees['Defect Quantity'].replace(np.nan, 0)    
+
+        # now we want to ge the unique pieces they defected on?        
+        defect_log_grouped = defect_log_to_group.groupby(['Worked by']).count()['Qty.']
+        # rename the column to what we wnat it to be called in the employees df
+        defect_log_grouped.name = 'Defect Unique'
+        # now join these onto the employees dataframe
+        employees = pd.merge(left=employees, right=defect_log_grouped, how='left', left_index=True, right_index=True)
+        # set the missing values to zero after our join
+        employees['Defect Unique'] = employees['Defect Unique'].replace(np.nan, 0)   
         
-        defect_log_grouped = defect_log.groupby(['Worked by','Defect Category']).count()['Qty.']
-        defect_log_grouped = defect_log_grouped.reset_index()
-        defect_log_grouped = defect_log_grouped[defect_log_grouped['Defect Category'].str.contains(employee_type)]
-        defect_log_grouped = defect_log_grouped.groupby(['Worked by']).sum()
-        # defect_log_grouped = defect_log_grouped.set_index('Worked by')    
-        employees = employees.join(defect_log_grouped['Qty.'], how='left')
-        employees = employees.rename(axis=1, mapper={'Qty.':'Defect Unique'})
-        employees['Defect Unique'] = employees['Defect Unique'].replace(np.nan, 0)
     else:
         employees['Defect Quantity'] = 0
         employees['Defect Unique'] = 0
@@ -365,49 +385,9 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
 
     
     
-    # reset the index 
-    employees = employees.reset_index()
-    employees = employees.rename(axis=1, mapper={'index':'ID'})
-
-    
-  
-
-    # iterate through the employee ids that are left in the dataframe  
-    for employee_id in employees['ID']:
-        # only grabs that employee's data
-        chunk = df[df[col_name] == employee_id]        
-        # get only the defects by that employee
-        defect_by_employee = defect_log[defect_log['Worked by'] == employee_id]
-        # only get the defect if they are a fit defect for fitters or a weld defect for welders
-        defect_by_employee = defect_by_employee[defect_by_employee['Defect Category'].str.contains(employee_type)]
-        # count the quantity of defects by summing the 'Qty.' column
-        # defect_quantity = defect_by_employee.sum()['Qty.']
-        # # append the quantity to the list
-        # defect_quantity_list.append(defect_quantity)
-        # # get the unique pieces defects were on by taking the shape (AKA # of rows)
-        # defect_unique = defect_by_employee.shape[0]
-        # # append the unique pieces count to list
-        # defect_unique_list.append(defect_unique)
-        # iterate thru each unique job in the dataframe
-        for job in fab_listing_jobs:
-            # get only the portion of the dataframe relating to that job #
-            job_chunk = chunk[chunk['Job #'] == job]
-            # get the total weight of that job, for that employee
-            job_weight = job_chunk.sum()['Weight']
-            # round the number b/c it is easier to deal with
-            job_weight = np.round(job_weight, 2)
-            # append the job_weight to the corresponding dict-list
-            job_weights[str(job)].append(job_weight)
-        
-
-    
-    
     # Convert weight from lbs to tons
     employees['Tonnage'] = employees['Weight'] / 2000    
     # put the quantity of  defects list in as a column
-    # employees['Defect Quantity'] = defect_quantity_list
-    # put the unique defects list in as a column
-    # employees['Defect Unique'] = defect_unique_list  
     # calculate average weight per piece
     employees['Weight per Piece'] = employees['Weight'] / employees['Quantity']
     # calculate average tons per piece
@@ -421,26 +401,25 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # replace any np.inf with zero
     employees['Tons per Defect'] = employees['Tons per Defect'].replace(np.inf, 0)
 
+
+            
+    # group by employee & job number
+    df_by_employee_job = df[[col_name, 'Job #', 'Weight']].groupby([col_name,'Job #']).sum()
+    # reset index
+    df_by_employee_job = df_by_employee_job.reset_index()
+    # set the index back to the employee
+    df_by_employee_job = df_by_employee_job.set_index(col_name)
+    # pivot to get the employee as index and the job as columns and the weight of the job as values in tons
+    df_by_employee_job_pivot = df_by_employee_job.pivot(columns='Job #',values='Weight') / 2000
+    # repalce nan with zero
+    df_by_employee_job_pivot = df_by_employee_job_pivot.fillna(0)
+    # rename the columns
+    df_by_employee_job_pivot.columns = ['Job:' + str(i) for i in df_by_employee_job_pivot.columns]
+    # join onto the employees dataframe
+    employees = pd.merge(employees, df_by_employee_job_pivot, how='left', left_index=True, right_index=True)
     
-    # ''' Create the ranks after removing anybody based on limits '''
-    # # create a rank column based on quantity - highest number = best rank
-    # employees['Quantity Rank'] = employees['Quantity'].rank(ascending=False)
-    # # create a rank column based on weight - highest number = best rank
-    # employees['Weight Rank'] = employees['Weight'].rank(ascending=False)
-    # # create a rank column column based on quantity of defects - lowest number = best rank
-    # employees['Defect Quantity Rank'] = employees['Defect Quantity'].rank()    
-    # # create a rank column column based on unique defects - lowest number = best rank
-    # employees['Defect Unique Rank'] = employees['Defect Unique'].rank()
-    # sort based on weight completed
-    # employees = employees.sort_values(by=['Weight'], ascending=False)
-    # drop any rows that have NaN as the ID
-    employees = employees[~employees['ID'].isna()]
     
     
-    # iterate thru each job in the unique set of jobs
-    for job in fab_listing_jobs:
-        # apply the job weight list for that job to the column in the dataframe
-        employees[str(job) + ' Weight'] = job_weights[str(job)]    
   
     return employees
 
