@@ -16,10 +16,15 @@ import re
 log_path = 'C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Last_day_retrieved_log.csv'
 def write_to_logfile(dt, status):
     dt_log_string = dt.strftime('%Y-%m-%d')
-    log = pd.read_csv(log_path)
     this_df = pd.DataFrame([{'date':dt_log_string, 'status':status}])
-    log = pd.concat([log, this_df], ignore_index=True)
-    log.to_csv(log_path, index=False)
+
+    try:
+        log = pd.read_csv(log_path)
+        log = pd.concat([log, this_df], ignore_index=True)
+        log.to_csv(log_path, index=False)
+    except:
+        this_df.to_csv(log_path, index=False)        
+            
     
 
 
@@ -244,10 +249,13 @@ for i in range(0,delta):
                 # append the lot's pieces to that main file 
                 # xls_main = xls_main.append(xls_lot)
                 xls_main = pd.concat([xls_main, xls_lot])
-                # send back to excel
-                xls_main.to_excel(xls_main_name , index=False)
+                try:
+                    # send back to excel
+                    xls_main.to_excel(xls_main_name , index=False)
+                    print('Successfully added {0} to {1}'.format(basename, xls_main_name))
+                except:
+                    print(f"could not write {xls_main_name}")
                 
-                print('Successfully added {0} to {1}'.format(basename, xls_main_name))
                 
             
             #if the file for that job DOES NOT EXIST, create it & create the xls_main variable as that LOTS data
