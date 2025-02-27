@@ -51,7 +51,6 @@ from datetime import datetime, timedelta
 from os import listdir
 from os.path import isfile, join
 import sys
-
 sys.path.append("C:\\Users\\cwilson\\Documents\\Python")
 
 from read_daily_fab_listing_function import compile_daily_fab
