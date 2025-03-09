@@ -5,45 +5,49 @@ Created on Fri Mar 19 09:50:48 2021
 @author: CWilson
 """
 
-
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import gspread
 from production_dashboards_google_credentials import init_google_sheet
 import time
 import datetime
 from CHANGE_THIS_NAME import download_data, get_production_dashboard_data
 import pandas as pd
+from pathlib import Path
+import os
+
+json_file_other = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
+json_file_daily = Path(os.getcwd()) / 'production-dashboard-daily-36537e626b7d.json'
+errors_dir = Path(os.getcwd()) / 'Production_Dashboard_temp_files' / 'Errors'
+download_base = Path(os.getcwd()) / 'Production_Dashboard_temp_files'
+
 
 
 def publish_dashboard(dashboard_name):
-    download_base = "C:\\users\\cwilson\\documents\\python\\Production_Dashboard_temp_files\\"
     
     today = datetime.date.today()
     
     dashboard_options = {}
     
     dashboard_options['Yearly'] = {'sheet_key':'1bEzy9UZdUrvdesdxMBum2NIHSm0ZooBYr3_5jLsjeOU',
-                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
-                                   'download_folder': download_base + "Yearly\\",
+                                   'json_file':json_file_other,
+                                   'download_folder': download_base / "Yearly",
                                    'start_date':datetime.date(today.year, 1, 1).strftime('%m/%d/%Y'),
                                    'end_date':datetime.date(today.year, 12, 31).strftime('%m/%d/%Y')}
     
     dashboard_options['Monthly'] = {'sheet_key':'1kwuWsOEEPcJWfl2EBkhOaSxAGl1vtPNtqoqIvsWjxmc',
-                                    'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
-                                    'download_folder': download_base + "Monthly\\",
+                                    'json_file':json_file_other,
+                                    'download_folder': download_base / "Monthly",
                                     'start_date':datetime.date(today.year, today.month, 1).strftime('%m/%d/%Y'),
                                     'end_date':(datetime.date(today.year, today.month+1, 1) + datetime.timedelta(days=-1)).strftime('%m/%d/%Y')}
     
     dashboard_options['Weekly'] = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
-                                   'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json',
-                                   'download_folder': download_base + "Weekly\\",
+                                   'json_file':json_file_other,
+                                   'download_folder': download_base / "Weekly",
                                    'start_date':(today - datetime.timedelta(days=today.weekday() + 1)).strftime('%m/%d/%Y'),
                                    'end_date':(today - datetime.timedelta(days=today.weekday() + 1 - 6)).strftime('%m/%d/%Y')}
     
     dashboard_options['Daily'] = {'sheet_key':'1bpb75pCrsRh7t4FZr1bMILCRzpVGyiOCws4oCh2nC5c',
-                                  'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-daily-36537e626b7d.json',
-                                  'download_folder': download_base + "Daily\\",
+                                  'json_file':json_file_daily,
+                                  'download_folder': download_base / "Daily",
                                   'start_date':today.strftime('%m/%d/%Y'),
                                   'end_date':today.strftime('%m/%d/%Y')}
 
@@ -64,12 +68,10 @@ def publish_dashboard(dashboard_name):
     except Exception as e:        
         # create a copy of the current variables in memory
         current_variables = dir().copy()
-        # error log directory
-        error_log = "C:\\Users\\cwilson\\Documents\\Python\\Production_Dashboard_temp_files\\Errors\\"
         # gets current date to timestamp the file
         error_date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         # create the entire file name
-        file_name = error_log + 'Gathering Data Error (' + dashboard_name + ') ' + error_date + ".txt"
+        file_name = errors_dir / ('Gathering Data Error (' + dashboard_name + ') ' + error_date + ".txt")
         # open the file
         file = open(file_name, 'w')
         # write the dahsboard name to the file
@@ -129,7 +131,7 @@ def publish_dashboard(dashboard_name):
             # break it into time string
             right_now_time = right_now_dt.time().strftime("%I:%M %p")
             # have right now be a string
-            right_now = right_now_dt.strftime('%m/%d/%Y %I:%M %p')
+            #right_now = right_now_dt.strftime('%m/%d/%Y %I:%M %p')
             
             # loops thru each state's data
             for state in state_data:
@@ -267,12 +269,10 @@ def publish_dashboard(dashboard_name):
     except Exception as e:
         # create a copy of the current variables in memory
         current_variables = dir().copy()
-        # error log directory
-        error_log = "C:\\Users\\cwilson\\Documents\\Python\\Production_Dashboard_temp_files\\Errors\\"
         # gets current date to timestamp the file
         error_date = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         # create the entire file name
-        file_name = error_log + 'Publishing Error (' + dashboard_name + ') ' + error_date + ".txt"
+        file_name = errors_dir / ('Publishing Error (' + dashboard_name + ') ' + error_date + ".txt")
         # open the file
         file = open(file_name, 'w')
         # write the state name to the file

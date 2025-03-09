@@ -8,7 +8,7 @@ Created on Thu Aug  1 15:17:22 2024
 import pandas as pd
 from sqlalchemy import MetaData, Table, func, text
 from sqlalchemy.orm import sessionmaker
-from initSQLConnectionEngine import yield_SQL_engine
+from utils.initSQLConnectionEngine import yield_SQL_engine
 import datetime
 
 

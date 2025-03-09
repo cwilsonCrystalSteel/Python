@@ -5,17 +5,13 @@ Created on Mon Mar  6 19:35:31 2023
 @author: CWilson
 """
 
-# this one will pull the timeclock data
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
-
 import datetime
 import pandas as pd
 import numpy as np
-from pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from pathlib import Path
+
 
 state = 'TN'
 today = datetime.datetime.now()
@@ -172,7 +168,8 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
                 group_like_timeclock_report_TNproductive = hours_productive.copy()
                 group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
                 group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()['Hours']
-                group_like_timeclock_report_TNproductive.to_excel('c:\\users\\cwilson\\downloads\\report_like_TNproductive.xlsx')
+                download_file = Path.home() / 'downloads' / 'report_like_TNproductive.xlsx'
+                group_like_timeclock_report_TNproductive.to_excel(download_file)
                 output[state]['productive_report'] = group_like_timeclock_report_TNproductive
         except:
             print('could not make TN productive like report')

@@ -5,18 +5,17 @@ Created on Tue Jul 20 11:19:21 2021
 @author: CWilson
 """
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-# sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
-# sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 import pandas as pd
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import json
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
-from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours
+from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
+import os
+from pathlib import Path
 
+download_folder = Path.home() / 'downloads'
 
-def download_data(start_date, end_date, download_folder="c:\\users\\cwilson\\downloads\\"):
+def download_data(start_date, end_date, download_folder=download_folder):
     basis = get_information_for_clock_based_email_reports(start_date, 
                                                           end_date,
                                                           exclude_terminated=False,  
@@ -29,8 +28,9 @@ def get_production_dashboard_data(start_date, end_date, base_data):
     #%% getting the hours here 
     
     ''' Change this to just use direct=basis['Direct'] & same for indirect '''
+    code_changes_filepath = Path(os.getcwd()) / 'job_and_cost_code_changes.json'
     # load up the code changes file from the json
-    code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
+    code_changes = json.load(open(code_changes_filepath))
     # get the clocks dataframe
     hours = base_data['Clocks Dataframe']
     # get rid of any troublesome clocks bc that is easiest

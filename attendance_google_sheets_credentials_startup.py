@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Mar 11 08:52:50 2021
+Created on Mon Apr 12 13:52:15 2021
 
 @author: CWilson
 """
@@ -14,7 +14,8 @@ def init_google_sheet(key):
     
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     
-    json_file = Path(os.getcwd()) / 'read-daily-fab-c5ac66b791a1.json'
+    json_file = Path(os.getcwd()) / 'attendance-310518-a7c687acd47a.json'
+    # json_file = 'C:\\Users\\cwilson\\Documents\\Python\\Attendance Project\\attendance-310518-a7c687acd47a.json'
     
     creds = ServiceAccountCredentials.from_json_keyfile_name(json_file, scope)
     

@@ -4,17 +4,18 @@ Created on Mon Mar  6 19:37:10 2023
 
 @author: CWilson
 """
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\Users\\cwilson\\documents\\python')
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
-from Pull_Fablisting_data import get_fablisting_plus_model_summary
-from Pull_TimeClock_data import get_timeclock_summary
-from Post_to_GoogleSheet import post_observation, move_to_archive, get_jobs_to_exclude
+
+from Speedo_Dashboard.Pull_Fablisting_data import get_fablisting_plus_model_summary
+from Speedo_Dashboard.Pull_TimeClock_data import get_timeclock_summary
+from Speedo_Dashboard.Post_to_GoogleSheet import post_observation, move_to_archive, get_jobs_to_exclude
 import datetime
+from pathlib import Path
+import os
+
+json_path = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
 
 weekly_sheet_info_dict = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
-                          'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
+                          'json_file':json_path
                           }
 '''
 # Variables for easier testing
@@ -111,4 +112,4 @@ predictor = None
 #     gsheet_dict.update(timeclock_summary)    
 #     post_observation(gsheet_dict, isReal=True, sheet_name='Day Summary')
 
-quit()
+#quit()

@@ -1,0 +1,2 @@
+anaconda="C:\Users\Netadmin\Anaconda3\python.exe"
+project="C:\Users\Netadmin\Documents\GitHub\Python"

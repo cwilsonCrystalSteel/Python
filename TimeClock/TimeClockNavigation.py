@@ -10,7 +10,7 @@ import datetime
 import os
 import glob
 import datetime
-from TimeClock_Credentials import returnTimeClockCredentials
+from TimeClock.TimeClock_Credentials import returnTimeClockCredentials
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
@@ -21,6 +21,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, ElementNotInteractableException, ElementClickInterceptedException, NoSuchElementException
 import signal
 from psutil import Process, NoSuchProcess
+from pathlib import Path
 
 
 def printwait(string='', waittime=0):
@@ -37,6 +38,8 @@ def delete_range(web_element, x=20):
 
 def enable_download(driver, download_folder):
     driver.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+    if not isinstance(download_folder, str):
+        download_folder = str(download_folder)
     params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath':download_folder}}
     driver.execute("send_command", params)
 
@@ -100,7 +103,7 @@ class WhileTimerTimeoutExcpetion(Exception):
 
 #%%
 class TimeClockBase():
-    def __init__(self, download_folder='c:\\users\\cwilson\\downloads\\', headless=False, fullscreen=False, offscreen=False):
+    def __init__(self, download_folder=None, headless=False, fullscreen=False, offscreen=False):
         self.verbosity = 1
         '''
         verbosity = 0: only get messages about browser starting & download 
@@ -109,6 +112,8 @@ class TimeClockBase():
         '''
         
         self.creds = returnTimeClockCredentials()
+        if download_folder is None:
+            download_folder = Path.home() / 'Downloads'
         self.download_folder = download_folder
         self.headless = headless
         self.fullscreen = fullscreen
@@ -149,7 +154,13 @@ class TimeClockBase():
         if os.path.exists(download_folder):
             enable_download(self.driver, self.download_folder)
         else:
-            os.makedirs(download_folder)
+            try:
+                os.makedirs(download_folder)
+            except PermissionError as e:
+                print(f'There was an error with permissions of filepath:\n{e}')
+                self.download_folder = Path.home() / 'Downloads' / 'PermissionErrorOverflowDownloads'
+                os.makedirs(download_folder)
+                
             enable_download(self.driver, self.download_folder)
             
             
@@ -560,7 +571,8 @@ class TimeClockEZGroupHours(TimeClockBase):
         self.date_str = date_str
         self.offscreen = offscreen
         
-        self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
+        # self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
+        self.download_folder = Path.home() / 'Downloads' / 'GroupHours'
         
     def get_filepath(self):
         self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=self.offscreen, fullscreen=True)
@@ -593,6 +605,8 @@ class TimeClockEZGroupHours(TimeClockBase):
         
 '''
 x = TimeClockEZGroupHours('07/21/2024')
+x = TimeClockEZGroupHours('03/06/2025')
+
 filepath = x.get_filepath()
 x.kill()
 '''        

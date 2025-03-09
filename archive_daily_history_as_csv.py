@@ -4,16 +4,15 @@ Created on Mon Mar 15 15:20:52 2021
 
 @author: CWilson
 """
-
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import time
 import gspread
 import pandas as pd
 import datetime
 from production_dashboards_google_credentials import init_google_sheet
+from pathlib import Path
+import os
 
-json_file = 'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
+json_file = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
 
 history_sheets = ['CSM History', 'CSF History', 'FED History']
 

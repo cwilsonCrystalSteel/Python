@@ -8,9 +8,6 @@ Created on Mon Mar  6 19:36:02 2023
 import datetime 
 import pandas as pd
 import numpy as np
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\Users\\cwilson\\documents\\python')
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
 

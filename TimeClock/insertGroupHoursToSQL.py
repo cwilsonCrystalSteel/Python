@@ -5,15 +5,15 @@ Created on Thu Aug  8 15:40:04 2024
 @author: CWilson
 """
 
-
 from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateTime, text
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
-from TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours, NoRecordsFoundException
-from initSQLConnectionEngine import yield_SQL_engine
+from TimeClock.TimeClockNavigation import TimeClockBase, TimeClockEZGroupHours, NoRecordsFoundException
+from utils.initSQLConnectionEngine import yield_SQL_engine
 from Read_Group_hours_HTML import new_and_imporved_group_hours_html_reader
 import os
 import datetime
+from pathlib import Path
 
 engine = yield_SQL_engine()
 
@@ -131,7 +131,8 @@ class insertGroupHours():
                 self.tc = TimeClockEZGroupHours(self.date_str, offscreen=self.offscreen)
                 
                 if self.download_folder is None:
-                    self.tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"
+                    # self.tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"
+                    self.tc.download_folder = Path.home() / 'Downloads' / 'GroupHours4SQL'
                 else:
                     self.tc.download_folder = self.download_folder
                     

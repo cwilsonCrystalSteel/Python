@@ -12,10 +12,6 @@ Created on Thu May  6 11:09:44 2021
 @author: CWilson
 """
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 import pandas as pd
 import glob
 import os
@@ -24,8 +20,8 @@ from TimeClock_Group_Hours import download_group_hours
 from TimeClock_Tools_Employee_Location import download_most_current_employee_location_csv
 from Read_Group_hours_HTML import new_output_each_clock_entry_job_and_costcode, new_and_imporved_group_hours_html_reader
 import json
-from TimeClockNavigation import TimeClockBase
-from pullEmployeeInformationFromSQL import return_sql_ei
+from TimeClock.TimeClockNavigation import TimeClockBase
+from TimeClock.pullEmployeeInformationFromSQL import return_sql_ei
 
 
 

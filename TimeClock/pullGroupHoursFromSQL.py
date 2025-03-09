@@ -9,10 +9,10 @@ Created on Wed Aug 14 15:34:12 2024
 import pandas as pd
 from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateTime
 from sqlalchemy.orm import sessionmaker
-from initSQLConnectionEngine import yield_SQL_engine
+from utils.initSQLConnectionEngine import yield_SQL_engine
 import datetime
 
-from insertGroupHoursToSQL import insertGroupHours
+from TimeClock.insertGroupHoursToSQL import insertGroupHours
 
 
     
@@ -242,7 +242,8 @@ def get_specific_dates_timesdf(date_str):
     if not check_remediated_availability(date_str):
         print(f'Trying to pull TimeClock for: {date_str} now...')
         try:
-            x = insertGroupHours(date_str=date_str, download_folder=r'c:\users\cwilson\downloads\GroupHours')
+            download_folder = Path.home() / 'downloads' / 'GroupHours'
+            x = insertGroupHours(date_str=date_str, download_folder=download_folder)
             x.doStuff()
             if check_remediated_availability(date_str):
                 print(f'Good news, we alleviated missing data on {date_str}')

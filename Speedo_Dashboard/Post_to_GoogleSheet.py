@@ -4,16 +4,17 @@ Created on Mon Mar  6 19:36:21 2023
 
 @author: CWilson
 """
-import sys
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
+
 from production_dashboards_google_credentials import init_google_sheet
 import pandas as pd
 import datetime
 import time
 # from Predictor import get_prediction_dict
 import numpy as np
+from pathlib import Path
 import os
-# this one will send TimeClock & Fablisting data to google sheet
+
+json_file = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
 
 
 monthly_dashboard_key = '1hbF775EzjMp80HrUTTWu5JJabzMZSx0e5wb_xHt49R0'
@@ -22,7 +23,7 @@ weekly_dashboard_key = '1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs'
 
 # sheet_name = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
-                     'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
+                     'json_file':json_file
                      }
 
 

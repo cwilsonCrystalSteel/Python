@@ -5,13 +5,9 @@ Created on Tue Aug 20 08:59:57 2024
 @author: CWilson
 """
 
-
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\Users\\cwilson\\documents\\python')
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
-from insertGroupHoursToSQL import insertGroupHours
+from TimeClock.insertGroupHoursToSQL import insertGroupHours
 import datetime
+from pathlib import Path
 
 print('Running insertGroupHoursToSQL_TODAY...')
 
@@ -20,10 +16,11 @@ today_str = now.strftime('%m/%d/%Y')
 
 source = 'bat_insertGroupHoursToSQL_Today'
 
+download_folder = Path.home() / 'downloads' / 'GroupHours_Today'
 
 
 try:
-    x = insertGroupHours(date_str=today_str, download_folder=r'c:\users\cwilson\downloads\GroupHours_Today')
+    x = insertGroupHours(date_str=today_str, download_folder=download_folder)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{today_str}") \n {e}')

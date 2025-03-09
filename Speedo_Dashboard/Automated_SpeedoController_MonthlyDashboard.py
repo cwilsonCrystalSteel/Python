@@ -5,17 +5,17 @@ Created on Thu Oct 17 10:38:23 2024
 @author: CWilson
 """
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\Users\\cwilson\\documents\\python')
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
 from Pull_Fablisting_data import get_fablisting_plus_model_summary
 from Pull_TimeClock_data import get_timeclock_summary
 from Post_to_GoogleSheet import post_observation, move_to_archive, get_jobs_to_exclude
 import datetime
+from pathlib import Path
+import os
+
+json_file = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
 
 monthly_sheet_info_dict = {'sheet_key':'1hbF775EzjMp80HrUTTWu5JJabzMZSx0e5wb_xHt49R0',
-                          'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
+                          'json_file':json_file
                           }
 '''
 # Variables for easier testing
