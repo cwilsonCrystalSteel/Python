@@ -8,12 +8,13 @@ Created on Fri Jun  3 07:46:06 2022
 import pandas as pd
 import os
 import datetime
+from pathlib import Path
 
 
 
 def get_errors_from_logs(person_name=None, lots_log = False):
     
-    error_dir = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Error_Logs'
+    error_dir = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'Error_Logs'
     
     today = datetime.datetime.now()
     

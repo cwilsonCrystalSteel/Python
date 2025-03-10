@@ -5,20 +5,14 @@ Created on Sun Jun  5 09:40:01 2022
 @author: CWilson
 """
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
-sys.path.append('c://users//cwilson//documents//python//Lots_schedule_calendar//')
-sys.path.append('c://users//cwilson//documents//python//TimeClock//')
 import pandas as pd
 import os
+from pathlib import Path
 import datetime
 import numpy as np
 import copy
 # from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
-from TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
-
+from TimeClock.TEMPORARY_Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 from Automate_MDI import do_mdi, eva_vs_hpt
 from High_Indirect_Hours_Email_Report import summarize_by_direct_indirect
 from High_Indirect_Hours_Email_Report import output_absent_dict
@@ -31,14 +25,16 @@ from High_Indirect_Hours_Email_Report import email_eva_vs_hpt
 from High_Indirect_Hours_Email_Report import emaIL_attendance_hours_report
 from High_Indirect_Hours_Email_Report import email_delivery_calendar_changelog
 from Attendance_Hours_Per_week_v2 import run_attendance_hours_report
-from Post_to_GoogleSheet import get_production_worksheet_production_sheet
-from pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_production_sheet
+from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+
 #%%
 
 try:
+    production_worksheet_outpath = Path(os.getcwd()) / 'speedo_dashboard' / 'production_worksheet.csv'
     df = get_production_worksheet_production_sheet(proper_headers=False)
-    df.to_csv('c:\\users\\cwilson\\\documents\\python\\speedo_dashboard\\production_worksheet.csv', index=False)
+    df.to_csv(production_worksheet_outpath, index=False)
 except:
     print('could not get the production_worksheet')
 
@@ -136,9 +132,11 @@ clock_summary_df = summarize_by_direct_indirect(clock_grouped_df)
 
 #%%
 
-
-lots_calendar_changelog_dir = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Change_Logs_v2\\'
-yesterday_lots_calendar_changelog = lots_calendar_changelog_dir + yesterday.strftime('%Y-%m-%d') + '.csv'
+lots_calendar_changelog_dir = Path(os.getcwd())/ 'Lots_schedule_calendar' / 'Change_Logs_v2'
+if not os.path.exists(lots_calendar_changelog_dir):
+    os.makedirs(lots_calendar_changelog_dir)
+    
+yesterday_lots_calendar_changelog = lots_calendar_changelog_dir / (yesterday.strftime('%Y-%m-%d') + '.csv')
 if os.path.exists(yesterday_lots_calendar_changelog):
     print('calendar updates')
     try:

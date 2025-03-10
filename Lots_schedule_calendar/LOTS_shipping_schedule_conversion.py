@@ -5,12 +5,11 @@ Created on Thu May 13 08:51:50 2021
 @author: CWilson
 """
 
-import sys
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 import pandas as pd
 import datetime
 import glob
 import os
+from pathlib import Path
 from attendance_google_sheets_credentials_startup import init_google_sheet
 import matplotlib.pyplot as plt
 
@@ -161,7 +160,7 @@ unique_lots_xlsx = unique_lots[['LOT Name','Job','Seq','Delivery']]
 unique_lots_xlsx = unique_lots_xlsx.reset_index(drop=True)
 
 # the excel file name to write to
-xl_file_name = 'c://users/cwilson/downloads/lots_delivery_date.xlsx'
+xl_file_name = Path.home() / 'downloads' / 'lots_delivery_date.xlsx'
 # write to excel with 2 sheets in the file
 with pd.ExcelWriter(xl_file_name) as writer:
     unique_lots_xlsx.to_excel(writer, sheet_name='Lots Delivery Date')

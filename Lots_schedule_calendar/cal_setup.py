@@ -7,7 +7,8 @@ Created on Wed Jun 16 09:25:56 2021
 
 import datetime
 import pickle
-import os.path
+import os
+from pathlib import Path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -15,9 +16,10 @@ from google.auth.transport.requests import Request
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-CREDENTIALS_FILE = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\lots_calendar.json'
+CREDENTIALS_FILE = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'lots_calendar.json'
 
-PICKLE_PATH = 'C:\\users\\cwilson\\documents\\python\\Lots_schedule_calendar\\calendar_token.pickle'
+PICKLE_PATH = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'calendar_token.json'
+
 
 def get_calendar_service():
    creds = None

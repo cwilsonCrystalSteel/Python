@@ -14,7 +14,7 @@ import google.auth
 import base64
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from email_setup import get_email_service
+from Lots_schedule_calendar.email_setup import get_email_service
 
 
 

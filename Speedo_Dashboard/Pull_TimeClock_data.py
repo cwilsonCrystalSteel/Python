@@ -165,14 +165,22 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
         
         try:
             if output_productive_report:
+                # make a copy
                 group_like_timeclock_report_TNproductive = hours_productive.copy()
+                # we will group it by the date of the clock in so start with thta
                 group_like_timeclock_report_TNproductive['date'] = group_like_timeclock_report_TNproductive['Time In'].dt.date
-                group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive.groupby(['Is Direct','Job Code','date']).sum()['Hours']
-                download_file = Path.home() / 'downloads' / 'report_like_TNproductive.xlsx'
+                # ensure we have only what we need              
+                columns_needed = ['Is Direct','Job Code', 'date','Hours']
+                # group by and sum 
+                group_like_timeclock_report_TNproductive = group_like_timeclock_report_TNproductive[columns_needed].groupby(['Is Direct','Job Code','date']).sum()['Hours']
+                # setup the directory and file
+                download_file = Path.home() / 'downloads' / f'report_like_TNproductive_{state}.xlsx'
+                # send it to excel file
                 group_like_timeclock_report_TNproductive.to_excel(download_file)
+                # save the df as a apart of the dict
                 output[state]['productive_report'] = group_like_timeclock_report_TNproductive
         except:
-            print('could not make TN productive like report')
+            print(f'could not make TN productive like report for {state}')
 
     output['basis'] = basis
     return output

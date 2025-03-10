@@ -72,7 +72,7 @@ def get_google_sheet_as_df(google_sheet_info_dict, shop=None, worksheet=None):
     df = df.replace('', 0)
     
     try:
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
     except Exception:
         print('could not convert timestamp to dataframe')
         
@@ -124,12 +124,14 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
         if isinstance(value, np.int32):
             value = int(value)
         try:
-            worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            # worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            worksheet.update_acell(cell, value)
         except:
             num_columns = len(df.columns)-1
          
             worksheet.append_row([''] * num_columns, value_input_option='USER_ENTERED')
-            worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            # worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            worksheet.update_acell(cell, value)
     
     # then paste the observed data
     return None
@@ -158,7 +160,7 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
 
 def move_to_archive(google_sheet_info_dict, shop=None, dashboard_name=''):
     
-    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + "_" + dashboard_name + '.csv'
+    archive_file = Path(os.getcwd()) / ('archive_' + shop + "_" + dashboard_name + '.csv')
     
     worksheet = get_google_sheet_as_df(google_sheet_info_dict=google_sheet_info_dict, shop=shop, worksheet=None)
     if os.path.exists(archive_file):

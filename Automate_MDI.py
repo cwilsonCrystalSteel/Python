@@ -11,10 +11,10 @@ from Gather_data_for_timeclock_based_email_reports import get_information_for_cl
 import datetime
 import pandas as pd
 import sys
-sys.path.append('c://users//cwilson//documents//python//TimeClock//')
-from pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
-
+from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+import os 
+from pathlib import Path
 # start_date = "07/01/2021"
 # end_date = "07/31/2021"
 
@@ -22,7 +22,7 @@ from functions_TimeclockForSpeedoDashboard import return_information_on_clock_da
 
 yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
 start_date = yesterday.strftime('%m/%d/%Y')
-path = 'c:\\users\\cwilson\\documents\\MDI\\Automatic\\'
+path = Path.home() / 'documents' / 'MDI' / 'Automatic'
 states = ['TN','DE','MD']
 
 # basis = get_information_for_clock_based_email_reports(start_date, start_date)
@@ -176,8 +176,8 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     file_date = start_date.replace('/','-')
     
     if proof == True:
-        print(path + state + ' MDI ' + file_date + '.xlsx')
-        with pd.ExcelWriter(path + state + ' MDI ' + file_date + '.xlsx') as writer:
+        print(path / (state + ' MDI ' + file_date + '.xlsx'))
+        with pd.ExcelWriter(path / (state + ' MDI ' + file_date + '.xlsx')) as writer:
             # state_series.to_excel(writer, 'MDI')
             # pieces_missing_model.to_excel(writer, 'Missing Model Pieces')
             # direct_df_departments.to_excel(writer, 'LOT Department Breakdown')
@@ -228,7 +228,7 @@ def verify_mdi(state, start_date, end_date, proof=False):
     state_df = state_df.fillna(0)
     start_date = start_date.replace('/', '-')
     end_date = end_date.replace('/','-')
-    file = path + state + ' Verification ' + start_date + ' to ' + end_date +'.xlsx'
+    file = path / (state + ' Verification ' + start_date + ' to ' + end_date +'.xlsx')
     with pd.ExcelWriter(file) as writer:
         # state_df.to_excel(writer, 'Verification')
         shape_check_before_to_excel(state_df, writer, sheet_name='Verification', indexTF=True)
@@ -336,14 +336,15 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     
     eva_vs_hpt_by_lot = eva_vs_hpt_by_lot.reset_index()
     
-    path = 'c:\\users\\cwilson\\documents\\EVA_VS_HPT\\Automatic\\'
+    path = Path.home() / 'documents' / 'EVA_VS_HPT' / 'Automatic'
+
     file_date = end_date.replace('/','-')
     timespan_str = '_' + str(timespan) + 'days'
     
     filename = None
     
     if proof == True:
-        filename = path + 'EVA_vs_HPT ' + file_date + timespan_str + '.xlsx'
+        filename = path / ('EVA_vs_HPT ' + file_date + timespan_str + '.xlsx')
         print(filename)
         with pd.ExcelWriter(filename) as writer:
             # missing_pieces.to_excel(writer, 'Missing Pieces', index=False)

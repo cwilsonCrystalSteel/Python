@@ -6,13 +6,9 @@ Created on Wed Apr 28 13:11:46 2021
 """
 #%% the initial fireup of the file & getting data from TIMECLOCK
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
-sys.path.append('c://users//cwilson//documents//python//Lots_schedule_calendar//')
 import pandas as pd
 import os
+from pathlib import Path
 import datetime
 import numpy as np
 import copy
@@ -20,7 +16,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-from email_setup import get_email_service
+from Lots_schedule_calendar.email_setup import get_email_service
 import base64
 
 # get today as a datetime
@@ -260,9 +256,11 @@ def email_sub80_results(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\High_Direct_Hours_Reports\\'    
+    directory = Path.home() / 'High_Direct_Hours_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the start of the file name
-    file_start = directory + state + ' High Percentage Indirect Hours ' 
+    file_start = state + ' High Percentage Indirect Hours ' 
     # the ending of the file 
     file_end = ' Report for ' + date_str.replace('/','-')  + '.csv'
 
@@ -279,7 +277,7 @@ def email_sub80_results(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"    
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>Check Here for backups or missed email results</a>'
+    email_end = '<a href=' + str(directory) +'>Check Here for backups or missed email results</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + summary_html + email_middle + details_html + email_pre_end + email_end
     # create new message
@@ -298,8 +296,10 @@ def email_sub80_results(date_str, state, state_dict):
     file_mid = 'Summary'
     # create the summary_file name
     summary_file = file_start + file_mid + file_end
+    
+    file_out = directory / summary_file
     # send it to a csv at the destination
-    state_dict['Summary'].to_csv(summary_file, index=False)
+    state_dict['Summary'].to_csv(file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
@@ -314,7 +314,7 @@ def email_sub80_results(date_str, state, state_dict):
     # for each file, add the attachment
     for filename in [summary_file, details_file]:
         part = MIMEBase('application', "octet-stream")
-        part.set_payload(open(filename, "rb").read())
+        part.set_payload(open(file_out, "rb").read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(filename)))
         msg.attach(part)
@@ -340,9 +340,11 @@ def email_sub2lots_results(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\Sub_2_Lots_Reports\\'    
+    directory = Path.home() / 'Sub_2_Lots_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the start of the file name
-    file_start = directory + state + ' Sub 2 Lots Report ' 
+    file_start = state + ' Sub 2 Lots Report ' 
     # the ending of the file 
     file_end = ' Report for ' + date_str.replace('/','-')  + '.csv'
 
@@ -359,7 +361,7 @@ def email_sub2lots_results(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"    
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>Check Here for backups or missed email results</a>'
+    email_end = '<a href=' + str(directory) +'>Check Here for backups or missed email results</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + summary_html + email_middle + details_html + email_pre_end +email_end
     # create new message
@@ -378,8 +380,9 @@ def email_sub2lots_results(date_str, state, state_dict):
     file_mid = 'Summary'
     # create the summary_file name
     summary_file = file_start + file_mid + file_end
+    file_out = directory / summary_file
     # send it to a csv at the destination
-    state_dict['Summary'].to_csv(summary_file, index=False)
+    state_dict['Summary'].to_csv(file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
@@ -394,7 +397,7 @@ def email_sub2lots_results(date_str, state, state_dict):
     # for each file, add the attachment
     for filename in [summary_file, details_file]:
         part = MIMEBase('application', "octet-stream")
-        part.set_payload(open(filename, "rb").read())
+        part.set_payload(open(file_out, "rb").read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(filename)))
         msg.attach(part)
@@ -418,11 +421,14 @@ def email_absent_list(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\Absent_Reports\\'    
+    directory = Path.home() / 'Absent_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the file name
-    file_name = directory + state + ' Absent Report for ' + date_str.replace('/','-')  + '.csv'
+    file_name =  state + ' Absent Report for ' + date_str.replace('/','-')  + '.csv'
+    out_file = directory / file_name
     # send the csv file to my local computer for safe keeping
-    state_dict['Absent'].to_csv(file_name, index=False)
+    state_dict['Absent'].to_csv(out_file, index=False)
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
   
@@ -434,7 +440,7 @@ def email_absent_list(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>This will be a link to the Z drive with backups of the data at some point</a>'
+    email_end = '<a href=' + str(directory) +'>This will be a link to the Z drive with backups of the data at some point</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + absent_html + email_pre_end + email_end
     # create new message
@@ -453,7 +459,7 @@ def email_absent_list(date_str, state, state_dict):
     
    
     part = MIMEBase('application', "octet-stream")
-    part.set_payload(open(file_name, "rb").read())
+    part.set_payload(open(out_file, "rb").read())
     encoders.encode_base64(part)
     part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(file_name)))
     msg.attach(part)
@@ -544,9 +550,12 @@ def email_mdi(date_str, state, state_dict, email_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\MDI\\Automatic\\'    
+    directory = Path.home() / 'MDI' / 'Automatic'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
+    
     # the file name
-    file_name = directory + state + ' MDI ' + date_str.replace('/','-')  + '.xlsx'
+    file_name = directory / (state + ' MDI ' + date_str.replace('/','-')  + '.xlsx')
     # send the csv file to my local computer for safe keeping
     
    
@@ -596,7 +605,7 @@ def email_mdi(date_str, state, state_dict, email_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>This will be a link to the Z drive with backups of the data at some point</a>'
+    email_end = '<a href=' + str(directory) +'>This will be a link to the Z drive with backups of the data at some point</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + '<u>MDI Summary\n</u>' + mdi_summary_html + br
     email_msg += '<u>Direct Hours Breakdown by Job\n</u>' + by_job_html + br

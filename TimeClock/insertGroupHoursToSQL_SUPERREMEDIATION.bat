@@ -1,4 +1,4 @@
-echo off
+@echo off
 setlocal enabledelayedexpansion
 
 :: Define config file location
@@ -31,6 +31,6 @@ echo Python Path: "%PYTHONPATH%"
 echo Running: "%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
 :: Run the Python script
-"%ANACONDA_PATH%" "%PROJECT_PATH%\Speedo_Dashboard\Automated_SpeedoController.py"
+"%ANACONDA_PATH%" "%PROJECT_PATH%\TimeClock\bat_insertGroupHoursToSQL_SuperRemediation.py"
 
 exit

@@ -4,29 +4,28 @@ Created on Wed Jun 16 10:31:11 2021
 
 @author: CWilson
 """
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\users\\cwilson\\documents\\python\\Lots_schedule_calendar')
+
 import datetime
 import pandas as pd
 import time
 import numpy as np
 import os
-from cal_setup import get_calendar_service
-from LOTS_shipping_schedule_conversion2 import draw_the_rest_of_the_horse
-from LOTS_shipping_schedule_conversion2 import retrieve_from_prod_schedule
-from calendar_error_producer_function import produce_error_file
-from calendar_change_producer_function import produce_change_file
-from calendar_emailing_functions_with_gmail_api import send_new_work_type_notice_email
-from calendar_emailing_functions_with_gmail_api import send_date_change_notice_email
-from calendar_emailing_functions_with_gmail_api import send_seq_change_notice_email
-from calendar_emailing_functions_with_gmail_api import send_error_notice_email
-from calendar_emailing_functions_with_gmail_api import daily_changes_new_work_email
-from calendar_emailing_functions_with_gmail_api import daily_errors_email
-from daily_changes_and_additions_for_whiny_mishler import changes_and_new_work
-from daily_changes_and_additions_for_whiny_mishler import daily_errors_summary
+from pathlib import Path
+from Lots_schedule_calendar.cal_setup import get_calendar_service
+from Lots_schedule_calendar.LOTS_shipping_schedule_conversion2 import draw_the_rest_of_the_horse
+from Lots_schedule_calendar.LOTS_shipping_schedule_conversion2 import retrieve_from_prod_schedule
+from Lots_schedule_calendar.calendar_error_producer_function import produce_error_file
+from Lots_schedule_calendar.calendar_change_producer_function import produce_change_file
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_new_work_type_notice_email
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_date_change_notice_email
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_seq_change_notice_email
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_error_notice_email
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import daily_changes_new_work_email
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import daily_errors_email
+from Lots_schedule_calendar.daily_changes_and_additions_for_whiny_mishler import changes_and_new_work
+from Lots_schedule_calendar.daily_changes_and_additions_for_whiny_mishler import daily_errors_summary
 
-from manila_calendar import manila_calendar_function
+from Lots_schedule_calendar.manila_calendar import manila_calendar_function
 
 _SendEmails = False
 
@@ -37,7 +36,7 @@ def get_events_dict(calendar_id):
         # initialize the calendar service       
         service = get_calendar_service()
         # starting time, only find events after right now
-        now = datetime.datetime.utcnow().isoformat() + 'Z'
+        now = datetime.datetime.now(datetime.UTC).isoformat()
         
         events_result = service.events().list(
                calendarId = calendar_id,
@@ -220,12 +219,14 @@ def get_color(calendar_slice):
 
 
 def add_to_change_log_v2(shop = '', job = '', type_of_work = '', number = '', action = '', description=''):
-    change_log_dir = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Change_Logs_v2\\'
+    change_log_dir = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'Change_Logs_v2'
+    if not os.path.exists(change_log_dir):
+        os.makedirs(change_log_dir)
     now = datetime.datetime.now()
     now_str = now.strftime('%Y-%m-%d %H:%M')
     today = now.date()
     today_str = today.strftime('%Y-%m-%d')
-    today_file = change_log_dir + today_str + '.csv'
+    today_file = change_log_dir / (today_str + '.csv')
     headers =  'datetime,shop,job,type_of_work,number,action,description'
     
     joining_list = [now_str, shop, job, type_of_work, number, action, description]
@@ -267,8 +268,11 @@ def get_lots_information(shop):
     
     # get today's date to know which lot information file to pull
     today = datetime.datetime.now().strftime("%m-%d-%Y")    
+    folder_path = Path.home() / 'documents' / 'LOT_schedule_dump'
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
     # cerate filepath
-    file_path = 'c://users/cwilson/documents/LOT_schedule_dump/todays_lot_info_' + today +' ' + shop + '.xlsx'
+    file_path  = folder_path / ('todays_lot_info_' + today +' ' + shop + '.xlsx')
     # process the excel file into a df
     lots_df = pd.read_excel(file_path)
     # rename the index to the lot
