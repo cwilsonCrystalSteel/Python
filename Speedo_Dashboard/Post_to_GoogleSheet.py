@@ -160,7 +160,11 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
 
 def move_to_archive(google_sheet_info_dict, shop=None, dashboard_name=''):
     
-    archive_file = Path(os.getcwd()) / ('archive_' + shop + "_" + dashboard_name + '.csv')
+    archive_dir = Path(os.getcwd()) / 'Speedo_dashboard' / 'archives' 
+    if not os.path.exists(archive_dir):
+        os.makedirs(archive_dir)
+    
+    archive_file =  archive_dir / ('archive_' + shop + "_" + dashboard_name + '.csv')
     
     worksheet = get_google_sheet_as_df(google_sheet_info_dict=google_sheet_info_dict, shop=shop, worksheet=None)
     if os.path.exists(archive_file):
