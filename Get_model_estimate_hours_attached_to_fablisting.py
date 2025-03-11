@@ -608,7 +608,7 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
             df.loc[no_model_search_just_jobs.index] = no_model_search_just_jobs
         
         except:
-            print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the production worksheet google sheet for fill_missing_model_earned_hours')
+            print(f'For {shop}, Get_model_estimate_hours_attached_to_fablisting.py could not reach the production worksheet google sheet for fill_missing_model_earned_hours')
         
         ''' Now we go back to try and fill in anything else from the Averages XLSX file '''
         no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]

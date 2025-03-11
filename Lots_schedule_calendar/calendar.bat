@@ -4,6 +4,9 @@ setlocal enabledelayedexpansion
 :: Define config file location
 set CONFIG_FILE=C:\Users\Netadmin\Documents\GitHub\Python\batFileLocations.txt
 
+set SCRIPT_PATH=Lots_schedule_calendar\LOTS_calendar_updater.py
+
+
 :: Read the anaconda path
 for /f "tokens=2 delims==" %%a in ('findstr /I "anaconda=" %CONFIG_FILE%') do (
     set "ANACONDA_PATH=%%a"
@@ -31,6 +34,6 @@ echo Python Path: "%PYTHONPATH%"
 echo Running: "%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
 :: Run the Python script
-"%ANACONDA_PATH%" "%PROJECT_PATH%\Lots_schedule_calendar\LOTS_calendar_updater.py"
+"%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
 exit

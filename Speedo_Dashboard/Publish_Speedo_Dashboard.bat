@@ -1,8 +1,11 @@
-echo off
+@echo off
 setlocal enabledelayedexpansion
 
 :: Define config file location
 set CONFIG_FILE=C:\Users\Netadmin\Documents\GitHub\Python\batFileLocations.txt
+
+set SCRIPT_PATH=Speedo_Dashboard\Automated_SpeedoController.py
+
 
 :: Read the anaconda path
 for /f "tokens=2 delims==" %%a in ('findstr /I "anaconda=" %CONFIG_FILE%') do (
@@ -31,6 +34,7 @@ echo Python Path: "%PYTHONPATH%"
 echo Running: "%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
 :: Run the Python script
-"%ANACONDA_PATH%" "%PROJECT_PATH%\Speedo_Dashboard\Automated_SpeedoController.py"
+"%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
 exit
+

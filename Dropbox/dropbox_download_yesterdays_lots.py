@@ -4,16 +4,14 @@ Created on Sun Jan 16 09:10:02 2022
 
 @author: CWilson
 """
-
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import os
+from pathlib import Path
 import glob
 import pandas as pd
 import datetime
 import re
 
-log_path = 'C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Last_day_retrieved_log.csv'
+log_path = Path(os.getcwd()) / 'Dropbox' / 'Last_day_retrieved_log.csv'
 def write_to_logfile(dt, status):
     dt_log_string = dt.strftime('%Y-%m-%d')
     this_df = pd.DataFrame([{'date':dt_log_string, 'status':status}])
@@ -34,16 +32,20 @@ critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','
 base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
 base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
 
-
-# open up the log 
-log = pd.read_csv(log_path)
-try:
-    # get the last time a file was the status
-    last_successful_date = log[log['status'].str.startswith('X')].iloc[-1]['date']
-    last_successful_date = log[log['status'] == 'Successfully completed all files'].iloc[-1]['date']
-except Exception:
+if os.path.exists(log_path):
+    # open up the log 
+    log = pd.read_csv(log_path)
+    try:
+        # get the last time a file was the status
+        last_successful_date = log[log['status'].str.startswith('X')].iloc[-1]['date']
+        last_successful_date = log[log['status'] == 'Successfully completed all files'].iloc[-1]['date']
+    except Exception:
+        last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
+ 
+else:    
     last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
-    
+
+ 
 # get the datetime of that date
 try:
     last_successful_dt = datetime.datetime.strptime(last_successful_date,'%m/%d/%Y').date()

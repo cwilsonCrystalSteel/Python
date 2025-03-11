@@ -68,8 +68,8 @@ state_recipients = {'TN':['cwilson@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net'],
                     'EC':['cwilson@crystalsteel.net'],}
 eva_hpt_recipients = ['cwilson@crystalsteel.net']
-
 '''
+
 #%%
 
 # get the data from TIMECLOCK then do basic transformations to it
@@ -204,23 +204,26 @@ if yesterday.weekday() != 6:
         if basis['Direct'].shape[0]:
             # calculate the MDI stuff from the do_mdi function
             mdi_dict = do_mdi(basis, state, yesterday_str)
+            # we get a None if there was nothing in fablisting for the date = yesterday_str
+            if mdi_dict is None:
+                continue
             # email out the mdi email
             # this funtion also adds rrichard@crystalsteel.net & emohamed@crystalsteel.net 
-            email_mdi(yesterday_str, state, copy.deepcopy(mdi_dict), state_recipients)
+            email_mdi(date_str=yesterday_str, state=state, state_dict=copy.deepcopy(mdi_dict), email_dict=state_recipients)
     
 # only send EVA once a week - so on sundays        
 # else:
     
     try:
-        day_pcs = eva_vs_hpt(yesterday_str, yesterday_str)
+        day_pcs = eva_vs_hpt(start_date=yesterday_str, end_date=yesterday_str)
         
         ten_days = (yesterday - datetime.timedelta(days=10)).strftime("%m/%d/%Y")
         
-        ten_day_lot = eva_vs_hpt(ten_days, yesterday_str)
+        ten_day_lot = eva_vs_hpt(start_date=ten_days, end_date=yesterday_str)
         
         sixty_days = (yesterday - datetime.timedelta(days=60)).strftime("%m/%d/%Y")
         
-        sixty_day_job = eva_vs_hpt(sixty_days, yesterday_str)
+        sixty_day_job = eva_vs_hpt(start_date=sixty_days, end_date=yesterday_str)
         
         # change it so you only run the sixty day timespan & then just portion out the 10 day & yesterday
         
@@ -228,7 +231,7 @@ if yesterday.weekday() != 6:
                            '10 day':ten_day_lot,
                            '60 day':sixty_day_job}
             
-        email_eva_vs_hpt(yesterday_str, eva_vs_hpt_dict, eva_hpt_recipients)
+        email_eva_vs_hpt(date_str=yesterday_str, eva_vs_hpt_dict=eva_vs_hpt_dict, email_recipients=eva_hpt_recipients)
         
     except Exception as e:
         print('could not send the email eva_vs_hpt_dict')
