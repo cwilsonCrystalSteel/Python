@@ -19,7 +19,7 @@ ten_day =  (now - datetime.timedelta(days=10)).strftime('%m/%d/%Y')
 
 source = 'bat_insertGroupHoursToSQL_SuperRemediation'
 
-for i in range(2,100):
+for i in range(50,1000):
     
     date = (now - datetime.timedelta(days=i)).strftime('%m/%d/%Y')
     
