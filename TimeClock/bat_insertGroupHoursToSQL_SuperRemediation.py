@@ -13,9 +13,6 @@ from pathlib import Path
 print('Running insertGroupHoursToSQL_REMEDIATION...')
 
 now = datetime.datetime.now()
-two_day = (now - datetime.timedelta(days=2)).strftime('%m/%d/%Y')
-four_day = (now - datetime.timedelta(days=4)).strftime('%m/%d/%Y')
-ten_day =  (now - datetime.timedelta(days=10)).strftime('%m/%d/%Y')
 
 source = 'bat_insertGroupHoursToSQL_SuperRemediation'
 

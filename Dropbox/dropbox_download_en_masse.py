@@ -5,6 +5,7 @@ Created on Fri Nov 12 15:37:58 2021
 @author: CWilson
 """
 import os 
+from pathlib import Path
 import glob
 import pandas as pd
 from navigate_EVA_folder_function import get_df_of_all_lots_files_information
@@ -23,10 +24,15 @@ df = get_df_of_all_lots_files_information()
 # d1 = pd.read_excel(c['destination'].iloc[0], header=2, engine='xlrd', sheet_name='RAW DATA')
 # x = d1[d1['PAGE'] == 'AN8021']
 
-# base_dir = "C:\\Users\\cwilson\\Dropbox\\EVA REPORTS FOR THE DAY\\"
-base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
-
-
+ 
+possible_dir = ['Y:','X:','\\\\192.168.50.9\\Dropbox_(CSF)']
+for ii in possible_dir:
+    if os.path.exists(Path(ii)):
+        base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+        print(f'Using the drive: "{base_dir}"')
+        break
+    else:
+        continue
 
 
 
@@ -50,17 +56,20 @@ jobs = {}
 
 for year in years:
     
-    months = os.listdir(base_dir + year)
+    year_dir = base_dir / year
+    months = os.listdir(year_dir)
     
     for month in months:
         
-        days = os.listdir(base_dir + year + '\\' + month)
+        month_dir = year_dir / month
+        days = os.listdir(month_dir)
         
         for day in days:
             
-            this_day = os.listdir(base_dir + year + '\\' + month + '\\' + day)
+            day_dir = month_dir / day
+            this_day = os.listdir(day_dir)
             
-            xls_files = glob.glob(base_dir + year + '\\' + month + '\\' + day + "\\*.xls")
+            xls_files = glob.glob(str(day_dir / "*.xls"))
             
             for xls_file in xls_files:
                 
