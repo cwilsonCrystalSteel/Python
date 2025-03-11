@@ -6,7 +6,7 @@ Created on Thu Aug  1 15:19:04 2024
 """
 
 from sqlalchemy import create_engine
-from sqlCredentials import returnSqlCredentials
+from utils.sqlCredentials import returnSqlCredentials
 
 
 def yield_SQL_engine():
