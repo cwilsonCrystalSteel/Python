@@ -5,18 +5,19 @@ Created on Thu Jul 25 15:39:29 2024
 @author: CWilson
 """
 
-''' Daily download of the employee information '''
+''' Daily 
+ of the employee information '''
 
 
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
-from TimeClockNavigation import TimeClockBase
-from initSQLConnectionEngine import yield_SQL_engine
+from TimeClock.TimeClockNavigation import TimeClockBase
+from utils.initSQLConnectionEngine import yield_SQL_engine
 from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
+from pathlib import Path
 
-
-
+download_path = Path.home() / 'Downloads' / 'EmployeeInformation'
 engine = yield_SQL_engine()
 
 def print_count_results(schema, engine, suffix_text):
@@ -42,8 +43,7 @@ def print_terminated_count_results(engine, terminated, suffix_text):
 def import_employee_information_to_SQL():
 
     
-
-    x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)     
+    x = TimeClockBase(download_path, headless=True)     
     x.startupBrowser()
     x.tryLogin()
     x.openTabularMenu()
@@ -93,7 +93,7 @@ def import_employee_information_to_SQL():
 
 def determine_terminated_employees():
     # Get the employee information for all employees
-    x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)     
+    x = TimeClockBase(download_path, headless=True)     
     x.verbosity=0
     x.startupBrowser()
     x.tryLogin()
@@ -112,7 +112,7 @@ def determine_terminated_employees():
     x.kill()
     
     # get the employee information for terminated employees
-    x = TimeClockBase("C:\\users\\cwilson\\downloads\\EmployeeInformation\\", headless=True)   
+    x = TimeClockBase(download_path, headless=True)   
     x.verbosity=0
     x.startupBrowser()
     x.tryLogin()

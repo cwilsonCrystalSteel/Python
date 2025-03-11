@@ -4,16 +4,17 @@ Created on Mon Mar  6 19:36:21 2023
 
 @author: CWilson
 """
-import sys
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
+
 from production_dashboards_google_credentials import init_google_sheet
 import pandas as pd
 import datetime
 import time
 # from Predictor import get_prediction_dict
 import numpy as np
+from pathlib import Path
 import os
-# this one will send TimeClock & Fablisting data to google sheet
+
+json_file = Path(os.getcwd()) / 'production-dashboard-other-e051ae12d1ef.json'
 
 
 monthly_dashboard_key = '1hbF775EzjMp80HrUTTWu5JJabzMZSx0e5wb_xHt49R0'
@@ -22,7 +23,7 @@ weekly_dashboard_key = '1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs'
 
 # sheet_name = 'CSM'
 google_sheet_info = {'sheet_key':'1RZKV2-jt5YOFJNKM8EJMnmAmgRM1LnA9R2-Yws2XQEs',
-                     'json_file':'C:\\Users\\cwilson\\Documents\\Python\\production-dashboard-other-e051ae12d1ef.json'
+                     'json_file':json_file
                      }
 
 
@@ -71,7 +72,7 @@ def get_google_sheet_as_df(google_sheet_info_dict, shop=None, worksheet=None):
     df = df.replace('', 0)
     
     try:
-        df['Timestamp'] = pd.to_datetime(df['Timestamp'])
+        df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
     except Exception:
         print('could not convert timestamp to dataframe')
         
@@ -123,12 +124,14 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
         if isinstance(value, np.int32):
             value = int(value)
         try:
-            worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            # worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            worksheet.update_acell(cell, value)
         except:
             num_columns = len(df.columns)-1
          
             worksheet.append_row([''] * num_columns, value_input_option='USER_ENTERED')
-            worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            # worksheet.update(cell, value, value_input_option='USER_ENTERED')
+            worksheet.update_acell(cell, value)
     
     # then paste the observed data
     return None
@@ -157,7 +160,11 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
 
 def move_to_archive(google_sheet_info_dict, shop=None, dashboard_name=''):
     
-    archive_file = 'c:\\users\\cwilson\\documents\\python\\speedo_dashboard\\archive_' + shop + "_" + dashboard_name + '.csv'
+    archive_dir = Path(os.getcwd()) / 'Speedo_dashboard' / 'archives' 
+    if not os.path.exists(archive_dir):
+        os.makedirs(archive_dir)
+    
+    archive_file =  archive_dir / ('archive_' + shop + "_" + dashboard_name + '.csv')
     
     worksheet = get_google_sheet_as_df(google_sheet_info_dict=google_sheet_info_dict, shop=shop, worksheet=None)
     if os.path.exists(archive_file):

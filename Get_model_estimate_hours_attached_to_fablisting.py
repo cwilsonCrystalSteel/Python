@@ -13,10 +13,8 @@ import numpy as np
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 import sys
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
 from attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
-sys.path.append('C:\\Users\\cwilson\\documents\\python\\Speedo_Dashboard')
-from Post_to_GoogleSheet import get_production_worksheet_job_hours
+from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_job_hours
 
 
 # shop = 'CSM'
@@ -610,7 +608,7 @@ def fill_missing_model_earned_hours(fablisting_df, shop):
             df.loc[no_model_search_just_jobs.index] = no_model_search_just_jobs
         
         except:
-            print('Get_model_estimate_hours_attached_to_fablisting.py could not reach the production worksheet google sheet for fill_missing_model_earned_hours')
+            print(f'For {shop}, Get_model_estimate_hours_attached_to_fablisting.py could not reach the production worksheet google sheet for fill_missing_model_earned_hours')
         
         ''' Now we go back to try and fill in anything else from the Averages XLSX file '''
         no_model = df[~df['Has Model'] & df['Earned Hours'].isna()]

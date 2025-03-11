@@ -5,8 +5,6 @@ Created on Tue Aug 10 15:04:26 2021
 @author: CWilson
 """
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 from shutil import copyfile
 from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import pandas as pd
@@ -14,10 +12,16 @@ import datetime
 import json
 import xlsxwriter
 from openpyxl import load_workbook
-code_changes = json.load(open("C:\\users\\cwilson\\documents\\python\\job_and_cost_code_changes.json"))
+import os
+from pathlib import Path
 
-base = 'c:\\users\\cwilson\\documents\\Productive_Employees_Hours_Worked_report\\'
-backup = base + 'Backups\\'
+code_changes_file = Path(os.getcwd()) / 'job_and_cost_code_changes.json'
+
+code_changes = json.load(open(code_changes_file))
+
+
+base = Path.home() / 'documents' / 'Productive_Employees_Hours_Worked_report'
+backup = base / 'Backups'
 
 
 states = ['TN','MD','DE']
@@ -33,7 +37,7 @@ def run_attendance_hours_report(state):
     dumb_list = []
 
     file_name = 'week_by_week_hours_of_employees ' + state 
-    file_path = base + file_name + '.xlsx'    
+    file_path = base / (file_name + '.xlsx'  )  
     starter = pd.read_excel(file_path, sheet_name='Data')
     starter = starter.set_index('Week Start')
     remove_cols = starter.columns[starter.iloc[0].isna()]
@@ -113,8 +117,8 @@ def run_attendance_hours_report(state):
 
         # get the excel file name & backup file name
         file_name = 'week_by_week_hours_of_employees ' + state 
-        file_path = base + file_name + '.xlsx'
-        backup_file_path = backup + file_name + ' ' +today_stamp + '.xlsx'
+        file_path = base / (file_name + '.xlsx')
+        backup_file_path = backup / (file_name + ' ' + today_stamp + '.xlsx')
         
         # copy the current file & move to the backup destination
         copyfile(file_path, backup_file_path)

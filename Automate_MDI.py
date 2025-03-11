@@ -11,10 +11,10 @@ from Gather_data_for_timeclock_based_email_reports import get_information_for_cl
 import datetime
 import pandas as pd
 import sys
-sys.path.append('c://users//cwilson//documents//python//TimeClock//')
-from pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
-
+from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+import os 
+from pathlib import Path
 # start_date = "07/01/2021"
 # end_date = "07/31/2021"
 
@@ -22,14 +22,16 @@ from functions_TimeclockForSpeedoDashboard import return_information_on_clock_da
 
 yesterday = datetime.datetime.now() + datetime.timedelta(days=-1)
 start_date = yesterday.strftime('%m/%d/%Y')
-path = 'c:\\users\\cwilson\\documents\\MDI\\Automatic\\'
+path = Path.home() / 'documents' / 'MDI' / 'Automatic'
+if not os.path.exists(path):
+    os.makedirs(path)
 states = ['TN','DE','MD']
 
 # basis = get_information_for_clock_based_email_reports(start_date, start_date)
 
 def shape_check_before_to_excel(df_or_series, writer, sheet_name, indexTF):
     if df_or_series.shape[0]:
-        df_or_series.to_excel(writer, sheet_name, index=indexTF)
+        df_or_series.to_excel(writer, sheet_name=sheet_name, index=indexTF)
     else:
         print('cannot send this df/series to excel b/c shape[0] == 0: {}'.format(sheet_name))
 
@@ -81,6 +83,11 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     fablisting = grab_google_sheet(sheet, start_date, end_date)
     # get dates between yesterday at 6 am and today at 6 am
     fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
+    # in case there is no records!
+    if not fablisting.shape[0]:
+        print(f'There were no records for {state} between {start_dt} and {end_dt}')
+        return None
+        
     # get the model hours attached to fablisting
     with_model = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
     # sum up the new earned hours
@@ -176,8 +183,8 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     file_date = start_date.replace('/','-')
     
     if proof == True:
-        print(path + state + ' MDI ' + file_date + '.xlsx')
-        with pd.ExcelWriter(path + state + ' MDI ' + file_date + '.xlsx') as writer:
+        print(path / (state + ' MDI ' + file_date + '.xlsx'))
+        with pd.ExcelWriter(path / (state + ' MDI ' + file_date + '.xlsx')) as writer:
             # state_series.to_excel(writer, 'MDI')
             # pieces_missing_model.to_excel(writer, 'Missing Model Pieces')
             # direct_df_departments.to_excel(writer, 'LOT Department Breakdown')
@@ -228,7 +235,7 @@ def verify_mdi(state, start_date, end_date, proof=False):
     state_df = state_df.fillna(0)
     start_date = start_date.replace('/', '-')
     end_date = end_date.replace('/','-')
-    file = path + state + ' Verification ' + start_date + ' to ' + end_date +'.xlsx'
+    file = path / (state + ' Verification ' + start_date + ' to ' + end_date +'.xlsx')
     with pd.ExcelWriter(file) as writer:
         # state_df.to_excel(writer, 'Verification')
         shape_check_before_to_excel(state_df, writer, sheet_name='Verification', indexTF=True)
@@ -256,24 +263,34 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         fablisting = grab_google_sheet(sheet, start_date, end_date)
         # get dates between yesterday at 6 am and today at 6 am
         fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
-        # get the model hours attached to fablisting
-        with_model = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
-        
-        old_way = fill_missing_model_earned_hours(fablisting, shop=sheet[:3])
-        # put the old earned hours column onto the with_model df
-        with_model = with_model.join(old_way[['Hours per Ton','Earned Hours']], rsuffix=' (old)')
-        
-        with_model = with_model[['Job #','Lot #','Quantity','Piece Mark - REV','Weight','Earned Hours','Earned Hours (old)','Has Model']]
-        
-        with_model = with_model.rename(columns={'Earned Hours':'EVA', 'Earned Hours (old)':'HPT', 'Piece Mark - REV':'Pcmark'})
-        
-        with_model['Shop'] = sheet[:3]
-        
-        if sheet == sheets[0]:
-            all_fab = with_model
+        # when we have no records:
+        if not fablisting.shape[0]:
+            with_model  = None
+            print(f'There were no records for {sheet} between {start_dt} and {end_dt}')
         else:
+            # get the model hours attached to fablisting
+            with_model = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
+            
+            old_way = fill_missing_model_earned_hours(fablisting_df=fablisting, shop=sheet[:3])
+            # put the old earned hours column onto the with_model df
+            with_model = with_model.join(old_way[['Hours per Ton','Earned Hours']], rsuffix=' (old)')
+            
+            with_model = with_model[['Job #','Lot #','Quantity','Piece Mark - REV','Weight','Earned Hours','Earned Hours (old)','Has Model']]
+            
+            with_model = with_model.rename(columns={'Earned Hours':'EVA', 'Earned Hours (old)':'HPT', 'Piece Mark - REV':'Pcmark'})
+            
+            with_model['Shop'] = sheet[:3]
+        
+        # if all_fab does not exist, and we have with_models
+        if not 'all_fab' in locals() and not with_model is None:
+            all_fab = with_model.copy()
+        # if all_fab exists, and we have with_models
+        elif not with_model is None:
             all_fab = pd.concat([all_fab, with_model])
-            # all_fab = all_fab.append(with_model, ignore_index=True)
+       
+    # this is for when NONE of the shops had any fablisting records
+    if not 'all_fab' in locals():
+        return None
     
     try:
         all_fab['Weight'] = all_fab['Weight'].apply(pd.to_numeric, errors='coerce')
@@ -293,7 +310,11 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     
     missing_pieces = missing_pieces[['Job #','Lot #','Pcmark','Quantity','Weight','Shop']]
     
-    missing_by_lot = missing_pieces.groupby(['Job #','Lot #']).sum()
+    missing_by_lot = missing_pieces.groupby(['Job #', 'Lot #','Shop']).agg({
+        'Quantity': 'sum',  # Sum numerical columns
+        'Weight': 'sum',
+        'Pcmark': lambda x: ', '.join(x)  # Concatenate strings
+    }).reset_index()
     
     missing_by_lot = missing_by_lot.reset_index()
     
@@ -336,14 +357,17 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     
     eva_vs_hpt_by_lot = eva_vs_hpt_by_lot.reset_index()
     
-    path = 'c:\\users\\cwilson\\documents\\EVA_VS_HPT\\Automatic\\'
+    path = Path.home() / 'documents' / 'EVA_VS_HPT' / 'Automatic'
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     file_date = end_date.replace('/','-')
     timespan_str = '_' + str(timespan) + 'days'
     
     filename = None
     
     if proof == True:
-        filename = path + 'EVA_vs_HPT ' + file_date + timespan_str + '.xlsx'
+        filename = path / ('EVA_vs_HPT ' + file_date + timespan_str + '.xlsx')
         print(filename)
         with pd.ExcelWriter(filename) as writer:
             # missing_pieces.to_excel(writer, 'Missing Pieces', index=False)

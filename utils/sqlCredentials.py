@@ -4,9 +4,12 @@ Created on Thu Jul 25 16:30:24 2024
 
 @author: CWilson
 """
+import os
+from pathlib import Path
 
 def returnSqlCredentials():
-    with open(r'c:\users\cwilson\documents\python\sqlCredentials.txt') as f:
+    credsPath = Path(os.getcwd()) / 'sqlCredentials.txt'
+    with open(credsPath) as f:
         out = f.readlines()
         
     out = [i.replace('\n','') for i in out]

@@ -9,16 +9,19 @@ Created on Thu Jun  2 09:56:04 2022
 
 import datetime
 import pickle
-import os.path
+import os
+from pathlib import Path
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
+
 SCOPES = ['https://mail.google.com/']
 
-CREDENTIALS_FILE = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\lots_calendar.json'
+CREDENTIALS_FILE = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'lots_calendar.json'
 
-PICKLE_PATH = 'C:\\users\\cwilson\\documents\\python\\Lots_schedule_calendar\\email_token.pickle'
+PICKLE_PATH = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'email_token.pickle'
+
 
 
 def get_email_service():

@@ -6,12 +6,12 @@ Created on Wed Jun 16 10:23:24 2021
 """
 
 import datetime
-from cal_setup import get_calendar_service
+from Lots_schedule_calendar.cal_setup import get_calendar_service
 
 def main():
    service = get_calendar_service()
    # Call the Calendar API
-   now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+   now = datetime.datetime.now(datetime.UTC).isoformat()
    print('Getting List o 10 events')
    events_result = service.events().list(
        calendarId='c_uqopq4705q7o473uveoah08h7o@group.calendar.google.com', timeMin=now,

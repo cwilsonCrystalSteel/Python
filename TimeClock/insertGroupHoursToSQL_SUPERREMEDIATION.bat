@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 :: Define config file location
 set CONFIG_FILE=C:\Users\Netadmin\Documents\GitHub\Python\batFileLocations.txt
 
-set SCRIPT_PATH=TimeClock\bat_insertGroupHoursToSQL_TODAY.py
+set SCRIPT_PATH=TimeClock\bat_insertGroupHoursToSQL_SuperRemediation.py
 
 :: Read the anaconda path
 for /f "tokens=2 delims==" %%a in ('findstr /I "anaconda=" %CONFIG_FILE%') do (

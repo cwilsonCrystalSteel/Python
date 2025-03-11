@@ -13,7 +13,8 @@ def find_string_in_the_dir(string_to_find):
     function_name_as_str = "Production_Dashboard_temp_files"
     function_name_as_str = string_to_find
     # directory to search within
-    pydir = 'c://users/cwilson/documents/python/'
+    # pydir = 'c://users/cwilson/documents/python/'
+    pydir = os.getcwd()
     # all the files within the directory
     files = [y for x in os.walk(pydir) for y in glob.glob(os.path.join(x[0], '*.py'))]
     # function/string to find within the python files
@@ -48,4 +49,4 @@ def find_string_in_the_dir(string_to_find):
                         specific[file].append(i)
                 
 
-find_string_in_the_dir("No open sequences")
+find_string_in_the_dir("sqlCredentials")

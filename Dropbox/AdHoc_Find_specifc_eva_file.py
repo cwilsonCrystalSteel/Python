@@ -6,13 +6,18 @@ Created on Fri Apr 28 07:34:37 2023
 """
 
 import os
+from pathlib import Path
 
 
-prereq = '//192.168.50.9//Dropbox_(CSF)//'
-os.scandir(prereq)
-
-# this is the base dir from the X:\\
-base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
+ 
+possible_dir = ['Y:','X:','\\\\192.168.50.9\\Dropbox_(CSF)']
+for ii in possible_dir:
+    if os.path.exists(Path(ii)):
+        base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+        print(f'Using the drive: "{base_dir}"')
+        break
+    else:
+        continue
 
 f = []
 for path, subdirs, files in os.walk(base_dir):

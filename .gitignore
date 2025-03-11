@@ -14,6 +14,7 @@ production-dashboard-other-890ed2bf828b.json
 /Attendance*Project/attendance-310518-02c301c1099c.json
 /Lots_schedule_calendar/Lots_calendar.json
 /Lots_schedule_calendar/calendar_token.pickle
+/Lots_schedule_calendar/calendar_token.json
 /Lots_schedule_calendar/email_token READ ME.pickle
 /Lots_schedule_calendar/email_token.pickle
 /Production_dashboard_temp_files/**
@@ -26,3 +27,4 @@ TimeClockCredentials.txt
 *.pyc
 sqlCredentials.txt
 /TimeClock/TimeClockCredentials.txt
+attendance-310518-a7c687acd47a.json

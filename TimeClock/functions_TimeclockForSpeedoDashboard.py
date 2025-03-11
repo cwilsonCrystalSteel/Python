@@ -7,8 +7,8 @@ Created on Wed Oct 16 11:14:33 2024
 
 
 import pandas as pd
-from pullEmployeeInformationFromSQL import return_sql_ei
-from pullJobCostCodesFromSQL import return_sql_jobcostcodes
+from TimeClock.pullEmployeeInformationFromSQL import return_sql_ei
+from TimeClock.pullJobCostCodesFromSQL import return_sql_jobcostcodes
 
 
 

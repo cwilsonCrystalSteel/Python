@@ -4,16 +4,14 @@ Created on Sun Jan 16 09:10:02 2022
 
 @author: CWilson
 """
-
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import os
+from pathlib import Path
 import glob
 import pandas as pd
 import datetime
 import re
 
-log_path = 'C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Last_day_retrieved_log.csv'
+log_path = Path(os.getcwd()) / 'Dropbox' / 'Last_day_retrieved_log.csv'
 def write_to_logfile(dt, status):
     dt_log_string = dt.strftime('%Y-%m-%d')
     this_df = pd.DataFrame([{'date':dt_log_string, 'status':status}])
@@ -30,20 +28,22 @@ def write_to_logfile(dt, status):
 
 
 critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
-# base_dir = "C:\\Users\\cwilson\\Dropbox\\EVA REPORTS FOR THE DAY\\"
-base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
-base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
 
 
-# open up the log 
-log = pd.read_csv(log_path)
-try:
-    # get the last time a file was the status
-    last_successful_date = log[log['status'].str.startswith('X')].iloc[-1]['date']
-    last_successful_date = log[log['status'] == 'Successfully completed all files'].iloc[-1]['date']
-except Exception:
+if os.path.exists(log_path):
+    # open up the log 
+    log = pd.read_csv(log_path)
+    try:
+        # get the last time a file was the status
+        last_successful_date = log[log['status'].str.startswith('X')].iloc[-1]['date']
+        last_successful_date = log[log['status'] == 'Successfully completed all files'].iloc[-1]['date']
+    except Exception:
+        last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
+ 
+else:    
     last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
-    
+
+ 
 # get the datetime of that date
 try:
     last_successful_dt = datetime.datetime.strptime(last_successful_date,'%m/%d/%Y').date()
@@ -62,6 +62,19 @@ delta = (yesterday - last_successful_dt).days
 #%%
 
 
+
+ 
+possible_dir = ['Y:','X:','\\\\192.168.50.9\\Dropbox_(CSF)']
+for ii in possible_dir:
+    if os.path.exists(Path(ii)):
+        base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+        print(f'Using the drive: "{base_dir}"')
+        break
+    else:
+        continue
+
+
+
 for i in range(0,delta):
     day_dt = last_successful_dt + datetime.timedelta(days=1+i)
     
@@ -70,22 +83,19 @@ for i in range(0,delta):
 
 
     write_to_logfile(day_dt, 'Started')
-    
+   
     try:
-        base_dir = 'X:\\production control\\EVA REPORTS FOR THE DAY\\'
         years = os.listdir(base_dir)
     except:
-        print('COULD NOT CONNECT TO THE X DRIVE / DROPBOX')
-        try:
-            base_dir = '\\\\192.168.50.9\Dropbox_(CSF)\\production control\\EVA REPORTS FOR THE DAY\\'
-            years = os.listdir(base_dir)   
-        except:
-            write_to_logfile(day_dt, 'Could not connect to the dropbox')
-            exit()    
+        write_to_logfile(day_dt, 'Could not connect to the dropbox')
+        exit()           
+    
     
     year = str(day_dt.year)
+    
+    year_dir = base_dir / year
 
-    months = os.listdir(base_dir + year)
+    months = os.listdir(year_dir)
     
     #get it as a zero padded number -> 01 or 12
     month_num = str(day_dt.month).zfill(2)
@@ -94,7 +104,13 @@ for i in range(0,delta):
     
     month_str = month_num + ' - ' + month_name
     
-    days = os.listdir(base_dir + year + '\\' + month_str)
+    month_dir = year_dir / month_str
+    
+    if not os.path.exists(month_dir):
+        print(f"The directory {month_dir} does not exist")
+        continue
+    
+    days = os.listdir(month_dir)
     
     # reread the log in each loop
     log = pd.read_csv(log_path)
@@ -103,26 +119,30 @@ for i in range(0,delta):
     
     if day in days:
     
-        xls_files = glob.glob(base_dir + year + '\\' + month_str + '\\' + day + "\\*.xls")
-        ph = [i for i in xls_files if 'PH' in i]
+        day_dir = month_dir / day    
+    
+        xls_files = glob.glob(str(day_dir / '*.xls'))
+        xlsx_files = glob.glob(str(day_dir / '*.xlsx'))
+        excel_files = xls_files + xlsx_files
+        ph = [i for i in excel_files if 'PH' in i]
         if len(ph):
             print(ph)
-        xls_files = [i for i in xls_files if not 'PH' in i]
+        excel_files = [i for i in excel_files if not 'PH' in i]
         
-        for xls_file in xls_files:
+        for excel_file in excel_files:
             # xls_file = [i for i in xls_files if 'T084' in i][0]
-            xls_file_exists_with_previous_date = False
+            excel_file_exists_with_previous_date = False
             # check to see if we have already recorded the xls file before
-            if xls_file in already_retrieved_files:
-                dates_for_file = log[log['status'] == xls_file]
+            if excel_file in already_retrieved_files:
+                dates_for_file = log[log['status'] == excel_file]
                 # set the indicator true 
-                xls_file_exists_with_previous_date = True
+                excel_file_exists_with_previous_date = True
                 # check to see if we have the same date for that file
                 if dates_for_file[dates_for_file['date'] == day_dt.strftime('%Y-%m-%d')].shape[0]:
                     # skip this file if it already exists with that date
                     continue
             
-            basename = os.path.basename(xls_file)
+            basename = os.path.basename(excel_file)
             
             basename_components = basename.split('-')
             
@@ -186,9 +206,9 @@ for i in range(0,delta):
                 try:
                     # open the current lots file -> fingers crossed the header is alwasy row 2
                     # only maintain those 9 columns that we actually need to pass along -> smaller file sizes
-                    xls_lot = pd.read_excel(xls_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns)
+                    excel_lot = pd.read_excel(excel_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns)
                     # if for some reason it pulls it but the dataframe is shape (0,0)
-                    if not xls_lot.size:
+                    if not excel_lot.size:
                         5 + '5' #???
                         # keep going in the while loop - try another sheet_name
                         continue
@@ -209,68 +229,69 @@ for i in range(0,delta):
                 continue                
 
             # get the 'database' from c:/downlaods/jobnumber
-            xls_main_name = 'c://downloads//' + job_str + '.xlsx'  
+            excel_main_name = Path('c://downloads//') / (job_str + '.xlsx'  )
             # this is if the storage file in c:/downloads exists for that job
-            if os.path.exists(xls_main_name):  
+            if os.path.exists(excel_main_name):  
                 # start by assuming headers are on row 0
                 header_num = 0
                 # open just the first col with 5 rows
                 try:
-                    xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                    excel_main_test = pd.read_excel(excel_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
                 except:
-                    xls_main_test = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
+                    excel_main_test = pd.read_excel(excel_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
              
                 # if the header is not 'JOB NUMBER' iterate header_num and try again
-                while xls_main_test.columns[0] != 'JOB NUMBER':
+                while excel_main_test.columns[0] != 'JOB NUMBER':
                     header_num += 1
                     try:
-                        xls_main_test = pd.read_excel(xls_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
+                        excel_main_test = pd.read_excel(excel_main_name, engine='xlrd', header=header_num, nrows=5, usecols=[0])
                     except:
-                        xls_main_test = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
+                        excel_main_test = pd.read_excel(excel_main_name, engine='openpyxl', header=header_num, nrows=5, usecols=[0])
     
                 #open the main file with the correct header number
                 try:
-                    xls_main = pd.read_excel(xls_main_name, engine='xlrd', header=header_num)
+                    excel_main = pd.read_excel(excel_main_name, engine='xlrd', header=header_num)
                 except:
-                    xls_main = pd.read_excel(xls_main_name, engine='openpyxl', header=header_num)
+                    excel_main = pd.read_excel(excel_main_name, engine='openpyxl', header=header_num)
                 
                 # add the lot to the df
-                xls_lot['LOT'] = lot
+                excel_lot['LOT'] = lot
                 
-                # if that LOT already exists in xls_main
-                if xls_main[xls_main['LOT'] == lot].shape[0]:
-                    # get rid of that LOT's records from xls_main
-                    xls_main = xls_main[xls_main['LOT'] != lot]
+                # if that LOT already exists in excel_main
+                if excel_main[excel_main['LOT'] == lot].shape[0]:
+                    # get rid of that LOT's records from excel_main
+                    excel_main = excel_main[excel_main['LOT'] != lot]
                 
-                xls_lot_grouped = xls_lot.groupby(['JOB NUMBER','SEQUENCE','PAGE','MAIN MEMBER','PRODUCTION CODE','SHAPE','LABOR CODE','LOT']).sum()
-                xls_lot_grouped = xls_lot_grouped.reset_index(drop=False)
+                excel_lot_grouped = excel_lot.groupby(['JOB NUMBER','SEQUENCE','PAGE','MAIN MEMBER','PRODUCTION CODE','SHAPE','LABOR CODE','LOT']).sum()
+                excel_lot_grouped = excel_lot_grouped.reset_index(drop=False)
                 #
                     
                 # append the lot's pieces to that main file 
-                # xls_main = xls_main.append(xls_lot)
-                xls_main = pd.concat([xls_main, xls_lot])
+                # excel_main = excel_main.append(excel_lot)
+                excel_main = pd.concat([excel_main, excel_lot])
                 try:
                     # send back to excel
-                    xls_main.to_excel(xls_main_name , index=False)
-                    print('Successfully added {0} to {1}'.format(basename, xls_main_name))
+                    excel_main.to_excel(excel_main_name , index=False)
+                    print('Successfully added {0} to {1}'.format(basename, excel_main_name))
                 except:
-                    print(f"could not write {xls_main_name}")
+                    print(f"could not write {excel_main_name}")
                 
                 
             
-            #if the file for that job DOES NOT EXIST, create it & create the xls_main variable as that LOTS data
+            #if the file for that job DOES NOT EXIST, create it & create the excel_main variable as that LOTS data
             else:
                 # add the lot to the df
-                xls_lot['LOT'] = lot
+                excel_lot['LOT'] = lot
                 
-                xls_lot.to_excel(xls_main_name, index=False)
+                excel_lot.to_excel(excel_main_name, index=False)
                 
-                xls_main = xls_lot.copy()
+                excel_main = excel_lot.copy()
             
-            log_file = open("C:\\Users\\cwilson\\Documents\\Python\\Dropbox\\Log of LOTS.txt","a")
-            log_file.write(xls_file + ", " + datetime.datetime.now().strftime('%m/%d/%Y %H:%M') + " \n")
+            log_file_path = Path(os.getcwd()) / 'Dropbox' / 'Log of LOTS.txt'
+            log_file = open(log_file_path,"a")
+            log_file.write(excel_file + ", " + datetime.datetime.now().strftime('%m/%d/%Y %H:%M') + " \n")
             log_file.close()
             
-            write_to_logfile(day_dt, xls_file)
+            write_to_logfile(day_dt, excel_file)
     write_to_logfile(day_dt, 'Successfully completed all files')
 

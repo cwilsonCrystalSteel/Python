@@ -5,17 +5,14 @@ Created on Thu Jun  3 08:18:31 2021
 @author: CWilson
 """
 #%% Functions & Importing Modules
-import sys
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append("c://users//cwilson//documents//python//Lots_schedule_calendar//")
 import pandas as pd
 import datetime
 import glob
 import os
+from pathlib import Path
 from attendance_google_sheets_credentials_startup import init_google_sheet
-from calendar_error_producer_function import produce_error_file
-from calendar_emailing_functions_with_gmail_api import send_error_notice_email
+from Lots_schedule_calendar.calendar_error_producer_function import produce_error_file
+from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_error_notice_email
 
 pm_emails = {'Darryl': 'dgassaway@crystalsteel.net',
              'Darryl ': 'dgassaway@crystalsteel.net',
@@ -268,6 +265,11 @@ def shipping_schedule_cleaner_of_bad_number_column(ss, shop, send_emails=False):
     return ss
 
 def shipping_schedule_cleaner_of_bad_dates(ss, shop, send_emails=False):
+    ''' I am doing this because I want the dates in ss2['Delivery'] to be checked each row 
+    I cannot trust these people to enter consistent date formatting'''
+    import warnings
+    warnings.simplefilter(action='ignore', category=UserWarning)
+    
     ss2 = ss.copy()
     # convert delivery to a datetime
     ss2['Delivery'] = pd.to_datetime(ss2['Delivery'].copy(), errors='coerce').dt.date
@@ -452,7 +454,7 @@ def lots_log_convert_sequences_col_to_list(ll):
         # go thru each item in that list
         for j, seq_value in enumerate(seq_list):
             # if it starts or ends with whitespace - strip
-            if seq_value[0] == ' ' or seq_value[-1] == ' ':
+            if len(seq_value) and (seq_value[0] == ' ' or seq_value[-1] == ' '):
                 # change the value in the list to the new value w/o whitespaces
                 seq_list[j] = seq_value.strip()
                 # add the lot to the funky_lots list
@@ -570,7 +572,8 @@ def draw_the_rest_of_the_horse(shop, send_emails=False):
     ll = clean_lots_log(ll, shop, send_emails)
 
     
-    
+    if ll is None:
+        print(shop)
     
     open_lots = {}
     
@@ -654,7 +657,11 @@ def draw_the_rest_of_the_horse(shop, send_emails=False):
         today = datetime.datetime.today()
         # todays date string for the excel file output
         today_str = today.strftime("%m-%d-%Y")
+        folder_path = Path.home() / 'documents' / 'LOT_schedule_dump'
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
         # send the lots_df to excel file
-        open_lots_df.to_excel('c://users/cwilson/documents/LOT_schedule_dump/todays_lot_info_' + today_str + ' '+shop + '.xlsx')
+        outfile = folder_path / ('todays_lot_info_' + today_str + ' ' + shop + '.xlsx')
+        open_lots_df.to_excel(outfile)
     
     

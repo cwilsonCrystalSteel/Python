@@ -6,18 +6,14 @@ Created on Fri Feb 18 13:36:53 2022
 """
 
 import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('C:\\users\\cwilson\\documents\\python\\Lots_schedule_calendar')
-sys.path.append('C:\\users\\cwilson\\documents\\python\\attendance project')
 import datetime
 import pandas as pd
 import time
 import numpy as np
-from cal_setup import get_calendar_service
+from Lots_schedule_calendar.cal_setup import get_calendar_service
 from attendance_google_sheets_credentials_startup import init_google_sheet
-from manila_calendar_emailing_functions import send_new_work_type_notice_email
-from manila_calendar_emailing_functions import send_date_change_notice_email
-from LOTS_shipping_schedule_conversion2 import get_shipping_schedule
+from Lots_schedule_calendar.manila_calendar_emailing_functions import send_new_work_type_notice_email, send_date_change_notice_email
+from Lots_schedule_calendar.LOTS_shipping_schedule_conversion2 import get_shipping_schedule
 
 
 _SendEmails = True
@@ -39,7 +35,7 @@ def manila_calendar_as_dict(cal_id):
         # initialize the calendar service       
         service = get_calendar_service()
         # starting time, only find events after right now
-        now = datetime.datetime.utcnow().isoformat() + 'Z'
+        now = datetime.datetime.now(datetime.UTC).isoformat()
         
         events_result = service.events().list(
                calendarId = cal_id,

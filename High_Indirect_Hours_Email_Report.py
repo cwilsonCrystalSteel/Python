@@ -6,13 +6,9 @@ Created on Wed Apr 28 13:11:46 2021
 """
 #%% the initial fireup of the file & getting data from TIMECLOCK
 
-import sys
-sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
-sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
-sys.path.append('c://users//cwilson//documents//python//Attendance Project//')
-sys.path.append('c://users//cwilson//documents//python//Lots_schedule_calendar//')
 import pandas as pd
 import os
+from pathlib import Path
 import datetime
 import numpy as np
 import copy
@@ -20,7 +16,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
-from email_setup import get_email_service
+from Lots_schedule_calendar.email_setup import get_email_service
 import base64
 
 # get today as a datetime
@@ -260,9 +256,11 @@ def email_sub80_results(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\High_Direct_Hours_Reports\\'    
+    directory = Path.home() / 'documents' / 'High_Direct_Hours_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the start of the file name
-    file_start = directory + state + ' High Percentage Indirect Hours ' 
+    file_start = state + ' High Percentage Indirect Hours ' 
     # the ending of the file 
     file_end = ' Report for ' + date_str.replace('/','-')  + '.csv'
 
@@ -279,7 +277,7 @@ def email_sub80_results(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"    
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>Check Here for backups or missed email results</a>'
+    email_end = '<a href=' + str(directory) +'>Check Here for backups or missed email results</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + summary_html + email_middle + details_html + email_pre_end + email_end
     # create new message
@@ -298,8 +296,10 @@ def email_sub80_results(date_str, state, state_dict):
     file_mid = 'Summary'
     # create the summary_file name
     summary_file = file_start + file_mid + file_end
+    
+    summary_file_out = directory / summary_file
     # send it to a csv at the destination
-    state_dict['Summary'].to_csv(summary_file, index=False)
+    state_dict['Summary'].to_csv(summary_file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
@@ -307,12 +307,13 @@ def email_sub80_results(date_str, state, state_dict):
     file_mid = 'Details'
     # create the details_file name
     details_file = file_start + file_mid + file_end
+    details_file_out = directory / details_file
     # send it to a csv at the destination
-    state_dict['Detail'].to_csv(details_file, index=False)
+    state_dict['Detail'].to_csv(details_file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(details_file, "I://Scanned Docs//")
     # for each file, add the attachment
-    for filename in [summary_file, details_file]:
+    for filename in [summary_file_out, details_file_out]:
         part = MIMEBase('application', "octet-stream")
         part.set_payload(open(filename, "rb").read())
         encoders.encode_base64(part)
@@ -340,9 +341,11 @@ def email_sub2lots_results(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\Sub_2_Lots_Reports\\'    
+    directory = Path.home() / 'documents' /'Sub_2_Lots_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the start of the file name
-    file_start = directory + state + ' Sub 2 Lots Report ' 
+    file_start = state + ' Sub 2 Lots Report ' 
     # the ending of the file 
     file_end = ' Report for ' + date_str.replace('/','-')  + '.csv'
 
@@ -359,7 +362,7 @@ def email_sub2lots_results(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"    
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>Check Here for backups or missed email results</a>'
+    email_end = '<a href=' + str(directory) +'>Check Here for backups or missed email results</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + summary_html + email_middle + details_html + email_pre_end +email_end
     # create new message
@@ -378,8 +381,9 @@ def email_sub2lots_results(date_str, state, state_dict):
     file_mid = 'Summary'
     # create the summary_file name
     summary_file = file_start + file_mid + file_end
+    summary_file_out = directory / summary_file
     # send it to a csv at the destination
-    state_dict['Summary'].to_csv(summary_file, index=False)
+    state_dict['Summary'].to_csv(summary_file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
@@ -387,8 +391,9 @@ def email_sub2lots_results(date_str, state, state_dict):
     file_mid = 'Details'
     # create the details_file name
     details_file = file_start + file_mid + file_end
+    details_file_out = directory / details_file
     # send it to a csv at the destination
-    state_dict['Detail'].to_csv(details_file, index=False)
+    state_dict['Detail'].to_csv(details_file_out, index=False)
     ## copy the file from the local drive to somewhere on the server
     # shutil.copy(details_file, "I://Scanned Docs//")
     # for each file, add the attachment
@@ -418,11 +423,14 @@ def email_absent_list(date_str, state, state_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\Absent_Reports\\'    
+    directory = Path.home() / 'documents' / 'Absent_Reports'
+    if not os.path.exists(directory):
+        os.makedirs(directory) 
     # the file name
-    file_name = directory + state + ' Absent Report for ' + date_str.replace('/','-')  + '.csv'
+    file_name =  state + ' Absent Report for ' + date_str.replace('/','-')  + '.csv'
+    out_file = directory / file_name
     # send the csv file to my local computer for safe keeping
-    state_dict['Absent'].to_csv(file_name, index=False)
+    state_dict['Absent'].to_csv(out_file, index=False)
     # shutil.copy(summary_file, "I://Scanned Docs//")
     
   
@@ -434,7 +442,7 @@ def email_absent_list(date_str, state, state_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>This will be a link to the Z drive with backups of the data at some point</a>'
+    email_end = '<a href=' + str(directory) +'>This will be a link to the Z drive with backups of the data at some point</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + absent_html + email_pre_end + email_end
     # create new message
@@ -453,7 +461,7 @@ def email_absent_list(date_str, state, state_dict):
     
    
     part = MIMEBase('application', "octet-stream")
-    part.set_payload(open(file_name, "rb").read())
+    part.set_payload(open(out_file, "rb").read())
     encoders.encode_base64(part)
     part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(file_name)))
     msg.attach(part)
@@ -544,20 +552,31 @@ def email_mdi(date_str, state, state_dict, email_dict):
     # the reporting email address
     my_email = 'csmreporting@crystalsteel.net'
     # the directory to save the csv files as a copy to
-    directory = 'c:\\users\\cwilson\\documents\\MDI\\Automatic\\'    
+    directory = Path.home() / 'documents' / 'MDI' / 'Automatic'
+    # if the directory does not exist
+    if not os.path.exists(directory):
+        # create the directory
+        os.makedirs(directory) 
+    
     # the file name
-    file_name = directory + state + ' MDI ' + date_str.replace('/','-')  + '.xlsx'
+    file_name = directory / (state + ' MDI ' + date_str.replace('/','-')  + '.xlsx')
     # send the csv file to my local computer for safe keeping
     
    
-    
-    
+
     # get the df from the dict
     mdi_summary = state_dict['MDI Summary']
-    
+    # round off the numbers 
     mdi_summary = mdi_summary.round(2)
     # change the efficiency numbers to strings in percentage format
-    mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] = (mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] * 100).round(1).astype(str) + ' %'
+    # mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] = (mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] * 100).round(1).astype(str) + ' %'
+    # Ensure the column can hold string values before assignment
+    mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] = (
+        (mdi_summary.loc[['Efficiency (Model)', 'Efficiency (Old)']] * 100)
+        .round(1)
+        .astype(str) + ' %'
+    ).astype(object)  # Explicitly convert to object dtype before assignment
+
     # put prettier names on the series for the email 
     mdi_summary = mdi_summary.rename({'Earned (Model)': 'Earned Hours (EVA)',
                                       'Earned (Old)': 'Earned Hours (HPT)',
@@ -596,7 +615,7 @@ def email_mdi(date_str, state, state_dict, email_dict):
     # little note regarding who to contact about the reports
     email_pre_end = "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"
     # create the hyperlink ending that links to a directory
-    email_end = '<a href=' + directory +'>This will be a link to the Z drive with backups of the data at some point</a>'
+    email_end = '<a href=' + str(directory) +'>This will be a link to the Z drive with backups of the data at some point</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + '<u>MDI Summary\n</u>' + mdi_summary_html + br
     email_msg += '<u>Direct Hours Breakdown by Job\n</u>' + by_job_html + br
@@ -652,76 +671,94 @@ def email_eva_vs_hpt(date_str, eva_vs_hpt_dict, email_recipients):
     # the file name
     file_names = []
     for key in eva_vs_hpt_dict.keys():
+        if eva_vs_hpt_dict[key] is None:
+            continue
         file_names.append(eva_vs_hpt_dict[key]['Filename'])
-    # send the csv file to my local computer for safe keeping
     
-    missing_pieces = eva_vs_hpt_dict['Yesterday']['Missing']
-    
-    missing_pieces['Job #'] = missing_pieces['Job #'].astype(int).astype(str)
-    
-    missing_pieces_html = missing_pieces.to_html(col_space=100, index=False, justify='center') 
-    
-   # get the different dataframes
-    by_pcmark = eva_vs_hpt_dict['Yesterday']['Pcmark'].iloc[:25]
-    by_lot = eva_vs_hpt_dict['10 day']['Lot'].iloc[:10]
-    by_job = eva_vs_hpt_dict['60 day']['Job'].iloc[:10]
-    
-    
-    percent_diff = by_pcmark['% Diff'].copy()
-    by_pcmark.loc[:,'bins'] = pd.cut(percent_diff, [0,0.5,1,max(2, max(percent_diff))])
-    by_pcmark_summary = by_pcmark.groupby('bins').count()
-    by_pcmark = by_pcmark.drop(columns=['bins'])
-    by_pcmark_summary['Range'] = ['< 50%','50-100%','> 100%']
-    by_pcmark_summary = by_pcmark_summary.set_index('Range')
-    by_pcmark_summary['% Share'] = by_pcmark_summary['Quantity'] / by_pcmark_summary['Quantity'].sum()
-    by_pcmark_summary['% Share'] = (by_pcmark_summary['% Share'].round(2) * 100).astype(int).astype(str) + ' %'
-    by_pcmark_summary = by_pcmark_summary[['Quantity','% Share']].reset_index()
-    by_pcmark_summary_html = by_pcmark_summary.to_html(col_space=100, index=False, justify='center')
-    
-    # by_pcmark = by_pcmark.drop(columns=['bins'])
     # add rounding to some columns
     rounding_dict = {'Tons':2, 'EVA':1, 'HPT':1, 'Hr. Diff':1, '% Diff':2}    
-    by_pcmark = by_pcmark.round(rounding_dict)
+    renaming_dict = {'Tons':'--Tons--', 'EVA':'--EVA--','HPT':'--HPT--', 'Quantity':'--Qty--'}
+    
+    # init the email_msg
+    email_msg = "\n<p>EVA & HPT recap " + date_str + "</p>\n"
+    
+    # This is because sometimes we dont find anything in fablisting for yesterday
+    # but when we do, then do all this stuff
+    if not eva_vs_hpt_dict['Yesterday'] is None:
+        missing_pieces = eva_vs_hpt_dict['Yesterday']['Missing']
+        
+        missing_pieces['Job #'] = missing_pieces['Job #'].astype(int).astype(str)
+        
+        missing_pieces_html = missing_pieces.to_html(col_space=100, index=False, justify='center') 
+    
+       # get the different dataframes
+        by_pcmark = eva_vs_hpt_dict['Yesterday']['Pcmark'].iloc[:25]
+        
+        percent_diff = by_pcmark['% Diff'].copy()
+        by_pcmark = by_pcmark.copy()
+        by_pcmark.loc[:,'bins'] = pd.cut(percent_diff, [0,0.5,1,max(2, max(percent_diff))])
+        by_pcmark_summary = by_pcmark.groupby('bins', observed=False).count()
+        by_pcmark = by_pcmark.drop(columns=['bins'])
+        by_pcmark_summary['Range'] = ['< 50%','50-100%','> 100%']
+        by_pcmark_summary = by_pcmark_summary.set_index('Range')
+        by_pcmark_summary['% Share'] = by_pcmark_summary['Quantity'] / by_pcmark_summary['Quantity'].sum()
+        by_pcmark_summary['% Share'] = (by_pcmark_summary['% Share'].round(2) * 100).astype(int).astype(str) + ' %'
+        by_pcmark_summary = by_pcmark_summary[['Quantity','% Share']].reset_index()
+    
+        by_pcmark = by_pcmark.round(rounding_dict)
+        by_pcmark_summary_html = by_pcmark_summary.to_html(col_space=100, index=False, justify='center')
+    
+        by_pcmark = by_pcmark.rename(columns = renaming_dict)
+        by_pcmark['% Diff'] = (by_pcmark['% Diff'] * 100).round(0).astype(int).astype(str) + ' %'
+
+        by_pcmark['Job #'] = by_pcmark['Job #'].astype(int).astype(str)
+        by_pcmark = by_pcmark.to_html(col_space=100, index=False)
+
+        email_msg += '<u>Pieces missing from the Model files\n</u>' + missing_pieces_html
+        
+        # combine all the HTML strings to form the message
+        email_msg += '<p>Remember to check Fablisting for spelling errors (check Job, Lot, & Pcmark), as that can cause pieces to show up in this report.' + br
+        email_msg += "If there are no spelling errors & pieces still show up here, it is likely that there is not a corresponding LOT file in the Dropbox</p>" + br
+        email_msg += "Here is the breakdown of how many of yesterday's pieces differ between models" + by_pcmark_summary_html + br
+        email_msg += "\n<p>See the attached Excel files for a full breakdown of EVA hours vs. HPT Hours." + br
+        email_msg += "The tables in this email only show the top offenders...</p>\n" 
+        email_msg += '<u>\nDifference between EVA & HPT models Yesterday, by Piecemark (TOP 25)\n</u>' + by_pcmark + br
+
+    # this is when there isnt anything from fablisting for yesterday
+    else:
+        email_msg += '<p>Remember to check Fablisting for spelling errors (check Job, Lot, & Pcmark), as that can cause pieces to show up in this report.' + br
+        email_msg += f'There were no pieces found in fablisting for {date_str}.</p>' + br
+        email_msg += "\n<p>See the attached Excel files for a full breakdown of EVA hours vs. HPT Hours." + br
+        email_msg += "The tables in this email only show the top offenders...</p>\n" 
+    
+    ''' There is an almost gurantee that the following will always have records in them'''     
+    
+    by_lot = eva_vs_hpt_dict['10 day']['Lot'].iloc[:15]
+    by_job = eva_vs_hpt_dict['60 day']['Job'].iloc[:15]
+    
+    # by_pcmark = by_pcmark.drop(columns=['bins'])
     by_lot = by_lot.round(rounding_dict)
     by_job = by_job.round(rounding_dict)
     # rename some columns
-    renaming_dict = {'Tons':'--Tons--', 'EVA':'--EVA--','HPT':'--HPT--', 'Quantity':'--Qty--'}
-    by_pcmark = by_pcmark.rename(columns = renaming_dict)
     by_lot = by_lot.rename(columns = renaming_dict)
     by_job = by_job.rename(columns = renaming_dict)
     # convert the percentage column to an actual percentage
-    by_pcmark['% Diff'] = (by_pcmark['% Diff'] * 100).round(0).astype(int).astype(str) + ' %'
     by_lot['% Diff'] = (by_lot['% Diff'] * 100).round(0).astype(int).astype(str) + ' %'
     by_job['% Diff'] = (by_job['% Diff'] * 100).round(0).astype(int).astype(str) + ' %'
     # convert the job # column to int
-    by_pcmark['Job #'] = by_pcmark['Job #'].astype(int).astype(str)
     by_lot['Job #'] = by_lot['Job #'].astype(int).astype(str)
     by_job['Job #'] = by_job['Job #'].astype(int).astype(str)
     
     
-    # Limit the size of the eva vs hpt tables for the email report
-    # by_pcmark = eva_vs_hpt_dict['Yesterday']['Pcmark'].iloc[:25]
-    # by_lot = eva_vs_hpt_dict['10 day']['Lot'].iloc[:10]
-    # by_job = eva_vs_hpt_dict['60 day']['Job'].iloc[:10]    
-    
-    
     # covnert to html tables
-    by_pcmark = by_pcmark.to_html(col_space=100, index=False)
     by_lot = by_lot.to_html(col_space=100, index=False, justify='center')
     by_job = by_job.to_html(col_space=100, index=False, justify='center')
     
 
-    email_msg = "\n<p>EVA & HPT recap " + date_str + "</p>\n"
-    # combine all the HTML strings to form the message
-    email_msg += '<u>Pieces missing from the Model files\n</u>' + missing_pieces_html
-    email_msg += '<p>Remember to check Fablisting for spelling errors (check Job, Lot, & Pcmark), as that can cause pieces to show up in this report.' + br
-    email_msg += "If there are no spelling errors & pieces still show up here, it is likely that there is not a corresponding LOT file in the Dropbox</p>" + br
-    email_msg += "Here is the breakdown of how many of yesterday's pieces differ between models" + by_pcmark_summary_html + br
-    email_msg += "\n<p>See the attached Excel files for a full breakdown of EVA hours vs. HPT Hours." + br
-    email_msg += "The tables in this email only show the top offenders..</p>\n" 
-    email_msg += '<u>\nDifference between EVA & HPT models Yesterday, by Piecemark (TOP 25)\n</u>' + by_pcmark + br
-    email_msg += '<u>\nDifference between EVA & HPT models Last 10 days, by Lot (TOP 10)\n</u>' + by_lot + br
-    email_msg += '<u>\nDifference between EVA & HPT models Last 60 days, by Job (TOP 10)\n</u>' + by_job + br
+    
+
+    email_msg += '<u>\nDifference between EVA & HPT models Last 10 days, by Lot (TOP 15)\n</u>' + by_lot + br
+    email_msg += '<u>\nDifference between EVA & HPT models Last 60 days, by Job (TOP 15)\n</u>' + by_job + br
     email_msg += "\n<br></br>\n<p>Please email cwilson@crystalsteel.net for questions regarding this information</p>\n"
 
     # create new message
@@ -738,6 +775,8 @@ def email_eva_vs_hpt(date_str, eva_vs_hpt_dict, email_recipients):
     msg.attach(part1)
     
     for key in eva_vs_hpt_dict.keys():
+        if eva_vs_hpt_dict[key] is None:
+            continue
         file_name = eva_vs_hpt_dict[key]['Filename']
         part = MIMEBase('application', "octet-stream")
         part.set_payload(open(file_name, "rb").read())

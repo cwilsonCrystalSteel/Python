@@ -7,12 +7,14 @@ Created on Sun Jul 10 09:10:48 2022
 
 
 import os
+from pathlib import Path
 import datetime
 import pandas as pd
 from csv import reader
 
-change_folder = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Change_Logs'
-error_folder = 'C:\\Users\\cwilson\\Documents\\Python\\Lots_schedule_calendar\\Error_logs'
+change_folder = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'Change_Logs'
+error_folder = Path(os.getcwd()) / 'Lots_schedule_calendar' / 'Error_logs'
+
 
 
 now = datetime.datetime.now()
