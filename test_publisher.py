@@ -9,7 +9,7 @@ import sys
 sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import datetime
 import gspread
-from google_sheets_credentials_startup import init_google_sheet
+from utils.google_sheets_credentials_startup import init_google_sheet
 from Update_History_Google_Sheet import update_history
 import time
 import timeit

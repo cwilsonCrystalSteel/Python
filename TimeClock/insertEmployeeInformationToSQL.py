@@ -14,7 +14,6 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from TimeClock.TimeClockNavigation import TimeClockBase
 from utils.initSQLConnectionEngine import yield_SQL_engine
-from Gather_data_for_timeclock_based_email_reports import get_ei_csv_downloaded
 from pathlib import Path
 
 download_path = Path.home() / 'Downloads' / 'EmployeeInformation'
@@ -42,6 +41,7 @@ def print_terminated_count_results(engine, terminated, suffix_text):
 
 def import_employee_information_to_SQL():
 
+    print(f'{"*"*50}\nBegining to import employee information to SQL\n{"*"*50}')
     
     x = TimeClockBase(download_path, headless=True)     
     x.startupBrowser()
@@ -92,6 +92,8 @@ def import_employee_information_to_SQL():
        
 
 def determine_terminated_employees():
+    print(f'{"*"*50}\nBegining to determine terminated employees into SQL\n{"*"*50}')
+    
     # Get the employee information for all employees
     x = TimeClockBase(download_path, headless=True)     
     x.verbosity=0

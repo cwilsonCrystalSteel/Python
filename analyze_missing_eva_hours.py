@@ -5,11 +5,15 @@ Created on Thu Jul 14 09:08:20 2022
 @author: CWilson
 """
 
-
+import os
+from pathlib import Path
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2, fill_missing_model_earned_hours
 import pandas as pd
 import numpy as np
+
+directory = Path.home() / 'documents' / 'analyze_missing_hours'
+
 
 start_date = '01/01/2021'
 end_date = '08/01/2022'
@@ -24,9 +28,9 @@ fab_csf = fab_csf[keep_cols]
 fab_csm = fab_csm[keep_cols]
 
 
-fab_fed_model = apply_model_hours2(fab_fed, fill_missing_values=False, shop='FED')
-fab_csf_model = apply_model_hours2(fab_csf, fill_missing_values=False, shop='CSF')
-fab_csm_model = apply_model_hours2(fab_csm, fill_missing_values=False, shop='CSM')
+fab_fed_model = apply_model_hours2(fablisting_df=fab_fed, fill_missing_values=False, shop='FED')
+fab_csf_model = apply_model_hours2(fablisting_df=fab_csf, fill_missing_values=False, shop='CSF')
+fab_csm_model = apply_model_hours2(fablisting_df=fab_csm, fill_missing_values=False, shop='CSM')
 
 
 fab_fed_model['shop'] = 'FED'
@@ -212,10 +216,9 @@ missing_and_earned_csf = eva_csf.merge(est_missing_csf, on=['Month','Year'], suf
 missing_and_earned_csm = eva_csm.merge(est_missing_csm, on=['Month','Year'], suffixes=(' of Pcs with model',' of Pcs missing model'))
 
 
-path = 'c:\\users\\cwilson\\documents\\analyze_missing_hours\\analyze missing hours '
-path += start_date.replace('/','-') + ' to ' + end_date.replace('/','-')
-path += '.xlsx'
-with pd.ExcelWriter(path) as writer:
+filename = 'analyze missing hours' + start_date.replace('/','-') + ' to ' + end_date.replace('/','-') + '.xlsx'
+filepath = directory / filename
+with pd.ExcelWriter(filepath) as writer:
     missing_and_earned_all.to_excel(writer, 'ALL shops summary')
     missing_and_earned_fed.to_excel(writer, 'FED summary')
     missing_and_earned_csf.to_excel(writer, 'CSF summary')

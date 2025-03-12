@@ -11,7 +11,7 @@ import pandas as pd
 import time
 import numpy as np
 from Lots_schedule_calendar.cal_setup import get_calendar_service
-from attendance_google_sheets_credentials_startup import init_google_sheet
+from utils.attendance_google_sheets_credentials_startup import init_google_sheet
 from Lots_schedule_calendar.manila_calendar_emailing_functions import send_new_work_type_notice_email, send_date_change_notice_email
 from Lots_schedule_calendar.LOTS_shipping_schedule_conversion2 import get_shipping_schedule
 
