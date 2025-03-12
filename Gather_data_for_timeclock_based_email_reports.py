@@ -167,6 +167,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
         try:
             count += 1
             timeclocker = download_group_hours(start_date, end_date, download_folder)
+            
             # downloadedSuccessful.startup()
             # downloadedSuccessful.navigate()
             downloadedSuccessful = timeclocker.downloader()

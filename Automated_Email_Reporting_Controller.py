@@ -142,7 +142,7 @@ if os.path.exists(yesterday_lots_calendar_changelog):
     try:
         email_delivery_calendar_changelog(yesterday_str, 
                                           file_name = yesterday_lots_calendar_changelog, 
-                                          recipient_list = ['cwilson@crystalsteel.net', 'jturner@crystalsteel.net'])
+                                          recipient_list = ['cwilson@crystalsteel.net'])
     except:
         print('email_delivery_calendar_changelog failed')
 else:

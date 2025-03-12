@@ -8,7 +8,7 @@ Created on Thu Apr 22 12:30:24 2021
 
 import pandas as pd
 import gspread
-from google_sheets_credentials_startup import init_google_sheet
+from utils.google_sheets_credentials_startup import init_google_sheet
 import datetime 
 
 # state = 'TN'

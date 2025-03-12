@@ -11,7 +11,7 @@ import time
 
 def update_history(last_datetime, state):
     
-    from google_sheets_credentials_startup import init_google_sheet
+    from utils.google_sheets_credentials_startup import init_google_sheet
 
     live_output_google_sheets_key = "12yFpSXyblbhueEM6e5vz_WaEXJKTsozHvkfS9gjux3w"
     # Grab the spreadsheet

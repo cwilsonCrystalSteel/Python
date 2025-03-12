@@ -13,19 +13,10 @@ import numpy as np
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 import sys
-from attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
+from utils.attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
 from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_job_hours
 
 
-# shop = 'CSM'
-# get the data from the fab listing google sheet
-# fablisting_df = grab_google_sheet(shop + ' QC Form', "06/01/2021", "02/15/2022")
-# get the df of eva destinations 
-# eva_destinations_df = get_df_of_all_lots_files_information()
-
-# fill = apply_model_hours2(fablisting_df, how='model', fill_missing_values=True, shop=shop, return_missing_job_lots=True)
-# fill['missing job lots'].to_excel('c:\\users\\cwilson\\downloads\\' + shop + ' missing job lots.xlsx')
-# fill['df'].to_excel('c:\\users\\cwilson\\downloads\\' + shop + ' fablisting with model filled in.xlsx')
 
 def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, shop='min', return_missing_job_lots=False):
     

@@ -336,10 +336,10 @@ class TimeClockBase():
         self.printverbosity('Found Export Templates')
         
         # clicks on my custom report called "emplyee locations"
-        self.employeeLocationsDropdownItem = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'employee location')]"), 'employeeLocationsDropdownItem', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
+        self.employeeLocationsDropdownItem = validateElement(self.driver, (By.XPATH, "//*[contains(text(), 'employee locations')]"), 'employeeLocationsDropdownItem', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.employeeLocationsDropdownItem.click()
         self.printverbosity('Found custom tempalte: employee locations')
-        
+       
         # termianted & suspended employees are automatically excluded
         if exclude_terminated == False:
             self.includeTerminatedSuspendedEmployees()

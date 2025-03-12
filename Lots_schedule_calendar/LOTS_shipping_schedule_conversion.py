@@ -10,7 +10,7 @@ import datetime
 import glob
 import os
 from pathlib import Path
-from attendance_google_sheets_credentials_startup import init_google_sheet
+from utils.attendance_google_sheets_credentials_startup import init_google_sheet
 import matplotlib.pyplot as plt
 
 # get the production worksheet 

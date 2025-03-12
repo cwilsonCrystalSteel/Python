@@ -95,7 +95,7 @@ def get_production_dashboard_data(start_date, end_date, base_data):
         # get the fablisting for the date range
         fablisting = grab_google_sheet(sheet_name, start_date, end_date, start_hour=5)
         # apply the model hours to the fablisting dataframe
-        fablisting = apply_model_hours(fablisting_df = fablisting, 
+        fablisting = apply_model_hours2(fablisting_df = fablisting, 
                                        how = 'old way', 
                                        shop = sheet_name[:3])
         

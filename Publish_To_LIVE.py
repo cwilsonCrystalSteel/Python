@@ -9,7 +9,7 @@ Created on Fri Mar 19 09:50:48 2021
 import sys
 sys.path.append("C:\\Users\\cwilson\\AppData\\Local\\Packages\\PythonSoftwareFoundation.Python.3.9_qbz5n2kfra8p0\\LocalCache\\local-packages\\Python39\\site-packages")
 import gspread
-from google_sheets_credentials_startup import init_google_sheet
+from utils.google_sheets_credentials_startup import init_google_sheet
 from Publish_to_live_gather_data_from_all_sources import gather_states_data
 from Publish_to_live_update_history import update_history
 from Grab_Fabrication_Totals import totals

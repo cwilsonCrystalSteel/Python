@@ -10,7 +10,7 @@ import datetime
 import glob
 import os
 from pathlib import Path
-from attendance_google_sheets_credentials_startup import init_google_sheet
+from utils.attendance_google_sheets_credentials_startup import init_google_sheet
 from Lots_schedule_calendar.calendar_error_producer_function import produce_error_file
 from Lots_schedule_calendar.calendar_emailing_functions_with_gmail_api import send_error_notice_email
 

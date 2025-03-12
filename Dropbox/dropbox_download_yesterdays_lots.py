@@ -11,6 +11,8 @@ import pandas as pd
 import datetime
 import re
 
+
+# all_LOTs_imported_path = Path(os.getcwd()) / 'Dropbox' / 'Log of LOTS.txt'
 log_path = Path(os.getcwd()) / 'Dropbox' / 'Last_day_retrieved_log.csv'
 def write_to_logfile(dt, status):
     dt_log_string = dt.strftime('%Y-%m-%d')
@@ -26,7 +28,6 @@ def write_to_logfile(dt, status):
     
 
 
-
 critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
 
 
@@ -35,7 +36,6 @@ if os.path.exists(log_path):
     log = pd.read_csv(log_path)
     try:
         # get the last time a file was the status
-        last_successful_date = log[log['status'].str.startswith('X')].iloc[-1]['date']
         last_successful_date = log[log['status'] == 'Successfully completed all files'].iloc[-1]['date']
     except Exception:
         last_successful_date = '2021-01-13' # this is the day before the EVA hours started showing up in X -drive
@@ -56,7 +56,7 @@ yesterday = (datetime.datetime.now() + datetime.timedelta(days=-1)).date()
 delta = (yesterday - last_successful_dt).days
  
 
-
+print(f"Found the last successfullly completed date: {last_successful_date}")
 
 
 #%%
@@ -64,7 +64,7 @@ delta = (yesterday - last_successful_dt).days
 
 
  
-possible_dir = ['Y:','X:','\\\\192.168.50.9\\Dropbox_(CSF)']
+possible_dir = ['Y:/','X:/','\\\\192.168.50.9\\Dropbox_(CSF)']
 for ii in possible_dir:
     if os.path.exists(Path(ii)):
         base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
@@ -116,6 +116,8 @@ for i in range(0,delta):
     log = pd.read_csv(log_path)
     
     already_retrieved_files = pd.unique(log['status'])
+    already_retrieved_files = already_retrieved_files[already_retrieved_files != 'Started']
+    already_retrieved_files = already_retrieved_files[already_retrieved_files != 'Successfully completed all files']
     
     if day in days:
     
@@ -154,11 +156,11 @@ for i in range(0,delta):
                 3) me
                 '''
                 try:
-                    basename_components = re.split('-|\ ', basename)
+                    basename_components = re.split(r'-|\ ', basename)
                     job_str = basename_components[0]
                     lot = basename_components[1]
                     shop = basename_components[2][:-4]
-                    print('Able to resolve the invalid filename')
+                    print(f'Able to resolve the invalid filename to its parts:\n\t{job_str}-{lot}-{shop}')
                 except:
                     continue
                 
@@ -168,16 +170,16 @@ for i in range(0,delta):
                 # lot is the middle portion of the filename
                 lot = basename_components[1]
                 # chop off the '.xls' and only maintain the shop 
-                shop = basename_components[2][:-4]
+                shop = basename_components[2].split('.')[0]
                 
                 
             # print(basename, day, month_str, year)
             
             ''' Try to massage the lot name '''
-            if lot[0] == 'T' and len(lot) == 4:
+            if lot[0].lower() == 't' and len(lot) == 4:
                 print('Rule 0: {}'.format(lot))
                 
-            elif lot[0] == 'T' and len(lot) == 3:
+            elif lot[0].lower() == 't' and len(lot) == 3:
                 old_lot = lot
                 lot = 'T' + lot[1:].zfill(3)
                 print('Rule 1: {} to {}'.format(old_lot, lot))
@@ -187,14 +189,39 @@ for i in range(0,delta):
                 lot = 'T' + lot.zfill(3)
                 print('Rule 2: {} to {}'.format(old_lot, lot))
                 
-            elif lot[0] == 'T' and lot[1:4].isnumeric():
+            elif lot[0].lower() == 't' and lot[1:4].isnumeric():
                 old_lot = lot
                 lot = lot[:4]
                 print('Rule 3: {} to {}'.format(old_lot, lot))
                 
+            # this could get TKT### or TK###
+            elif lot[0:2].lower() == 'tk':
+                old_lot = lot
+                
+                # convert TK into TKT
+                if not lot.lower().startswith('tkt'):
+                    split_on_number = re.split(r'(\d+)', lot)
+                    split_on_number[0] = 'TKT'
+                    lot = ''.join(split_on_number)
+                    print(f'Rule TKT 1: {old_lot} to {lot}')
+                    
+                
+                # make sure the number part is 3 digits 
+                split_on_number = re.split(r'(\d+)', lot)
+                if len(split_on_number[1]) < 3:
+                    split_on_number[1] = split_on_number[1].zfill(3)
+                    old_lot = lot
+                    lot = ''.join(split_on_number)
+                    print(f'Rule TKT 2: {old_lot} to {lot}')
+                    
+                # no changes were made
+                if lot == old_lot:
+                    print(f'Rule TKT 0: {lot}')
+
+                
             else:
-                print('This lot does not fill other criteria')
-                write_to_logfile(day_dt, f'{lot} is does not match expected criterias ')
+                print(f'This lot does not fill other criteria\n{lot}\t{excel_file}')
+                write_to_logfile(day_dt, f'{lot} is does not match expected criterias: {excel_file}')
                 # 5 + '5'
                 # raise Exception('This lot does not fill other criteria')
                 
@@ -287,10 +314,10 @@ for i in range(0,delta):
                 
                 excel_main = excel_lot.copy()
             
-            log_file_path = Path(os.getcwd()) / 'Dropbox' / 'Log of LOTS.txt'
-            log_file = open(log_file_path,"a")
-            log_file.write(excel_file + ", " + datetime.datetime.now().strftime('%m/%d/%Y %H:%M') + " \n")
-            log_file.close()
+            
+            # all_LOTs_file = open(all_LOTs_imported_path,"a")
+            # all_LOTs_file.write(excel_file + ", " + datetime.datetime.now().strftime('%m/%d/%Y %H:%M') + " \n")
+            # all_LOTs_file.close()
             
             write_to_logfile(day_dt, excel_file)
     write_to_logfile(day_dt, 'Successfully completed all files')
