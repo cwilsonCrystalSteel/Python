@@ -11,6 +11,7 @@ from sqlalchemy import create_engine, MetaData, Table, select, func, and_, DateT
 from sqlalchemy.orm import sessionmaker
 from utils.initSQLConnectionEngine import yield_SQL_engine
 import datetime
+from pathlib import Path
 
 from TimeClock.insertGroupHoursToSQL import insertGroupHours
 
@@ -26,15 +27,15 @@ def get_today_or_yesterdays_timesdf(today_or_yesterday):
     metadata = MetaData()
     today_or_yesterday_table = Table(tablename, metadata, autoload_with=engine, schema='dbo')
     Session = sessionmaker(bind=engine)
-    session = Session()   
-    
-    query = (
-        select(today_or_yesterday_table)  # No square brackets around clocktimes
-    )
-    # Execute the query
-    result = session.execute(query)
-    # Convert to DataFrame
-    df = pd.DataFrame(result.fetchall(), columns=result.keys())
+    with Session() as session:
+        
+        query = (
+            select(today_or_yesterday_table)  # No square brackets around clocktimes
+        )
+        # Execute the query
+        result = session.execute(query)
+        # Convert to DataFrame
+        df = pd.DataFrame(result.fetchall(), columns=result.keys())
     
     
     return df
@@ -80,16 +81,16 @@ def check_remediated_availability(date_str):
     metadata = MetaData()
     clocktimes = Table('clocktimes', metadata, autoload_with=engine, schema='dbo')
     Session = sessionmaker(bind=engine)
-    session = Session()   
-    
-    query = (
-        select(clocktimes)  # No square brackets around clocktimes
-        .where(clocktimes.c.targetdate == date_str_for_sql)
-    )
-    # Execute the query
-    result = session.execute(query)
-    # Convert to DataFrame
-    df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+    with Session() as session: 
+        
+        query = (
+            select(clocktimes)  # No square brackets around clocktimes
+            .where(clocktimes.c.targetdate == date_str_for_sql)
+        )
+        # Execute the query
+        result = session.execute(query)
+        # Convert to DataFrame
+        df = pd.DataFrame(result.fetchall(), columns=result.keys())    
         
     return bool(df.shape[0])
 
@@ -205,31 +206,31 @@ def get_date_range_timesdf_REMEDIATEDONLY(start_date, end_date):
     
     # Create a session
     Session = sessionmaker(bind=engine)
-    session = Session() 
+    with Session() as session:
+        
+        subquery = (
+            select(
+                clocktimes.c.targetdate,
+                func.max(clocktimes.c.remediationtype).label('remediationtype')
+            )
+            .group_by(clocktimes.c.targetdate)
+        ).alias('z')
     
-    subquery = (
-        select(
-            clocktimes.c.targetdate,
-            func.max(clocktimes.c.remediationtype).label('remediationtype')
-        )
-        .group_by(clocktimes.c.targetdate)
-    ).alias('z')
-
-    # Create the main query
-    query = (
-        select(clocktimes)
-        .select_from(clocktimes.join(subquery, 
-            (subquery.c.remediationtype == clocktimes.c.remediationtype) &
-            (clocktimes.c.targetdate == subquery.c.targetdate)
-        ))
-        .where(clocktimes.c.targetdate >= start_date_sql, clocktimes.c.targetdate <= end_date_sql)
-    )    
-    
-    
-    result = session.execute(query)
-    
-    # Convert to DataFrame
-    times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+        # Create the main query
+        query = (
+            select(clocktimes)
+            .select_from(clocktimes.join(subquery, 
+                (subquery.c.remediationtype == clocktimes.c.remediationtype) &
+                (clocktimes.c.targetdate == subquery.c.targetdate)
+            ))
+            .where(clocktimes.c.targetdate >= start_date_sql, clocktimes.c.targetdate <= end_date_sql)
+        )    
+        
+        
+        result = session.execute(query)
+        
+        # Convert to DataFrame
+        times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
 
     return times_df
     
@@ -262,28 +263,28 @@ def get_specific_dates_timesdf(date_str):
     
     # Create a session
     Session = sessionmaker(bind=engine)
-    session = Session()    
-    
-    subquery = (
-        select(func.max(clocktimes.c.remediationtype).label('remediationtype'))
-        .where(clocktimes.c.targetdate == date_str_for_sql)
-        .group_by(clocktimes.c.targetdate)
-    ).alias('z')
-    
- 
-    # Create the main query
-    query = (
-        select(clocktimes)  # No square brackets around clocktimes
-        .select_from(clocktimes.join(subquery, subquery.c.remediationtype == clocktimes.c.remediationtype))
-        .where(clocktimes.c.targetdate == date_str_for_sql)
-    )
+    with Session() as session: 
         
+        subquery = (
+            select(func.max(clocktimes.c.remediationtype).label('remediationtype'))
+            .where(clocktimes.c.targetdate == date_str_for_sql)
+            .group_by(clocktimes.c.targetdate)
+        ).alias('z')
         
-    # Execute the query
-    result = session.execute(query)
-    
-    # Convert to DataFrame
-    times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+     
+        # Create the main query
+        query = (
+            select(clocktimes)  # No square brackets around clocktimes
+            .select_from(clocktimes.join(subquery, subquery.c.remediationtype == clocktimes.c.remediationtype))
+            .where(clocktimes.c.targetdate == date_str_for_sql)
+        )
+            
+            
+        # Execute the query
+        result = session.execute(query)
+        
+        # Convert to DataFrame
+        times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
 
     return times_df
     
@@ -309,6 +310,31 @@ def get_timesdf_from_sql(date_str):
     return times_df
 
 
-
-
+def get_timesdf_from_vClocktimes(start_date, end_date):
+    
+    start_date_sql = date_str_handler(start_date)
+    end_date_sql = date_str_handler(end_date)
+        
+    engine = yield_SQL_engine()
+    metadata = MetaData()
+    vclocktimes = Table('vclocktimes', metadata, autoload_with=engine, schema='dbo')
+    
+    # Create a session
+    Session = sessionmaker(bind=engine)
+    
+    with Session() as session:
+       
+        query = (
+            select(vclocktimes)
+            .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql)
+        )    
+        
+        
+        result = session.execute(query)
+        
+        # Convert to DataFrame
+        times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
+        
+    return times_df
+    
     
