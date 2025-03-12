@@ -35,7 +35,13 @@ def replace_ids_with_columns(times_df, ei=None):
     if ei is None:
         ei = return_sql_ei()
     
-    df = pd.merge(left=times_df, right=jccSQL, how='left', left_on='job_costcode_id', right_on='id')
+    # if using get_timesdf_from_vClocktimes
+    if 'jobcode' in times_df.columns and 'costcode' in times_df.columns:
+        df = times_df.drop(columns=['targetdate','source'])
+    # if using get_date_range_timesdf_controller
+    else:
+        df = pd.merge(left=times_df, right=jccSQL, how='left', left_on='job_costcode_id', right_on='id')
+        
     df = pd.merge(left=df, right=ei, how='left', left_on='employeeidnumber', right_on='employeeidnumber')
     
     return df
@@ -48,7 +54,6 @@ def replace_ids_with_columns(times_df, ei=None):
 def return_information_on_clock_data(times_df, include_terminated=False):
     
     ei = return_sql_ei()
-    
     df = replace_ids_with_columns(times_df, ei=ei)
     
     # only what we need

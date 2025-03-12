@@ -6,7 +6,10 @@ Created on Tue Aug 10 15:04:26 2021
 """
 
 from shutil import copyfile
-from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+from TimeClock.Gather_data_for_timeclock_based_email_reports_SQL import get_information_for_clock_based_email_reports
+from TimeClock.pullGroupHoursFromSQL import get_timesdf_from_vClocktimes, get_date_range_timesdf_controller
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+
 import pandas as pd
 import datetime
 import json
@@ -32,25 +35,39 @@ def run_attendance_hours_report(state):
     now = datetime.datetime.today()
     today_stamp = datetime.datetime.strftime(now, '%Y-%m-%d %H-%M')
     
+    # Find the most recent Sunday
+    last_sunday = now - datetime.timedelta(days=now.weekday() + 1)
+    
+    if (now-last_sunday).days < 7:
+        last_sunday = last_sunday - datetime.timedelta(days = 7)
+        
+    last_sunday = last_sunday.date()
+    
+    # Find the Sunday before that - to update it with remediated values!
+    previous_sunday = last_sunday - datetime.timedelta(days=7)
+    
+    
+    
     # open up each of the excel files and figure out what the earliest possible start date could be
     earliest_start_dts = {}
     dumb_list = []
 
     file_name = 'week_by_week_hours_of_employees ' + state 
-    file_path = base / (file_name + '.xlsx'  )  
-    starter = pd.read_excel(file_path, sheet_name='Data')
-    starter = starter.set_index('Week Start')
-    remove_cols = starter.columns[starter.iloc[0].isna()]
-    starter = starter.drop(columns=remove_cols)
-    # the summary rows are the last 5
-    summary = starter.iloc[-5:]
-    # get the starter df that does not contain the indexes contained in the summary
-    data = starter[~starter.index.isin(summary.index)]
-    # drop the na rows - the rows between the data & the summary
-    data = data.dropna()
-    start_dt = max(data.index) + datetime.timedelta(days=7)
-    earliest_start_dts[state] = start_dt
-    dumb_list.append(start_dt)
+    file_path = base / (file_name + '.xlsx' )  
+    if os.path.exists(file_path):
+        starter = pd.read_excel(file_path, sheet_name='Data', index_col='Week Start')
+        starter = starter.set_index('Week Start')
+        remove_cols = starter.columns[starter.iloc[0].isna()]
+        starter = starter.drop(columns=remove_cols)
+        # the summary rows are the last 5
+        summary = starter.iloc[-5:]
+        # get the starter df that does not contain the indexes contained in the summary
+        data = starter[~starter.index.isin(summary.index)]
+        # drop the na rows - the rows between the data & the summary
+        data = data.dropna()
+        start_dt = max(data.index) + datetime.timedelta(days=7)
+        earliest_start_dts[state] = start_dt
+        dumb_list.append(start_dt)
     
     
     # init a new dict that will have keys being the possible start dates
@@ -78,6 +95,14 @@ def run_attendance_hours_report(state):
     # go through each start date
     for start_dt in reversed_start_date_dict.keys():
         
+        start_date = start_dt.strftime("%m/%d/%Y")
+        end_dt = start_dt + datetime.timedelta(days=6)
+        end_date = end_dt.strftime("%m/%d/%Y")
+        
+        times_df = get_timesdf_from_vClocktimes(start_date, end_date)
+        # times_df2 = get_date_range_timesdf_controller(start_date, end_date)
+        basis = return_information_on_clock_data(times_df)
+        
         # get the start and end dates for the basis dict
         # start_date0 = start_dt.strftime("%m/%d/%Y")
         # end_date0 = (start_dt + datetime.timedelta(days=3)).strftime("%m/%d/%Y")
@@ -88,28 +113,29 @@ def run_attendance_hours_report(state):
         # basis0 = get_information_for_clock_based_email_reports(start_date0, end_date0, exclude_terminated=False)    
         # basis1 = get_information_for_clock_based_email_reports(start_date1, end_date1, exclude_terminated=False) 
         
-        basis_dt = {}
-        end_dt = start_dt + datetime.timedelta(days=6)
+        
+        # basis_dt = {}
+        # end_dt = start_dt + datetime.timedelta(days=6)
         
         
-        this_start_dt = start_dt + datetime.timedelta(days=0)
-        this_end_dt = this_start_dt + datetime.timedelta(days = 1)
-        this_start_date = this_start_dt.strftime("%m/%d/%Y")
-        this_end_date = this_end_dt.strftime("%m/%d/%Y")
-        basis0 = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=None) 
-        ei = basis0['Employee Information']
-        basis_dt[this_start_dt] = {'Direct':basis0['Direct'], 'Indirect':basis0['Indirect']}
-        basis = basis0.copy()
-        for i in range(1,(end_dt-start_dt).days+1):
-            this_start_dt = start_dt + datetime.timedelta(days=i)
-            this_end_dt = this_start_dt + datetime.timedelta(days = 1)
-            this_start_date = this_start_dt.strftime("%m/%d/%Y")
-            this_end_date = this_end_dt.strftime("%m/%d/%Y")
-            print(this_start_date, this_start_date)
-            # this is so that we don't have to get the ei every single time after the first time
-            this_basis = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=ei) 
-            basis['Direct'] = basis['Direct'].append(this_basis['Direct'], ignore_index=True)
-            basis['Indirect'] = basis['Indirect'].append(this_basis['Indirect'], ignore_index=True)    
+        # this_start_dt = start_dt + datetime.timedelta(days=0)
+        # this_end_dt = this_start_dt + datetime.timedelta(days = 1)
+        # this_start_date = this_start_dt.strftime("%m/%d/%Y")
+        # this_end_date = this_end_dt.strftime("%m/%d/%Y")
+        # basis0 = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=None) 
+        # ei = basis0['Employee Information']
+        # basis_dt[this_start_dt] = {'Direct':basis0['Direct'], 'Indirect':basis0['Indirect']}
+        # basis = basis0.copy()
+        # for i in range(1,(end_dt-start_dt).days+1):
+        #     this_start_dt = start_dt + datetime.timedelta(days=i)
+        #     this_end_dt = this_start_dt + datetime.timedelta(days = 1)
+        #     this_start_date = this_start_dt.strftime("%m/%d/%Y")
+        #     this_end_date = this_end_dt.strftime("%m/%d/%Y")
+        #     print(this_start_date, this_start_date)
+        #     # this is so that we don't have to get the ei every single time after the first time
+        #     this_basis = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=ei) 
+        #     basis['Direct'] = basis['Direct'].append(this_basis['Direct'], ignore_index=True)
+        #     basis['Indirect'] = basis['Indirect'].append(this_basis['Indirect'], ignore_index=True)    
                     
         
         # go through each state
@@ -120,26 +146,6 @@ def run_attendance_hours_report(state):
         file_path = base / (file_name + '.xlsx')
         backup_file_path = backup / (file_name + ' ' + today_stamp + '.xlsx')
         
-        # copy the current file & move to the backup destination
-        copyfile(file_path, backup_file_path)
-        print('\nCopy of file made before new week added: ')
-        print(backup_file_path, end='\n\n')
-        
-        # read the file
-        starter = pd.read_excel(file_path, sheet_name='Data')
-        # change the index to the week start date
-        starter = starter.set_index('Week Start')
-        # get the columns that need to be removed
-        remove_cols = starter.columns[starter.iloc[0].isna()]
-        # remove those columns
-        starter = starter.drop(columns=remove_cols)
-        # grab the summary portion of the file as last 5 rows
-        summary = starter.iloc[-5:]
-        # grab the data portion of the excel file as not the summary part
-        data = starter[~starter.index.isin(summary.index)]
-        # drop any na
-        data = data.dropna()
-        
         # get the employee information df
         # ei = basis0['Employee Information']
         ei = basis['Employee Information']
@@ -149,9 +155,18 @@ def run_attendance_hours_report(state):
         ei = ei[ei['Productive'].str.contains(state)]
         # Get all the hours put into one df
         # hours = basis0['Direct'].append(basis0['Indirect']).append(basis1['Direct']).append(basis1['Indirect'])
-        hours = basis['Direct'].append(basis['Indirect'])
+        hours = pd.concat([basis['Direct'], basis['Indirect']])
+        
+        hours['Hours'] = hours['Hours'].astype(float)
+        
+        if 'Time In' in hours.columns:
+            hours = hours.drop(columns=['Time In'])
+        if 'Time Out' in hours.columns:
+            hours = hours.drop(columns=['Time Out'])
+        
         # get rid of the delete job codes 
         hours = hours[~hours['Job Code'].isin(code_changes['Delete Job Codes'])]
+        
         # group by the index & sum
         hours = hours.groupby('Name').sum()
         # Join the productive column to hours
@@ -166,9 +181,9 @@ def run_attendance_hours_report(state):
         hours = hours.set_index('Week Start')
         
         # sum the total hours worked by all employees
-        hours_worked = hours.sum(axis=1)[0]
+        hours_worked = hours.sum(axis=1).iloc[0]
         # count the number of employees that have worked
-        number_worked = hours[hours>0].count(axis=1)[0]
+        number_worked = hours[hours>0].count(axis=1).iloc[0]
         # calculate the goal number of hours 
         goal_worked = 48 * number_worked
         # subtract to get the missing # of hours
@@ -185,50 +200,74 @@ def run_attendance_hours_report(state):
         hours_plus['Num. Worked'] = number_worked
         hours_plus['48 x Num. Worked'] = goal_worked
         hours_plus['Missing Hours'] = missing_hours
-        # append the row to the data df
-        data = data.append(hours_plus)
-        # fill any missing values with zero
-        data = data.fillna(0)
-        # these are the calculated rows that average numbers for each employee
-        summary = summary.copy()
-        # get the total average
-        summary.loc['Average'] = data.mean()
-        # get the average of present weeks
-        summary.loc['Average (if worked)'] = data[data > 0].mean()
-        # get the 12 week average when they have worked
-        summary.loc['12-Week Average'] = data.iloc[-12:][data > 0].mean()
-        # get the 8 week average when they worked
-        summary.loc['8-Week Average'] = data.iloc[-8:][data > 0].mean()
-        # get the 4 week average when they worked
-        summary.loc['4-Week Average'] = data.iloc[-4:][data > 0].mean()
-        # fill any missing with zero
-        summary = summary.fillna(0)
         
         
+        if os.path.exists(file_path):
+        # copy the current file & move to the backup destination
+            copyfile(file_path, backup_file_path)
+            print('\nCopy of file made before new week added: ')
+            print(backup_file_path, end='\n\n')
         
-        # append 3 blank rows to the data ddf -> formatting for excel
-        for i in range(0,3):
-            # data.loc[data.shape[0]] = [None] * data.shape[1]
-            data = data.append(pd.Series(name='', dtype=float))
+            # read the file
+            starter = pd.read_excel(file_path, sheet_name='Data')
+            # change the index to the week start date
+            starter = starter.set_index('Week Start')
+            # get the columns that need to be removed
+            remove_cols = starter.columns[starter.iloc[0].isna()]
+            # remove those columns
+            starter = starter.drop(columns=remove_cols)
+            # grab the summary portion of the file as last 5 rows
+            summary = starter.iloc[-5:]
+            # grab the data portion of the excel file as not the summary part
+            data = starter[~starter.index.isin(summary.index)]
+            # drop any na
+            data = data.dropna()
         
-        # now append the summary df to data
-        data = data.append(summary)
-        # get the columns we want to show up first / on the left
-        columns_start = ['Hours Worked', 'Num. Worked', '48 x Num. Worked', 'Missing Hours']
-        # sort the employees by most to least worked for the most current week
-        hours = hours.squeeze().sort_values(ascending=False).to_frame().transpose()
-        # get the rest of the columns
-        columns_rest = list(hours.columns)
-        # get any not worked employees so they dont get axed from the excel file
-        columns_missing = [i for i in list(data.columns) if i not in list(hours_plus.columns)]
-        # combine the columns to one list
-        columns_order = columns_start + columns_rest + columns_missing
-        # now order the data df columns as desired
-        data = data[columns_order]
         
-        with pd.ExcelWriter(file_path) as writer:  
-
-            data.to_excel(writer, sheet_name='Data')
+            # append the row to the data df
+            data = data.append(hours_plus)
+            # fill any missing values with zero
+            data = data.fillna(0)
+            # these are the calculated rows that average numbers for each employee
+            summary = summary.copy()
+            # get the total average
+            summary.loc['Average'] = data.mean()
+            # get the average of present weeks
+            summary.loc['Average (if worked)'] = data[data > 0].mean()
+            # get the 12 week average when they have worked
+            summary.loc['12-Week Average'] = data.iloc[-12:][data > 0].mean()
+            # get the 8 week average when they worked
+            summary.loc['8-Week Average'] = data.iloc[-8:][data > 0].mean()
+            # get the 4 week average when they worked
+            summary.loc['4-Week Average'] = data.iloc[-4:][data > 0].mean()
+            # fill any missing with zero
+            summary = summary.fillna(0)
+            
+            
+            
+            # append 3 blank rows to the data ddf -> formatting for excel
+            for i in range(0,3):
+                # data.loc[data.shape[0]] = [None] * data.shape[1]
+                data = data.append(pd.Series(name='', dtype=float))
+            
+            # now append the summary df to data
+            data = data.append(summary)
+            # get the columns we want to show up first / on the left
+            columns_start = ['Hours Worked', 'Num. Worked', '48 x Num. Worked', 'Missing Hours']
+            # sort the employees by most to least worked for the most current week
+            hours = hours.squeeze().sort_values(ascending=False).to_frame().transpose()
+            # get the rest of the columns
+            columns_rest = list(hours.columns)
+            # get any not worked employees so they dont get axed from the excel file
+            columns_missing = [i for i in list(data.columns) if i not in list(hours_plus.columns)]
+            # combine the columns to one list
+            columns_order = columns_start + columns_rest + columns_missing
+            # now order the data df columns as desired
+            data = data[columns_order]
+            
+            with pd.ExcelWriter(file_path) as writer:  
+    
+                data.to_excel(writer, sheet_name='Data')
         
         try:
             new_file_path = create_formatted_excel(data, file_path)

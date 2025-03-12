@@ -16,7 +16,7 @@ now = datetime.datetime.now()
 
 source = 'bat_insertGroupHoursToSQL_SuperRemediation'
 
-for i in range(50,1000):
+for i in range(2,60):
     
     date = (now - datetime.timedelta(days=i)).strftime('%m/%d/%Y')
     

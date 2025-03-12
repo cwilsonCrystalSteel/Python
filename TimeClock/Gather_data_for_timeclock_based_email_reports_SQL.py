@@ -15,15 +15,14 @@ Created on Thu May  6 11:09:44 2021
 import pandas as pd
 import glob
 import os
+from pathlib import Path
 import datetime
-from TimeClock_Group_Hours import download_group_hours
-from TimeClock_Tools_Employee_Location import download_most_current_employee_location_csv
 from Read_Group_hours_HTML import new_output_each_clock_entry_job_and_costcode, new_and_imporved_group_hours_html_reader
 import json
 from TimeClock.TimeClockNavigation import TimeClockBase
 from TimeClock.pullEmployeeInformationFromSQL import return_sql_ei
 
-
+default_download_folder = Path.home() / 'downloads' / 'EmployeeInformation'
 
 def clean_up_this_gunk(times_df, ei):
     
@@ -84,7 +83,7 @@ def clean_up_this_gunk(times_df, ei):
     # 5 digit codes are direct - except for CAPEX (idk how to tell if it is CAPEX)
     
     # split the cost code on a space or a slash (idk why i have to do 4 slashes)
-    times_df['Job #'] = times_df['Cost Code'].str.split('\s|\\\\').str[0]
+    times_df['Job #'] = times_df['Cost Code'].str.split(r'\s|\\\\').str[0]
     # get the shop site by taking the first 2 characters of the PRODUCTIVE tag from the EI dataframe
     times_df = times_df.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
     # rename that to location
@@ -183,44 +182,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
             return times_df
             
             
-            '''
-            timeclocker = download_group_hours(start_date, end_date, download_folder)
-            # downloadedSuccessful.startup()
-            # downloadedSuccessful.navigate()
-            downloadedSuccessful = timeclocker.downloader()
-            
-            
-            if not downloadedSuccessful:
-                return False
-            
-            # deprecated
-            if downloadedSuccessful is None:
-                return False
-            
-            # Grab all HTML files in downloads
-            list_of_htmls = glob.glob(download_folder +"*.html") # * means all if need specific format then *.csv
-            # Create a list with only the states we want to look at
-            group_hours_html = [f for f in list_of_htmls if "Hours" in f]
-            # Get the most recent file for that state
-            latest_html = max(group_hours_html, key=os.path.getctime)
-            # get the file creation time as a datetime
-            latest_html_time = datetime.datetime.fromtimestamp(os.path.getctime(latest_html))
-            # if the file was created today, then use it, if not then throw error            
-            if latest_html_time.date() == today:
-                print(latest_html)
-                try:
-                    # try the new method of reading timeclock
-                    times_df = new_and_imporved_group_hours_html_reader(latest_html, in_and_out_times=in_and_out_times)
-                except Exception:
-                    # try the old way of reading timeclock incase the top fails
-                    times_df = new_output_each_clock_entry_job_and_costcode(latest_html, in_and_out_times=in_and_out_times)
-                # delete the html file
-                os.remove(latest_html)                
-            else:
-                '2' + 2
-                
-            break
-            '''
+           
         except Exception as e:
             print('\n\nDownloading group hours failed: ')
             print(e)
@@ -239,7 +201,7 @@ def get_clock_times_html_downloaded(start_date, end_date, exclude_terminated=Tru
     return False
 
 
-def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilson\\downloads\\EmployeeInformation\\"):
+def get_ei_csv_downloaded(exclude_terminated, download_folder=default_download_folder):
     ''' try to get from sql first! '''
     try:
         ei = return_sql_ei()
@@ -279,27 +241,7 @@ def get_ei_csv_downloaded(exclude_terminated, download_folder="C:\\users\\cwilso
             
             return ei
             
-            '''
-            download_most_current_employee_location_csv(download_folder, exclude_terminated)
-            # Grab all HTML files in downloads
-            list_of_csvs = glob.glob(download_folder +"*.csv") # * means all if need specific format then *.csv
-            # Create a list with only the states we want to look at
-            employee_info_csvs = [f for f in list_of_csvs if "Employee Information" in f]
-            # Get the most recent file for that state
-            latest_csv = max(employee_info_csvs, key=os.path.getctime)
-            # get the file creation time as a datetime
-            latest_csv_time = datetime.datetime.fromtimestamp(os.path.getctime(latest_csv))
-            # if the file was created today, then use it, if not then throw error
-            if latest_csv_time.date() == today:
-                print(latest_csv)
-                ei = pd.read_csv(latest_csv)
-                # Delete the Employee Information CSV file from the downloads folder
-                os.remove(latest_csv)                
-            else:
-                2 + "2"
-            break
-        
-            '''
+           
         except Exception as e:
             print('Downloading employee information failed: ')
             print(e)
