@@ -1,3 +1,0 @@
-FED
-2215-7
-Ticket 2215-7<br>2023-02-22<br><a href="https://docs.google.com/spreadsheets/d/1HIpS0gbQo8q1Pwo9oQgRFUqCNdud_RXS3w815jX6zc4/edit#gid=396215481&range=D4652">Link to Google Sheets</a><br>(PM: Patrick K) Seq4-New Beam Added per ASI #009 -  Load on Top of T013<br>(02/23/2023 01:20) Added to Calendar with delivery date: 02/22/2023
