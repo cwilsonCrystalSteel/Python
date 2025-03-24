@@ -7,7 +7,7 @@ Created on Mon Jul 26 08:11:44 2021
 
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2, fill_missing_model_earned_hours
-from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
 import datetime
 import pandas as pd
 import sys
@@ -219,7 +219,9 @@ def verify_mdi(state, start_date, end_date, proof=False):
         # conver to the string format i need
         date = dt.strftime('%m/%d/%Y')
         # get that day's information
-        basis = get_information_for_clock_based_email_reports(date, date)
+        # basis = get_information_for_clock_based_email_reports(date, date)
+        times_df = get_date_range_timesdf_controller(date, date)
+        basis = return_information_on_clock_data(times_df)
 
         # convert basis to MDI format
         this_days_mdi = do_mdi(basis, state, date, proof=False)['MDI Summary']

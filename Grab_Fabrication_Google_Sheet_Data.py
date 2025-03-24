@@ -7,7 +7,7 @@ Created on Wed Mar 10 11:30:32 2021
 
 import pandas as pd
 import gspread
-from google_sheets_credentials_startup import init_google_sheet
+from utils.google_sheets_credentials_startup import init_google_sheet
 import datetime 
 
 
