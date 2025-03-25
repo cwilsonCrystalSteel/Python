@@ -55,7 +55,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                     try:
                         xls_main = pd.read_excel('C://downloads//' + str(int(job)) + '.xlsx')  
                     except Exception:
-                        print('coudld not open job "database": C://downloads//{}.xlsx'.format(job))
+                        print('coudld not open job "database": C://downloads//{}.xlsx'.format(str(int(job))))
                         chunk_job.loc[:, 'Hours Per Piece'] = np.nan
                         df = pd.concat([df, chunk_job])
                         # df = df.append(chunk_job)
@@ -106,7 +106,10 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
                         # xls_lot = pd.read_excel(eva_destination, header=2, engine='xlrd', sheet_name='RAW DATA', usecols=critical_columns)
                         # xls_main = pd.read_excel('C://downloads//' + str(job) + '.xlsx')
                         if 'T' in lot_name:
-                            xls_lot_from_main = xls_main[(xls_main['LOT'] == lot_name) | (xls_main['LOT'] == lot_name.replace('T',''))]
+                            xls_lot_from_main = xls_main[(xls_main['LOT'] == lot_name)  # try to find the lot name as it stands
+                                                         | (xls_main['LOT'] == lot_name.replace('T','')) # try to find the lot name when removing the letter 'T'
+                                                         | (xls_main['LOT'] == lot_name.split('.')[0]) # try to find the lot name by removing any decimal places after its name
+                                                         ]
                         else:
                             xls_lot_from_main = xls_main[xls_main['LOT'] == lot_name]
                     except:
@@ -186,7 +189,7 @@ def apply_model_hours2(fablisting_df, how='model', fill_missing_values=False, sh
             # create a copy of the df to work on for this exercise
             df2 = df.copy()
             # create the key to join to the LL with 
-            df2['LOTS Name'] = df2['Job #'].astype(int).astype(str) + '-' + df2['Lot Name']
+            df2['LOTS Name'] = df2['Job #'].astype(int).astype(str) + '-' + df2['Lot Name'].str.split('.').str[0]
             # inner merge so that we only get records that match in the LL
             df2_plus_ll = pd.merge(df2.reset_index(), ll, left_on=['LOTS Name'], right_on=['LOTS Name']).set_index('index')
             print('We were able to match {} records with LOTS Log eva hours'.format(df2_plus_ll.shape[0]))
