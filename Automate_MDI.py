@@ -315,7 +315,7 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     missing_by_lot = missing_pieces.groupby(['Job #', 'Lot #','Shop']).agg({
         'Quantity': 'sum',  # Sum numerical columns
         'Weight': 'sum',
-        'Pcmark': lambda x: ', '.join(x)  # Concatenate strings
+        'Pcmark': lambda x: ', '.join(set(x))  # Concatenate unique strings
     }).reset_index()
     
     missing_by_lot = missing_by_lot.reset_index()
@@ -339,8 +339,18 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     
     eva_vs_hpt = eva_vs_hpt.sort_values('% Diff', ascending=False)
     
-    eva_vs_hpt_by_job = eva_vs_hpt.groupby('Job #').sum()
-    
+    # eva_vs_hpt_by_job = eva_vs_hpt.groupby('Job #').sum()
+    eva_vs_hpt_by_job = eva_vs_hpt.groupby('Job #').agg({
+        'Lot #': lambda x: ', '.join(set(x)), # concatenate strings of Lot # - only get unique
+        'Pcmark': lambda x: ', '.join(set(x)),  # Concatenate strings - only get unique
+        'Tons': 'sum',  # Sum numerical columns
+        'Quantity': 'sum',  # Sum numerical columns
+        'EVA': 'sum',  # Sum numerical columns
+        'HPT': 'sum',  # Sum numerical columns
+        'Hr. Diff': 'sum',   # we will redo this calcualtion 
+        '% Diff': 'sum',  # we will redo this calcualtion 
+    })
+        
     eva_vs_hpt_by_job['Hr. Diff'] = eva_vs_hpt_by_job['EVA'] - eva_vs_hpt_by_job['HPT']
     
     eva_vs_hpt_by_job['% Diff'] = (abs(eva_vs_hpt_by_job['Hr. Diff']) / eva_vs_hpt_by_job['EVA'])
@@ -350,6 +360,15 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     eva_vs_hpt_by_job = eva_vs_hpt_by_job.reset_index()
     
     eva_vs_hpt_by_lot = eva_vs_hpt.groupby(['Job #','Lot #']).sum()
+    eva_vs_hpt_by_lot = eva_vs_hpt.groupby('Job #').agg({
+        'Pcmark': lambda x: ', '.join(set(x)),  # Concatenate strings - only get unique
+        'Tons': 'sum',  # Sum numerical columns
+        'Quantity': 'sum',  # Sum numerical columns
+        'EVA': 'sum',  # Sum numerical columns
+        'HPT': 'sum',  # Sum numerical columns
+        'Hr. Diff': 'sum',   # we will redo this calcualtion 
+        '% Diff': 'sum',  # we will redo this calcualtion 
+    })    
     
     eva_vs_hpt_by_lot['Hr. Diff'] = eva_vs_hpt_by_lot['EVA'] - eva_vs_hpt_by_lot['HPT']
     

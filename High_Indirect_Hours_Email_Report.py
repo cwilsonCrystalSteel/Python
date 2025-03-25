@@ -398,8 +398,9 @@ def email_sub2lots_results(date_str, state, state_dict):
     # shutil.copy(details_file, "I://Scanned Docs//")
     # for each file, add the attachment
     for filename in [summary_file, details_file]:
+        filepath = directory / filename
         part = MIMEBase('application', "octet-stream")
-        part.set_payload(open(filename, "rb").read())
+        part.set_payload(open(filepath, "rb").read())
         encoders.encode_base64(part)
         part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(filename)))
         msg.attach(part)
@@ -899,4 +900,45 @@ def email_delivery_calendar_changelog(date_str, file_name, recipient_list):
     }
     # pylint: disable=E1101
     send_message = (service.users().messages().send(userId="me", body=create_message).execute())
-    print(F'Message Id: {send_message["id"]}')   
+    print(F'Message Id: {send_message["id"]}')  
+    
+    
+
+def email_error_message(error_messages_list, recipient_list='cwilson@crystalsteel.net'):
+    service = get_email_service()
+    
+    # the reporting email address
+    my_email = 'csmreporting@crystalsteel.net'
+    # create new message
+    msg = MIMEMultipart("html")
+    # create the subject line
+    msg['Subject'] = 'Emailing Error!'
+    # create the sender
+    msg['From'] = 'errors <' + my_email +'>'
+    
+    if isinstance(recipient_list, str):
+        recipient_list = [recipient_list]
+    
+    email_msg = "\n<p>"
+    for i in error_messages_list:
+        email_msg += '<br>' + i +'<br>'
+    email_msg += "</p>\n"
+  
+    
+    # create the receiver
+    msg['To'] = ', '.join(recipient_list)
+    # create the body of the message
+    part1 = MIMEText(email_msg, 'html')
+    # attach the bod to the message
+    msg.attach(part1)
+    
+   
+    part = MIMEBase('application', "octet-stream")
+    
+    encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
+    create_message = {
+        'raw': encoded_message
+    }
+    # pylint: disable=E1101
+    send_message = (service.users().messages().send(userId="me", body=create_message).execute())
+    print(F'Message Id: {send_message["id"]}')  

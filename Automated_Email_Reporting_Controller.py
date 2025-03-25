@@ -24,6 +24,7 @@ from High_Indirect_Hours_Email_Report import email_mdi
 from High_Indirect_Hours_Email_Report import email_eva_vs_hpt
 from High_Indirect_Hours_Email_Report import emaIL_attendance_hours_report
 from High_Indirect_Hours_Email_Report import email_delivery_calendar_changelog
+from High_Indirect_Hours_Email_Report import email_error_message
 from Attendance_Hours_Per_week_v2 import run_attendance_hours_report
 from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_production_sheet
 from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
@@ -61,7 +62,7 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net','awhitacre@crystalsteel.net',
                       'jlaird@crystalsteel.net']
 
 
-''' un-comment this when debugging 
+''' #un-comment this when debugging 
 
 state_recipients = {'TN':['cwilson@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net'],
@@ -160,8 +161,14 @@ if yesterday.weekday() != 6:
         if output_absent:
             # assign the recipients
             output_absent[state]['Recipients'] = state_recipients[state]
-            # call the email function for the absent employees
-            email_absent_list(yesterday_str, state, copy.deepcopy(output_absent[state]))
+            try:
+                # call the email function for the absent employees
+                email_absent_list(yesterday_str, state, copy.deepcopy(output_absent[state]))
+            except Exception as e:
+                email_error_message([f'Error {e}', 
+                                     'email_absent_list',
+                                     f'yesterday_str: {yesterday_str}',
+                                     f'state: {state}'])
     
     
     
@@ -175,8 +182,15 @@ if yesterday.weekday() != 6:
         # assign the recipients    
         if output_sub80direct:
             output_sub80direct[state]['Recipients'] = state_recipients[state]
-            # call the email function for the employees with less then 80% direct
-            email_sub80_results(yesterday_str, state, copy.deepcopy(output_sub80direct[state]))
+
+            try:
+                # call the email function for the employees with less then 80% direct
+                email_sub80_results(yesterday_str, state, copy.deepcopy(output_sub80direct[state]))
+            except Exception as e:
+                email_error_message([f'Error {e}', 
+                                     'email_sub80_results',
+                                     f'yesterday_str: {yesterday_str}',
+                                     f'state: {state}'])
         
     
     
@@ -193,8 +207,15 @@ if yesterday.weekday() != 6:
         if output_sub2lots:
             # assign the recipients
             output_sub2lots[state]['Recipients'] = state_recipients[state]
-            # call the email function for the employees with <= 1 lot
-            email_sub2lots_results(yesterday_str, state, copy.deepcopy(output_sub2lots[state]))
+
+            try:
+                # call the email function for the employees with <= 1 lot
+                email_sub2lots_results(date_str=yesterday_str, state=state, state_dict=copy.deepcopy(output_sub2lots[state]))
+            except Exception as e:
+                email_error_message([f'Error {e}', 
+                                     'email_sub2lots_results',
+                                     f'yesterday_str: {yesterday_str}',
+                                     f'state: {state}'])
         
 
     
@@ -206,10 +227,21 @@ if yesterday.weekday() != 6:
             mdi_dict = do_mdi(basis, state, yesterday_str)
             # we get a None if there was nothing in fablisting for the date = yesterday_str
             if mdi_dict is None:
+                email_error_message(['mdi_dict is None',
+                                     'email_mdi',
+                                     f'yesterday_str: {yesterday_str}'])
                 continue
-            # email out the mdi email
-            # this funtion also adds rrichard@crystalsteel.net & emohamed@crystalsteel.net 
-            email_mdi(date_str=yesterday_str, state=state, state_dict=copy.deepcopy(mdi_dict), email_dict=state_recipients)
+
+            try:
+                # email out the mdi email
+                # this funtion also adds rrichard@crystalsteel.net & emohamed@crystalsteel.net 
+                email_mdi(date_str=yesterday_str, state=state, state_dict=copy.deepcopy(mdi_dict), email_dict=state_recipients)
+        
+            except Exception as e:
+                email_error_message([f'Error {e}', 
+                                     'email_mdi',
+                                     f'yesterday_str: {yesterday_str}',
+                                     f'state: {state}'])
     
 # only send EVA once a week - so on sundays        
 # else:
@@ -236,6 +268,11 @@ if yesterday.weekday() != 6:
     except Exception as e:
         print('could not send the email eva_vs_hpt_dict')
         print(e)
+        email_error_message([f'Error {e}', 
+                             'email_eva_vs_hpt',
+                             f'day_pcs: {yesterday_str} to {yesterday_str}',
+                             f'ten_day_lot: {ten_days} to {yesterday_str}'
+                             f'sixty_day_job: {sixty_days} to {yesterday_str}'])
 
 # # run on fridays?
 # if yesterday.weekday() == 3:
