@@ -309,6 +309,8 @@ class insertGroupHours():
         
         
     def insertGroupHours(self):
+        # set the target date - going forward this will go to all 3 tables 
+        self.times_df.loc[:,'targetdate'] = self.date_str
         if self.mergeTodayAvailable == True:
             proc_name = 'merge_clocktimes_today'
             table_name = 'clocktimes_today'
@@ -319,7 +321,6 @@ class insertGroupHours():
             proc_name = 'merge_clocktimes'
             table_name = 'clocktimes'
             self.times_df.loc[:,'remediationtype'] = self.remediationtype
-            self.times_df.loc[:,'targetdate'] = self.date_str
         
         
         # check to make sure we have the right names

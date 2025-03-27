@@ -23,8 +23,12 @@ code_changes_file = Path(os.getcwd()) / 'job_and_cost_code_changes.json'
 code_changes = json.load(open(code_changes_file))
 
 
-base = Path.home() / 'documents' / 'Productive_Employees_Hours_Worked_report'
+base = Path.home() / 'documents' / 'Attendance_Hours_Worked'
 backup = base / 'Backups'
+if not os.path.exists(base):
+    os.makedirs(base)
+if not os.path.exists(backup):
+    os.makedirs(backup)
 
 
 states = ['TN','MD','DE']
@@ -33,7 +37,6 @@ states = ['TN','MD','DE']
 def run_attendance_hours_report(state):
     
     now = datetime.datetime.today()
-    today_stamp = datetime.datetime.strftime(now, '%Y-%m-%d %H-%M')
     
     # Find the most recent Sunday
     last_sunday = now - datetime.timedelta(days=now.weekday() + 1)
@@ -46,105 +49,67 @@ def run_attendance_hours_report(state):
     # Find the Sunday before that - to update it with remediated values!
     previous_sunday = last_sunday - datetime.timedelta(days=7)
     
+    file_name = 'Weekly Hours Worked By Employees - ' + state + '.xlsx'
+    file_path = base / file_name    
     
-    
-    # open up each of the excel files and figure out what the earliest possible start date could be
-    earliest_start_dts = {}
-    dumb_list = []
-
-    file_name = 'week_by_week_hours_of_employees ' + state 
-    file_path = base / (file_name + '.xlsx' )  
-    if os.path.exists(file_path):
+    # if we dont even have a file, lets start here
+    if not os.path.exists(file_path):
+        start_dt = datetime.date(2022,6,19) # earlist available in db as of 2025-03-25
+        # start_dt = datetime.date(2023,12,31) # happens to be a sunday
+        
+        # start_dt = datetime.date(2025,2,23)
+        # list of weeks we will run
+        weeks_to_run = [start_dt]
+        # add 7 days 
+        missing_week_start_dt = start_dt + datetime.timedelta(days=7)
+        # loop until we hit the max
+        while missing_week_start_dt <= last_sunday:
+            # add to the list
+            weeks_to_run += [missing_week_start_dt]
+            # increase by a week
+            missing_week_start_dt += datetime.timedelta(days = 7)
+            
+        
+        
+        
+    # this is so that we can do some catchup
+    else:
+        
         starter = pd.read_excel(file_path, sheet_name='Data', index_col='Week Start')
-        starter = starter.set_index('Week Start')
-        remove_cols = starter.columns[starter.iloc[0].isna()]
-        starter = starter.drop(columns=remove_cols)
-        # the summary rows are the last 5
-        summary = starter.iloc[-5:]
-        # get the starter df that does not contain the indexes contained in the summary
-        data = starter[~starter.index.isin(summary.index)]
-        # drop the na rows - the rows between the data & the summary
-        data = data.dropna()
-        start_dt = max(data.index) + datetime.timedelta(days=7)
-        earliest_start_dts[state] = start_dt
-        dumb_list.append(start_dt)
-    
-    
-    # init a new dict that will have keys being the possible start dates
-    reversed_start_date_dict = {}
-    # iterate thru each possible start date found from the current excel files
-    for start_dt in list(set(dumb_list)):
-        # dont add the start date if it greater than today's date
-        if start_dt > now:
-            continue
+        # get all the datetime values from the index
+        weeks_ran = [i.date() for i in starter.index if isinstance(i,datetime.datetime)]
         
-        # loop thru each state in the earliest_start_dts dict
-        # for state in earl1iest_start_dts.keys():
-        # check if the list of states needs to be initalized to that start_dt key
-        if earliest_start_dts[state] == start_dt and start_dt not in reversed_start_date_dict:
-            reversed_start_date_dict[start_dt] = [state]
+        weeks_to_run = []
+        # if we see the previous_sunday in there, we know it was probably run before being finalized
+        if previous_sunday in weeks_ran:
+            weeks_to_run += [previous_sunday]
+            print(f"We will remediate the week of {previous_sunday.strftime('%Y-%m-%d')}")
+            
+        # start off with where the file was left off at 
+        missing_week_start_dt = max(weeks_ran) + datetime.timedelta(days=7)
+        while missing_week_start_dt <= last_sunday:
+            # add to the list
+            weeks_to_run += [missing_week_start_dt]
+            # increase by a week
+            missing_week_start_dt += datetime.timedelta(days = 7)
         
-        # append to the list bc the list is already made for that start dt key
-        elif earliest_start_dts[state] == start_dt and start_dt in reversed_start_date_dict:
-            reversed_start_date_dict[start_dt].append(state)
-                
-    
-    if len(list(reversed_start_date_dict.keys())) == 0:
-        print('There are no start dates that are befoer the current date - ENDING PROGRAM')
+        
+    print(f"Found the following dates to run: {', '.join([i.strftime('%Y-%m-%d') for i in weeks_to_run])}")
     
     # go through each start date
-    for start_dt in reversed_start_date_dict.keys():
+    for start_dt in weeks_to_run:
+        
+        print(f"Running {state} for {start_dt.strftime('%Y-%m-%d')}")
         
         start_date = start_dt.strftime("%m/%d/%Y")
         end_dt = start_dt + datetime.timedelta(days=6)
         end_date = end_dt.strftime("%m/%d/%Y")
         
         times_df = get_timesdf_from_vClocktimes(start_date, end_date)
-        # times_df2 = get_date_range_timesdf_controller(start_date, end_date)
         basis = return_information_on_clock_data(times_df)
         
-        # get the start and end dates for the basis dict
-        # start_date0 = start_dt.strftime("%m/%d/%Y")
-        # end_date0 = (start_dt + datetime.timedelta(days=3)).strftime("%m/%d/%Y")
-        # start_date1 = (start_dt + datetime.timedelta(days=4)).strftime("%m/%d/%Y")
-        # end_dt = start_dt + datetime.timedelta(days=6)
-        # end_date1 = end_dt.strftime("%m/%d/%Y")
-        # # get the basis dict
-        # basis0 = get_information_for_clock_based_email_reports(start_date0, end_date0, exclude_terminated=False)    
-        # basis1 = get_information_for_clock_based_email_reports(start_date1, end_date1, exclude_terminated=False) 
-        
-        
-        # basis_dt = {}
-        # end_dt = start_dt + datetime.timedelta(days=6)
-        
-        
-        # this_start_dt = start_dt + datetime.timedelta(days=0)
-        # this_end_dt = this_start_dt + datetime.timedelta(days = 1)
-        # this_start_date = this_start_dt.strftime("%m/%d/%Y")
-        # this_end_date = this_end_dt.strftime("%m/%d/%Y")
-        # basis0 = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=None) 
-        # ei = basis0['Employee Information']
-        # basis_dt[this_start_dt] = {'Direct':basis0['Direct'], 'Indirect':basis0['Indirect']}
-        # basis = basis0.copy()
-        # for i in range(1,(end_dt-start_dt).days+1):
-        #     this_start_dt = start_dt + datetime.timedelta(days=i)
-        #     this_end_dt = this_start_dt + datetime.timedelta(days = 1)
-        #     this_start_date = this_start_dt.strftime("%m/%d/%Y")
-        #     this_end_date = this_end_dt.strftime("%m/%d/%Y")
-        #     print(this_start_date, this_start_date)
-        #     # this is so that we don't have to get the ei every single time after the first time
-        #     this_basis = get_information_for_clock_based_email_reports(this_start_date, this_start_date, exclude_terminated=False, ei=ei) 
-        #     basis['Direct'] = basis['Direct'].append(this_basis['Direct'], ignore_index=True)
-        #     basis['Indirect'] = basis['Indirect'].append(this_basis['Indirect'], ignore_index=True)    
-                    
-        
-        # go through each state
-        # for state in reversed_start_date_dict[start_dt]:
+      
 
-        # get the excel file name & backup file name
-        file_name = 'week_by_week_hours_of_employees ' + state 
-        file_path = base / (file_name + '.xlsx')
-        backup_file_path = backup / (file_name + ' ' + today_stamp + '.xlsx')
         
         # get the employee information df
         # ei = basis0['Employee Information']
@@ -201,17 +166,40 @@ def run_attendance_hours_report(state):
         hours_plus['48 x Num. Worked'] = goal_worked
         hours_plus['Missing Hours'] = missing_hours
         
+        # create the file name
+        file_name = 'Weekly Hours Worked By Employees - ' + state + '.xlsx'
+        # make it a filepath
+        file_path = base / file_name
+        today_stamp = datetime.datetime.strftime(now, '%Y%m%d%H%M%S')
+        # create the backup files name
+        backup_file_path = backup / (file_name + ' ' + today_stamp + '.xlsx')
         
-        if os.path.exists(file_path):
+        
+        
+        # we do not have a file yet, so lets create it
+        if not os.path.exists(file_path):
+            # copy the hours plus df
+            data = hours_plus.copy()
+            # replace any missing values with 0
+            data = data.fillna(0)
+            # make sure it is ordered correctly - yet this is not a problem for when the file doesnt exist yet
+            data = data.sort_index()
+            # these are the calculated rows that average numbers for each employee
+            summary = data.copy()
+            # we dont want the individual week's data in the summary table
+            summary = summary.drop(data.index)
+           
+            
+        
+        # we already have a file, so we need to read it and update it
+        else:
         # copy the current file & move to the backup destination
             copyfile(file_path, backup_file_path)
-            print('\nCopy of file made before new week added: ')
-            print(backup_file_path, end='\n\n')
+            # print('\nCopy of file made before new week added: ')
+            # print(backup_file_path, end='\n\n')
         
             # read the file
-            starter = pd.read_excel(file_path, sheet_name='Data')
-            # change the index to the week start date
-            starter = starter.set_index('Week Start')
+            starter = pd.read_excel(file_path, sheet_name='Data', index_col='Week Start')
             # get the columns that need to be removed
             remove_cols = starter.columns[starter.iloc[0].isna()]
             # remove those columns
@@ -222,68 +210,88 @@ def run_attendance_hours_report(state):
             data = starter[~starter.index.isin(summary.index)]
             # drop any na
             data = data.dropna()
-        
-        
+            # try and force index to be datetime.date
+            data.index = pd.to_datetime(data.index).date
+            # only want to try and drop out the previous sunday to Recalculate it if its in the file already & we want to run it with weeks_to_run
+            # we could also do: if start_dt == previous_sunday
+            if previous_sunday in data.index and previous_sunday in weeks_to_run:
+                # if we are doing a remediation of previous_sunday
+                data = data.drop(index=previous_sunday)
+          
             # append the row to the data df
-            data = data.append(hours_plus)
-            # fill any missing values with zero
-            data = data.fillna(0)
+            data = pd.concat([data, hours_plus])
+            # sort it after potentially doing an out of order for the remediation
+            data = data.sort_index()
+            
             # these are the calculated rows that average numbers for each employee
             summary = summary.copy()
-            # get the total average
-            summary.loc['Average'] = data.mean()
-            # get the average of present weeks
-            summary.loc['Average (if worked)'] = data[data > 0].mean()
-            # get the 12 week average when they have worked
-            summary.loc['12-Week Average'] = data.iloc[-12:][data > 0].mean()
-            # get the 8 week average when they worked
-            summary.loc['8-Week Average'] = data.iloc[-8:][data > 0].mean()
-            # get the 4 week average when they worked
-            summary.loc['4-Week Average'] = data.iloc[-4:][data > 0].mean()
-            # fill any missing with zero
-            summary = summary.fillna(0)
+            # figure out which names are in data (could be new for this week, from df:hours) but not in summary
+            summary_missing_cols = list(set(data.columns) - set(summary.columns))
+            
+            summary[summary_missing_cols] = float(0)
+            
+        
+        ''' this is all the same if the file is new or the file alraedy has data '''
+            
+        # fill any missing values with zero
+        data = data.fillna(0)
+        # get the total average
+        summary.loc['Average'] = data.mean()
+        # get the average of present weeks
+        summary.loc['Average (if worked)'] = data[data > 0].mean()
+        # get the 12 week average when they have worked
+        # summary.loc['12-Week Average'] = data.iloc[-12:][data > 0].mean()
+        summary.loc['12-Week Average'] = data.iloc[-12:].where(data.iloc[-12:] > 0).mean()
+        # get the 8 week average when they worked
+        # summary.loc['8-Week Average'] = data.iloc[-8:][data > 0].mean()
+        summary.loc['8-Week Average'] = data.iloc[-8:].where(data.iloc[-8:] > 0).mean()
+        # get the 4 week average when they worked
+        # summary.loc['4-Week Average'] = data.iloc[-4:][data > 0].mean()
+        summary.loc['4-Week Average'] = data.iloc[-4:].where(data.iloc[-4:] > 0).mean()
+
+        # fill any missing with zero
+        summary = summary.fillna(0)
+            
+            
+        # Create an empty DataFrame with the same columns
+        empty_rows = pd.DataFrame([[None] * data.shape[1]] * 3, columns=data.columns, dtype=float)
+        
+        # Append empty rows to the original DataFrame
+        output = pd.concat([data, empty_rows, summary], ignore_index=False)
+            
+        # this is for excel formatting
+        # Create an empty DataFrame with the same columns
+        empty_rows = pd.DataFrame([[None] * data.shape[1]] * 3, columns=data.columns, dtype=float, index=[""]*3)
+        # Append empty rows and the summary to the data df
+        output = pd.concat([data, empty_rows, summary], ignore_index=False)
+            
+        # get the columns we want to show up first / on the left
+        columns_start = ['Hours Worked', 'Num. Worked', '48 x Num. Worked', 'Missing Hours']
+        # sort the employees by most to least worked for the most current week
+        hours = hours.squeeze().sort_values(ascending=False).to_frame().transpose()
+        # get the rest of the columns
+        columns_rest = list(hours.columns)
+        # get any not worked employees so they dont get axed from the excel file
+        columns_missing = [i for i in list(output.columns) if i not in list(hours_plus.columns)]
+        # combine the columns to one list
+        columns_order = columns_start + columns_rest + columns_missing
+        # now order the output df columns as desired
+        output = output[columns_order]
+        
+        output.index.name = 'Week Start'
             
             
             
-            # append 3 blank rows to the data ddf -> formatting for excel
-            for i in range(0,3):
-                # data.loc[data.shape[0]] = [None] * data.shape[1]
-                data = data.append(pd.Series(name='', dtype=float))
-            
-            # now append the summary df to data
-            data = data.append(summary)
-            # get the columns we want to show up first / on the left
-            columns_start = ['Hours Worked', 'Num. Worked', '48 x Num. Worked', 'Missing Hours']
-            # sort the employees by most to least worked for the most current week
-            hours = hours.squeeze().sort_values(ascending=False).to_frame().transpose()
-            # get the rest of the columns
-            columns_rest = list(hours.columns)
-            # get any not worked employees so they dont get axed from the excel file
-            columns_missing = [i for i in list(data.columns) if i not in list(hours_plus.columns)]
-            # combine the columns to one list
-            columns_order = columns_start + columns_rest + columns_missing
-            # now order the data df columns as desired
-            data = data[columns_order]
-            
-            with pd.ExcelWriter(file_path) as writer:  
-    
-                data.to_excel(writer, sheet_name='Data')
+        # output = output.reset_index(drop=False)    
+        with pd.ExcelWriter(file_path) as writer:  
+            output.to_excel(writer, sheet_name='Data', index=True)
         
         try:
-            new_file_path = create_formatted_excel(data, file_path)
+            new_file_path = create_formatted_excel(output, file_path)
         except Exception:
             # if the formatting funciton fails - just pass the plain excel file
             new_file_path = file_path
-        
-        # book = load_workbook(file_path)
-        # book.remove(book['Data'])
-        # writer = pd.ExcelWriter(file_path, engine='openpyxl')
-        # writer.book = book
-        
-        
-        # data.to_excel(writer, sheet_name='Data')
-        # writer.save()
-        # writer.close()
+    
         
         
         
@@ -296,8 +304,8 @@ def run_attendance_hours_report(state):
     
 def create_formatted_excel(xlsx_structured_df, file_path):
     
-    new_file_path = file_path.split('.xlsx')
-    new_file_path = new_file_path[0] + '_formatted' + '.xlsx'
+    new_file_name = os.path.basename(file_path).split('.xlsx')[0] + ' - formatted.xlsx'
+    new_file_path = Path(os.path.dirname(file_path)) / new_file_name
     
     
     
@@ -344,7 +352,7 @@ def create_formatted_excel(xlsx_structured_df, file_path):
     # get the index into the excel file
     for index_name in xlsx_structured_df.index:
         
-        if isinstance(index_name, datetime.datetime):
+        if isinstance(index_name, datetime.datetime) or isinstance(index_name, datetime.date):
                 index_name = index_name.strftime('%Y-%m-%d')
                 
         worksheet.write(row, 0, index_name, bold)
