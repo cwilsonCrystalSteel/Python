@@ -17,17 +17,20 @@ now = datetime.datetime.now()
 
 source = 'bat_insertGroupHoursToSQL_Manual'
 
-times_df = get_timesdf_from_vClocktimes('2022-01-01','2028-04-01')
+# times_df = get_timesdf_from_vClocktimes('2022-01-01','2028-04-01')
 
-noEmployeeNumber = times_df[times_df['employeeidnumber'].isna()]
+# noEmployeeNumber = times_df[times_df['employeeidnumber'].isna()]
 
-noEmployeeNumber = noEmployeeNumber[noEmployeeNumber['source'] == 'clocktimes']
+# noEmployeeNumber = noEmployeeNumber[noEmployeeNumber['source'] == 'clocktimes']
 
-targetDates = pd.unique(noEmployeeNumber['targetdate'])
+# targetDates = pd.unique(noEmployeeNumber['targetdate'])
 
-
-for i in targetDates:
-    date_str = i.strftime('%m/%d/%Y')
+targetDates = []
+start_dt = datetime.date(2020,1,3)
+while start_dt <= datetime.date(2025,3,23):
+    start_dt += datetime.timedelta(days=1)
+    
+    date_str = start_dt.strftime('%m/%d/%Y')
         
     try:
         download_folder = Path.home() / 'downloads' / 'GroupHours_manual'

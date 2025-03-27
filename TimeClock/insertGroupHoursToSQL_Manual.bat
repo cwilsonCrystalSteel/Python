@@ -35,4 +35,4 @@ echo Running: "%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 :: Run the Python script
 "%ANACONDA_PATH%" "%PROJECT_PATH%\%SCRIPT_PATH%"
 
-exit
+pause
