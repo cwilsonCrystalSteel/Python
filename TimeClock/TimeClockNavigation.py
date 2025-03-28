@@ -165,6 +165,30 @@ class TimeClockBase():
             
             
         self.pid = self.driver.service.process.pid
+        
+        self.screenshotDirectory = None
+        
+    def enableScreenshots(self, directory):
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        
+        self.screenshotDirectory = directory
+        
+        self.printverbosity(f"Enabling Screenshots to: {self.screenshotDirectory}")
+        
+            
+    def take_screenshot(self, name):
+        if not self.screenshotDirectory is None:
+            
+            if not '.png' in name:
+                name = name + '.png'
+                
+            outfile = self.screenshotDirectory / name
+            self.printverbosity(f"Screenshot taken: {outfile}")
+                
+            self.driver.get_screenshot_as_file(outfile)
+            
+            
    
     def printverbosity(self, string):
         if self.verbosity >= 1:
@@ -420,8 +444,12 @@ class TimeClockBase():
         if exclude_terminated == False:
             self.includeTerminatedSuspendedEmployees()
     
+    
+        self.take_screenshot('1')
+    
         self.waitForProcessingPopup()
         
+        self.take_screenshot('2')
         
         
         # Find the stop date box
@@ -429,7 +457,7 @@ class TimeClockBase():
         # find the start date box
         self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         
-        
+        self.take_screenshot('3')
         
         # Clear the field
         delete_range(self.endDateInput)
@@ -438,6 +466,8 @@ class TimeClockBase():
         self.endDateInput.send_keys(dateString)
         self.printverbosity(f'Entered End Date: {dateString}')
         
+        self.take_screenshot('4')
+        
         
         delete_range(self.startDateInput)
         self.printverbosity('Deleted Start Date')
@@ -445,6 +475,8 @@ class TimeClockBase():
         self.startDateInput = validateElement(self.driver, (By.NAME, 'dpPeriodStart'), 'startDateInput', checkPresence=True, checkClickable=True, verbosity=self.verbosity)               
         self.startDateInput.send_keys(dateString)
         self.printverbosity(f'Entered Start Date: {dateString}')
+        
+        self.take_screenshot('5')
 
         
      
@@ -452,6 +484,8 @@ class TimeClockBase():
         # self.updateButton = self.driver.find_element(By.XPATH, "//input[@value='Update']")
         self.updateButton.click()
         self.printverbosity('Clicked update button')
+        
+        self.take_screenshot('6')
         
         self.waitForProcessingPopup()
         
@@ -461,8 +495,12 @@ class TimeClockBase():
             # self.noRecordsFoundText = self.driver.find_element(By.CLASS_NAME, 'NoDataListItem')
             self.printverbosity('Uh oh! we found text saying "No Records Found" for the search criteria...')
             
+            self.take_screenshot('7a')
+            
         except:
-            self.printverbosity('Good news, we did not find the text saying "No records found"')    
+            self.printverbosity('Good news, we did not find the text saying "No records found"')  
+            
+            self.take_screenshot('7b')
     
     
         try:
@@ -489,10 +527,12 @@ class TimeClockBase():
         zooming out, it is not interactable ElementNotInteractableException for some reason
         
         '''
+        self.take_screenshot('8')
         
         # self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'Download'), 'menuDownloadButton', checkPresence=True, checkClickable=True)
         # trying to get it into view  
         self.driver.execute_script("window.scrollBy(10000,-1000);")
+        self.take_screenshot('9')
         self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
@@ -505,6 +545,7 @@ class TimeClockBase():
             try:
                 self.menuDownloadButton.click()
                 self.printverbosity('We were able to press the menuDownloadButton')
+                self.take_screenshot('10')
                 break
             except Exception as e:
                 print(e)
@@ -517,17 +558,19 @@ class TimeClockBase():
         # self.menuDownloadButton.click()
         # self.menuDownloadButton.send_keys(Keys.RETURN)
         
-        
+        self.take_screenshot('11')
         
         # self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15)               
         self.htmlOption = self.driver.find_elements(By.XPATH,  "//*[contains(text(), 'HTML')]")[0]
         self.htmlOption.click()
         printwait('Clicked HTML download type', 0)
         
-        
+        self.take_screenshot('12')
         
         self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)               
         # self.processingPopupDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15)    
+
+        self.take_screenshot('13')
 
         endTime = time.time() + 15
         while True:
@@ -538,9 +581,11 @@ class TimeClockBase():
                     # raise Exception('processingPopupDownloadButtonDisabled')    
                     raise DownloadButtonDisabledException('processsingPopupDownloadButton')
                 else:
+                    self.take_screenshot('14')
                     self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                     self.processingPopupDownloadButton.click()
-                    self.printverbosity('Processing Popup Download Button Clicked!')                    
+                    self.printverbosity('Processing Popup Download Button Clicked!')    
+                    self.take_screenshot('15')
                     break
                 
             except Exception as e:
@@ -565,17 +610,22 @@ class TimeClockBase():
         
         
 class TimeClockEZGroupHours(TimeClockBase):
-    def __init__(self, date_str, offscreen=True):
+    def __init__(self, date_str, offscreen=True, headless=False):
         
         
         self.date_str = date_str
         self.offscreen = offscreen
+        self.headless = headless
         
         # self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
         self.download_folder = Path.home() / 'Downloads' / 'GroupHours'
         
     def get_filepath(self):
-        self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=self.offscreen, fullscreen=True)
+        if self.offscreen:
+            self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=self.offscreen, fullscreen=True)
+        
+        elif self.headless:
+            self.tcb = TimeClockBase(download_folder=self.download_folder, headless=True)
         self.tcb.verbosity=1
         self.tcb.startupBrowser()
         self.tcb.tryLogin()
@@ -635,6 +685,21 @@ print(filepath)
 
   #%%      
 x.kill()        
+
+'''
+
+
+'''
+x = TimeClockBase(headless=True)  
+x.verbosity = 2
+x.enableScreenshots(Path('c:/users/netadmin/downloads/test'))
+x.startupBrowser()
+x.tryLogin()
+x.openTabularMenu()
+x.searchFromTabularMenu('Group Hours')
+x.clickTabularMenuSearchResults('Hours > Group Hours')
+x.groupHoursFinale('03/27/2024')
+filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
 
 '''
         

@@ -20,7 +20,7 @@ source = 'bat_insertGroupHoursToSQL_Yesterday'
 
 try:
     download_folder = Path.home() / 'downloads' / 'GroupHours_Yesterday'
-    x = insertGroupHours(date_str=yesterday_str, download_folder=download_folder, source=source)
+    x = insertGroupHours(date_str=yesterday_str, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{yesterday_str}") \n {e}')
