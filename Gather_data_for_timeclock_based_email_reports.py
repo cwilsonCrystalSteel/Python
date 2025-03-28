@@ -65,8 +65,8 @@ def clean_up_this_gunk(times_df, ei):
     # 3 digit codes are indirect - except for recieving
     # 5 digit codes are direct - except for CAPEX (idk how to tell if it is CAPEX)
     
-    # split the cost code on a space or a slash (idk why i have to do 4 slashes)
-    times_df['Job #'] = times_df['Cost Code'].str.split('\s|\\\\').str[0]
+    # split the cost code on a space or a slash
+    times_df['Job #'] = times_df['Cost Code'].str.split(r'\s|\\').str[0]
     # get the shop site by taking the first 2 characters of the PRODUCTIVE tag from the EI dataframe
     times_df = times_df.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
     # rename that to location

@@ -106,8 +106,8 @@ def return_information_on_clock_data(times_df, include_terminated=False):
     # 3 digit codes are indirect - except for recieving
     # 5 digit codes are direct - except for CAPEX (idk how to tell if it is CAPEX)
     
-    # split the cost code on a space or a slash (idk why i have to do 4 slashes)
-    df['Job #'] = df['Cost Code'].str.split(r'\s|\\\\').str[0]
+    # split the cost code on a space or a slash
+    df['Job #'] = df['Cost Code'].str.split(r'\s|\\').str[0]
     # get the shop site by taking the first 2 characters of the PRODUCTIVE tag from the EI dataframe
     df = df.join(ei.set_index('Name')['Productive'].astype(str).str[:2], on='Name')
     # rename that to location
