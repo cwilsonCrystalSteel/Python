@@ -51,11 +51,12 @@ x.doStuff()
 '''
 
 class insertGroupHours():
-    def __init__(self, date_str, download_folder=None, offscreen=True):
+    def __init__(self, date_str, download_folder=None, offscreen=True, source=None):
         self.date_str = date_str
         # self.remediationtype = remediationtype
         self.download_folder = download_folder
         self.offscreen = offscreen
+        self.source = source
         self.df_renamed_toggle = False
         
         self.engine = yield_SQL_engine()
@@ -255,13 +256,19 @@ class insertGroupHours():
         print_count_results(schema, table_name, self.engine, 'after truncating')
         
         
-    def callMergeProc(self, proc_name, table_name):
+    def callMergeProc(self, proc_name, table_name, sources=()):
         
         print_count_results('dbo', table_name, self.engine, 'before merge proc')
         
         connection = self.engine.raw_connection()
         cursor = connection.cursor()
-        cursor.execute(f"call dbo.{proc_name}()")
+        if len(sources):
+            #Example:
+            # cursor.execute(f"CALL dbo.{proc_name}(%s)", ('donkey',))# It NEEDS the comma after the param
+            cursor.execute(f"CALL dbo.{proc_name}(%s)", sources) 
+            
+        else:
+            cursor.execute(f"call dbo.{proc_name}()")
         connection.commit()
         connection.close()
         
@@ -337,7 +344,7 @@ class insertGroupHours():
         self.insertToLiveTable(table_name, self.times_df)
         
         # call our merge proc
-        self.callMergeProc(proc_name, table_name)
+        self.callMergeProc(proc_name, table_name, (self.source,))
         
     def get_timeout_to_sqlformat(self):
         

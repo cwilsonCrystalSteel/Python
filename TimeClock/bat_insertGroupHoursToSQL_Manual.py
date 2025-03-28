@@ -26,7 +26,7 @@ source = 'bat_insertGroupHoursToSQL_Manual'
 # targetDates = pd.unique(noEmployeeNumber['targetdate'])
 
 targetDates = []
-start_dt = datetime.date(2020,1,3)
+start_dt = datetime.date(2020,1,18)
 while start_dt <= datetime.date(2025,3,23):
     start_dt += datetime.timedelta(days=1)
     
@@ -34,7 +34,7 @@ while start_dt <= datetime.date(2025,3,23):
         
     try:
         download_folder = Path.home() / 'downloads' / 'GroupHours_manual'
-        x = insertGroupHours(date_str=date_str, download_folder=download_folder)
+        x = insertGroupHours(date_str=date_str, download_folder=download_folder, source=source)
         x.doStuff()
     except Exception as e:
         print(f'Could not complete insertGroupHours("{date_str}") \n {e}')

@@ -77,6 +77,15 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net']
 # basis = get_information_for_clock_based_email_reports(yesterday_str, yesterday_str, exclude_terminated=True)
 
 times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
+# if we got no records for yesterday, lets run yesterday from the bat-ready py file
+if not times_df.shape[0]:
+    from TimeClock.insertGroupHoursToSQL import insertGroupHours
+    source = 'Automated_Email_Reporting_Controller'
+    download_folder = Path.home() / 'downloads' / 'GroupHours_Yesterday'
+    x = insertGroupHours(date_str=yesterday_str, source=source, download_folder=download_folder)
+    x.doStuff()
+    times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
+
 basis = return_information_on_clock_data(times_df)
 
 # gets all of the absent shop employees who did not clock in by comparing 
