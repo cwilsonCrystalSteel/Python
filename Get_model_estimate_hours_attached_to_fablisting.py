@@ -10,9 +10,8 @@ import datetime
 import glob
 import os
 import numpy as np
-from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
-from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 import sys
+from navigate_EVA_folder_function import get_df_of_all_lots_files_information
 from utils.attendance_google_sheets_credentials_startup import init_google_sheet as init_google_sheet_production_worksheet
 from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_job_hours
 
