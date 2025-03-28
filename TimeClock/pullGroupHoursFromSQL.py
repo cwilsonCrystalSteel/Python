@@ -244,7 +244,7 @@ def get_specific_dates_timesdf(date_str):
         print(f'Trying to pull TimeClock for: {date_str} now...')
         try:
             download_folder = Path.home() / 'downloads' / 'GroupHours'
-            x = insertGroupHours(date_str=date_str, download_folder=download_folder)
+            x = insertGroupHours(date_str=date_str, download_folder=download_folder, source='pullGroupHoursFromSQL')
             x.doStuff()
             if check_remediated_availability(date_str):
                 print(f'Good news, we alleviated missing data on {date_str}')

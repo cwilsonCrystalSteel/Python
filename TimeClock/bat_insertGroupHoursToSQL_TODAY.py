@@ -20,7 +20,7 @@ download_folder = Path.home() / 'downloads' / 'GroupHours_Today'
 
 
 try:
-    x = insertGroupHours(date_str=today_str, download_folder=download_folder)
+    x = insertGroupHours(date_str=today_str, download_folder=download_folder, source=source)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{today_str}") \n {e}')
