@@ -51,11 +51,12 @@ x.doStuff()
 '''
 
 class insertGroupHours():
-    def __init__(self, date_str, download_folder=None, offscreen=True, source=None):
+    def __init__(self, date_str, download_folder=None, offscreen=True, headless=False, source=None):
         self.date_str = date_str
         # self.remediationtype = remediationtype
         self.download_folder = download_folder
         self.offscreen = offscreen
+        self.headless = headless
         self.source = source
         self.df_renamed_toggle = False
         
@@ -129,7 +130,7 @@ class insertGroupHours():
         i = 0
         while i < 5:
             try:
-                self.tc = TimeClockEZGroupHours(self.date_str, offscreen=self.offscreen)
+                self.tc = TimeClockEZGroupHours(self.date_str, offscreen=self.offscreen, headless=self.headless)
                 
                 if self.download_folder is None:
                     # self.tc.download_folder =  "C:\\users\\cwilson\\downloads\\GroupHours4SQL\\"

@@ -23,7 +23,7 @@ source = 'bat_insertGroupHoursToSQL_Remediation'
 
 try:
     download_folder = Path.home() / 'downloads' / 'GroupHours_2DayRemediation'
-    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source)
+    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{two_day}") \n {e}')
@@ -31,7 +31,7 @@ except Exception as e:
     
 try:
     download_folder = Path.home() / 'downloads' / 'GroupHours_4DayRemediation'
-    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source)
+    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{four_day}") \n {e}')
@@ -39,7 +39,7 @@ except Exception as e:
 
 try:
     download_folder = Path.home() / 'downloads' / 'GroupHours_10DayRemediation'
-    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source)
+    x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
     print(f'Could not complete insertGroupHours("{ten_day}") \n {e}')
