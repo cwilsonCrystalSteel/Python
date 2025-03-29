@@ -9,6 +9,7 @@ Created on Tue Aug 20 10:29:52 2024
 from TimeClock.insertGroupHoursToSQL import insertGroupHours
 import datetime
 from pathlib import Path
+from utils.insertErrorToSQL import insertError
 
 print('Running insertGroupHoursToSQL_REMEDIATION...')
 
@@ -26,7 +27,9 @@ try:
     x = insertGroupHours(date_str=two_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
-    print(f'Could not complete insertGroupHours("{two_day}") \n {e}')
+    output_error_string = f'Could not complete insertGroupHours("{two_day}") \n {e}'
+    print(output_error_string)
+    insertError(name=source, description = output_error_string)
     
     
 try:
@@ -34,7 +37,9 @@ try:
     x = insertGroupHours(date_str=four_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
-    print(f'Could not complete insertGroupHours("{four_day}") \n {e}')
+    output_error_string = f'Could not complete insertGroupHours("{four_day}") \n {e}'
+    print(output_error_string)
+    insertError(name=source, description = output_error_string)
     
 
 try:
@@ -42,4 +47,6 @@ try:
     x = insertGroupHours(date_str=ten_day, download_folder=download_folder, source=source, headless=True, offscreen=False)
     x.doStuff()
 except Exception as e:
-    print(f'Could not complete insertGroupHours("{ten_day}") \n {e}')
+    output_error_string = f'Could not complete insertGroupHours("{ten_day}") \n {e}'
+    print(output_error_string)
+    insertError(name=source, description = output_error_string)

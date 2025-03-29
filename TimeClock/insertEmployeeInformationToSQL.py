@@ -39,7 +39,7 @@ def print_terminated_count_results(engine, terminated, suffix_text):
         
     
 
-def import_employee_information_to_SQL():
+def import_employee_information_to_SQL(source=None):
 
     print(f'{"*"*50}\nBegining to import employee information to SQL\n{"*"*50}')
     
@@ -81,7 +81,10 @@ def import_employee_information_to_SQL():
     
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    cursor.execute("call dbo.merge_employeeinformation()")
+    if source is None:
+        cursor.execute("call dbo.merge_employeeinformation()")
+    else:
+        cursor.execute("call dbo.merge_employeeinformation(%s)", (source,))
     connection.commit()
     connection.close()
     
@@ -91,7 +94,7 @@ def import_employee_information_to_SQL():
 
        
 
-def determine_terminated_employees():
+def determine_terminated_employees(source=None):
     print(f'{"*"*50}\nBegining to determine terminated employees into SQL\n{"*"*50}')
     
     # Get the employee information for all employees
@@ -163,7 +166,10 @@ def determine_terminated_employees():
     print_terminated_count_results(engine,False, 'before updating IS terminated')
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    cursor.execute("call dbo.update_employeeinformation_isterminated()")
+    if source is None:
+        cursor.execute("call dbo.update_employeeinformation_isterminated()")
+    else:
+        cursor.execute("call dbo.update_employeeinformation_isterminated(%s)", (source,))
     connection.commit()
     connection.close()
     print_terminated_count_results(engine,True, 'after updating IS terminated')
@@ -194,7 +200,10 @@ def determine_terminated_employees():
     print_terminated_count_results(engine,False, 'before updating IS terminated')
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    cursor.execute("call dbo.update_employeeinformation_isnnotterminated()")
+    if source is None:
+        cursor.execute("call dbo.update_employeeinformation_isnnotterminated()")
+    else:
+        cursor.execute("call dbo.update_employeeinformation_isnnotterminated(%s)", (source,))
     connection.commit()
     connection.close()
     print_terminated_count_results(engine,True, 'after updating IS terminated')
