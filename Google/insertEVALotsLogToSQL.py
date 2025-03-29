@@ -23,8 +23,10 @@ def print_count_results(schema, engine, suffix_text):
     
 
 
-def import_Lots_Log_EVA_hours_to_SQL():
+def import_Lots_Log_EVA_hours_to_SQL(source=None):
+    print('Retrieving LOTS Log from google sheets...')
     ll = pullEVALotsLogFromGoogle(drop_nonnumeric=False)
+    
     
     engine = yield_SQL_engine()
     
@@ -50,7 +52,10 @@ def import_Lots_Log_EVA_hours_to_SQL():
     
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    cursor.execute("call dbo.merge_evalotslog()")
+    if source is None:
+        cursor.execute("call dbo.merge_evalotslog()")
+    else:
+        cursor.execute("call dbo.merge_evalotslog(%s)", (source,))
     connection.commit()
     connection.close()
     

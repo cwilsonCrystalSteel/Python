@@ -7,6 +7,7 @@ Created on Tue Aug 20 10:29:52 2024
 
 from TimeClock.pullGroupHoursFromSQL import get_timesdf_from_vClocktimes
 from TimeClock.insertGroupHoursToSQL import insertGroupHours
+from utils.insertErrorToSQL import insertError
 import datetime
 from pathlib import Path
 import pandas as pd
@@ -37,6 +38,8 @@ while start_dt <= datetime.date(2025,3,23):
         x = insertGroupHours(date_str=date_str, download_folder=download_folder, source=source, headless=True, offscreen=False)
         x.doStuff()
     except Exception as e:
-        print(f'Could not complete insertGroupHours("{date_str}") \n {e}')
+        output_error_string = f'Could not complete insertGroupHours("{date_str}")\n{e}'
+        print(output_error_string)
+        insertError(name=source, description = output_error_string)
     
     
