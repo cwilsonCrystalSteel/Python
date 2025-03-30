@@ -336,5 +336,7 @@ def get_timesdf_from_vClocktimes(start_date, end_date):
         times_df = pd.DataFrame(result.fetchall(), columns=result.keys())    
         
     return times_df
+
+
     
     
