@@ -49,20 +49,26 @@ def check_file_existence_in_db(excel_file):
     
     # query
     existence_df = return_select_evadropbox_where_filename(str(excel_file))
-    existence_df['insertedat'] = pd.to_datetime(existence_df['insertedat'])
-    existence_df['updatedat'] = pd.to_datetime(existence_df['updatedat'])
-    # existence_df = pd.DataFrame().query(existence_check)
+    # if there is rows to the returned sql, then it exists
     if existence_df.shape[0]:
         exists = True
-    
+        
+        # if it exists, then we need to check when it was inserted/updated and when the file was created/modified
+        
         # check when the file was created
         file_creation_dt = datetime.datetime.fromtimestamp(os.path.getctime(excel_file))
-        file_update_dt = datetime.datetime.fromtimestamp(os.path.getmtime(excel_file))
+        file_modified_dt = datetime.datetime.fromtimestamp(os.path.getmtime(excel_file))
         
+        # convert to datetime
+        existence_df['insertedat'] = pd.to_datetime(existence_df['insertedat'])
+        # convert to datetime
+        existence_df['updatedat'] = pd.to_datetime(existence_df['updatedat'])
+        # somehow get the maximum value of these 
         sql_time = existence_df[['insertedat','updatedat']].max().max()
         
         # if the insertedat or updatedat is BEFORE the later of creation/modification, we will redo it
-        if sql_time < max(file_creation_dt, file_update_dt):
+        if sql_time < max(file_creation_dt, file_modified_dt):
+            # if the SQL time was before the later of creation/modified, then it needs to be redone
             redo = True
    
     
@@ -217,7 +223,7 @@ def adhoc_get_all_excel_files():
         
 #%%        
 
-folderpaths = determine_folders_Glob(days_back=200000)
+folderpaths = determine_folders_Glob(days_back=30)
 excel_files = [file for folder in folderpaths for file in determine_excel_files(folder)]
 
 #%%
@@ -231,7 +237,12 @@ for excel_file in excel_files:
       delete_query = 'delete from dbo.evadropbox where filename = {excel_file}'  
       print('****************************************************\nFigure out how to delete and then redo!')
       
+      #??? for now, 2025-03-25, i will just do an error entry
+      insertError(name='EVADropbox - redo = True', description = f'This file needs to be deleted and reinserted, or updated via the merge proc(?): {excel_file}')
+      
+      
     elif file_work['exists']:
+        print(f"Exists in database & skipping: {excel_file}")
         continue
       
     
@@ -270,7 +281,6 @@ for excel_file in excel_files:
         shop = basename_components[2].split('.')[0]
         
         
-        
     
     # we are going to iterate thru the sheet_names as numbers to find the right one b/c calling by name results in a lot of failures
     sheet_num = 0
@@ -295,7 +305,10 @@ for excel_file in excel_files:
         
         #write to error sql table
         insertError(name='EVADropbox', description = f'Could not find a valid sheet in the Excel File with LOT data: {excel_file}')
-        continue                
+        continue     
+
+
+    lot, rule = massage_lot_name(lot)           
 
     
     # add the lot to the df
@@ -303,17 +316,21 @@ for excel_file in excel_files:
     # add the filepath to the df
     excel_lot['filepath'] = str(excel_file)
     
+    # add these to go to the DB for tracability
     excel_lot['rawJob'] = job_str
     excel_lot['rawLot'] = lot_orig
     excel_lot['rawShop'] = shop
     
+    excel_lot['PAGE'] = excel_lot['PAGE'].astype(str)
+    
         
     # insert into live table
+    try:
+        import_dropbox_eva_to_SQL(excel_lot, source)
+    except:
+        insertError(name='EVADropbox - import_dropbox_eva_to_SQL', description = f'Could not find a valid sheet in the Excel File with LOT data: {excel_file}')
+        continue                
     
-    import_dropbox_eva_to_SQL(excel_lot, source)
-    
-    
-    # call the merge proc
                 
                 
 
