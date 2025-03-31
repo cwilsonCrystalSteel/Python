@@ -14,29 +14,14 @@ from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from TimeClock.TimeClockNavigation import TimeClockBase
 from utils.initSQLConnectionEngine import yield_SQL_engine
+from utils.sql_print_count_results import print_count_results, print_count_results_where
 from pathlib import Path
 
 download_path = Path.home() / 'Downloads' / 'EmployeeInformation'
 engine = yield_SQL_engine()
 
-def print_count_results(schema, engine, suffix_text):
-    with engine.connect() as connection:
-        result = connection.execute(text(f"select count(*) from {schema}.employeeinformation"))
-        for row in result:
-            continue
-    
-    print(f"There are {row[0]} rows in {schema}.employeeinformation {suffix_text}")
-    
-    
-def print_terminated_count_results(engine, terminated, suffix_text):
-    terminated_str = 'TRUE' if terminated else 'FALSE'
-    with engine.connect() as connection:
-        result = connection.execute(text(f"select count(*) from dbo.employeeinformation where terminated={terminated_str}"))
-        for row in result:
-            continue
-        
-    print(f"There are {row[0]} rows in dbo.employeeinformation where terminated={terminated_str} {suffix_text}")
-        
+table = 'employeeinformation'
+
     
 
 def import_employee_information_to_SQL(source=None):
@@ -60,7 +45,7 @@ def import_employee_information_to_SQL(source=None):
     
     x.kill()
     
-    print_count_results('live', engine, 'before truncating')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before truncating')
     
     
     Session = sessionmaker(bind=engine)
@@ -71,12 +56,12 @@ def import_employee_information_to_SQL(source=None):
     
     
     # get count of table before insert --> should be 0
-    print_count_results('live', engine, 'before importing')
-    print_count_results('dbo', engine, 'before merge proc')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before importing')
+    print_count_results(engine=engine, schema='dbo', table=table, suffix_text='before merge proc')
     
     ei.to_sql('employeeinformation', engine, schema='live', if_exists='replace', index=False)
     # get count of table after insert
-    print_count_results('live', engine, 'after importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after importing')
           
     
     connection = engine.raw_connection()
@@ -89,8 +74,8 @@ def import_employee_information_to_SQL(source=None):
     connection.close()
     
     # double check length of live table after merge proc --> should be 0
-    print_count_results('dbo', engine, 'after merge proc') 
-    print_count_results('live', engine, 'after merge proc')
+    print_count_results(engine=engine, schema='dbo', table=table, suffix_text='after merge proc') 
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after merge proc')
 
        
 
@@ -148,7 +133,7 @@ def determine_terminated_employees(source=None):
         # inner join live.employeeinformation to dbo.employeeinformation
         # update values of terminated
     print('RUNNING UPDATES FOR TERMINATED EMPLOYEES')
-    print_count_results('live', engine, 'before truncating')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before truncating')
     
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -156,14 +141,15 @@ def determine_terminated_employees(source=None):
     session.commit()
     session.close()
     
-    print_count_results('live', engine, 'before importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before importing')
     
     ei_terminated.to_sql('employeeinformation', engine, schema='live', if_exists='replace', index=False)
     # get count of table after insert
-    print_count_results('live', engine, 'after importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after importing')
     
-    print_terminated_count_results(engine,True, 'before updating IS terminated')
-    print_terminated_count_results(engine,False, 'before updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=True, suffix_text='before updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=False, suffix_text='before updating IS terminated')
+
     connection = engine.raw_connection()
     cursor = connection.cursor()
     if source is None:
@@ -172,17 +158,19 @@ def determine_terminated_employees(source=None):
         cursor.execute("call dbo.update_employeeinformation_isterminated(%s)", (source,))
     connection.commit()
     connection.close()
-    print_terminated_count_results(engine,True, 'after updating IS terminated')
-    print_terminated_count_results(engine,False, 'after updating IS terminated')
+    
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=True, suffix_text='after updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=False, suffix_text='after updating IS terminated')
+
     
     # double check length of live table after merge proc --> should be 0
-    print_count_results('live', engine, 'after merge proc')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after merge proc')
     
     
     
     
     print('RUNNING UPDATES FOR NON-TERMINATED EMPLOYEES')
-    print_count_results('live', engine, 'before truncating')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before truncating')
     
     Session = sessionmaker(bind=engine)
     session = Session()
@@ -190,14 +178,15 @@ def determine_terminated_employees(source=None):
     session.commit()
     session.close()
     
-    print_count_results('live', engine, 'before importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before importing')
     
     ei_notTerminated.to_sql('employeeinformation', engine, schema='live', if_exists='replace', index=False)
     # get count of table after insert
-    print_count_results('live', engine, 'after importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after importing')
     
-    print_terminated_count_results(engine,True, 'before updating IS terminated')
-    print_terminated_count_results(engine,False, 'before updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=True, suffix_text='before updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=False, suffix_text='before updating IS terminated')
+
     connection = engine.raw_connection()
     cursor = connection.cursor()
     if source is None:
@@ -206,9 +195,11 @@ def determine_terminated_employees(source=None):
         cursor.execute("call dbo.update_employeeinformation_isnnotterminated(%s)", (source,))
     connection.commit()
     connection.close()
-    print_terminated_count_results(engine,True, 'after updating IS terminated')
-    print_terminated_count_results(engine,False, 'after updating IS terminated')
+    
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=True, suffix_text='after updating IS terminated')
+    print_count_results_where(engine=engine, schema='dbo', table=table, fieldname='terminated', equal_to_value=False, suffix_text='after updating IS terminated')
+
     
     # double check length of live table after merge proc --> should be 0
-    print_count_results('live', engine, 'after merge proc')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after merge proc')
     
