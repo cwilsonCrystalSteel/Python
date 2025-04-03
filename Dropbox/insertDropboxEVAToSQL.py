@@ -10,7 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
 from utils.initSQLConnectionEngine import yield_SQL_engine
-from utils.sql_print_count_results import print_count_results
+from utils.sql_print_count_results import print_count_results, table_exists
 from pathlib import Path
 
 engine = yield_SQL_engine()
@@ -33,19 +33,19 @@ def import_dropbox_eva_to_SQL(excel_lot_df, source=None):
     
     print_count_results(engine, schema='live', table=table, suffix_text='before truncating')
     
-    
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    session.execute(text(f'''TRUNCATE TABLE live.{table}'''))
-    session.commit()
-    session.close()
+    if table_exists(engine, 'live', table):
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        session.execute(text(f'''TRUNCATE TABLE live.{table}'''))
+        session.commit()
+        session.close()
     
     
     # get count of table before insert --> should be 0
     print_count_results(engine, schema='live', table=table, suffix_text='before importing')
     print_count_results(engine, schema='dbo', table=table, suffix_text='before merge proc')
     
-    excel_lot_df.to_sql('evadropbox', engine, schema='live', if_exists='replace', index=False)
+    excel_lot_df.to_sql(table, engine, schema='live', if_exists='replace', index=False)
     # get count of table after insert
     print_count_results(engine, schema='live', table=table, suffix_text='after importing')
           
