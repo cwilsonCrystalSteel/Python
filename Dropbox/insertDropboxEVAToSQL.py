@@ -15,7 +15,17 @@ from pathlib import Path
 
 engine = yield_SQL_engine()
 
+def insert_evaDropbox_log(description='', source=''):
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
+    query = text("""
+    INSERT INTO dbo.eva_log (description, insertedat, source)
+    VALUES (:description, NOW(), :source)
+    """)
+    session.execute(query, {"description": description, "source": source})
+    session.commit()
+    
 
     
 def import_dropbox_eva_to_SQL(excel_lot_df, source=None):
