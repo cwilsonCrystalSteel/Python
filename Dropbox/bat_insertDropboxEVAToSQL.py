@@ -13,10 +13,12 @@ import pandas as pd
 import datetime
 import re
 from utils.insertErrorToSQL import insertError
-from Dropbox.insertDropboxEVAToSQL import import_dropbox_eva_to_SQL
+from Dropbox.insertDropboxEVAToSQL import import_dropbox_eva_to_SQL, insert_evaDropbox_log
 from Dropbox.pullDropboxEVAFromSQL import return_select_evadropbox_where_filename
 
+
 source = 'bat_insertDropboxEVAToSQL'
+insert_evaDropbox_log(description='Begin checking Dropbox EVA files', source=source)
 
 critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
 now = datetime.datetime.now()
@@ -32,7 +34,10 @@ def determine_directory_path():
         else:
             continue
     
-    insertError('EVADropbox - determine_directory_path', 'could not reach any directory!')
+    # we did not find a match at this point!
+    if not os.path.exists(Path(ii)):
+        insertError('EVADropbox - determine_directory_path', 'could not reach any directory!')
+        raise Exception('Could not determine directory for Dropbox EVA files.')
     
     return base_dir
 
@@ -334,3 +339,4 @@ for excel_file in excel_files:
                 
                 
 
+insert_evaDropbox_log(description='Finished checking Dropbox EVA files', source=source)
