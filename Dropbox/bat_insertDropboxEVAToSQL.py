@@ -10,6 +10,7 @@ import os
 from pathlib import Path
 import glob
 import pandas as pd
+import numpy as np
 import datetime
 import re
 from utils.insertErrorToSQL import insertError
@@ -279,6 +280,7 @@ for excel_file in excel_files:
     else:
         # job # is the start of the filename
         job_str = basename_components[0]
+        job_str = re.sub(r'[A-Z]', '', job_str.upper())
         # lot is the middle portion of the filename
         lot = basename_components[1]
         lot_orig = lot
@@ -313,25 +315,62 @@ for excel_file in excel_files:
         continue     
 
 
-    lot, rule = massage_lot_name(lot)           
 
+    ''' 2025-04-04
+    # we are going to do the grouping to get the worth of main members in python
+    # it was too much to do it on-demand in sql
+    '''
     
-    # add the lot to the df
-    excel_lot['LOT'] = lot
-    # add the filepath to the df
-    excel_lot['filepath'] = str(excel_file)
+    # This is counting how many times Production Code == Page
+    # when Production Code == Page, it is a main member 
+    # Production Code can have minor marks and main members 
+    # but the minor marks have hours and weights that need added into the main member 
+    excel_lot['matched_quantity'] = np.where(excel_lot['PRODUCTION CODE'] == excel_lot['PAGE'], excel_lot['QTY'], 0.0)
     
+    # get the quantity, weight in pounds, and hours  
+    main_members = excel_lot.groupby(['PAGE','SEQUENCE']).agg(
+        quantity=('matched_quantity', 'sum'),
+        pounds=('WEIGHT', 'sum'),
+        hours=('TOTAL MANHOURS', 'sum')
+    )
+    
+    # Add eva per quantity as a derived column
+    main_members['evaperquantity'] = main_members['hours'] / main_members['quantity'].replace(0, np.nan)
+    # move the PAGE & sequence back into a column
+    main_members = main_members.reset_index()
+    # make sure this goes into the db as as string
+    main_members['PAGE'] = main_members['PAGE'].astype(str)
+    # rename the 2 all caps to lower
+    main_members = main_members.rename(columns={'PAGE':'page','SEQUENCE':'sequence'})
+    
+    # clean up the lot name 
+    lot, rule = massage_lot_name(lot)     
+    # set values of the lot/job into the dataframe 
+    main_members['lotcleaned'] = lot
     # add these to go to the DB for tracability
-    excel_lot['rawJob'] = job_str
-    excel_lot['rawLot'] = lot_orig
-    excel_lot['rawShop'] = shop
+    main_members['rawjob'] = int(job_str)
+    main_members['rawlot'] = lot_orig
+    main_members['rawshop'] = shop
+    main_members['jobinfile'] = excel_lot.loc[0,'JOB NUMBER']
     
-    excel_lot['PAGE'] = excel_lot['PAGE'].astype(str)
+    # we need to get parts from the directory of the file
+    directory, filename = os.path.split(excel_file)
+    directory, folder_date = os.path.split(directory)
+    directory, folder_month = os.path.split(directory)
+    directory, folder_year = os.path.split(directory)
+    
+    # now add in the details of the file
+    main_members['filepath'] = str(excel_file)
+    main_members['filename'] = filename
+    main_members['folderday'] = folder_date
+    main_members['foldermonth'] = folder_month 
+    main_members['folderyear'] = folder_year
+    
     
         
-    # insert into live table
+    # insert into live table & do the merge proc
     try:
-        import_dropbox_eva_to_SQL(excel_lot, source)
+        import_dropbox_eva_to_SQL(main_members, source)
     except:
         insertError(name='EVADropbox - import_dropbox_eva_to_SQL', description = f'Could not find a valid sheet in the Excel File with LOT data: {excel_file}')
         continue                
