@@ -8,46 +8,39 @@ Created on Fri Mar 28 17:20:48 2025
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 from utils.initSQLConnectionEngine import yield_SQL_engine
+from utils.sql_print_count_results import table_exists, print_count_results
 import pandas as pd
 from Google.pullEVALotsLogFromGoogle import pullEVALotsLogFromGoogle
 
 
-
-def print_count_results(schema, engine, suffix_text):
-    with engine.connect() as connection:
-        result = connection.execute(text(f"select count(*) from {schema}.evaLotsLog"))
-        for row in result:
-            continue
-    
-    print(f"There are {row[0]} rows in {schema}.evaLotsLog {suffix_text}")
     
 
 
 def import_Lots_Log_EVA_hours_to_SQL(source=None):
+    table = 'evalotslog'
     print('Retrieving LOTS Log from google sheets...')
     ll = pullEVALotsLogFromGoogle(drop_nonnumeric=False)
-    
     
     engine = yield_SQL_engine()
     
     
-    print_count_results('live', engine, 'before truncating')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before truncating')
     
-    
-    Session = sessionmaker(bind=engine)
-    session = Session()
-    session.execute(text('''TRUNCATE TABLE live.evalotslog'''))
-    session.commit()
-    session.close()
+    if table_exists(engine, schema='live', table=table):
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        session.execute(text(f'''TRUNCATE TABLE live.{table}'''))
+        session.commit()
+        session.close()
     
     
     # get count of table before insert --> should be 0
-    print_count_results('live', engine, 'before importing')
-    print_count_results('dbo', engine, 'before merge proc')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='before importing')
+    print_count_results(engine=engine, schema='dbo', table=table, suffix_text='before merge proc')
     
-    ll.to_sql('evalotslog', engine, schema='live', if_exists='replace', index=False)
+    ll.to_sql(table, engine, schema='live', if_exists='replace', index=False)
     # get count of table after insert
-    print_count_results('live', engine, 'after importing')
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after importing')
           
     
     connection = engine.raw_connection()
@@ -60,5 +53,5 @@ def import_Lots_Log_EVA_hours_to_SQL(source=None):
     connection.close()
     
     # double check length of live table after merge proc --> should be 0
-    print_count_results('dbo', engine, 'after merge proc') 
-    print_count_results('live', engine, 'after merge proc')
+    print_count_results(engine=engine, schema='dbo', table=table, suffix_text='after merge proc') 
+    print_count_results(engine=engine, schema='live', table=table, suffix_text='after merge proc')
