@@ -14,7 +14,11 @@ import datetime
 # daily_fab_listing_google_sheet_key = "1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
 
 
-def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997", start_hour=0, sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"):
+def grab_google_sheet(sheet_name, 
+                      start_date="03/06/1997", end_date="03/06/1997", 
+                      start_hour=0, 
+                      sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k",
+                      include_sheet_name=False):
     
     
     # key for the daily fab listing google sheet
@@ -88,6 +92,9 @@ def grab_google_sheet(sheet_name, start_date="03/06/1997", end_date="03/06/1997"
     df = df[~df["Quantity"].isna()]
     # removes the row if there is a NaN in the 'Weight' column
     df = df[~df["Weight"].isna()]
+    
+    if include_sheet_name:
+        df['sheetname'] = sheet_name
     
 
     return df

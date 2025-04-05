@@ -16,6 +16,8 @@ import re
 engine = yield_SQL_engine()
 
 
+from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
+fablisting = grab_google_sheet('FED QC Form', '01/01/2023','05/01/2025', include_sheet_name=True)
 def further_fablisting_df_preperations(fablisting_df): # move this to get_model_estimate_hours_attached_to_fablisting_SQL
     df = fablisting_df.copy()
     
@@ -24,6 +26,8 @@ def further_fablisting_df_preperations(fablisting_df): # move this to get_model_
     
     df['lot_3_digit'] = df['Lot #'].str.zfill(3)
     df['lot_with_t_start'] = 'T' + df['lot_3_digit']
+    
+    df['shop'] = df['sheetname'].apply(lambda x: x.split(' ')[0])
     
     cols = df.columns
     new_cols = []
@@ -34,13 +38,14 @@ def further_fablisting_df_preperations(fablisting_df): # move this to get_model_
             counter += 1
         else:
             new_cols.append(i)
-    df.columns = new_cols
+    
+    df.columns = [i.lower() for i in new_cols]
             
     # df['Job #'] = df['Job #'].astype(str)
     
     return df
 
-def lotnumber_cleaner(lot):
+def lotnumber_cleaner(lot): # move this to get_model_estimate_hours_attached_to_fablisting_SQL
     if 'ph' in lot.lower():
         out = 'use job average' # cant do anything with these
         return out 
@@ -157,7 +162,7 @@ def lotnumber_cleaner(lot):
 
 def import_dropbox_eva_to_SQL(fablisting, source=None):
     fablisting_df = further_fablisting_df_preperations(fablisting) # move this to get_model_estimate_hours_attached_to_fablisting_SQL
-    fablisting_df['lotcleaned'] = fablisting_df['Lot #'].apply(lotnumber_cleaner)
+    fablisting_df['lotcleaned'] = fablisting_df['lot #'].apply(lotnumber_cleaner)
     
     table = 'fablisting'
     
@@ -184,9 +189,9 @@ def import_dropbox_eva_to_SQL(fablisting, source=None):
     connection = engine.raw_connection()
     cursor = connection.cursor()
     if source is None:
-        cursor.execute("call dbo.merge_evadropbox()")
+        cursor.execute("call dbo.merge_fablisting()")
     else:
-        cursor.execute("call dbo.merge_evadropbox(%s)", (source,))
+        cursor.execute("call dbo.merge_fablisting(%s)", (source,))
     connection.commit()
     connection.close()
     
