@@ -7,7 +7,8 @@ Created on Mon Jul 26 08:11:44 2021
 
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2, fill_missing_model_earned_hours
-# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
+from get_model_estimate_hours_attached_to_fablisting_SQL import apply_model_hours_SQL, call_to_insert
+
 import datetime
 import pandas as pd
 import sys
@@ -15,8 +16,6 @@ from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
 from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
 import os 
 from pathlib import Path
-# start_date = "07/01/2021"
-# end_date = "07/31/2021"
 
 
 
@@ -89,13 +88,25 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
         return None
         
     # get the model hours attached to fablisting
-    with_model = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
+    # with_model_old = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
+    
+    ''' Get earned hours information from the DB attached to fablisting '''
+    # lets dump the fablisting dataframe into the live table
+    call_to_insert(fablisting, sheet)
+    # then call the view and get back the earned horus = best_eva option
+    with_model = apply_model_hours_SQL(how='best_eva', keep_diagnostic_cols=False)
+    # also get back the best HPT option
+    old_way = apply_model_hours_SQL(how='best_hpt')
+    # then get only the ones matching on the pcmark, which is eva from dropbox
+    eva_by_pcmark = apply_model_hours_SQL(how='eva_pcmark_dropbox')
+    
+    
     # sum up the new earned hours
     earned_new = with_model['Earned Hours'].sum()
     # get the old way of claculating earned hours
-    old_way = fill_missing_model_earned_hours(fablisting, shop=sheet[:3])
+    # old_way_old = fill_missing_model_earned_hours(fablisting, shop=sheet[:3])
     # put the old earned hours column onto the with_model df
-    with_model = with_model.join(old_way[['Hours per Ton','Earned Hours']], rsuffix=' (old)')
+    with_model = with_model.join(old_way[['Earned Hours']], rsuffix=' (old)')
     # sort the with_model dataframe by the creation time not the job
     with_model = with_model.sort_values('Timestamp')
     # sum up the old earned hours
@@ -104,15 +115,20 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     tonnage = with_model['Weight'].sum() / 2000
     
     quantity = with_model['Quantity'].sum()
-    ''' '''
-    pieces_missing_model = with_model[with_model['Has Model'] == False]
-    
+    ''' Check the pieces that dont match on the pcmarks to eva files 
+        ---> these are ones that are probably a typo in fablisting!
+        ---> can we get a hyperlink url to correct these?
+    '''
+    # find pieces without a value of earned horus
+    pieces_missing_model = eva_by_pcmark[eva_by_pcmark['Earned Hours'].isna()]
+    # keep select columns
     pieces_missing_model = pieces_missing_model[['Job #','Lot #','Piece Mark - REV', 'Weight', 'Quantity']]
-    
+    # reset the index
     pieces_missing_model = pieces_missing_model.reset_index(drop=True)
+    
     ''' Here I calcualte the difference between EVA & HPT models '''
-    # only get the pieces that have EVA model
-    pieces_hours_difference = with_model[with_model['Has Model'] == True]
+    # only get the pieces that have EVA model (this is eva model of any kind - how='best_eva')
+    pieces_hours_difference = with_model[~with_model['Earned Hours'].isna()]
     # cut down the columns to what I need
     pieces_hours_difference = pieces_hours_difference[['Job #','Lot #','Piece Mark - REV', 'Weight', 'Quantity','Earned Hours','Earned Hours (old)']]
     # rename columns to more fitting name
@@ -185,13 +201,6 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     if proof == True:
         print(path / (state + ' MDI ' + file_date + '.xlsx'))
         with pd.ExcelWriter(path / (state + ' MDI ' + file_date + '.xlsx')) as writer:
-            # state_series.to_excel(writer, 'MDI')
-            # pieces_missing_model.to_excel(writer, 'Missing Model Pieces')
-            # direct_df_departments.to_excel(writer, 'LOT Department Breakdown')
-            # direct_df.to_excel(writer, 'Direct Hours', index=False)
-            # indirect_df.to_excel(writer, 'Indirect Hours', index=False)
-            # with_model.to_excel(writer, 'Fablisting', index=False)
-            # pieces_hours_difference.to_excel(writer, 'EVA vs HPT', index=False)
             
             shape_check_before_to_excel(state_series, writer, sheet_name='MDI', indexTF=True)
             shape_check_before_to_excel(pieces_missing_model, writer, sheet_name='Missing Model Pieces', indexTF=True)

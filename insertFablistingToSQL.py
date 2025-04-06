@@ -16,8 +16,6 @@ import re
 engine = yield_SQL_engine()
 
 
-from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
-fablisting = grab_google_sheet('FED QC Form', '01/01/2023','05/01/2025', include_sheet_name=True)
 def further_fablisting_df_preperations(fablisting_df): # move this to get_model_estimate_hours_attached_to_fablisting_SQL
     df = fablisting_df.copy()
     
@@ -160,7 +158,7 @@ def lotnumber_cleaner(lot): # move this to get_model_estimate_hours_attached_to_
 
 
 
-def import_dropbox_eva_to_SQL(fablisting, source=None):
+def insert_fablisting_to_live(fablisting, source=None):
     fablisting_df = further_fablisting_df_preperations(fablisting) # move this to get_model_estimate_hours_attached_to_fablisting_SQL
     fablisting_df['lotcleaned'] = fablisting_df['lot #'].apply(lotnumber_cleaner)
     
@@ -188,10 +186,7 @@ def import_dropbox_eva_to_SQL(fablisting, source=None):
     
     connection = engine.raw_connection()
     cursor = connection.cursor()
-    if source is None:
-        cursor.execute("call dbo.merge_fablisting()")
-    else:
-        cursor.execute("call dbo.merge_fablisting(%s)", (source,))
+    cursor.execute("call dbo.merge_fablisting(%s)", (source,))
     connection.commit()
     connection.close()
     
