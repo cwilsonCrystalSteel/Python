@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Get_model_estimate_hours_attached_to_fablisting import apply_model_hours2
+from get_model_estimate_hours_attached_to_fablisting_SQL import apply_model_hours_SQL, call_to_insert
 
 # this one will pull the fablisting data
 state = 'TN'
@@ -32,7 +33,9 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, output_fablisting
     # get dates between yesterday at 6 am and today at 6 am
     fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
     # get the model hours attached to fablisting
-    with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
+    call_to_insert(fablisting, sheet, source='Pull_Fablisting_data')
+    with_model = apply_model_hours_SQL(how='best', keep_diagnostic_cols=False)
+    # with_model = apply_model_hours2(fablisting, how = 'model but Justins dumb way of getting average hours', fill_missing_values=True, shop=sheet[:3])
     # with_model = apply_model_hours2(fablisting, how = 'model', fill_missing_values=False, shop=sheet[:3])
 
 
@@ -43,9 +46,9 @@ def get_fablisting_plus_model_summary(start_dt, end_dt, sheet, output_fablisting
         with_model = with_model[~with_model['Job #'].isin(excluded_jobs)]
     
     # count number of peices with model horus
-    num_with_model = with_model['Has Model'].sum()
+    # num_with_model = with_model['Has Model'].sum()
     # count pieces without model  hours
-    num_without_model = with_model.shape[0] - num_with_model
+    # num_without_model = with_model.shape[0] - num_with_model
     # sum the number of earned hours
     earned_hours = np.round(with_model['Earned Hours'].sum(), 2)
     # sum the weight into tons
