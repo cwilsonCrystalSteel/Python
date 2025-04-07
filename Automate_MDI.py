@@ -79,9 +79,9 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     # format as the date string
     end_date = end_dt.strftime('%m/%d/%Y')
     # get fablisting for all of start_date and all of end_date
-    fablisting = grab_google_sheet(sheet, start_date, end_date)
+    fablisting = grab_google_sheet(sheet, start_date, start_date, start_hour='use_function')
     # get dates between yesterday at 6 am and today at 6 am
-    fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
+    # fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
     # in case there is no records!
     if not fablisting.shape[0]:
         print(f'There were no records for {state} between {start_dt} and {end_dt}')

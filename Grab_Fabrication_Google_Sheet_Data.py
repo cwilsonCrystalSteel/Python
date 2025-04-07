@@ -12,7 +12,19 @@ import datetime
 
 
 # daily_fab_listing_google_sheet_key = "1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
-
+def convert_hours_to_dayshift(start_date, end_date, start_hour=6):
+        start_dt = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+        end_dt = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+        arg_start_dt = start_dt.replace(hour=start_hour, minute=0, second=0)
+        
+        arg_end_dt = end_dt + datetime.timedelta(days=1)
+        arg_end_dt = arg_end_dt.replace(hour=start_hour, minute=0, second=0)
+        
+        print(f"{start_date} : {arg_start_dt.strftime('%m/%d/%Y %H:%M')}")
+        print(f"{end_date} : {arg_end_dt.strftime('%m/%d/%Y %H:%M')}")
+        
+        return arg_start_dt, arg_end_dt
+    
 
 def grab_google_sheet(sheet_name, 
                       start_date="03/06/1997", end_date="03/06/1997", 
@@ -20,6 +32,22 @@ def grab_google_sheet(sheet_name,
                       sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k",
                       include_sheet_name=False):
     
+    if isinstance(start_hour, int):
+        # set start date to datetime
+        start_dt = datetime.datetime.strptime(start_date, "%m/%d/%Y")
+        # make it so the start time on the start date is 4:00 am.... prevent any potential overlap from 2nd shift
+        start_dt = start_dt.replace(hour=start_hour, minute=0, second=0)
+        # set end date to datetime
+        end_dt = datetime.datetime.strptime(end_date, "%m/%d/%Y")
+        # set end date to be at 23:59
+        end_dt = end_dt.replace(hour=23, minute=59, second=59)
+    
+    elif start_hour == 'use_function':
+        # justin says that the start of dayshift is 6 am
+        # a day runs from 6 am to 6 am 
+        start_dt, end_dt = convert_hours_to_dayshift(start_date, end_date, 6)
+        
+        
     
     # key for the daily fab listing google sheet
     
@@ -55,14 +83,7 @@ def grab_google_sheet(sheet_name,
     df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
     # remove any dates that became NaT values from above step
     df = df[df['Timestamp'].notna()]
-    # set start date to datetime
-    start_dt = datetime.datetime.strptime(start_date, "%m/%d/%Y")
-    # make it so the start time on the start date is 4:00 am.... prevent any potential overlap from 2nd shift
-    start_dt = start_dt.replace(hour=start_hour, minute=0, second=0)
-    # set end date to datetime
-    end_dt = datetime.datetime.strptime(end_date, "%m/%d/%Y")
-    # set end date to be at 23:59
-    end_dt = end_dt.replace(hour=23, minute=59, second=59)
+    
     # get only pieces after start date
     df = df[df['Timestamp'] >= start_dt]
     # get only pieces before end date. this is a catch just in case
