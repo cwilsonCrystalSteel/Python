@@ -15,7 +15,8 @@ def call_to_insert(fablisting_df, sheet = None, source=source):
     if sheet is None:
         sheet = ''
     
-    fablisting_df['sheetname'] = sheet
+    if not 'sheetname' in fablisting_df.columns:
+        fablisting_df['sheetname'] = sheet
     
     insert_fablisting_to_live(fablisting_df, source=source)
 
@@ -57,17 +58,17 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     elif how == 'best_hpt':
         fl_eva['Earned Hours'] = fl_eva['hpt_hours']
     elif how == 'eva_pcmark_dropbox':
-        fl_eva['Earned Hours'] = fl_eva['evadropbox'] * fl_eva['Quantity']
+        fl_eva['Earned Hours'] = fl_eva['eva_hours_dropbox']
     elif how == 'eva_lot_ave_lotslog':
-        fl_eva['Earned Hours'] = fl_eva['evalotslog'] * fl_eva['Weight']
+        fl_eva['Earned Hours'] = fl_eva['eva_hours_lotslog']
     elif how == 'eva_job_ave_lotslog':
-        fl_eva['Earned Hours'] = fl_eva['evalotslogjobaverage'] * fl_eva['Weight']
+        fl_eva['Earned Hours'] = fl_eva['eva_hours_lotslogjobaverage']
     elif how == 'eva_job_ave_dropbox':
-        fl_eva['Earned Hours'] = fl_eva['evadropboxjobaverage'] * fl_eva['Weight']    
+        fl_eva['Earned Hours'] = fl_eva['eva_hours_dropboxjobaverage']  
     elif how == 'hpt_job_shop':
-        fl_eva['Earned Hours'] = fl_eva['hptjobshop'] * fl_eva['Weight'] / 2000
+        fl_eva['Earned Hours'] = fl_eva['hpt_hours_jobshop']
     elif how == 'hpt_job_ave':
-        fl_eva['Earned Hours'] = fl_eva['hptjob'] * fl_eva['Weight'] / 2000
+        fl_eva['Earned Hours'] = fl_eva['hpt_hours_jobaverage']
     
     if not keep_diagnostic_cols:
         diagnostic_cols = ['sheetname', 'pcmark', 'rev','lot_3_digit', 
