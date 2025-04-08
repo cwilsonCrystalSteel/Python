@@ -31,6 +31,7 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     
     fl_eva = get_fablisting_from_vreturnevafromfablisting()
     
+    # put the names back to how they were before being inserted into live.fablisting
     rename_mapper = {'timestamp':'Timestamp', 
                      'job #':'Job #', 
                      'lot #':'Lot #', 
@@ -42,11 +43,23 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
                      'welder':'Welder', 
                      'weld qc':'Weld QC',
                      'does this piece have a defect?':'Does this piece have a defect?'}
-    
+    # do the renaming
     fl_eva = fl_eva.rename(columns=rename_mapper)
     
+    # if we are passed a list of the coalesce(value1, value2, ...)
+    if isinstance(how, list):
+        cols = []
+        for i in how:
+            if i in fl_eva.columns:
+                cols.append(i)
+            else:
+                print(f"The provided column {i} was not found in the SQL Fablisting EVA view")
+                
+        
+        fl_eva['Earned Hours'] = fl_eva[cols].bfill(axis=1).iloc[:, 0]
+
     
-    if how=='best':
+    elif how=='best':
         # essentially this is:
             # eva_pcmark_dropbox -> eva_lot_ave_lotslog -> eva_job_ave_lotslog ->
             # eva_job_ave_dropbox -> hpt_job_shop -> hpt_job_ave
@@ -71,12 +84,16 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
         fl_eva['Earned Hours'] = fl_eva['hpt_hours_jobaverage']
     
     if not keep_diagnostic_cols:
-        diagnostic_cols = ['sheetname', 'pcmark', 'rev','lot_3_digit', 
-                           'lot_with_t_start', 'shop', 'lotcleaned', 'eva_hours', 
-                           'hpt_hours', 'edjoin', 'elljoin', 'elljobjoin', 'edjobjoin', 
-                           'hptjobshopjoin', 'hptjobjoin', 'evadropbox', 'evalotslog', 
-                           'evalotslogjobaverage', 'evadropboxjobaverage', 'hptjobshop', 
-                           'hptjob', 'evasource']
+        
+        diagnostic_cols = ['sheetname', 'pcmark', 'rev',
+        'lot_3_digit', 'lot_with_t_start', 'shop', 'lotcleaned', 'eva_hours',
+        'hpt_hours', 'eva_hours_dropbox', 'eva_hours_lotslog',
+        'eva_hours_lotslogjobaverage', 'eva_hours_dropboxjobaverage',
+        'hpt_hours_jobshop', 'hpt_hours_jobaverage', 'edjoin', 'elljoin',
+        'elljobjoin', 'edjobjoin', 'hptjobshopjoin', 'hptjobjoin',
+        'evaperquantity_dropbox', 'evaperpound_lotslog',
+        'evaperpound_lotslogjobaverage', 'evaperpound_dropboxjobaverage',
+        'hpt_jobshop', 'hpt_jobaverage', 'evasource']
         
         fl_eva = fl_eva.drop(columns=diagnostic_cols)
         

@@ -619,6 +619,7 @@ def email_mdi(date_str, state, state_dict, email_dict):
     email_end = '<a href=' + str(directory) +'>This will be a link to the Z drive with backups of the data at some point</a>'
     # combine all the HTML strings to form the message
     email_msg = email_start + '<u>MDI Summary\n</u>' + mdi_summary_html + br
+    email_msg += '<b>See attached Excel file for detailed breakdown of these numbers!</b>' + br + br
     email_msg += '<u>Direct Hours Breakdown by Job\n</u>' + by_job_html + br
     email_msg += '<u>Direct Hours Breakdown by Lot\n</u>' + by_lot_html + br
     email_msg += '<u>Direct Hours Breakdown by Department\n</u>' + by_dept_html + br    

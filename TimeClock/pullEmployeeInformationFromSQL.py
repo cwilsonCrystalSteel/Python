@@ -15,7 +15,6 @@ import datetime
 def return_sql_ei():
     engine = yield_SQL_engine()
     metadata = MetaData()
-    log_table = Table('employeeinformation_log', metadata, autoload_with=engine, schema='dbo')
     
     
     Session = sessionmaker(bind=engine)
@@ -27,7 +26,7 @@ def return_sql_ei():
     # mostRecentMerge = session.query(func.max(log_table.c.insertedat)).scalar()
     
     with engine.connect() as connection:
-        result = connection.execute(text(f"select max(insertedat) from dbo.employeeinformation_log where description='merge_employeeinformation'"))
+        result = connection.execute(text("select max(insertedat) from dbo.employeeinformation_log where description='merge_employeeinformation'"))
         for row in result:
             continue
     

@@ -8,7 +8,7 @@ Created on Tue Aug 10 15:04:26 2021
 from shutil import copyfile
 from TimeClock.Gather_data_for_timeclock_based_email_reports_SQL import get_information_for_clock_based_email_reports
 from TimeClock.pullGroupHoursFromSQL import get_timesdf_from_vClocktimes, get_date_range_timesdf_controller
-from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_direct_rules
 
 import pandas as pd
 import datetime
@@ -106,7 +106,7 @@ def run_attendance_hours_report(state):
         end_date = end_dt.strftime("%m/%d/%Y")
         
         times_df = get_timesdf_from_vClocktimes(start_date, end_date)
-        basis = return_information_on_clock_data(times_df)
+        basis = return_basis_new_direct_rules(times_df)
         
       
 
