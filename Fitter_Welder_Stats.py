@@ -9,7 +9,7 @@ import sys
 sys.path.append('c://users//cwilson//documents//python//Weekly Shop Hours Project//')
 sys.path.append('C:\\Users\\cwilson\\documents\\python\\TimeClock')
 from pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from functions_TimeclockForSpeedoDashboard import return_basis_new_direct_rules
 # from TimeClock_Tools_Employee_Department import download_most_current_employee_department_csv
 # from Grab_Fabrication_Google_Sheet_Data import grab_google_sheet
 from Grab_Defect_Log_Google_Sheet_Data import grab_defect_log
@@ -44,7 +44,7 @@ states = ['TN','MD','DE']
 
 
 times_df = get_date_range_timesdf_controller(start_date, end_date)
-basis = return_information_on_clock_data(times_df, include_terminated=True)
+basis = return_basis_new_direct_rules(times_df, include_terminated=True)
 ei = basis['Employee Information']
 # ei = get_ei_csv_downloaded(exclude_terminated=False)
 

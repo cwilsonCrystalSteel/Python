@@ -11,8 +11,6 @@ from pathlib import Path
 import datetime
 import numpy as np
 import copy
-# from Gather_data_for_timeclock_based_email_reports import get_information_for_clock_based_email_reports
-# from TimeClock.Gather_data_for_timeclock_based_email_reports_SQL import get_information_for_clock_based_email_reports
 from Automate_MDI import do_mdi, eva_vs_hpt
 from High_Indirect_Hours_Email_Report import summarize_by_direct_indirect
 from High_Indirect_Hours_Email_Report import output_absent_dict
@@ -28,7 +26,7 @@ from High_Indirect_Hours_Email_Report import email_error_message
 from Attendance_Hours_Per_week_v2 import run_attendance_hours_report
 from Speedo_Dashboard.Post_to_GoogleSheet import get_production_worksheet_production_sheet
 from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_direct_rules
 
 #%%
 
@@ -86,7 +84,7 @@ if not times_df.shape[0]:
     x.doStuff()
     times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
 
-basis = return_information_on_clock_data(times_df)
+basis = return_basis_new_direct_rules(times_df)
 
 # gets all of the absent shop employees who did not clock in by comparing 
 # employee information list to names in the clocked in list
@@ -98,23 +96,13 @@ ei['Location'] = ei['Productive'].str[:2]
 ei = ei[~ei['Productive'].str.contains('NON')]
 # get the dataframe version of the time clock - 
 clock_raw_df = basis['Clocks Dataframe']
-
-direct = basis['Direct']
-# direct['Is Direct'] = True
-indirect = basis['Indirect']
-# indirect['Is Direct'] = False
-
-# # replace 'no cost code' to be empty
-# clock_raw_df['Cost Code'] = clock_raw_df['Cost Code'].replace('no cost code', '')
-# # create a series thats a combination of job & cost code
-# clock_raw_df['Job CostCode'] = clock_raw_df['Job #'].astype(str) + '<>' + clock_raw_df['Cost Code']
-# # add the productive column based on employees name
-# clock_raw_df = clock_raw_df.merge(ei[['Name','Location']], on='Name', how='left')
-
-
-
 # reset the clock_raw_df index back to numbers
 clock_raw_df = clock_raw_df.reset_index(drop=True)
+
+
+direct = basis['Direct']
+indirect = basis['Indirect']
+
 
 
 

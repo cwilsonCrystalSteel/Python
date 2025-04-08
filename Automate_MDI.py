@@ -13,7 +13,7 @@ import datetime
 import pandas as pd
 import sys
 from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data, return_basis_new_direct_rules
 import os 
 from pathlib import Path
 
@@ -44,9 +44,9 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     
     # error handling -> can call the do_mdi without basis already generated
     if basis == None:
-        # basis = get_information_for_clock_based_email_reports(start_date, start_date)
         times_df = get_date_range_timesdf_controller(start_date, start_date)
-        basis = return_information_on_clock_data(times_df)
+        basis = return_basis_new_direct_rules(times_df)
+    
     
     
     # get the employee information df & sest the index to the employee name
@@ -66,7 +66,8 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     elif state == 'MD':
         sheet = 'FED QC Form'
         
-    
+
+
         
     # accoutn for the day being 6 am to 6 am for fablisting
     start_dt = datetime.datetime.strptime(start_date, '%m/%d/%Y')
@@ -84,38 +85,48 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     # fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
     # in case there is no records!
     if not fablisting.shape[0]:
-        print(f'There were no records for {state} between {start_dt} and {end_dt}')
+        print(f'There were no records for {state} between {start_date} and {end_date}')
         return None
         
     # get the model hours attached to fablisting
     # with_model_old = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
     
+    ''' get any hours worked that count as earned hours '''
+    # extract the Hours & Location from the df that has Horus that count as earned hours
+    earned_from_transfers = basis['Direct as Earned Hours'][['Hours','Location']]
+    # limit it to the state in question
+    earned_from_transfers = earned_from_transfers[earned_from_transfers['Location'] == state]
+    # sum up the hours
+    earned_from_transfers = earned_from_transfers['Hours'].sum()
+    
+    
     ''' Get earned hours information from the DB attached to fablisting '''
     # lets dump the fablisting dataframe into the live table
     call_to_insert(fablisting, sheet)
     # then call the view and get back the earned horus = best_eva option
-    with_model = apply_model_hours_SQL(how='best_eva', keep_diagnostic_cols=False)
+    with_model = apply_model_hours_SQL(how=['eva_hours_lotslog','eva_hours','hpt_hours'], keep_diagnostic_cols=True)
     # also get back the best HPT option
     old_way = apply_model_hours_SQL(how='best_hpt')
     # then get only the ones matching on the pcmark, which is eva from dropbox
     eva_by_pcmark = apply_model_hours_SQL(how='eva_pcmark_dropbox')
     
-    
+    ''' count values for front page of the mdi email '''
     # sum up the new earned hours
     earned_new = with_model['Earned Hours'].sum()
-    # get the old way of claculating earned hours
-    # old_way_old = fill_missing_model_earned_hours(fablisting, shop=sheet[:3])
-    # put the old earned hours column onto the with_model df
-    with_model = with_model.join(old_way[['Earned Hours']], rsuffix=' (old)')
-    # sort the with_model dataframe by the creation time not the job
-    with_model = with_model.sort_values('Timestamp')
+    # add in any work as earned
+    earned_new += earned_from_transfers
     # sum up the old earned hours
     earned_old = old_way['Earned Hours'].sum()
+    # add in any work as earned
+    earned_old += earned_from_transfers
     # calculate the tonnage
     tonnage = with_model['Weight'].sum() / 2000
-    
+    # calculate the number of pcs
     quantity = with_model['Quantity'].sum()
-    ''' Check the pieces that dont match on the pcmarks to eva files 
+
+    ''' 
+    2025-04-07 
+    Check the pieces that dont match on the pcmarks to eva files, below: pieces_missing_model
         ---> these are ones that are probably a typo in fablisting!
         ---> can we get a hyperlink url to correct these?
     '''
@@ -126,7 +137,15 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
     # reset the index
     pieces_missing_model = pieces_missing_model.reset_index(drop=True)
     
+
+    
     ''' Here I calcualte the difference between EVA & HPT models '''
+    # put the old earned hours column onto the with_model df
+    with_model = with_model.join(old_way[['Earned Hours']], rsuffix=' (old)')
+    
+
+    # sort the with_model dataframe by the creation time not the job
+    with_model = with_model.sort_values('Timestamp')
     # only get the pieces that have EVA model (this is eva model of any kind - how='best_eva')
     pieces_hours_difference = with_model[~with_model['Earned Hours'].isna()]
     # cut down the columns to what I need
@@ -175,13 +194,30 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
         efficiency_new = 0
         efficiency_old = 0
 
+    # get the indirect dataframe
     indirect_df = basis['Indirect']
-    
+    # limit indirect to the state in question
     indirect_df = indirect_df[indirect_df['Location'] == state]
-    
+    # join to make sure we get valid people ?
     indirect_df = indirect_df.join(ei['Department'], on='Name')
-    
+    # calcualte number of indirect horus
     indirect = indirect_df['Hours'].sum()
+    
+    # get the missed horus opportunity  df
+    missing_hours_df = basis['Missed Hours']
+    # limit to the state in question
+    missing_hours_df = missing_hours_df[missing_hours_df['Location'] == state]
+    # calculate the number of missed hours
+    missed = missing_hours_df['Hours'].sum()
+    
+    # get the hours not counted
+    not_counted_df = basis['Not Counted']
+    # limit to the state in question
+    not_counted_df = not_counted_df[not_counted_df['Location'] == state]
+    # calcaulte the number of hours spent on other things
+    not_counted = not_counted_df['Hours'].sum()
+    
+    
     
     state_dict[state] = {'Earned (Model)': earned_new,
                          'Earned (Old)': earned_old,
@@ -189,8 +225,10 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
                          'Efficiency (Model)': efficiency_new,
                          'Efficiency (Old)': efficiency_old,
                          'Indirect': indirect,
+                         'Not Counted Hours': not_counted,
+                         'Missed Hours':missed,
                          'Tons': tonnage,
-                         '# Pcs': quantity,}
+                         '# Pcs': quantity}
     
     state_series = pd.Series(state_dict[state])
     
@@ -207,6 +245,8 @@ def do_mdi(basis=None, state='TN', start_date='01/01/2021', proof=True):
             shape_check_before_to_excel(direct_df_departments, writer, sheet_name='LOT Department Breakdown', indexTF=True)
             shape_check_before_to_excel(direct_df, writer, sheet_name='Direct Hours', indexTF=False)
             shape_check_before_to_excel(indirect_df, writer, sheet_name='Indirect Hours', indexTF=False)
+            shape_check_before_to_excel(not_counted_df, writer, sheet_name='Hours Not Counted', indexTF=False)
+            shape_check_before_to_excel(missing_hours_df, writer, sheet_name='Missing Hours', indexTF=False)
             shape_check_before_to_excel(with_model, writer, sheet_name='Fablisting', indexTF=False)
             shape_check_before_to_excel(pieces_hours_difference, writer, sheet_name='EVA vs HPT', indexTF=False)
                 
@@ -228,9 +268,8 @@ def verify_mdi(state, start_date, end_date, proof=False):
         # conver to the string format i need
         date = dt.strftime('%m/%d/%Y')
         # get that day's information
-        # basis = get_information_for_clock_based_email_reports(date, date)
         times_df = get_date_range_timesdf_controller(date, date)
-        basis = return_information_on_clock_data(times_df)
+        basis = return_basis_new_direct_rules(times_df)
 
         # convert basis to MDI format
         this_days_mdi = do_mdi(basis, state, date, proof=False)['MDI Summary']

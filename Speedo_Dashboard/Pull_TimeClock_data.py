@@ -9,7 +9,7 @@ import datetime
 import pandas as pd
 import numpy as np
 from TimeClock.pullGroupHoursFromSQL import get_date_range_timesdf_controller
-from TimeClock.functions_TimeclockForSpeedoDashboard import return_information_on_clock_data
+from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_direct_rules
 from pathlib import Path
 
 
@@ -35,7 +35,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     '''
     
     times_df = get_date_range_timesdf_controller(start_date, end_date)
-    basis = return_information_on_clock_data(times_df)
+    basis = return_basis_new_direct_rules(times_df)
             
     '''
     if basis == None:

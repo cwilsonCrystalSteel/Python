@@ -18,15 +18,19 @@ from insertFablistingToSQL import lotnumber_cleaner
 
 #%%
 
-start_date = '04/01/2025'
+start_date = '04/06/2025'
 start_dt = datetime.datetime.strptime(start_date, '%m/%d/%Y')
+
+end_date = '04/07/2025'
+end_dt = datetime.datetime.strptime(end_date, '%m/%d/%Y')
 
 sheet = 'FED QC Form'
 shop = sheet[:3]
 
-fablisting = grab_google_sheet(sheet, start_date, start_date, start_hour='use_function', include_sheet_name=True)
+fablisting = grab_google_sheet(sheet, start_date, end_date, start_hour='use_function', include_sheet_name=True)
 call_to_insert(fablisting)
-eva = apply_model_hours_SQL(how='best', keep_diagnostic_cols=True)
+# eva = apply_model_hours_SQL(how='best', keep_diagnostic_cols=True)
+eva = apply_model_hours_SQL(how=['eva_hours_lotslog','eva_hours','hpt_hours'], keep_diagnostic_cols=True)
 
 #%%
 compared_to_sheet_key = '1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k'
@@ -50,7 +54,7 @@ comp['Job #'] = pd.to_numeric(comp['Job #'], errors='coerce')
 
 comp['EVA'] = pd.to_numeric(comp['EVA'])
 
-justin = comp[(comp['Date'] == start_dt) & (comp['Site'] == shop)]
+justin = comp[(comp['Date'] >= start_dt) & (comp['Date'] <= end_dt) & (comp['Site'] == shop)]
 #%%
 
 
