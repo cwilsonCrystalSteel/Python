@@ -9,7 +9,7 @@ from shutil import copyfile
 from TimeClock.Gather_data_for_timeclock_based_email_reports_SQL import get_information_for_clock_based_email_reports
 from TimeClock.pullGroupHoursFromSQL import get_timesdf_from_vClocktimes, get_date_range_timesdf_controller
 from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_direct_rules
-
+import numpy as np
 import pandas as pd
 import datetime
 import json
@@ -70,7 +70,7 @@ def run_attendance_hours_report(state):
             missing_week_start_dt += datetime.timedelta(days = 7)
             
         
-        
+    
         
     # this is so that we can do some catchup
     else:
@@ -78,20 +78,19 @@ def run_attendance_hours_report(state):
         starter = pd.read_excel(file_path, sheet_name='Data', index_col='Week Start')
         # get all the datetime values from the index
         weeks_ran = [i.date() for i in starter.index if isinstance(i,datetime.datetime)]
-        
-        weeks_to_run = []
-        # if we see the previous_sunday in there, we know it was probably run before being finalized
-        if previous_sunday in weeks_ran:
-            weeks_to_run += [previous_sunday]
-            print(f"We will remediate the week of {previous_sunday.strftime('%Y-%m-%d')}")
-            
+        # basically always going to do last_sunday
+        weeks_to_run = [previous_sunday, last_sunday]
         # start off with where the file was left off at 
         missing_week_start_dt = max(weeks_ran) + datetime.timedelta(days=7)
+        
         while missing_week_start_dt <= last_sunday:
             # add to the list
             weeks_to_run += [missing_week_start_dt]
             # increase by a week
             missing_week_start_dt += datetime.timedelta(days = 7)
+            
+        #in case we accidentaly added last_sunday or previous_sunday into the list again
+        weeks_to_run = list(set(weeks_to_run))
         
         
     print(f"Found the following dates to run: {', '.join([i.strftime('%Y-%m-%d') for i in weeks_to_run])}")
@@ -106,7 +105,7 @@ def run_attendance_hours_report(state):
         end_date = end_dt.strftime("%m/%d/%Y")
         
         times_df = get_timesdf_from_vClocktimes(start_date, end_date)
-        basis = return_basis_new_direct_rules(times_df)
+        basis = return_basis_new_direct_rules(times_df, productive_only=False)
         
       
 
@@ -119,9 +118,8 @@ def run_attendance_hours_report(state):
         # get all employees at that state
         ei = ei[ei['Productive'].str.contains(state)]
         # Get all the hours put into one df
-        # hours = basis0['Direct'].append(basis0['Indirect']).append(basis1['Direct']).append(basis1['Indirect'])
-        hours = pd.concat([basis['Direct'], basis['Indirect']])
-        
+        hours = pd.concat([basis['Direct'], basis['Indirect'], basis['Not Counted']])
+        # make sure the datatype is correct
         hours['Hours'] = hours['Hours'].astype(float)
         
         if 'Time In' in hours.columns:
@@ -129,8 +127,9 @@ def run_attendance_hours_report(state):
         if 'Time Out' in hours.columns:
             hours = hours.drop(columns=['Time Out'])
         
-        # get rid of the delete job codes 
-        hours = hours[~hours['Job Code'].isin(code_changes['Delete Job Codes'])]
+        ''' this is now beign handled in the new direct/indirect/not counted ways '''
+        # # get rid of the delete job codes 
+        # hours = hours[~hours['Job Code'].isin(code_changes['Delete Job Codes'])]
         
         # group by the index & sum
         hours = hours.groupby('Name').sum()
@@ -183,7 +182,7 @@ def run_attendance_hours_report(state):
             # replace any missing values with 0
             data = data.fillna(0)
             # make sure it is ordered correctly - yet this is not a problem for when the file doesnt exist yet
-            data = data.sort_index()
+            data = data.sort_index(ascending=False)
             # these are the calculated rows that average numbers for each employee
             summary = data.copy()
             # we dont want the individual week's data in the summary table
@@ -200,12 +199,14 @@ def run_attendance_hours_report(state):
         
             # read the file
             starter = pd.read_excel(file_path, sheet_name='Data', index_col='Week Start')
-            # get the columns that need to be removed
-            remove_cols = starter.columns[starter.iloc[0].isna()]
-            # remove those columns
-            starter = starter.drop(columns=remove_cols)
-            # grab the summary portion of the file as last 5 rows
-            summary = starter.iloc[-5:]
+            # # get the columns that need to be removed
+            # remove_cols = starter.columns[starter.iloc[0].isna()]
+            # # remove those columns
+            # starter = starter.drop(columns=remove_cols)
+            
+            
+            # grab the summary portion of the file as first 5 rows
+            summary = starter.iloc[:5].copy()
             # grab the data portion of the excel file as not the summary part
             data = starter[~starter.index.isin(summary.index)]
             # drop any na
@@ -214,17 +215,16 @@ def run_attendance_hours_report(state):
             data.index = pd.to_datetime(data.index).date
             # only want to try and drop out the previous sunday to Recalculate it if its in the file already & we want to run it with weeks_to_run
             # we could also do: if start_dt == previous_sunday
-            if previous_sunday in data.index and previous_sunday in weeks_to_run:
+            if start_dt in data.index:
                 # if we are doing a remediation of previous_sunday
-                data = data.drop(index=previous_sunday)
+                data = data.drop(index=start_dt)
           
             # append the row to the data df
-            data = pd.concat([data, hours_plus])
+            data = pd.concat([hours_plus, data])
             # sort it after potentially doing an out of order for the remediation
-            data = data.sort_index()
+            data = data.sort_index(ascending=False)
             
-            # these are the calculated rows that average numbers for each employee
-            summary = summary.copy()
+            
             # figure out which names are in data (could be new for this week, from df:hours) but not in summary
             summary_missing_cols = list(set(data.columns) - set(summary.columns))
             
@@ -233,37 +233,57 @@ def run_attendance_hours_report(state):
         
         ''' this is all the same if the file is new or the file alraedy has data '''
             
+        
+        def mean_from_first_nonzero(col):
+            # Sort by ascending date (oldest first)
+            col_sorted = col.sort_index(ascending=True)
+        
+            # Find the first non-zero index
+            first_nonzero_idx = col_sorted.ne(0).idxmax()
+        
+            # If everything is zero, idxmax still returns the first index, so we check value
+            if col_sorted.loc[first_nonzero_idx] == 0:
+                return float('nan')  # or 0 if you'd prefer that
+        
+            # Filter from that point onward
+            filtered = col_sorted.loc[first_nonzero_idx:]
+            return filtered.mean()        
+        
+        
+                
         # fill any missing values with zero
         data = data.fillna(0)
         # get the total average
-        summary.loc['Average'] = data.mean()
+        # summary.loc['Average'] = data.mean()
+        # this is so that we can figure out when they first started working, THEN do the average 
+        summary.loc['Average'] = data.apply(mean_from_first_nonzero)
         # get the average of present weeks
         summary.loc['Average (if worked)'] = data[data > 0].mean()
         # get the 12 week average when they have worked
         # summary.loc['12-Week Average'] = data.iloc[-12:][data > 0].mean()
-        summary.loc['12-Week Average'] = data.iloc[-12:].where(data.iloc[-12:] > 0).mean()
+        summary.loc['12-Week Average'] = data.iloc[:12].where(data.iloc[:12] > 0).mean()
         # get the 8 week average when they worked
         # summary.loc['8-Week Average'] = data.iloc[-8:][data > 0].mean()
-        summary.loc['8-Week Average'] = data.iloc[-8:].where(data.iloc[-8:] > 0).mean()
+        summary.loc['8-Week Average'] = data.iloc[:8].where(data.iloc[:8] > 0).mean()
         # get the 4 week average when they worked
         # summary.loc['4-Week Average'] = data.iloc[-4:][data > 0].mean()
-        summary.loc['4-Week Average'] = data.iloc[-4:].where(data.iloc[-4:] > 0).mean()
+        summary.loc['4-Week Average'] = data.iloc[:4].where(data.iloc[:4] > 0).mean()
 
         # fill any missing with zero
         summary = summary.fillna(0)
             
             
-        # Create an empty DataFrame with the same columns
-        empty_rows = pd.DataFrame([[None] * data.shape[1]] * 3, columns=data.columns, dtype=float)
+        # # Create an empty DataFrame with the same columns
+        # empty_rows = pd.DataFrame([[None] * data.shape[1]] * 3, columns=data.columns, dtype=float)
         
-        # Append empty rows to the original DataFrame
-        output = pd.concat([data, empty_rows, summary], ignore_index=False)
+        # # Append empty rows to the original DataFrame
+        # output = pd.concat([summary, empty_rows, data], ignore_index=False)
             
         # this is for excel formatting
         # Create an empty DataFrame with the same columns
-        empty_rows = pd.DataFrame([[None] * data.shape[1]] * 3, columns=data.columns, dtype=float, index=[""]*3)
+        empty_rows = pd.DataFrame([[None] * data.shape[1]] * 1, columns=data.columns, dtype=float, index=[""]*1)
         # Append empty rows and the summary to the data df
-        output = pd.concat([data, empty_rows, summary], ignore_index=False)
+        output = pd.concat([summary, empty_rows, data], ignore_index=False)
             
         # get the columns we want to show up first / on the left
         columns_start = ['Hours Worked', 'Num. Worked', '48 x Num. Worked', 'Missing Hours']
@@ -370,6 +390,7 @@ def create_formatted_excel(xlsx_structured_df, file_path):
         for x in range(0, xlsx_structured_df.shape[1]):
             
             value = xlsx_structured_df.iloc[y, x]
+            # if datetime, convert to string
             if isinstance(value, datetime.datetime):
                 value = value.strftime('%Y-%m-%d')
                 worksheet.write(row + y, col + x, value)
@@ -382,7 +403,9 @@ def create_formatted_excel(xlsx_structured_df, file_path):
     
     # workbook.close()
     
+    # where the individual employees start
     col_letter_start = 'F'
+    # gte the letter of the last column based on the number cols in the df
     if x + 1 <= 26:
         col_letter_end = chr(ord('A') + x + 1)
     else:
@@ -393,19 +416,27 @@ def create_formatted_excel(xlsx_structured_df, file_path):
         col_letter_end = chr(ord('A') +  int(x / 26) - 1) + chr(ord('A') + int(x % 26))
         
         
-    row_number_start_body = '2'
-    row_number_end_body = str(y - 6)
+        
     
-    row_number_start_summary = str(int(row_number_end_body) + 4)
-    row_number_end_summary = str(y + 2)
+    row_number_start_summary = '2'
+    row_number_end_summary = '6'
+    # row_number_start_summary = str(int(row_number_end_body) + 4)
+    # row_number_end_summary = str(y + 2)
+    
+    cell_start_summary = col_letter_start + row_number_start_summary
+    cell_end_summary = col_letter_end + row_number_end_summary
+    cell_range_summary = cell_start_summary + ':' + cell_end_summary
+    
+    row_number_start_body = str(int(row_number_end_summary) + 2)
+    row_number_end_body = str(y + 2)
+    # row_number_start_body = '2'
+    # row_number_end_body = str(y - 6)
+    
     
     cell_start_body = col_letter_start + row_number_start_body
     cell_end_body = col_letter_end + row_number_end_body
     cell_range_body = cell_start_body + ':' + cell_end_body
     
-    cell_start_summary = col_letter_start + row_number_start_summary
-    cell_end_summary = col_letter_end + row_number_end_summary
-    cell_range_summary = cell_start_summary + ':' + cell_end_summary
     
   
     

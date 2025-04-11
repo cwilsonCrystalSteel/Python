@@ -132,6 +132,7 @@ def determine_absent_hours_that_got_clocked(df):
                         (df['Cost Code'] == '646 EXCUSED ABSENCE') |
                         (df['Cost Code'] == '647 - Unexcused Absence') |
                         (df['Cost Code'] == '648 - Unpaid time off request') |
+                        (df['Cost Code'] == '649 - PTO (Office)') |
                         (df['Cost Code'] == '650 - PTO (Shop)') |
                         (df['Cost Code'].str.startswith('650 PTO')) |
                         (df['Cost Code'] == '653 - Bereavement') |
@@ -236,14 +237,16 @@ def return_information_on_clock_data(times_df, include_terminated=False):
             'Direct as Earned Hours':direct_as_earned}    
 
 
-def return_basis_new_direct_rules(times_df, include_terminated=False):
+def return_basis_new_direct_rules(times_df, include_terminated=False, productive_only=False):
     df, ei = preprocess_data(times_df, include_terminated)
         
     # remove employees without a productive/nonproductive grouping
     ei_shop = ei[~ei['Productive'].isna()]
-    # get only people that have productive in their schedule group
-    ei_shop = ei_shop[(ei_shop['Productive'].str.contains('PRODUCTIVE')) & 
-                      (~ei_shop['Productive'].str.contains('NON PRODUCTIVE'))]
+    if productive_only:
+        # get only people that have productive in their schedule group
+        ei_shop = ei_shop[(ei_shop['Productive'].str.contains('PRODUCTIVE')) & 
+                          (~ei_shop['Productive'].str.contains('NON PRODUCTIVE'))]
+    
     
     df_productive = pd.merge(left=df,
                              right=ei_shop,
@@ -281,12 +284,16 @@ def return_basis_new_direct_rules(times_df, include_terminated=False):
                   (df['Job #'] == '175') |
                   (df['Job #'] == '275') |
                   (df['Job #'] == '525') |
+                  (df['Job #'] == '760') |
+                  (df['Job #'] == '770') |
+                  (df['Job #'] == '780') |
                   (df['Job #'] == '800') |
                   (df['Job # 2'].str.len() >=6) # when it is a 6 digit job like 930100
                   ].copy()
     
     indirect = df[(df['Job #'] == '200') |
                   (df['Cost Code'].str.contains('QUALITY CONTROL')) |
+                  (df['Job #'] == '300') |
                   (df['Job #'] == '325') |
                   (df['Job #'] == '350') |
                   (df['Job #'] == '375') |
