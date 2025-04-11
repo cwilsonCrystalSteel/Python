@@ -154,6 +154,8 @@ if yesterday.weekday() != 6:
     output_absent = output_absent_dict(absent)
     
     for state in output_absent.keys():
+        if not state in ['MD','DE','TN']:
+            continue
         
         if output_absent:
             # assign the recipients
@@ -176,6 +178,8 @@ if yesterday.weekday() != 6:
     
     
     for state in output_sub80direct.keys():
+        if not state in ['MD','DE','TN']:
+            continue
         # assign the recipients    
         if output_sub80direct:
             output_sub80direct[state]['Recipients'] = state_recipients[state]
@@ -201,6 +205,8 @@ if yesterday.weekday() != 6:
     # email out each state's list of employees with <= 1 lot
  
     for state in output_sub2lots.keys():
+        if not state in ['MD','DE','TN']:
+            continue
         if output_sub2lots:
             # assign the recipients
             output_sub2lots[state]['Recipients'] = state_recipients[state]
@@ -218,7 +224,9 @@ if yesterday.weekday() != 6:
     
         
     # This one sends out the MDI stuff
-    for state in [i for i in state_recipients.keys() if i != 'EC']:
+    for state in state_recipients.keys():
+        if not state in ['MD','DE','TN']:
+            continue
         if basis['Direct'].shape[0]:
             # calculate the MDI stuff from the do_mdi function
             mdi_dict = do_mdi(basis, state, yesterday_str)
@@ -276,17 +284,19 @@ if yesterday.weekday() == 3:
     print('Run weekly attendance hours report here')
     
     for state in state_recipients.keys():
-        attendance_hours = run_attendance_hours_report(state)
-        filepath = attendance_hours['filepath']
-        weekstart = attendance_hours['weekstart']
-        
-        
-        # filepath = 'C:\\Users\\cwilson\\Documents\\Productive_Employees_Hours_Worked_Report\\week_by_week_hours_of_employees ' + state + '.xlsx'
-        # weekstart = '05/22/2022'
-        
-        
-        emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
-
+        if not state in ['MD','DE','TN']:
+            continue
+        try:
+            attendance_hours = run_attendance_hours_report(state)
+            filepath = attendance_hours['filepath']
+            weekstart = attendance_hours['weekstart']
+            
+            emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
+        except Exception as e:
+            print('could not send attendance hours report')
+            print(e)
+            email_error_message([f'Error {e}', 
+                                 'run_attendance_hours_report / emaIL_attendance_hours_report',])
  #%%       
     
 quit()
