@@ -37,7 +37,7 @@ try:
 except:
     print('could not get the production_worksheet')
 
-
+#%%
 
 # get today as a datetime
 today = datetime.datetime.now()
@@ -271,21 +271,21 @@ if yesterday.weekday() != 6:
                              f'ten_day_lot: {ten_days} to {yesterday_str}'
                              f'sixty_day_job: {sixty_days} to {yesterday_str}'])
 
-# # run on fridays?
-# if yesterday.weekday() == 3:
-#     print('Run weekly attendance hours report here')
+# run on fridays?
+if yesterday.weekday() == 3:
+    print('Run weekly attendance hours report here')
     
-#     for state in state_recipients.keys():
-#         attendance_hours = run_attendance_hours_report(state)
-#         filepath = attendance_hours['filepath']
-#         weekstart = attendance_hours['weekstart']
+    for state in state_recipients.keys():
+        attendance_hours = run_attendance_hours_report(state)
+        filepath = attendance_hours['filepath']
+        weekstart = attendance_hours['weekstart']
         
         
-#         # filepath = 'C:\\Users\\cwilson\\Documents\\Productive_Employees_Hours_Worked_Report\\week_by_week_hours_of_employees ' + state + '.xlsx'
-#         # weekstart = '05/22/2022'
+        # filepath = 'C:\\Users\\cwilson\\Documents\\Productive_Employees_Hours_Worked_Report\\week_by_week_hours_of_employees ' + state + '.xlsx'
+        # weekstart = '05/22/2022'
         
         
-#         emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
+        emaIL_attendance_hours_report(weekstart, state, filepath, state_recipients)
 
  #%%       
     
