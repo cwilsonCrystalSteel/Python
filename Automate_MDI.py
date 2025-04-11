@@ -306,26 +306,30 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     
     sheets = ['CSM QC Form', 'CSF QC Form', 'FED QC Form']
     
-    # combine all the shops 
+    # combine all the shops fablisting for the timeframe 
     for sheet in sheets:
         print(sheet)
         # get fablisting for all of start_date and all of end_date
-        fablisting = grab_google_sheet(sheet, start_date, end_date)
+        fablisting = grab_google_sheet(sheet, start_date, end_date, start_hour='use_function')
         # get dates between yesterday at 6 am and today at 6 am
-        fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
+        # fablisting = fablisting[(fablisting['Timestamp'] > start_dt) & (fablisting['Timestamp'] < end_dt)]
         # when we have no records:
         if not fablisting.shape[0]:
             with_model  = None
             print(f'There were no records for {sheet} between {start_dt} and {end_dt}')
         else:
             # get the model hours attached to fablisting
-            with_model = apply_model_hours2(fablisting, fill_missing_values=True, shop=sheet[:3])
+            with_model = apply_model_hours_SQL(how=['eva_pcmark_dropbox'], keep_diagnostic_cols=False)
+            # also get back the best HPT option
+            old_way = apply_model_hours_SQL(how='best_hpt')
             
-            old_way = fill_missing_model_earned_hours(fablisting_df=fablisting, shop=sheet[:3])
+            
+            
+            # old_way = fill_missing_model_earned_hours(fablisting_df=fablisting, shop=sheet[:3])
             # put the old earned hours column onto the with_model df
-            with_model = with_model.join(old_way[['Hours per Ton','Earned Hours']], rsuffix=' (old)')
+            with_model = with_model.join(old_way[['Earned Hours']], rsuffix=' (old)')
             
-            with_model = with_model[['Job #','Lot #','Quantity','Piece Mark - REV','Weight','Earned Hours','Earned Hours (old)','Has Model']]
+            with_model = with_model[['Job #','Lot #','Quantity','Piece Mark - REV','Weight','Earned Hours','Earned Hours (old)']]
             
             with_model = with_model.rename(columns={'Earned Hours':'EVA', 'Earned Hours (old)':'HPT', 'Piece Mark - REV':'Pcmark'})
             
@@ -350,44 +354,46 @@ def eva_vs_hpt(start_date, end_date, proof=True):
     except:
         print('For some damn reason one of the all_fab number columns wont convert to numeric')
     
-    missing_pieces = all_fab[all_fab['Has Model'] == False]
-    
+    # get the pieces that didnt get a join by the pcmark / eva dropbox
+    missing_pieces = all_fab[all_fab['EVA'].isna()]
+    # select columns
     missing_pieces = missing_pieces[['Job #', 'Lot #','Pcmark','Quantity','Weight','Shop']]
-    
+    # group in case the same pcmark is listed on multiple lines & sum qty & weight
     missing_pieces = missing_pieces.groupby(['Job #','Lot #','Pcmark','Shop']).sum()
-    
+    # reset index back
     missing_pieces = missing_pieces.reset_index()
-    
+    # select columns
     missing_pieces = missing_pieces[['Job #','Lot #','Pcmark','Quantity','Weight','Shop']]
     
+    # now we want to group by Job/Lot/Shop, and sum qty/weight but join unique pcmarks 
     missing_by_lot = missing_pieces.groupby(['Job #', 'Lot #','Shop']).agg({
         'Quantity': 'sum',  # Sum numerical columns
         'Weight': 'sum',
         'Pcmark': lambda x: ', '.join(set(x))  # Concatenate unique strings
     }).reset_index()
-    
+    # reset index back
     missing_by_lot = missing_by_lot.reset_index()
-    
+    # sort by weight
     missing_by_lot = missing_by_lot.sort_values(by=['Weight','Quantity','Job #'], ascending=False)
     
-    eva_vs_hpt = all_fab[all_fab['Has Model'] == True]
-    
-    eva_vs_hpt = eva_vs_hpt.drop(columns=['Has Model'])
-    
-    eva_vs_hpt = eva_vs_hpt.groupby(['Job #','Lot #','Pcmark']).sum().reset_index()
-    
+    # get pieces with EVA match by pcmark
+    eva_vs_hpt = all_fab[~all_fab['EVA'].isna()]
+    # group by job/lot/pcmark and sum the rest    
+    eva_vs_hpt = eva_vs_hpt.groupby(['Job #','Lot #','Pcmark']).sum()
+    # reset index back
+    eva_vs_hpt = eva_vs_hpt.reset_index()
+    # calcualte weight in tons
     eva_vs_hpt['Tons'] = eva_vs_hpt['Weight'] / 2000
-    # eva_vs_hpt = eva_vs_hpt.drop_duplicates('Pcmark', keep='first')
-    
+    # ge tthe select columns
     eva_vs_hpt = eva_vs_hpt[['Job #','Lot #','Pcmark','Tons','Quantity','EVA','HPT']]
-    
+    # calculate the numerical difference
     eva_vs_hpt['Hr. Diff'] = eva_vs_hpt['EVA'] - eva_vs_hpt['HPT']
-    
+    # calcualte percent difference in eva from hpt
     eva_vs_hpt['% Diff'] = (abs(eva_vs_hpt['Hr. Diff']) / eva_vs_hpt['EVA'])
-    
+    # sort by biggest diff at top
     eva_vs_hpt = eva_vs_hpt.sort_values('% Diff', ascending=False)
     
-    # eva_vs_hpt_by_job = eva_vs_hpt.groupby('Job #').sum()
+    # gorup by just the job 
     eva_vs_hpt_by_job = eva_vs_hpt.groupby('Job #').agg({
         'Lot #': lambda x: ', '.join(set(x)), # concatenate strings of Lot # - only get unique
         'Pcmark': lambda x: ', '.join(set(x)),  # Concatenate strings - only get unique
@@ -399,16 +405,17 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         '% Diff': 'sum',  # we will redo this calcualtion 
     })
         
+    # redo calculation of hour difference
     eva_vs_hpt_by_job['Hr. Diff'] = eva_vs_hpt_by_job['EVA'] - eva_vs_hpt_by_job['HPT']
-    
+    # redo opercentage difference
     eva_vs_hpt_by_job['% Diff'] = (abs(eva_vs_hpt_by_job['Hr. Diff']) / eva_vs_hpt_by_job['EVA'])
-    
+    # sort by biggest % diff at top
     eva_vs_hpt_by_job = eva_vs_hpt_by_job.sort_values(by='% Diff', ascending=False)
-    
+    # reset index back
     eva_vs_hpt_by_job = eva_vs_hpt_by_job.reset_index()
     
-    eva_vs_hpt_by_lot = eva_vs_hpt.groupby(['Job #','Lot #']).sum()
-    eva_vs_hpt_by_lot = eva_vs_hpt.groupby('Job #').agg({
+    # group by Job & Lot 
+    eva_vs_hpt_by_lot = eva_vs_hpt.groupby(['Job #', 'Lot #']).agg({
         'Pcmark': lambda x: ', '.join(set(x)),  # Concatenate strings - only get unique
         'Tons': 'sum',  # Sum numerical columns
         'Quantity': 'sum',  # Sum numerical columns
@@ -418,14 +425,16 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         '% Diff': 'sum',  # we will redo this calcualtion 
     })    
     
+    # redo numerical difference calculation on this group by
     eva_vs_hpt_by_lot['Hr. Diff'] = eva_vs_hpt_by_lot['EVA'] - eva_vs_hpt_by_lot['HPT']
-    
+    # redo percentage difference calc on this group by 
     eva_vs_hpt_by_lot['% Diff'] = (abs(eva_vs_hpt_by_lot['Hr. Diff']) / eva_vs_hpt_by_lot['EVA'])
-    
+    # order by biggest % diff at top
     eva_vs_hpt_by_lot = eva_vs_hpt_by_lot.sort_values(by='% Diff', ascending=False)
-    
+    # reset index abck 
     eva_vs_hpt_by_lot = eva_vs_hpt_by_lot.reset_index()
     
+    # set the directory to store proof:
     path = Path.home() / 'documents' / 'EVA_VS_HPT' / 'Automatic'
     if not os.path.exists(path):
         os.makedirs(path)
@@ -439,11 +448,6 @@ def eva_vs_hpt(start_date, end_date, proof=True):
         filename = path / ('EVA_vs_HPT ' + file_date + timespan_str + '.xlsx')
         print(filename)
         with pd.ExcelWriter(filename) as writer:
-            # missing_pieces.to_excel(writer, 'Missing Pieces', index=False)
-            # eva_vs_hpt.to_excel(writer, 'Pcmark', index=False)
-            # eva_vs_hpt_by_lot.to_excel(writer, 'Lot', index=False)
-            # eva_vs_hpt_by_job.to_excel(writer, 'Job', index=False)
-            
             shape_check_before_to_excel(missing_pieces, writer, sheet_name='Missing Pieces', indexTF=False)
             shape_check_before_to_excel(eva_vs_hpt, writer, sheet_name='Pcmark', indexTF=False)
             shape_check_before_to_excel(eva_vs_hpt_by_lot, writer, sheet_name='Lot', indexTF=False)
