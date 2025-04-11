@@ -46,8 +46,14 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     # do the renaming
     fl_eva = fl_eva.rename(columns=rename_mapper)
     
+    
+    if isinstance(how, list) and len(how) == 1:
+        how = how[0]
+        
     # if we are passed a list of the coalesce(value1, value2, ...)
     if isinstance(how, list):
+    
+        
         cols = []
         for i in how:
             if i in fl_eva.columns:
@@ -57,6 +63,7 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
                 
         
         fl_eva['Earned Hours'] = fl_eva[cols].bfill(axis=1).iloc[:, 0]
+
 
     
     elif how=='best':
