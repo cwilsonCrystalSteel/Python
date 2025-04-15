@@ -232,7 +232,7 @@ if yesterday.weekday() != 6:
             mdi_dict = do_mdi(basis, state, yesterday_str)
             # we get a None if there was nothing in fablisting for the date = yesterday_str
             if mdi_dict is None:
-                email_error_message(['mdi_dict is None',
+                email_error_message([f'mdi_dict is None for {state}',
                                      'email_mdi',
                                      f'yesterday_str: {yesterday_str}'])
                 continue
@@ -280,7 +280,7 @@ if yesterday.weekday() != 6:
                              f'sixty_day_job: {sixty_days} to {yesterday_str}'])
 
 # run on fridays?
-if yesterday.weekday() == 3:
+if today.weekday() == 4:
     print('Run weekly attendance hours report here')
     
     for state in state_recipients.keys():
