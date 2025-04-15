@@ -188,7 +188,7 @@ def grab_defect_log(state, start_date="03/06/1997", end_date="03/06/1997", worke
         # drop anything in the df if the Worked By does not contain a number (number = Employee ID)
         df = df[has_num_list]
     # Split up any entries with multiple employees based on the period
-    df = unsplit_shared_pieces_defect_log(df, 6, '\.')
+    df = unsplit_shared_pieces_defect_log(df, 6, '.')
     # Split up any entries with multiple employees based on the slash
     df = unsplit_shared_pieces_defect_log(df, 6, '/')
     
