@@ -94,7 +94,7 @@ def unsplit_shared_pieces(df1, col_name, multiple_employee_split_key, index_divi
         # break apart the fitter by the splitting key
         mult_employees = this_piece.loc[col_name].split(multiple_employee_split_key[-1])
         # get the number of employees
-        num_employees = len(mult_employees)
+        num_employees = len(set(mult_employees))
         # divide the quantity by the number of people working on it    
         this_piece['Quantity'] = this_piece['Quantity'] / num_employees
         # divide the weight by the number of people working on it    
@@ -221,7 +221,8 @@ def change_hyperlink_to_correct_column(hyperlink, col_name, df):
 
 def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, start_date, end_date, hours_types_pivot, void_entries_with_invalid_employee_number=True):
 
-    
+    df['hyperlink'] = df['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+
     
     ei_copy = ei.copy()
     # ei_copy['Name'] = ei_copy['<FIRSTNAME>'] + ' ' + ei_copy['<LASTNAME>']
@@ -262,7 +263,7 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
         print('The index in df with these IDS are: {}'.format(indexes))
         df_to_fix = df.loc[indexes].copy()
         # get the hyperlink to the cells that need fixin
-        df_to_fix['hyperlink'] = df_to_fix['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+        # df_to_fix['hyperlink'] = df_to_fix['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
 
         
         df = df[~df.index.isin(df_to_fix.index)]
@@ -277,7 +278,7 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # figure out which employees are not in the current state's ei
     df_wrong_state = df[~df[col_name].isin(ei_state['ID'])].copy()
     # update the hyperlinks to the right column
-    df_wrong_state['hyperlink'] = df_wrong_state['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+    # df_wrong_state['hyperlink'] = df_wrong_state['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
 
     # join to get the employee information
     df_wrong_state = pd.merge(left=df_wrong_state, right=ei, left_on = col_name, right_on='ID')
@@ -305,7 +306,7 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # now lets grab those records for people not working
     df_notworked = df[~df.index.isin(df_worked.index)].copy()
     # update the hyperlinks
-    df_notworked['hyperlink'] = df_notworked['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+    # df_notworked['hyperlink'] = df_notworked['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
 
     if df_notworked.shape[0]:
         print(f'We found {df_notworked.shape[0]} records in fablisting that are attributed to employees that did not work in the month provided')
@@ -313,6 +314,27 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # now lets get rid of the records that were by employees who did not work 
     # basically jsut using the df-portion of df_worked
     df = df[~df.index.isin(df_notworked.index)]
+    
+    
+    ei_temp = ei[ei['Productive'].str.contains('TEMP')]
+
+    # # I thought i was going to filter out temp employees
+    # # but Marcos Landero, Carlos Garcia, others are technically temp
+    # df2 = df.copy().reset_index()
+    # df_temp = pd.merge(left=df2, right=ei_temp,
+    #                    left_on=col_name, right_on='ID',
+    #                    how='inner').set_index('index')
+    
+    # if df_temp.shape[0]:
+    #     # set a dummy ID for all temp workers to be joined into 
+    #     df.loc[df_temp.index, col_name] = 69696969
+    #     # add new row for temp employees
+    #     employees.loc[employees.shape[0]+1,:] = {'ID':69696969,'Name':'TempWorkers'}
+    #     # get rid of temp workers 
+    #     employees = employees[~employees['ID'].isin(ei_temp['ID'])]
+    
+    
+    
     
     # get the unique jobs in the dataframe
     fab_listing_jobs = pd.unique(df['Job #'])
@@ -333,7 +355,13 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # set the state location
     employees['Location'] = state
     # groups by the col_name to sum all values and then only keep quantity, weight, earned hours
-    df_grouped = df[[col_name, 'Quantity','Weight','Earned Hours']].groupby(col_name).sum()
+    # df_grouped = df[[col_name, 'Quantity','Weight','Earned Hours']].groupby(col_name).sum()
+    df_grouped = df.groupby(col_name).agg({
+        'Quantity': 'sum',
+        'Weight': 'sum',
+        'Earned Hours': 'sum',
+        'Piece Mark - REV': pd.Series.nunique  # Count of unique 'Pcmark' per group
+    }).rename(columns={'Piece Mark - REV': 'Unique Quantity'})
     # covnert them to numbers?
     df_grouped = df_grouped.apply(pd.to_numeric)
     # join the grouped data onto the  dataframe
