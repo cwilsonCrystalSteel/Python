@@ -180,7 +180,7 @@ def determine_how_many_hours_missed_out_on(absent, absent_clocked):
     return missed_hours    
     
 
-def return_information_on_clock_data(times_df, include_terminated=False):
+def return_information_on_clock_data(times_df, include_terminated=False, remove_CSM_shop_b=True):
     df, ei = preprocess_data(times_df, include_terminated)
         
     # remove employees without a productive/nonproductive grouping
@@ -191,8 +191,9 @@ def return_information_on_clock_data(times_df, include_terminated=False):
     # get the people who are not in the times_df, but in the subset of employees
     absent = determine_absent(ei_shop, df)
     
-    # get rid of shop B
-    df = remove_csm_shop_b_employees(ei, df)
+    if remove_CSM_shop_b:
+        # get rid of shop B
+        df = remove_csm_shop_b_employees(ei, df)
     
     
     # get items where length of the job # is 5 long
@@ -237,7 +238,7 @@ def return_information_on_clock_data(times_df, include_terminated=False):
             'Direct as Earned Hours':direct_as_earned}    
 
 
-def return_basis_new_direct_rules(times_df, include_terminated=False, productive_only=False):
+def return_basis_new_direct_rules(times_df, include_terminated=False, productive_only=False, remove_CSM_shop_b=True):
     df, ei = preprocess_data(times_df, include_terminated)
         
     # remove employees without a productive/nonproductive grouping
@@ -268,8 +269,9 @@ def return_basis_new_direct_rules(times_df, include_terminated=False, productive
     # get the df of how many hours missed & why
     missed_hours = determine_how_many_hours_missed_out_on(absent, absent_clocked)
     
-    # get rid of shop B
-    df = remove_csm_shop_b_employees(ei, df)
+    if remove_CSM_shop_b:
+        # get rid of shop B
+        df = remove_csm_shop_b_employees(ei, df)
     
     
     ''' 2025-04-08 (or earlier)

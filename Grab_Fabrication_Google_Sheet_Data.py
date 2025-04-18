@@ -10,6 +10,7 @@ import gspread
 from utils.google_sheets_credentials_startup import init_google_sheet
 import datetime 
 
+sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
 
 # daily_fab_listing_google_sheet_key = "1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k"
 def convert_hours_to_dayshift(start_date, end_date, start_hour=6):
@@ -27,10 +28,10 @@ def convert_hours_to_dayshift(start_date, end_date, start_hour=6):
     
 
 def grab_google_sheet(sheet_name, 
-                      start_date="03/06/1997", end_date="03/06/1997", 
-                      start_hour=0, 
-                      sheet_key="1gTBo9c0CKFveF892IgWEcP2ctAtBXoI3iqjEvZVtl5k",
-                      include_sheet_name=False):
+                      start_date="04/01/2025", end_date="04/01/2025", 
+                      start_hour=0,
+                      include_sheet_name=False,
+                      include_hyperlink=False):
     
     if isinstance(start_hour, int):
         # set start date to datetime
@@ -60,9 +61,30 @@ def grab_google_sheet(sheet_name,
     worksheet = sh.worksheet(sheet_name)
     # convert all values to a list of lists
     all_values = worksheet.get_all_values()
-    # only takes the last 100 rows as data for the dataframe
-    # df = pd.DataFrame(columns = all_values[0], data=all_values[-200:])
+    
+    # adding hyperlinks to the 'last column' of the sheet
+    if include_hyperlink:
+        # chatGPT
+        sheet_metadata = sh.fetch_sheet_metadata()
+        worksheet_gid = None
+        for sheet in sheet_metadata['sheets']:
+            if sheet['properties']['title'] == sheet_name:
+                worksheet_gid = sheet['properties']['sheetId']
+                break
+        
+        # make a lambda function to take in rownumber and transform to URL
+        make_col_a_url = lambda rownum: (
+            'hyperlink' if rownum == 0
+            else f"https://docs.google.com/spreadsheets/d/{sheet_key}/edit#gid={worksheet_gid}&range=A{rownum+1}"
+            )
+        # addd the url as the last item in each list
+        all_values = [rowlist + [make_col_a_url(rownum)] for rownum, rowlist in enumerate(all_values)]
+
+    
+    # columns are first row
+    # data starts on Google Sheets Row Number = 3 (python 2)
     df = pd.DataFrame(columns=all_values[0], data=all_values[2:])
+    # this is to force columns incase any accidentaly renaming happens on the google sheet
     if 'Timestamp' not in df.columns:
         try:
             columns = ['', 'Timestamp', 'Job #', 'Lot #', 'Quantity', 
@@ -73,8 +95,13 @@ def grab_google_sheet(sheet_name,
                        # 'Defect Category', 'Defect Sub Category', 'Defect Type', 
                        # 'Disposition', 'Repaired By', 'Repair Inspected By', 
                        # 'Rework Time', '', '']
+            # we want to fill in the blanks with empty colnames
             if len(columns) < df.shape[1]:
                 columns = columns + [''] * (df.shape[1] - len(columns))
+                # change the last name to hyperlink if using it
+                if include_hyperlink:
+                    columns[-1] = 'hyperlink'
+            # now fix up the dataframe with consistent and reliable column names
             df = pd.DataFrame(columns = columns, data=all_values)
         except:
             return pd.DataFrame(data=all_values)
@@ -90,8 +117,11 @@ def grab_google_sheet(sheet_name,
     df = df[df['Timestamp'] <= end_dt]
     # Removes duplicated column
     df = df.loc[:,~df.columns.duplicated()]
-    # Drop the columns regarding defects, keeps the isDefect yes/no
-    df = df[df.columns[:12]]
+    if include_hyperlink:
+        df = df[list(df.columns[:12]) + ['hyperlink']]
+    else:
+        # Drop the columns regarding defects, keeps the isDefect yes/no
+        df = df[df.columns[:12]]
     # Resets the index, don't need old index
     df = df.reset_index(drop=True)
     # only keep the first 4 digits in the job #

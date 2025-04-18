@@ -17,6 +17,9 @@ def call_to_insert(fablisting_df, sheet = None, source=source):
     
     if not 'sheetname' in fablisting_df.columns:
         fablisting_df['sheetname'] = sheet
+        
+    if not 'hyperlink' in fablisting_df.columns:
+        fablisting_df['hyperlink'] = ''
     
     insert_fablisting_to_live(fablisting_df, source=source)
 
@@ -26,7 +29,8 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     HOW_VALID_LIST = ['best','best_eva','best_hpt','eva_pcmark_dropbox','eva_lot_ave_lotslog',
                       'eva_job_ave_lotslog','eva_job_ave_dropbox','hpt_job_shop','hpt_job_ave']
     
-    
+    if not how in HOW_VALID_LIST:
+        raise Exception(f'Value of how="{how}" did not match any values of {HOW_VALID_LIST}')
     
     
     fl_eva = get_fablisting_from_vreturnevafromfablisting()

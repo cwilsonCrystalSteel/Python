@@ -159,7 +159,7 @@ def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_h
         multiple_employee_split_key = '.'
 
     # grab the sheet data
-    df = grab_google_sheet(fab_google_sheet_name, start_date, end_date, include_sheet_name=True)
+    df = grab_google_sheet(fab_google_sheet_name, start_date, end_date, include_sheet_name=True, include_hyperlink=True)
     call_to_insert(df, sheet=fab_google_sheet_name, source='fitter_welder_stats_functions_v2')
     # get the EVA hours applied to the dataframe
     df = apply_model_hours_SQL(how=earned_hours)
@@ -200,8 +200,26 @@ def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_h
         
     return {'Fab df': df, 'Fitter list': fitters, 'Welder list': welders}
 
+def change_hyperlink_to_correct_column(hyperlink, col_name, df):
+    # find the column number in the df
+    col_number = list(df.columns).index(col_name)
+    # convert col_number to excel column letter
+    col_letter = chr(ord('A')+ col_number)
+    # reverse the order
+    hyperlink_reversed = hyperlink[::-1]
+    # split on A (hyperlink should be given as Column A), only split once
+    hyperlink_reversed_split = hyperlink_reversed.split('A',1)
+    # changing the letter to new letter
+    hyperlink_reversed_split[0] += col_letter
+    # put back together
+    hyperlink_reversed_put_back_together = hyperlink_reversed_split[0] + hyperlink_reversed_split[1]
+    # reverse it again to correct the order
+    hyperlink_reversed_reversed = hyperlink_reversed_put_back_together[::-1]
+    
+    return hyperlink_reversed_reversed
 
-def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, start_date, end_date, void_entries_with_invalid_employee_number=True):
+
+def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, start_date, end_date, hours_types_pivot, void_entries_with_invalid_employee_number=True):
 
     
     
@@ -216,26 +234,7 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     employees = employees.reset_index(drop=False)
     employees = employees.rename(axis=1, mapper={'index':'ID'})
     
-    ''' if you get the error:
-        
-        ValueError: Length of values does not match length of index
-        
-        the best way to troubleshoot is to to compare the ids in the 
-        'troubleshooter' list to the ids in 'employees' (or 'fitters'/'welders')
-        and then find where in the fab listing google sheet that the typo'ed 
-        employee number is at. 'troubleshooter' and 'fitter'/'welder' will not 
-        be the same length so find the values that are missing
-        
-        The variables to be assigned are:
-            df : this should already be defined in the states-loop
-            array_of_ids : let this be either the variable 'fitters' or 'welders'
-            col_name : either 'Fitter' or 'Welder'
-            defect_log : should already be defined in the states-loop
-            state : should already be defined in the states-loop
-            start_date : should already be defined in the states-loop
-            end_date : should already be defined in the states-loop
-        
-        '''
+    
     # create an empty list to store names in
     names = []
     troubleshooter = []
@@ -252,26 +251,68 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
             troubleshooter.append(int(id_num))
         else:
             print(id_num)
-    
    
+    # we need to init this so that it is a variable incase the following evaluates to false
+    df_to_fix = None
     if len(array_of_ids) != len(troubleshooter):
         print(col_name)
         difference = list(np.setdiff1d(array_of_ids, np.array(troubleshooter)))
         print('{} has the following extra IDS: {}'.format(state, difference))
         indexes = list(df[df[col_name].isin(difference)].index)
         print('The index in df with these IDS are: {}'.format(indexes))
-        df_to_fix = df.loc[indexes]
-        df_to_fix_timestamp = list(df_to_fix['Timestamp'].dt.strftime('%d/%m/%Y %h:%m%s'))
-        print('The datetimes for the rows that need fixing are:\n{}'.format(df_to_fix_timestamp))
+        df_to_fix = df.loc[indexes].copy()
+        # get the hyperlink to the cells that need fixin
+        df_to_fix['hyperlink'] = df_to_fix['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+
         
         df = df[~df.index.isin(df_to_fix.index)]
 
-    ''' This is the old way of doing things and could not be done unless the extra employee ids found in the 'difference'
-        variable get fixed 
-        Now I just use a join b/c i am a little less of a dummy
-        signed -Cody 2022-09-23'''
-        
-        
+    # now ge tthe state in question's employees
+    ei_state = ei_copy.copy()
+    # determine which state they work at
+    ei_state['State'] = ei_state['Productive'].str[0:2]
+    # only get that state in this df
+    ei_state = ei_state[ei_state['State'] == state]
+    
+    # figure out which employees are not in the current state's ei
+    df_wrong_state = df[~df[col_name].isin(ei_state['ID'])].copy()
+    # update the hyperlinks to the right column
+    df_wrong_state['hyperlink'] = df_wrong_state['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+
+    # join to get the employee information
+    df_wrong_state = pd.merge(left=df_wrong_state, right=ei, left_on = col_name, right_on='ID')
+    if df_wrong_state.shape[0]:
+        print(f'We found {df_wrong_state.shape[0]} records in fablisting that are attributed to employees at a different shop')
+    
+    # now get rid of pieces not possibly completed at this shop
+    df = df[~df.index.isin(df_wrong_state)]
+    
+    
+    ''' figure out if employees even worked in that month or not '''
+    # this should be the same shape[0] as hours_types_pivot[0]
+    ei_hours = pd.merge(left=hours_types_pivot, right=ei,
+                        left_on='Name', right_on='Name',
+                        how='inner')
+    
+    # we need to maintain the index on the merge so lets save it to a column
+    df2 = df.copy().reset_index()
+    # join to the emmployees worked & set the index back to original
+    # this should not make shape[0] > df.shape[0], it should only be <=
+    df_worked = pd.merge(left=df2, right=ei_hours,
+                         left_on=col_name, right_on='ID',
+                         how='inner').set_index('index')
+    
+    # now lets grab those records for people not working
+    df_notworked = df[~df.index.isin(df_worked.index)].copy()
+    # update the hyperlinks
+    df_notworked['hyperlink'] = df_notworked['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+
+    if df_notworked.shape[0]:
+        print(f'We found {df_notworked.shape[0]} records in fablisting that are attributed to employees that did not work in the month provided')
+    
+    # now lets get rid of the records that were by employees who did not work 
+    # basically jsut using the df-portion of df_worked
+    df = df[~df.index.isin(df_notworked.index)]
     
     # get the unique jobs in the dataframe
     fab_listing_jobs = pd.unique(df['Job #'])
@@ -369,7 +410,8 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     
     
   
-    return {'employees':employees, 'df_to_fix':df_to_fix}
+    return {'employees':employees, 
+            'df_to_fix':df_to_fix, 'df_wrong_state':df_wrong_state, 'df_notworked':df_notworked}
 
 
 
