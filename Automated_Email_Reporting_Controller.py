@@ -280,7 +280,7 @@ if yesterday.weekday() != 6:
                              f'sixty_day_job: {sixty_days} to {yesterday_str}'])
 
 # run on fridays?
-if today.weekday() == 4:
+if yesterday.weekday() == 3:
     print('Run weekly attendance hours report here')
     
     for state in state_recipients.keys():

@@ -310,7 +310,7 @@ def get_timesdf_from_sql(date_str):
     return times_df
 
 
-def get_timesdf_from_vClocktimes(start_date, end_date):
+def get_timesdf_from_vClocktimes(start_date, end_date, include_isClockedIn=True):
     
     start_date_sql = date_str_handler(start_date)
     end_date_sql = date_str_handler(end_date)
@@ -326,7 +326,7 @@ def get_timesdf_from_vClocktimes(start_date, end_date):
        
         query = (
             select(vclocktimes)
-            .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql)
+            .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql, vclocktimes.c.isclockedin == include_isClockedIn)
         )    
         
         
