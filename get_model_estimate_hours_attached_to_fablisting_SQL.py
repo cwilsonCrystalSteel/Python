@@ -8,6 +8,7 @@ Created on Sun Apr  6 10:45:53 2025
 
 from insertFablistingToSQL import insert_fablisting_to_live
 from pullFablistingWithEVAFromSQL import get_fablisting_from_vreturnevafromfablisting
+import warnings
 
 source = 'get_model_estimate_hours_attached_to_fablisting_SQL'
 
@@ -29,8 +30,23 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     HOW_VALID_LIST = ['best','best_eva','best_hpt','eva_pcmark_dropbox','eva_lot_ave_lotslog',
                       'eva_job_ave_lotslog','eva_job_ave_dropbox','hpt_job_shop','hpt_job_ave']
     
-    if not how in HOW_VALID_LIST:
-        raise Exception(f'Value of how="{how}" did not match any values of {HOW_VALID_LIST}')
+    # if isinstance(how, list):
+    #     valid_in_how = [i for i in how if i in HOW_VALID_LIST]
+    #     not_valid_in_how =  [i for i in how if not i in HOW_VALID_LIST]
+    #     # if we have any invalid entries
+    #     if len(not_valid_in_how):
+    #         # set how to be just those that are valid
+    #         how = valid_in_how
+            
+    #         # if we have NO remaining entries in how
+    #         if not how:
+    #             raise Exception(f"No values provided in 'how' ({how}) match any values of:\n\t{HOW_VALID_LIST}")
+    #         else:
+    #             warnings.warn(f"One of more value(s) in 'how' ({','.join(not_valid_in_how)}) do not match values of {HOW_VALID_LIST}.\n Proceeding with how={how}")
+                
+    
+    if isinstance(how, str) and not how in HOW_VALID_LIST:
+        raise Exception(f'Value of how="{how}" did not match any values of:\n{HOW_VALID_LIST}')
     
     
     fl_eva = get_fablisting_from_vreturnevafromfablisting()
@@ -57,13 +73,14 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     # if we are passed a list of the coalesce(value1, value2, ...)
     if isinstance(how, list):
     
+            
         
         cols = []
         for i in how:
             if i in fl_eva.columns:
                 cols.append(i)
             else:
-                print(f"The provided column {i} was not found in the SQL Fablisting EVA view")
+                warnings.warn(f"The provided column {i} was not found in the SQL Fablisting EVA view")
                 
         
         fl_eva['Earned Hours'] = fl_eva[cols].bfill(axis=1).iloc[:, 0]

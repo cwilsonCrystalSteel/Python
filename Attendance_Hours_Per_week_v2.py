@@ -95,6 +95,9 @@ def run_attendance_hours_report(state):
         
     print(f"Found the following dates to run: {', '.join([i.strftime('%Y-%m-%d') for i in weeks_to_run])}")
     
+    # try and force it to go in chronological order
+    weeks_to_run.sort()
+    
     # go through each start date
     for start_dt in weeks_to_run:
         
@@ -104,7 +107,7 @@ def run_attendance_hours_report(state):
         end_dt = start_dt + datetime.timedelta(days=6)
         end_date = end_dt.strftime("%m/%d/%Y")
         
-        times_df = get_timesdf_from_vClocktimes(start_date, end_date)
+        times_df = get_timesdf_from_vClocktimes(start_date, end_date, include_isClockedIn=False)
         basis = return_basis_new_direct_rules(times_df, productive_only=False)
         
       
