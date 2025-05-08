@@ -15,16 +15,13 @@ from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_dir
 from Grab_Defect_Log_Google_Sheet_Data import grab_defect_log
 from fitter_welder_stats.Fitter_Welder_Stats_functions_v2 import clean_and_adjust_fab_listing_for_range
 from fitter_welder_stats.Fitter_Welder_Stats_functions_v2 import return_sorted_and_ranked
-# from fitter_welder_stats.Fitter_Welder_Stats_functions_v2 import convert_weight_to_earned_hours
-# from Fitter_Welder_Stats_functions_v2 import get_employee_name_ID
-# from Fitter_Welder_Stats_functions_v2 import download_employee_group_hours
-# from Fitter_Welder_Stats_functions_v2 import get_employee_hours
-# from Fitter_Welder_Stats_functions_v2 import combine_multiple_all_both_csv_files_into_one_big_one
+from fitter_welder_stats.Fitter_Welder_Stats_functions_v2 import combine_to_make_fixing_df_for_email
 
 state = 'TN'
 start_date = "02/02/2025"
 end_date = "02/28/2025"
 states = ['TN','MD','DE']
+
 
 def fitter_welder_stats_month(month_num=3, year=2025): 
     
@@ -90,6 +87,9 @@ def fitter_welder_stats_month(month_num=3, year=2025):
     
     all_fitters_dict = {}
     all_welders_dict = {}
+    invalid_id_dict = {}
+    wrong_state_dict = {}
+    didnt_work_dict = {}
     fix_me_fitter_dict = {}
     fix_me_welder_dict = {}
     wrong_state_fitter_dict = {}
@@ -135,13 +135,24 @@ def fitter_welder_stats_month(month_num=3, year=2025):
             
         all_fitters_dict[state] = fitter_data['employees'].copy().reset_index(drop=True)
         all_welders_dict[state] = welder_data['employees'].copy().reset_index(drop=True)
+        
+        invalid_id = combine_to_make_fixing_df_for_email(fitter_data['df_to_fix'], welder_data['df_to_fix'], 'Invalid ID')
+        invalid_id_dict[state] = invalid_id
+        
+        wrong_state = combine_to_make_fixing_df_for_email(fitter_data['df_wrong_state'], welder_data['df_wrong_state'], 'Wrong State')
+        wrong_state_dict[state] = wrong_state
+        
+        didnt_work = combine_to_make_fixing_df_for_email(fitter_data['df_notworked'], welder_data['df_notworked'], 'Did Not Work in Month')
+        didnt_work_dict[state] = didnt_work
+    
         fix_me_fitter_dict[state] = fitter_data['df_to_fix']
         fix_me_welder_dict[state] = welder_data['df_to_fix']
         wrong_state_fitter_dict[state] = fitter_data['df_wrong_state']
         wrong_state_welder_dict[state] = welder_data['df_wrong_state']
         employee_not_worked_fitter_dict[state] = fitter_data['df_notworked']
-        employee_not_worked_welder_dict[state] = welder_data['df_notworked']
-            
+        employee_not_worked_welder_dict[state] = welder_data['df_notworked']        
+        
+        
         
     # combine
     all_both = pd.concat(list(all_fitters_dict.values()) +  list(all_welders_dict.values()), axis=0)
@@ -169,11 +180,15 @@ def fitter_welder_stats_month(month_num=3, year=2025):
     out_df.to_csv(file_out)
 
     return {'filepath':file_out, 
+            'invalid_id':invalid_id_dict, 
+            'wrong_state':wrong_state_dict,
+            'didnt_work':didnt_work_dict,
             'fix_fitters':fix_me_fitter_dict, 
             'fix_welders':fix_me_welder_dict,
             'wrong_state_fitters':wrong_state_fitter_dict,
             'wrong_state_welders':wrong_state_welder_dict,
             'employee_didnt_work_fitters':employee_not_worked_fitter_dict,
-            'employee_didnt_work_welders':employee_not_worked_welder_dict}
+            'employee_didnt_work_welders':employee_not_worked_welder_dict            
+            }
 
 

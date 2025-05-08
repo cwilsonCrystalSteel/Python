@@ -323,11 +323,18 @@ def get_timesdf_from_vClocktimes(start_date, end_date, include_isClockedIn=True)
     Session = sessionmaker(bind=engine)
     
     with Session() as session:
-       
-        query = (
-            select(vclocktimes)
-            .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql, vclocktimes.c.isclockedin == include_isClockedIn)
-        )    
+       # no extra where clause that could filter out based on value of isclockedin
+        if include_isClockedIn:
+            query = (
+                select(vclocktimes)
+                .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql)
+            )    
+        # filter out based on isclockedin = False
+        else:
+            query = (
+                select(vclocktimes)
+                .where(vclocktimes.c.targetdate >= start_date_sql, vclocktimes.c.targetdate <= end_date_sql, vclocktimes.c.isclockedin == include_isClockedIn)
+            )    
         
         
         result = session.execute(query)
