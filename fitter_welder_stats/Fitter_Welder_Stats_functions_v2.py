@@ -208,7 +208,7 @@ def change_hyperlink_to_correct_column(hyperlink, col_name, df):
     # reverse the order
     hyperlink_reversed = hyperlink[::-1]
     # split on A (hyperlink should be given as Column A), only split once
-    hyperlink_reversed_split = hyperlink_reversed.split('A',1)
+    hyperlink_reversed_split = hyperlink_reversed.split('A', 1)
     # changing the letter to new letter
     hyperlink_reversed_split[0] += col_letter
     # put back together
@@ -221,7 +221,11 @@ def change_hyperlink_to_correct_column(hyperlink, col_name, df):
 
 def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, start_date, end_date, hours_types_pivot, void_entries_with_invalid_employee_number=True):
 
+    df = df.copy()    
+
     df['hyperlink'] = df['hyperlink'].apply(lambda x: change_hyperlink_to_correct_column(x, col_name, df))
+    
+    df['hyperlink_html'] = "<a href=" + df['hyperlink'] + ">Link to Cell</a>"
 
     
     ei_copy = ei.copy()
@@ -574,3 +578,23 @@ def combine_multiple_all_both_csv_files_into_one_big_one(list_of_files_to_combin
     combo_csv_grouped['Earned Hours Rank'] = combo_csv_grouped.groupby(by=['Classification','Location'])['Earned Hours'].rank('first', ascending=False)
     
     combo_csv_grouped.to_csv(new_file_output_fullpath_and_name)
+
+
+
+def combine_to_make_fixing_df_for_email(fitters, welders, category):
+    # add a column to end of df with the category nice name and the value in fitter
+    fitters.insert(fitters.shape[1], category, fitters['Fitter'])
+    fitters.insert(fitters.shape[1], 'Fitter/Welder?', "Fitter")
+    # same for welder
+    welders.insert(welders.shape[1], category, welders['Welder'])
+    welders.insert(welders.shape[1], 'Fitter/Welder?', "Welder")
+    
+    
+    
+    combined = pd.concat([fitters, welders])
+    
+    
+    combined = combined[['hyperlink_html', 'Fitter/Welder?', category, 'Job #', 'Lot #','Piece Mark - REV', 'Timestamp']]
+    combined = combined.rename(columns={'hyperlink_html':'Link','Piece Mark - REV':'Pcmark'})
+    return combined
+
