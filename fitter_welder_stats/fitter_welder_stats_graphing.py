@@ -478,6 +478,34 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
 # hours_comparison_by_employee('DE',None, None)
 # hours_comparison_by_employee('TN',None, None)
 
+#%%
+
+def mom_hours_comparison_by_employee(dict_of_dfs, state=None, hours_type='Total Hours', topN=25, SAVEFILES=SAVEFILES):
+    dfs = dict_of_dfs.copy()
+    for k in dfs:
+        df = dfs[k].copy()
+        df = df[df['Location'] == state]     
+        df = df.drop_duplicates(subset='Name')
+        df = df[['Name',hours_type]]
+        df= df.set_index('Name')
+        dfs[k] = df
+        
+    keys = list(dfs.keys())
+    keys.sort()
+    df = pd.merge(left=dfs[keys[0]], right=dfs[keys[1]],
+                  left_index=True, right_index=True,
+                  suffixes=('_0','_1'))
+    for i in range(2,len(keys)):
+        df = pd.merge(left=df, right=dfs[keys[i]],
+                      left_index=True, right_index=True,
+                      suffixes=('',f'_{i}'))
+        
+        
+    # Do 3 bar plots 
+    
+    # subplots(ncol=3, nrow=1)
+        
+    
 
 #%% plot X=Total Hours, y=Earned Hours
 

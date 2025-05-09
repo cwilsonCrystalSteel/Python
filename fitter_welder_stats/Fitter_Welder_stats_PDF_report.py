@@ -74,7 +74,7 @@ centered_note_style = ParagraphStyle(
 
 
 class pdf_report():
-    def __init__(self, state, csv_file=None, output_pdf=None, aggregate_data=None):
+    def __init__(self, state, csv_file=None, output_pdf=None, aggregate_data=None, past_agg_data=None):
         self.state = state
         self.aggregate_data = aggregate_data
         if csv_file is None and not aggregate_data is None:
@@ -87,9 +87,24 @@ class pdf_report():
         elif csv_file is None and aggregate_data is None:
             raise Exception("Did not pass either 'csv_file' or 'aggregate_data'")
             
+        self.past_agg_data = past_agg_data
+         
+        
+            
             
         self.extrapolate_month_year()
-        self.load_df()
+        self.main_df = self.load_df(self.csv_file)
+        #if we have past aggregate data files to look at 
+        if not self.past_agg_data is None :
+            # go thru each key in the past agg data and convert to df
+            for k in self.past_agg_data:
+                # convert filepaths to nice dataframes 
+                self.past_agg_data[k] = self.load_df(self.past_agg_data[k])
+        
+            # if we don't already have the current months df in the past agg dict then add id 
+            if not 1 in self.past_agg_data:
+                self.past_agg_data[1] = self.main_df.copy()
+            
         
         self.output_pdf = output_pdf
         
@@ -129,72 +144,44 @@ class pdf_report():
         self.elements.append(NextPageTemplate("AllEmployees"))
         self.do_pagebreak()
         self.add_AllHourTypeComparison()
-
-    
-        # Page 2(ish) -Table of Stats (sometimes overflows to 2nd page)
-        self.elements.append(NextPageTemplate("Fitter"))
-        self.do_pagebreak()
-        self.add_state_table("Fitter")
         
-        # how bad the bad entries effect them
-        self.do_pagebreak()
-        self.add_badEntries("Fitter")
-    
+        for classification in ['Fitter','Welder']:
+            self.elements.append(NextPageTemplate(classification))
+            self.do_pagebreak()
+            self.add_state_table(classification)
+            
+            # how bad the bad entries effect them
+            self.do_pagebreak()
+            self.add_badEntries(classification)
         
-        # Page 3 defects fitter
-        self.do_pagebreak()
-        self.add_DefectsPlot("Fitter")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_AverageTonsPerPiece("Fitter")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_DirectAndTotalEfficiency("Fitter")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_EarnedAndTotalHours("Fitter")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_TonsByEmployee("Fitter")
-        
-        ''' Start the Welders'''
-        
-        
-        # Page
-        self.do_pagebreak()
-        self.add_state_table("Welder")
-        self.elements.append(NextPageTemplate("Welder"))
-
-        # how bad the bad entries effect them
-        self.do_pagebreak()
-        self.add_badEntries("Welder")
-        
-        # Page
-        self.do_pagebreak()
-        self.add_DefectsPlot("Welder")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_AverageTonsPerPiece("Welder")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_DirectAndTotalEfficiency("Welder")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_EarnedAndTotalHours("Welder")
-        
-        # Page 
-        self.do_pagebreak()
-        self.add_TonsByEmployee("Welder")        
-        
-    
+            
+            # Page 3 defects fitter
+            self.do_pagebreak()
+            self.add_DefectsPlot(classification)
+            
+            # Page 
+            self.do_pagebreak()
+            self.add_AverageTonsPerPiece(classification)
+            
+            # Page 
+            self.do_pagebreak()
+            self.add_DirectAndTotalEfficiency(classification)
+            
+            # Page 
+            self.do_pagebreak()
+            self.add_EarnedAndTotalHours(classification)
+            
+            # Page 
+            self.do_pagebreak()
+            self.add_TonsByEmployee(classification)
+            
+            if not self.past_agg_data is None:
+                print('placeholder')
+                print(f'Month over Month Plot for {classification}')
+                
         self.build_document()
+
+    
         
         
     def get_bad_dfs(self):
@@ -226,13 +213,13 @@ class pdf_report():
                 self.bad_dfs['Welder'] = dfs_together
         
         
-    def load_df(self):
+    def load_df(self, filepath):
         
         self.display_cols = ['Name','Earned Hours','Tons','Defect Quantity','Tons per Piece',
                         'Direct Hours','Total Hours','Missed Hours']
 
         # load the file
-        main_df = pd.read_csv(self.csv_file, index_col=0)
+        main_df = pd.read_csv(filepath, index_col=0)
         # this is a place holder until I figure out how to alert on when employees are terminated but being credited with work /
         # did not work any during that month but are credited
         main_df = main_df[~main_df['direct'].isna()]
@@ -247,20 +234,19 @@ class pdf_report():
                                           'Tonnage':'Tons',
                                           'Tonnage per Piece':'Tons per Piece'})
 
-        state = 'MD'
-        classification = 'Fitter'
+        return main_df
         
         
-        
-        self.main_df = main_df
         
         
     def extrapolate_month_year(self):
         str_file = os.path.basename(self.csv_file)
-        split_name = str_file.split('-')[1]
-        month_number = split_name.split('_')[0]
-        self.month_name = datetime.date(year=2000, month=int(month_number), day=1).strftime('%B')
-        self.year = split_name.split('_')[1]
+        split_name = str_file.split('_')[1].split('-')
+        self.month_name = split_name[0]
+        self.year = split_name[1]
+        # date = datetime.datetime.strptime(month_name, '%B')
+        # self.month_name = datetime.date(year=2000, month=int(month_number), day=1).strftime('%B')
+        # self.year = split_name.split('_')[1]
         
         
 
@@ -464,6 +450,19 @@ class pdf_report():
         
         self.elements.append(img)
         
+    def add_MonthOverMonth_Hours(self, hours_type):
+        HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
+        from fitter_welder_stats.fitter_welder_stats_graphing import mom_hours_comparison_by_employee
+        graphic = mom_hours_comparison_by_employee(self.past_agg_data, self.state, hours_type, SAVEFILES=True)
+        
+        title_text = 'Month Over Month of {hours_type}'
+        title = Paragraph(title_text, title_style)
+        self.elements.append(title)
+        
+        img = Image(graphic, width=520, height = 640)
+        
+        self.elements.append(img)
+        
         
     def add_DefectsPlot(self, classification):
         from fitter_welder_stats.fitter_welder_stats_graphing import defects_by_employee
@@ -591,7 +590,7 @@ class pdf_report():
         self.elements.append(Spacer(1, 12))
         self.elements.append(table_note)           
         
-        
+
         
         
 

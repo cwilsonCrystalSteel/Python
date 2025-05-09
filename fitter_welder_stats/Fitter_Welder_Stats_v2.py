@@ -23,7 +23,12 @@ end_date = "02/28/2025"
 states = ['TN','MD','DE']
 
 
-def fitter_welder_stats_month(month_num=3, year=2025): 
+# where to put the csv files
+directory = Path().home() / 'documents' / 'FitterWelderPerformanceCSVs'
+if not os.path.exists(directory):
+    os.mkdir(directory)
+
+def fitter_welder_stats_month(month_num=3, year=2025, production=False): 
     
     start_dt = datetime.date(year, month_num, 1)
     if month_num == 12:
@@ -163,20 +168,20 @@ def fitter_welder_stats_month(month_num=3, year=2025):
                       right=hours_types_pivot, right_on=['Name','Location'],
                       how='left')
             
-    # where to put the csv files
-    directory = Path().home() / 'documents' / 'FitterWelderPerformanceCSVs'
-    if not os.path.exists(directory):
-        os.mkdir(directory)
+    
     # create a timestamp so as not to override files
-    file_timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    file_timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     # the time span of when the file was created for
-    file_range = f"{start_dt.year}-{str(start_dt.month).zfill(2)}"
-    # the end of the file name is the file range and creation timestamp 
-    file_name_end = '_' + file_range + '_' + file_timestamp + '.csv'
+    file_range = f"{start_dt.strftime('%B')}-{start_dt.year}"
+    
+    if production:
+        file_name_end = f'_prod_{file_range}_{file_timestamp}.csv'
+    else:
+        file_name_end = f'_{file_range}_{file_timestamp}.csv'
     
 
     
-    file_out = directory / ('all_both' + file_name_end)
+    file_out = directory / ('FitterWelderStats' + file_name_end)
     out_df.to_csv(file_out)
 
     return {'filepath':file_out, 
@@ -192,3 +197,29 @@ def fitter_welder_stats_month(month_num=3, year=2025):
             }
 
 
+def find_old_file(month, year):
+    # convert month number to month name
+    month_name = datetime.datetime(2025, month, 1).strftime('%B')
+    # get the files in the direcotyr
+    files = os.listdir(directory)
+    
+    files = [i for i in files if f'_prod_{month_name}-{year}' in i]
+    if len(files):
+        files.sort()
+        
+        file_name = files[-1]
+        
+        filepath = directory / file_name
+        
+        try:
+            ts = file_name[::-1].split('_',1)[0][::-1].split('.csv')[0]
+            ts_date = datetime.datetime.strptime(ts, "%Y%m%d%H%M%S")
+            
+            print(f"We found a production file to use for {month_name} {year}: {file_name}\n\t Created on: {ts_date}")
+        except Exception:
+            print('Could not determine timestamp for {file}')
+        
+        return filepath
+
+    else:
+        return None
