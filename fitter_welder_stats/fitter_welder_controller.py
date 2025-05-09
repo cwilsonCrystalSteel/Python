@@ -8,11 +8,18 @@ Created on Mon Apr 21 16:05:04 2025
 import datetime
 from pathlib import Path
 import os
-from fitter_welder_stats.Fitter_Welder_Stats_v2 import fitter_welder_stats_month
+from fitter_welder_stats.Fitter_Welder_Stats_v2 import fitter_welder_stats_month, find_old_file
 from fitter_welder_stats.Fitter_Welder_stats_PDF_report import pdf_report
 from fitter_welder_stats.Fitter_Welder_Stats_emailing import email_pdf_report, email_error_message
 import pandas as pd
 
+
+
+output_dir = Path().home() / 'documents' / 'FitterWelderStatsPDFReports'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+    
+    
 
 #%% define recipients
 
@@ -26,13 +33,15 @@ state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.ne
                           'rrichard@crystalsteel.net','emohamed@crystalsteel.net']
                     }
 
-
+production=True
 ''' #un-comment this when debugging 
 
 state_recipients = {'TN':['cwilson@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net']
                     }
+production = False
+
 '''
 
 
@@ -48,31 +57,38 @@ if month == 12:
 else:
     year = today.year
     
-aggregate_data = fitter_welder_stats_month(month, year)
+
+aggregate_data = fitter_welder_stats_month(month, year, production)
+#%% get the previous month's data
+# go back one day from the month we are running
+two_months = datetime.datetime(today.year, month, 1) - datetime.timedelta(days=1)
+# now set it to be the first day of the month
+two_months = datetime.datetime(two_months.year, two_months.month, 1)
+
+aggregate_data_2mo = find_old_file(two_months.month, two_months.year)
+if aggregate_data_2mo is None:
+    aggregate_data_2mo = fitter_welder_stats_month(two_months.month, two_months.year, production)
+
+three_months = two_months - datetime.timedelta(days=1)
+three_months = datetime.datetime(three_months.year, three_months.month, 1)
+aggregate_data_3mo = find_old_file(three_months.month, three_months.year)
+if aggregate_data_3mo is None:
+    aggregate_data_3mo = fitter_welder_stats_month(three_months.month, three_months.year, production)
+    
+past_agg_data = {2:aggregate_data_2mo,
+                 3:aggregate_data_3mo}
 ''' Handle sending messages out about the missing data'''
 #%% create pdfs & mail
 
 
-
-csv_file = aggregate_data['filepath']
-
-
-
-
-
-
-output_dir = Path().home() / 'documents' / 'FitterWelderStatsPDFReports'
-if not os.path.exists(output_dir):
-    os.makedirs(output_dir)
-    
     
 
 
 for state in ['MD','DE','TN']:
     try:
-        output_file = f"FitterWelderStats-{state}-{str(month).zfill(2)}-{year}_{file_timestamp}.pdf"
+        output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
-        pdfreport = pdf_report(state, aggregate_data=aggregate_data, output_pdf=output_filepath)
+        pdfreport = pdf_report(state, aggregate_data=aggregate_data, output_pdf=output_filepath, past_agg_data=past_agg_data)
         pdfreport.build_report()
     
     
