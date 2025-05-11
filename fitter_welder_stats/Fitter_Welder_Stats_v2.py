@@ -164,10 +164,14 @@ def fitter_welder_stats_month(month_num=3, year=2025, production=False):
     all_both = all_both.sort_values(by=['Classification','Weight'], ascending=False)
     
     # join to the hours worked
-    out_df = pd.merge(left=all_both, left_on=['Name','Location'],
-                      right=hours_types_pivot, right_on=['Name','Location'],
-                      how='left')
-            
+    # out_df = pd.merge(left=all_both, left_on=['Name','Location'],
+    #                   right=hours_types_pivot, right_on=['Name','Location'],
+    #                   how='left')
+    out_df = pd.merge(left=hours_types_pivot, left_on=['Name','Location'],
+                      right=all_both, right_on=['Name','Location'],
+                      how='left')    
+    
+    out_df = out_df.fillna(0)
     
     # create a timestamp so as not to override files
     file_timestamp = datetime.datetime.now().strftime("%Y%m%d%H%M%S")

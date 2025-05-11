@@ -436,21 +436,20 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
 
 
             
-    # group by employee & job number
-    df_by_employee_job = df[[col_name, 'Job #', 'Weight']].groupby([col_name,'Job #']).sum()
-    # reset index
-    df_by_employee_job = df_by_employee_job.reset_index()
-    # set the index back to the employee
-    df_by_employee_job = df_by_employee_job.set_index(col_name)
-    # pivot to get the employee as index and the job as columns and the weight of the job as values in tons
-    df_by_employee_job_pivot = df_by_employee_job.pivot(columns='Job #',values='Weight') / 2000
-    # repalce nan with zero
-    df_by_employee_job_pivot = df_by_employee_job_pivot.fillna(0)
-    # rename the columns
-    df_by_employee_job_pivot.columns = ['Job:' + str(i) for i in df_by_employee_job_pivot.columns]
-    # join onto the employees dataframe
-    employees = pd.merge(employees, df_by_employee_job_pivot, how='left', left_index=True, right_index=True)
-    
+    # # group by employee & job number
+    # df_by_employee_job = df[[col_name, 'Job #', 'Weight']].groupby([col_name,'Job #']).sum()
+    # # reset index
+    # df_by_employee_job = df_by_employee_job.reset_index()
+    # # set the index back to the employee
+    # df_by_employee_job = df_by_employee_job.set_index(col_name)
+    # # pivot to get the employee as index and the job as columns and the weight of the job as values in tons
+    # df_by_employee_job_pivot = df_by_employee_job.pivot(columns='Job #',values='Weight') / 2000
+    # # repalce nan with zero
+    # df_by_employee_job_pivot = df_by_employee_job_pivot.fillna(0)
+    # # rename the columns
+    # df_by_employee_job_pivot.columns = ['Job:' + str(i) for i in df_by_employee_job_pivot.columns]
+    # # join onto the employees dataframe
+    # employees = pd.merge(employees, df_by_employee_job_pivot, how='left', left_index=True, right_index=True)
     
     
   

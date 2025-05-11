@@ -14,7 +14,7 @@ from fitter_welder_stats.Fitter_Welder_Stats_emailing import email_pdf_report, e
 import pandas as pd
 
 
-
+file_timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 output_dir = Path().home() / 'documents' / 'FitterWelderStatsPDFReports'
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
@@ -47,36 +47,45 @@ production = False
 
 
 #%% run the data 
-file_timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 
+# current date
 today = datetime.datetime.now()
-month = today.month - 1
-month_name = datetime.datetime(today.year, month, 1).strftime('%B')
-if month == 12:
-    year = today.year - 1
-else:
-    year = today.year
-    
+# go to the last day of the previous month
+month_start = datetime.datetime(today.year, today.month, 1) - datetime.timedelta(days=1)
+# now go back to first day of previous month
+month_start = datetime.datetime(month_start.year, month_start.month, 1)
+# grab its month number
+month = month_start.month
+# convert month to its calendar name
+month_name = month_start.strftime('%B')
+# get the year
+year = month_start.year
 
+    
+# now get the data for that month
 aggregate_data = fitter_welder_stats_month(month, year, production)
+
 #%% get the previous month's data
-# go back one day from the month we are running
-two_months = datetime.datetime(today.year, month, 1) - datetime.timedelta(days=1)
-# now set it to be the first day of the month
-two_months = datetime.datetime(two_months.year, two_months.month, 1)
 
-aggregate_data_2mo = find_old_file(two_months.month, two_months.year)
-if aggregate_data_2mo is None:
-    aggregate_data_2mo = fitter_welder_stats_month(two_months.month, two_months.year, production)
 
-three_months = two_months - datetime.timedelta(days=1)
-three_months = datetime.datetime(three_months.year, three_months.month, 1)
-aggregate_data_3mo = find_old_file(three_months.month, three_months.year)
-if aggregate_data_3mo is None:
-    aggregate_data_3mo = fitter_welder_stats_month(three_months.month, three_months.year, production)
-    
-past_agg_data = {2:aggregate_data_2mo,
-                 3:aggregate_data_3mo}
+past_agg_data = {}
+for i in range(1,7):
+    # reset the value of months_ago to one month before month_start
+    months_ago = datetime.datetime(month_start.year, month_start.month, 1) - datetime.timedelta(days=1) 
+    months_ago = datetime.datetime(months_ago.year, months_ago.month, 1)
+    # loop thru to iteratively subtract one month at a time 
+    for j in range(1,i):
+        months_ago = datetime.datetime(months_ago.year, months_ago.month, 1) - datetime.timedelta(days=1) 
+        months_ago = datetime.datetime(months_ago.year, months_ago.month, 1)
+        
+    aggregate_data_months_ago = find_old_file(months_ago.month, months_ago.year)
+    if aggregate_data_months_ago is None:
+        aggregate_data_months_ago = fitter_welder_stats_month(months_ago.month, months_ago.year, production)
+        past_agg_data[i] = aggregate_data_months_ago['filepath']
+    else:
+        # if we get it from find_old_file- its a filepath
+        past_agg_data[i] = aggregate_data_months_ago
+
 ''' Handle sending messages out about the missing data'''
 #%% create pdfs & mail
 
