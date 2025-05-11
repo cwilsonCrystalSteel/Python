@@ -189,7 +189,7 @@ def defects_by_employee(main_df, state=None, classification=None, topN=25, SAVEF
 #%%
 
 def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN=25, SAVEFILES=SAVEFILES):
-    col = 'Tonnage per Piece'
+    col = 'Average Tonnage per Piece'
     filename = 'AverageTonsPerPiece_' + file_name_suffix(state,classification) + '.png'
     df = determine_location_and_classification(main_df, state, classification)
     
@@ -480,7 +480,8 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
 
 #%%
 
-def mom_hours_comparison_by_employee(dict_of_dfs, state=None, hours_type='Total Hours', topN=25, SAVEFILES=SAVEFILES):
+
+def mom_hours_comparison_by_employee_big_change(dict_of_dfs, state=None, hours_type='Total Hours', topN=25, SAVEFILES=SAVEFILES):
     dfs = dict_of_dfs.copy()
     for k in dfs:
         df = dfs[k].copy()
@@ -492,18 +493,57 @@ def mom_hours_comparison_by_employee(dict_of_dfs, state=None, hours_type='Total 
         
     keys = list(dfs.keys())
     keys.sort()
-    df = pd.merge(left=dfs[keys[0]], right=dfs[keys[1]],
-                  left_index=True, right_index=True,
-                  suffixes=('_0','_1'))
-    for i in range(2,len(keys)):
-        df = pd.merge(left=df, right=dfs[keys[i]],
+    # get the first dataframe as the current month
+    df = dfs[keys[0]].copy()
+    # add suffix _0
+    df = df.add_suffix('_0')
+    # for dataframes 1:end
+    for i in range(1,len(keys)):
+        # get the joining df
+        right_df = dfs[keys[i]].copy()
+        # add its suffix
+        right_df = right_df.add_suffix(f'_{i}')
+        # do a left join
+        df = pd.merge(left=df, right=right_df,
                       left_index=True, right_index=True,
-                      suffixes=('',f'_{i}'))
-        
+                      how='left')
+    
+    df = df.mean(axis=1)
         
     # Do 3 bar plots 
     
     # subplots(ncol=3, nrow=1)
+    
+    
+    # Set up data for plotting
+    months = ['2 Months Ago', '1 Month Ago', 'Current Month']
+    values = [df['Total Hours_2'], df['Total Hours_1'], df['Total Hours_0']]
+    
+    x = range(len(df))  # Number of employees
+    bar_width = 0.25
+    
+    # Plot
+    fig, ax = plt.subplots(figsize=(12, 6))
+    
+    for i, (month, val) in enumerate(zip(months, values)):
+        ax.bar(
+            [pos + i * bar_width for pos in x],
+            val,
+            width=bar_width,
+            label=month
+        )
+    
+    # X-axis labels and ticks
+    ax.set_xticks([pos + bar_width for pos in x])
+    ax.set_xticklabels(df.index, rotation=45, ha='right')
+    
+    ax.set_ylabel('Total Hours')
+    ax.set_title('Month-over-Month Comparison of Total Hours Worked')
+    ax.legend()
+    ax.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    plt.tight_layout()
+    plt.show()
         
     
 

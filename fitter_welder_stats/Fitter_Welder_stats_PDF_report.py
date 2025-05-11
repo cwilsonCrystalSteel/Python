@@ -97,13 +97,13 @@ class pdf_report():
         #if we have past aggregate data files to look at 
         if not self.past_agg_data is None :
             # go thru each key in the past agg data and convert to df
-            for k in self.past_agg_data:
+            for k in self.past_agg_data.keys():
                 # convert filepaths to nice dataframes 
                 self.past_agg_data[k] = self.load_df(self.past_agg_data[k])
         
             # if we don't already have the current months df in the past agg dict then add id 
-            if not 1 in self.past_agg_data:
-                self.past_agg_data[1] = self.main_df.copy()
+            if self.past_agg_data.get(0) is None:
+                self.past_agg_data[0] = self.main_df.copy()
             
         
         self.output_pdf = output_pdf
@@ -241,7 +241,11 @@ class pdf_report():
         
     def extrapolate_month_year(self):
         str_file = os.path.basename(self.csv_file)
-        split_name = str_file.split('_')[1].split('-')
+        split_name = str_file.split('_')
+        if 'prod_' in str_file:
+            split_name = split_name[2].split('-')
+        else:
+            split_name = split_name[1].split('-')
         self.month_name = split_name[0]
         self.year = split_name[1]
         # date = datetime.datetime.strptime(month_name, '%B')
