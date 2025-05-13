@@ -67,9 +67,10 @@ aggregate_data = fitter_welder_stats_month(month, year, production)
 
 #%% get the previous month's data
 
+number_months = 12
 
 past_agg_data = {}
-for i in range(1,7):
+for i in range(1,1+number_months):
     # reset the value of months_ago to one month before month_start
     months_ago = datetime.datetime(month_start.year, month_start.month, 1) - datetime.timedelta(days=1) 
     months_ago = datetime.datetime(months_ago.year, months_ago.month, 1)
@@ -113,11 +114,11 @@ for state in ['MD','DE','TN']:
             
     
         email_pdf_report(pdf_filepath=output_filepath, 
-                         month_name=month_name, 
-                         year=year, 
-                         dfs_to_fix_dict = dfs_to_fix_dict,
-                         state=state, 
-                         recipients=state_recipients[state])
+                          month_name=month_name, 
+                          year=year, 
+                          dfs_to_fix_dict = dfs_to_fix_dict,
+                          state=state, 
+                          recipients=state_recipients[state])
     
     except Exception as e:
         print(e)

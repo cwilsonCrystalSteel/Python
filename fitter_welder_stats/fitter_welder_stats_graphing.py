@@ -478,74 +478,7 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
 # hours_comparison_by_employee('DE',None, None)
 # hours_comparison_by_employee('TN',None, None)
 
-#%%
 
-
-def mom_hours_comparison_by_employee_big_change(dict_of_dfs, state=None, hours_type='Total Hours', topN=25, SAVEFILES=SAVEFILES):
-    dfs = dict_of_dfs.copy()
-    for k in dfs:
-        df = dfs[k].copy()
-        df = df[df['Location'] == state]     
-        df = df.drop_duplicates(subset='Name')
-        df = df[['Name',hours_type]]
-        df= df.set_index('Name')
-        dfs[k] = df
-        
-    keys = list(dfs.keys())
-    keys.sort()
-    # get the first dataframe as the current month
-    df = dfs[keys[0]].copy()
-    # add suffix _0
-    df = df.add_suffix('_0')
-    # for dataframes 1:end
-    for i in range(1,len(keys)):
-        # get the joining df
-        right_df = dfs[keys[i]].copy()
-        # add its suffix
-        right_df = right_df.add_suffix(f'_{i}')
-        # do a left join
-        df = pd.merge(left=df, right=right_df,
-                      left_index=True, right_index=True,
-                      how='left')
-    
-    df = df.mean(axis=1)
-        
-    # Do 3 bar plots 
-    
-    # subplots(ncol=3, nrow=1)
-    
-    
-    # Set up data for plotting
-    months = ['2 Months Ago', '1 Month Ago', 'Current Month']
-    values = [df['Total Hours_2'], df['Total Hours_1'], df['Total Hours_0']]
-    
-    x = range(len(df))  # Number of employees
-    bar_width = 0.25
-    
-    # Plot
-    fig, ax = plt.subplots(figsize=(12, 6))
-    
-    for i, (month, val) in enumerate(zip(months, values)):
-        ax.bar(
-            [pos + i * bar_width for pos in x],
-            val,
-            width=bar_width,
-            label=month
-        )
-    
-    # X-axis labels and ticks
-    ax.set_xticks([pos + bar_width for pos in x])
-    ax.set_xticklabels(df.index, rotation=45, ha='right')
-    
-    ax.set_ylabel('Total Hours')
-    ax.set_title('Month-over-Month Comparison of Total Hours Worked')
-    ax.legend()
-    ax.grid(axis='y', linestyle='--', alpha=0.7)
-    
-    plt.tight_layout()
-    plt.show()
-        
-    
 
 #%% plot X=Total Hours, y=Earned Hours
 
@@ -1114,3 +1047,125 @@ def bad_entriesPieChartAndTable(main_df, bad_df, state, classification, SAVEFILE
 # bad_entriesPieChartAndTable(main_df, bad_df, state, classification)
 # main_df = pdfreport.main_df
 # bad_df = pdfreport.bad_dfs['Welder]
+
+#%%
+
+
+def mom_hours_worked_by_shop(dict_of_dfs, state=None, hours_type='Total Hours', classification=None, month_0_name='March', month_0_year=2025, SAVEFILES=SAVEFILES):
+    if classification is None:
+        classification_text = ''
+    else:
+        classification_text = f"_Class-{classification}"
+    
+    filename = f'MonthOverMonthLine_State-{state}{classification_text}_{hours_type.replace(' ','')}.png'
+    
+    if isinstance(month_0_year, str):
+        month_0_year = int(month_0_year)
+        
+    month_start = datetime.datetime.strptime(month_0_name,'%B')
+    month_start = datetime.datetime(month_0_year, month_start.month, 1)
+    
+    
+    x_display_names = []
+    
+    dfs = dict_of_dfs.copy()
+    dfs = dict(sorted(dfs.items()))
+    for k in dfs:
+        df = dfs[k].copy()
+        df = df[df['Location'] == state]
+        # make sure we are gpoing to get the right class when doing the drop_duplicates
+        if not classification is None:
+            # use a custom sort key so that the value of Classification=classification is always the first option if it is available
+            df_sorted = df.sort_values(
+                by=['Name', 'Classification'],
+                key=lambda col: col.map(lambda x: 0 if x == classification else 1) if col.name == 'Classification' else col
+            )
+            
+        df = df.drop_duplicates(subset='Name', keep='first')
+            
+            
+        df = df[['Name',hours_type,'Classification']]
+        df= df.set_index('Name')
+        dfs[k] = df
+        
+        
+        months_ago = month_start
+        for _ in range(k):
+            months_ago = months_ago - datetime.timedelta(days=1)
+            months_ago = datetime.datetime(months_ago.year, months_ago.month, 1)
+    
+        x_display_names.append(months_ago.strftime('%b %Y'))
+            
+        
+        
+    keys = list(dfs.keys())
+    keys.sort()
+    # get the first dataframe as the current month
+    df = dfs[keys[0]].copy()
+    # add suffix _0
+    df = df.add_suffix('_0')
+    # for dataframes 1:end
+    for i in range(1,len(keys)):
+        # get the joining df
+        right_df = dfs[keys[i]].copy()
+        # add its suffix
+        right_df = right_df.add_suffix(f'_{i}')
+        # do a left join
+        df = pd.merge(left=df, right=right_df,
+                      left_index=True, right_index=True,
+                      how='left')
+        
+    if not classification is None:
+        df = df[df['Classification_0'] == classification]
+        
+    df = df.drop(columns = [i for i in df.columns if 'Classification' in i])
+        
+    # only get employees who worked the zero month
+    df = df[df.iloc[:,0] > 0]
+        
+    
+    if hours_type == 'Missed Hours':
+        # for this type of hours we need to include zeros
+        avg_per_column = df.mean(axis=0)
+        mean_nonzero = df.stack().mean()
+
+    else:    
+        df = df.fillna(0)
+        avg_per_column = df[df > 0].mean(axis=0)
+        mean_nonzero = df[df != 0].stack().mean()
+    
+
+    
+    avg_series = pd.Series(avg_per_column)
+    avg_series = avg_series[::-1]  # Reverse so Total Hours_6 is on the left
+    
+        
+    fig, ax = plt.subplots(1, 1, figsize=(8, 5))
+    
+    # Plot line
+    ax.plot(avg_series.index, avg_series.values, marker='o', label=f'Average {hours_type}')
+    
+    # Horizontal mean line
+    ax.axhline(y=mean_nonzero, color='red', linestyle='--', label=f'Average: {mean_nonzero:.0f}')
+    
+    # Set custom x-tick labels
+    ax.set_xticks(avg_series.index)
+    ax.set_xticklabels(x_display_names[::-1], rotation=45)
+    
+    # Labels and title
+    # ax.set_xlabel('Month')
+    ax.set_ylabel('Average Hours per Employee')
+    # ax.set_title(f'Month-Over-Month Comparison of {hours_type}')
+    
+    # Grid, legend, layout
+    ax.legend()
+    ax.grid(True)
+    fig.tight_layout()
+    
+    if SAVEFILES:
+        plt.savefig(out_folder / filename, dpi=300)
+        plt.close()
+        return out_folder / filename
+    else:
+        plt.show()
+        return None

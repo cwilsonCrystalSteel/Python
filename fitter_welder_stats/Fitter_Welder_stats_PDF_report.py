@@ -87,7 +87,7 @@ class pdf_report():
         elif csv_file is None and aggregate_data is None:
             raise Exception("Did not pass either 'csv_file' or 'aggregate_data'")
             
-        self.past_agg_data = past_agg_data
+        self.past_agg_data = past_agg_data.copy()
          
         
             
@@ -145,11 +145,24 @@ class pdf_report():
         self.do_pagebreak()
         self.add_AllHourTypeComparison()
         
+        self.do_pagebreak()
+        self.add_MonthOverMonth_Hours('Total Hours', None)
+        
+        # self.do_pagebreak()
+        self.add_MonthOverMonth_Hours('Missed Hours', None)
+        
         for classification in ['Fitter','Welder']:
             self.elements.append(NextPageTemplate(classification))
             self.do_pagebreak()
             self.add_state_table(classification)
+           
+            self.do_pagebreak()
+            self.add_MonthOverMonth_Hours('Total Hours', classification)
             
+            # self.do_pagebreak()
+            self.add_MonthOverMonth_Hours('Missed Hours', classification)
+            
+           
             # how bad the bad entries effect them
             self.do_pagebreak()
             self.add_badEntries(classification)
@@ -175,9 +188,6 @@ class pdf_report():
             self.do_pagebreak()
             self.add_TonsByEmployee(classification)
             
-            if not self.past_agg_data is None:
-                print('placeholder')
-                print(f'Month over Month Plot for {classification}')
                 
         self.build_document()
 
@@ -454,16 +464,21 @@ class pdf_report():
         
         self.elements.append(img)
         
-    def add_MonthOverMonth_Hours(self, hours_type):
+    def add_MonthOverMonth_Hours(self, hours_type, classification):
         HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
-        from fitter_welder_stats.fitter_welder_stats_graphing import mom_hours_comparison_by_employee
-        graphic = mom_hours_comparison_by_employee(self.past_agg_data, self.state, hours_type, SAVEFILES=True)
+        from fitter_welder_stats.fitter_welder_stats_graphing import mom_hours_worked_by_shop
+        graphic = mom_hours_worked_by_shop(self.past_agg_data, self.state, 
+                                           hours_type, classification,
+                                           self.month_name, self.year,
+                                           SAVEFILES=True)
         
-        title_text = 'Month Over Month of {hours_type}'
+        title_text = f'{hours_type} by Month'
+        if not classification is None:
+            title_text += f" for {classification}"
         title = Paragraph(title_text, title_style)
         self.elements.append(title)
         
-        img = Image(graphic, width=520, height = 640)
+        img = Image(graphic, width=520, height = 325)
         
         self.elements.append(img)
         
