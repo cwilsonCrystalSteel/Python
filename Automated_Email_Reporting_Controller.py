@@ -30,12 +30,12 @@ from TimeClock.functions_TimeclockForSpeedoDashboard import return_basis_new_dir
 
 #%%
 
-# try:
-#     production_worksheet_outpath = Path(os.getcwd()) / 'speedo_dashboard' / 'production_worksheet.csv'
-#     df = get_production_worksheet_production_sheet(proper_headers=False)
-#     df.to_csv(production_worksheet_outpath, index=False)
-# except:
-#     print('could not get the production_worksheet')
+try:
+    production_worksheet_outpath = Path.home() / 'Documents' / 'speedo_dashboard' / 'production_worksheet.csv'
+    df = get_production_worksheet_production_sheet(proper_headers=False)
+    df.to_csv(production_worksheet_outpath, index=False)
+except:
+    print('could not get the production_worksheet')
 
 #%%
 

@@ -160,7 +160,7 @@ def post_observation(gsheet_dict, google_sheet_info_dict, isReal=True, sheet_nam
 
 def move_to_archive(google_sheet_info_dict, shop=None, dashboard_name=''):
     
-    archive_dir = Path(os.getcwd()) / 'Speedo_dashboard' / 'archives' 
+    archive_dir = Path.home() / 'Documents' / 'Speedo_dashboard' / 'archives'
     if not os.path.exists(archive_dir):
         os.makedirs(archive_dir)
     
