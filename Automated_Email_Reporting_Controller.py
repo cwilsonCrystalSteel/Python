@@ -77,12 +77,18 @@ eva_hpt_recipients = ['cwilson@crystalsteel.net']
 times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
 # if we got no records for yesterday, lets run yesterday from the bat-ready py file
 if not times_df.shape[0]:
-    from TimeClock.insertGroupHoursToSQL import insertGroupHours
-    source = 'Automated_Email_Reporting_Controller'
-    download_folder = Path.home() / 'downloads' / 'GroupHours_Yesterday'
-    x = insertGroupHours(date_str=yesterday_str, source=source, download_folder=download_folder)
-    x.doStuff()
-    times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
+    try:
+        from TimeClock.insertGroupHoursToSQL import insertGroupHours
+        source = 'Automated_Email_Reporting_Controller'
+        download_folder = Path.home() / 'downloads' / 'GroupHours_Yesterday'
+        x = insertGroupHours(date_str=yesterday_str, source=source, download_folder=download_folder)
+        x.doStuff()
+        times_df = get_date_range_timesdf_controller(yesterday_str, yesterday_str)
+    except Exception as e:
+        email_error_message([f'Error {e}', 
+                             f'Source: {source}',
+                             f'yesterday_str: {yesterday_str}',
+                             'There was no times_df available for {yesterday_str}, and then we failed to obtain a new timeclock record!'])
 
 basis = return_basis_new_direct_rules(times_df)
 

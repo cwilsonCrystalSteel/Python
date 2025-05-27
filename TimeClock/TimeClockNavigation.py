@@ -120,7 +120,7 @@ class TimeClockBase():
         self.offscreen = offscreen
         
         if self.fullscreen and self.headless:
-            Exception('Both options fullscreen & headless are enabled, only one can be enabled at a time')
+            Exception("Both options 'fullscreen' & 'headless' are enabled, only one can be enabled at a time")
           
         # init the service?
         self.service = Service()
@@ -414,7 +414,6 @@ class TimeClockBase():
                 pass
                 
             if time.time() > endTime:
-                # raise Exception('No reasonable download was found...')
                 raise WhileTimerTimeoutExcpetion(f'No filetype {fileType} was found downloaded.')
     
                 
@@ -433,7 +432,6 @@ class TimeClockBase():
                 break
             
             if time.time() > endTime:
-                # raise Exception('The processingPopup box never went away!')
                 raise WhileTimerTimeoutExcpetion('The processingPopup box never went away!')
                 
     def groupHoursFinale(self, dateString, exclude_terminated=False):
@@ -511,7 +509,6 @@ class TimeClockBase():
         else:
             self.noRecordsFoundTextEsists = True
         
-            # raise Exception('NoRecordsFoundException')
             raise NoRecordsFoundException()
             
     
@@ -536,10 +533,9 @@ class TimeClockBase():
         self.menuDownloadButton = validateElement(self.driver, (By.CLASS_NAME, 'DownloadMenu'), 'menuDownloadButton', checkPresence=True, checkClickable=True, verbosity=self.verbosity)
         self.menuDownloadButtonDisabled = self.menuDownloadButton.get_attribute('disabled')
         if self.menuDownloadButtonDisabled is not None:
-            # raise Exception('menuDownloadButtonDisabled')
             raise DownloadButtonDisabledException('menuDownloadButton')
 
-
+        # this is to try and wait until the download button is available 
         endTime = time.time() + 15
         while True:
             try:
@@ -547,16 +543,16 @@ class TimeClockBase():
                 self.printverbosity('We were able to press the menuDownloadButton')
                 self.take_screenshot('10')
                 break
+            except ElementClickInterceptedException:
+                self.maximizeWindow()
             except Exception as e:
                 print(e)
                 
             
             if time.time() > endTime:
-                # raise Exception('We could not press the menuDownloadButton')
                 raise WhileTimerTimeoutExcpetion('We could not press the menuDownloadButton')
             
-        # self.menuDownloadButton.click()
-        # self.menuDownloadButton.send_keys(Keys.RETURN)
+
         
         self.take_screenshot('11')
         
@@ -577,8 +573,7 @@ class TimeClockBase():
             try:
                 self.processingPopupDownloadButton = validateElement(self.driver, (By.XPATH, "//input[@value='Download']"), 'processingPopupDownloadButton', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)    
                 self.processingPopupDownloadButtonDisabled = self.processingPopupDownloadButton.get_attribute('disabled')
-                if self.processingPopupDownloadButtonDisabled is not None:
-                    # raise Exception('processingPopupDownloadButtonDisabled')    
+                if self.processingPopupDownloadButtonDisabled is not None: 
                     raise DownloadButtonDisabledException('processsingPopupDownloadButton')
                 else:
                     self.take_screenshot('14')
@@ -593,7 +588,6 @@ class TimeClockBase():
                 
             
             if time.time() > endTime:
-                # raise Exception('We could not press the processingPopupDownloadButton')
                 raise WhileTimerTimeoutExcpetion('We could not press the processingPopupDownloadButton')
                 
        
@@ -678,7 +672,7 @@ x.openTabularMenu()
 
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')
-x.groupHoursFinale('07/21/2024')
+x.groupHoursFinale('05/22/2025')
 filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
 print(filepath)
 
@@ -690,7 +684,7 @@ x.kill()
 
 
 '''
-x = TimeClockBase(headless=True)  
+x = TimeClockBase(headless=True)
 x.verbosity = 2
 x.enableScreenshots(Path('c:/users/netadmin/downloads/test'))
 x.startupBrowser()
@@ -698,7 +692,7 @@ x.tryLogin()
 x.openTabularMenu()
 x.searchFromTabularMenu('Group Hours')
 x.clickTabularMenuSearchResults('Hours > Group Hours')
-x.groupHoursFinale('03/27/2024')
+x.groupHoursFinale('05/22/2025')
 filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
 
 '''
