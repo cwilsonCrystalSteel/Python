@@ -26,8 +26,10 @@ if not os.path.exists(output_dir):
 
 # this is the actual email list 
 state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.net',
+                          'ewilson@crystalsteel.net',
                           'rrichard@crystalsteel.net','emohamed@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net',  'mmishler@crystalsteel.net',
+                          'jkeith@crystalsteel.net',
                           'rrichard@crystalsteel.net','emohamed@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net',  'jrodriguez@crystalsteel.net',
                           'rrichard@crystalsteel.net','emohamed@crystalsteel.net']
