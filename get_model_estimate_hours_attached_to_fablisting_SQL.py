@@ -28,7 +28,8 @@ def call_to_insert(fablisting_df, sheet = None, source=source):
 def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
     
     HOW_VALID_LIST = ['best','best_eva','best_hpt','eva_pcmark_dropbox','eva_lot_ave_lotslog',
-                      'eva_job_ave_lotslog','eva_job_ave_dropbox','hpt_job_shop','hpt_job_ave']
+                      'eva_job_ave_lotslog','eva_job_ave_dropbox','hpt_job_shop','hpt_job_ave',
+                      'class_eva']
     
     # if isinstance(how, list):
     #     valid_in_how = [i for i in how if i in HOW_VALID_LIST]
@@ -85,7 +86,9 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
         
         fl_eva['Earned Hours'] = fl_eva[cols].bfill(axis=1).iloc[:, 0]
 
-
+    elif how == 'class_eva':
+        fl_eva['Earned Hours Fit'] = fl_eva['eva_hours_fit']
+        fl_eva['Earned Hours Weld'] = fl_eva['eva_hours_weld']
     
     elif how=='best':
         # essentially this is:
@@ -112,7 +115,7 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
         fl_eva['Earned Hours'] = fl_eva['hpt_hours_jobaverage']
     
     if not keep_diagnostic_cols:
-        
+        #drop these out if we dont want them - for bad coding where we dont specify the exact columns!
         diagnostic_cols = ['sheetname', 'pcmark', 'rev',
         'lot_3_digit', 'lot_with_t_start', 'shop', 'lotcleaned', 'eva_hours',
         'hpt_hours', 'eva_hours_dropbox', 'eva_hours_lotslog',
@@ -121,11 +124,11 @@ def apply_model_hours_SQL(how='best', keep_diagnostic_cols=False):
         'elljobjoin', 'edjobjoin', 'hptjobshopjoin', 'hptjobjoin',
         'evaperquantity_dropbox', 'evaperpound_lotslog',
         'evaperpound_lotslogjobaverage', 'evaperpound_dropboxjobaverage',
-        'hpt_jobshop', 'hpt_jobaverage', 'evasource']
+        'hpt_jobshop', 'hpt_jobaverage', 'evasource','fit_hours', 'weld_hours',
+        'evaperquantity_fit', 'evaperquantity_weld',
+        'eva_hours_fit', 'eva_hours_weld']
         
         fl_eva = fl_eva.drop(columns=diagnostic_cols)
         
-    
-    
     
     return fl_eva

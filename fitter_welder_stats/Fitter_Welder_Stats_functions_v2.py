@@ -105,8 +105,16 @@ def unsplit_shared_pieces(df1, col_name, multiple_employee_split_key, index_divi
             this_piece['Hours Per Piece'] = this_piece['Hours Per Piece'] / num_employees
             # divide the Earned Hours by the number of people working on it
             this_piece['Earned Hours'] = this_piece['Earned Hours'] / num_employees
-        elif 'Hours per Ton' in this_piece.index:
+            
+        if 'Hours per Ton' in this_piece.index:
             this_piece['Earned Hours'] = this_piece['Earned Hours'] / num_employees
+            
+        if 'Earned Hours Fit' in this_piece.index:
+            this_piece['Earned Hours Fit'] = this_piece['Earned Hours Fit'] / num_employees
+            
+        if 'Earned Hours Weld' in this_piece.index:
+            this_piece['Earned Hours Weld'] = this_piece['Earned Hours Weld'] / num_employees
+            
     
         # iterate through each employee on the piece
         for i,emp in enumerate(mult_employees):
@@ -146,7 +154,7 @@ def unsplit_shared_pieces(df1, col_name, multiple_employee_split_key, index_divi
     return df1
 
 
-def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_hours='best'):
+def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_hours='class_eva'):
     
     if state == 'TN':
         fab_google_sheet_name = 'CSM QC Form'
@@ -163,6 +171,11 @@ def clean_and_adjust_fab_listing_for_range(state, start_date, end_date, earned_h
     call_to_insert(df, sheet=fab_google_sheet_name, source='fitter_welder_stats_functions_v2')
     # get the EVA hours applied to the dataframe
     df = apply_model_hours_SQL(how=earned_hours)
+    
+    # TODO:  i think this is only a placeholder while I am populating these values in the db 
+    # it bonks when doing the unsplit_shared_pieces and the values are None / 5 --> TypeError
+    df['Earned Hours Fit'] = df['Earned Hours Fit'].fillna(0)
+    df['Earned Hours Weld'] = df['Earned Hours Weld'].fillna(0)
     
     # fix the split up pieces for multiple fitters -> column 6
     df = unsplit_shared_pieces(df, col_name="Fitter", multiple_employee_split_key=multiple_employee_split_key, index_divider=10)
@@ -239,6 +252,14 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     employees = employees.reset_index(drop=False)
     employees = employees.rename(axis=1, mapper={'index':'ID'})
     
+    # chagne the name of the Earned Hours column accordingly
+    if col_name == 'Fitter':
+        df['Earned Hours'] = df['Earned Hours Fit']
+    
+    if col_name == 'Welder':
+        df['Earned Hours'] = df['Earned Hours Weld']
+        
+    df = df.drop(columns = ['Earned Hours Fit','Earned Hours Weld'])
     
     
     # find where an invalid ID is in the col_name
@@ -452,6 +473,7 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     # employees = pd.merge(employees, df_by_employee_job_pivot, how='left', left_index=True, right_index=True)
     
     
+
   
     return {'employees':employees, 
             'df_to_fix':df_na_ID, 'df_wrong_state':df_wrong_state, 'df_notworked':df_notworked}
