@@ -62,3 +62,26 @@ def import_dropbox_eva_to_SQL(excel_lot_df, source=None):
     # double check length of live table after merge proc --> should be 0
     print_count_results(engine, schema='dbo', table=table, suffix_text='after merge proc')
     print_count_results(engine, schema='live', table=table, suffix_text='after merge proc')
+    
+    
+def delete_filepath_for_redo(filepath_str):
+    table = 'evadropbox'
+    
+    if not isinstance(filepath_str, str):
+        filepath_str = str(filepath_str)
+        
+        
+    delete_query = f"delete from dbo.{table} where filepath = '{filepath_str}'"
+    
+    
+    print_count_results(engine, schema='dbo', table=table, suffix_text='before deleting filepath')
+    
+    connection = engine.raw_connection()
+    cursor = connection.cursor()
+    cursor.execute(delete_query)
+    connection.commit()
+    connection.close()
+    
+    print_count_results(engine, schema='dbo', table=table, suffix_text='after deleting filepath')
+        
+        

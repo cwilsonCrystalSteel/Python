@@ -111,7 +111,7 @@ def fitter_welder_stats_month(month_num=3, year=2025, production=False):
         fablisting_cleaned = clean_and_adjust_fab_listing_for_range(state, 
                                                                     start_date, 
                                                                     end_date, 
-                                                                    earned_hours = 'best')
+                                                                    earned_hours = 'class_eva')
         df = fablisting_cleaned['Fab df'].copy()
         df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
         # df = df.rename(columns={'Earned Hours':'EVA Hours'})

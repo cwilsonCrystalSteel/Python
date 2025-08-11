@@ -331,6 +331,8 @@ class pdf_report():
         self.elements.append(PageBreak())
         
     def add_TitlePage(self):
+        print('Building add_TitlePage...')
+
         today = datetime.datetime.now()
         formatted_date = today.strftime('%B %d, %Y')  # e.g., April 21, 2025
 
@@ -380,6 +382,8 @@ class pdf_report():
         
         
     def add_state_table(self, classification):
+        print('Building add_state_table...')
+
         state_df = self.main_df[(self.main_df['Location'] == self.state) & 
                                 (self.main_df['Classification'] == classification)].copy()
         state_df = state_df[self.display_cols]
@@ -449,6 +453,7 @@ class pdf_report():
         # self.do_pagebreak()
         
     def add_AllHourTypeComparison(self):
+        print('Building add_AllHourTypeComparison...')
         from fitter_welder_stats.fitter_welder_stats_graphing import hours_comparison_by_employee
         graphic = hours_comparison_by_employee(self.main_df, self.state, SAVEFILES=True)
         if not os.path.exists(graphic):
@@ -465,6 +470,7 @@ class pdf_report():
         self.elements.append(img)
         
     def add_MonthOverMonth_Hours(self, hours_type, classification):
+        print(f'Building add_MonthOverMonth_Hours {hours_type} {classification}')
         HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
         from fitter_welder_stats.fitter_welder_stats_graphing import mom_hours_worked_by_shop
         graphic = mom_hours_worked_by_shop(self.past_agg_data, self.state, 
@@ -484,6 +490,7 @@ class pdf_report():
         
         
     def add_DefectsPlot(self, classification):
+        print(f'Building add_DefectsPlot {classification}')
         from fitter_welder_stats.fitter_welder_stats_graphing import defects_by_employee
         graphic = defects_by_employee(self.main_df, self.state, classification, SAVEFILES=True)
         if not os.path.exists(graphic):
@@ -499,6 +506,7 @@ class pdf_report():
         
         
     def add_AverageTonsPerPiece(self, classification):
+        print(f'Building add_AverageTonsPerPiece {classification}')
         from fitter_welder_stats.fitter_welder_stats_graphing import tonnage_per_piece_by_employee
         graphic = tonnage_per_piece_by_employee(self.main_df, self.state, classification, SAVEFILES=True)    
         if not os.path.exists(graphic):
@@ -516,6 +524,7 @@ class pdf_report():
         
         
     def add_DirectAndTotalEfficiency(self, classification):
+        print(f'Building add_DirectAndTotalEfficiency {classification}...')
         from fitter_welder_stats.fitter_welder_stats_graphing import total_direct_labor_efficiency
         graphic = total_direct_labor_efficiency(self.main_df, self.state, classification, SAVEFILES=True)   
         if not os.path.exists(graphic):
@@ -531,6 +540,8 @@ class pdf_report():
         
         
     def add_EarnedAndTotalHours(self, classification):
+        print(f'Building add_EarnedAndTotalHours {classification}...')
+
         from fitter_welder_stats.fitter_welder_stats_graphing import earned_hours_by_employee
         graphic = earned_hours_by_employee(self.main_df, self.state, classification, SAVEFILES=True)
         if not os.path.exists(graphic):
@@ -552,6 +563,8 @@ class pdf_report():
         self.elements.append(table_note)
         
     def add_TonsByEmployee(self, classification):
+        print(f'Building add_TonsByEmployee {classification}...')
+
         from fitter_welder_stats.fitter_welder_stats_graphing import weight_by_employee
         graphic = weight_by_employee(self.main_df, self.state, classification, SAVEFILES=True)
         if not os.path.exists(graphic):
@@ -574,6 +587,8 @@ class pdf_report():
         
         
     def add_badEntries(self, classification):
+        print(f'Building add_badEntries {classification}...')
+
         from fitter_welder_stats.fitter_welder_stats_graphing import bad_EmployeeCredit, bad_entriesPieChartAndTable
         
         graphic1 = bad_EmployeeCredit(self.bad_dfs[classification], self.state, classification, SAVEFILES=True)

@@ -14,14 +14,19 @@ import numpy as np
 import datetime
 import re
 from utils.insertErrorToSQL import insertError
-from Dropbox.insertDropboxEVAToSQL import import_dropbox_eva_to_SQL, insert_evaDropbox_log
+from Dropbox.insertDropboxEVAToSQL import import_dropbox_eva_to_SQL, insert_evaDropbox_log, delete_filepath_for_redo
 from Dropbox.pullDropboxEVAFromSQL import return_select_evadropbox_where_filename
 
 
 source = 'bat_insertDropboxEVAToSQL'
 insert_evaDropbox_log(description='Begin checking Dropbox EVA files', source=source)
 
-critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY','SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
+critical_columns = ['JOB NUMBER', 'SEQUENCE', 'PAGE', 'PRODUCTION CODE', 'QTY',
+                    'SHAPE', 'LABOR CODE', 'MAIN MEMBER', 'TOTAL MANHOURS', 'WEIGHT']
+# New for Fit/Weld eva hours request 2025-08-11
+extra_columns = ['300 - LAY OUT', '302 -  MARK / TAG', '350 - PUNCH', 
+                 '400 -  FIT UP', '450 - BURN', '500 - WELD', 
+                 '550 - FULL PEN WELD', '600 - CLEAN']
 now = datetime.datetime.now()
 
 
@@ -70,12 +75,14 @@ def check_file_existence_in_db(excel_file):
         # convert to datetime
         existence_df['updatedat'] = pd.to_datetime(existence_df['updatedat'])
         # somehow get the maximum value of these 
-        sql_time = existence_df[['insertedat','updatedat']].max().max()
+        # sql_time = existence_df[['insertedat','updatedat']].max().max()
+        sql_time = existence_df[['insertedat']].max().max()
         
         # if the insertedat or updatedat is BEFORE the later of creation/modification, we will redo it
         if sql_time < max(file_creation_dt, file_modified_dt):
             # if the SQL time was before the later of creation/modified, then it needs to be redone
             redo = True
+            
    
     
     return {'redo':redo, 'exists':exists}
@@ -239,23 +246,26 @@ for excel_file in excel_files:
     
     file_work = check_file_existence_in_db(excel_file)
     
-    if file_work['redo']:
-      delete_query = 'delete from dbo.evadropbox where filename = {excel_file}'  
-      print('****************************************************\nFigure out how to delete and then redo!')
-      
-      #??? for now, 2025-03-25, i will just do an error entry
-      insertError(name='EVADropbox - redo = True', description = f'This file needs to be deleted and reinserted, or updated via the merge proc(?): {excel_file}')
-      
-      
-    elif file_work['exists']:
-        print(f"Exists in database & skipping: {excel_file}")
-        continue
-      
-    
     # get the file's name
     basename = os.path.basename(excel_file)
     # split it on the hyphen
     basename_components = basename.split('-')
+    
+    # check if it needs redoing ---> delete & do re-insert
+    if file_work['redo']:
+        print(f'Attempting to delete file: {excel_file}')
+    
+        delete_filepath_for_redo(filepath_str = excel_file)
+      
+        #??? for now, 2025-03-25, i will just do an error entry
+        # insertError(name='EVADropbox - redo = True', description = f'This file needs to be deleted and reinserted, or updated via the merge proc(?): {excel_file}')
+        
+      
+    # continue
+    elif file_work['exists']:
+        print(f"Exists in database & skipping: {excel_file}")
+        continue
+      
     
     
     # THERE SHOULD ALWAYS BE 3 pIECS TO THE FILE NAME:
@@ -296,7 +306,7 @@ for excel_file in excel_files:
         try:
             # open the current lots file -> fingers crossed the header is alwasy row 2
             # only maintain those 9 columns that we actually need to pass along -> smaller file sizes
-            excel_lot = pd.read_excel(excel_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns)
+            excel_lot = pd.read_excel(excel_file, header=2, engine='xlrd', sheet_name=sheet_num, usecols=critical_columns + extra_columns)
             # if for some reason it pulls it but the dataframe is shape (0,0)
             if not excel_lot.size:
                 raise Exception
@@ -306,6 +316,41 @@ for excel_file in excel_files:
             pass
         
         sheet_num += 1
+    
+    # sheet_num = 0
+    # max_sheet_num = 6
+    # # this will first try and get a file with the extra_columns, but will default to just the critical_columns if it cant get the extra_columns
+    # while sheet_num <= max_sheet_num:
+    #     try:
+    #         # First attempt: critical + extra columns
+    #         try:
+    #             cols_to_use = critical_columns + extra_columns
+    #             excel_lot = pd.read_excel(
+    #                 excel_file,
+    #                 header=2,
+    #                 engine='xlrd',
+    #                 sheet_name=sheet_num,
+    #                 usecols=cols_to_use
+    #             )
+    #             if not excel_lot.size:
+    #                 raise ValueError("Empty dataframe with extra columns")
+    #         except Exception:
+    #             # Fallback: just critical columns
+    #             excel_lot = pd.read_excel(
+    #                 excel_file,
+    #                 header=2,
+    #                 engine='xlrd',
+    #                 sheet_name=sheet_num,
+    #                 usecols=critical_columns
+    #             )
+    #             if not excel_lot.size:
+    #                 raise ValueError("Empty dataframe with critical columns")
+    
+    #         break  # Success, exit the loop
+    
+    #     except Exception:
+    #         sheet_num += 1
+    
         
     # when we max out the sheet_name iterator - skip this LOT
     if sheet_num  == max_sheet_num:
@@ -327,15 +372,23 @@ for excel_file in excel_files:
     # but the minor marks have hours and weights that need added into the main member 
     excel_lot['matched_quantity'] = np.where(excel_lot['PRODUCTION CODE'] == excel_lot['PAGE'], excel_lot['QTY'], 0.0)
     
+    # now calcualte the fit hours & weld hours
+    excel_lot['fit_hours'] = excel_lot[['300 - LAY OUT','302 -  MARK / TAG','350 - PUNCH','400 -  FIT UP']].sum(axis=1)
+    excel_lot['weld_hours'] = excel_lot[['500 - WELD','550 - FULL PEN WELD','600 - CLEAN']].sum(axis=1)
+    
     # get the quantity, weight in pounds, and hours  
     main_members = excel_lot.groupby(['PAGE','SEQUENCE']).agg(
         quantity=('matched_quantity', 'sum'),
         pounds=('WEIGHT', 'sum'),
-        hours=('TOTAL MANHOURS', 'sum')
+        hours=('TOTAL MANHOURS', 'sum'),
+        fit_hours=('fit_hours', 'sum'),
+        weld_hours=('weld_hours', 'sum')
     )
     
     # Add eva per quantity as a derived column
     main_members['evaperquantity'] = main_members['hours'] / main_members['quantity'].replace(0, np.nan)
+    main_members['evaperquantity_fit'] = main_members['fit_hours'] / main_members['quantity'].replace(0, np.nan)
+    main_members['evaperquantity_weld'] = main_members['weld_hours'] / main_members['quantity'].replace(0, np.nan)
     # move the PAGE & sequence back into a column
     main_members = main_members.reset_index()
     # make sure this goes into the db as as string
