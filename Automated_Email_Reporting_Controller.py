@@ -50,7 +50,8 @@ yesterday_str = yesterday.strftime("%m/%d/%Y")
 # this is the actual email list 
 state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.net',
                           'jshade@crystalsteel.net','rhagins@crystalsteel.net',
-                          'ewilson@crystalsteel.net','lrhoads@crystalsteel.net'],
+                          'ewilson@crystalsteel.net','lrhoads@crystalsteel.net',
+                          'acook@crystalsteel.net','fvillatoro@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net',  'mmishler@crystalsteel.net',
                           'jkeith@crystalsteel.net','jlaird@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net',  'jrodriguez@crystalsteel.net'],
