@@ -32,7 +32,7 @@ class GroupHoursIsNoneException(Exception):
 
 
 '''
-x = insertGroupHours('08/10/2024')
+x = insertGroupHours('08/12/2025')
 x.getFilepath()
 x.html_to_times_df()
 x.check_job_costcodes()

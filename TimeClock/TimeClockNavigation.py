@@ -47,8 +47,10 @@ def enable_download(driver, download_folder):
 def setting_chrome_options(headless):
     chrome_options = Options()
     if headless:
-        chrome_options.add_argument("--headless")
+        # chrome_options.add_argument("--headless")
         chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument("--window-size=1920,1080")  # Forces large viewport
+        chrome_options.add_argument("--headless=new")  # Chrome 109+ headless mode
     return chrome_options;
 
 
@@ -81,6 +83,20 @@ def validateElement(driver, findElementArg, elemOutputName, checkPresence=True, 
             print(f'Timeout Error for clickability: {elemOutputName}')  
             
     return elem
+
+def safe_send_keys(element, text, driver, retries=3):
+    for attempt in range(retries):
+        try:
+            element.click()  # optional: focus before typing
+            element.clear()
+            element.send_keys(text)
+            return
+        except ElementClickInterceptedException:
+            print(f"Tooltip in the way, attempt {attempt+1}/{retries}")
+            WebDriverWait(driver, 3).until_not(
+                EC.presence_of_element_located((By.CLASS_NAME, "ui-tooltip-content"))
+            )
+    raise Exception("Could not send keys after retries")
 
 
 class NoRecordsFoundException(Exception):
@@ -178,6 +194,9 @@ class TimeClockBase():
         
             
     def take_screenshot(self, name):
+        if isinstance(self.screenshotDirectory, str):
+            self.screenshotDirectory = Path(self.screenshotDirectory)
+            
         if not self.screenshotDirectory is None:
             
             if not '.png' in name:
@@ -417,22 +436,50 @@ class TimeClockBase():
                 raise WhileTimerTimeoutExcpetion(f'No filetype {fileType} was found downloaded.')
     
                 
-    def waitForProcessingPopup(self):
-        # need to find the processing popup
-        self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)               
-        # then need to wait til its gone
+    # def waitForProcessingPopup(self):
+    #     # need to find the processing popup
+    #     self.processingPopup = validateElement(self.driver, (By.CLASS_NAME, 'ProgressIndicatorModal'), 'processingPopup', checkPresence=True, checkClickable=True, timeoutLimit=15, verbosity=self.verbosity)               
+    #     # then need to wait til its gone
         
-        # give it 15 seconds or until the popup box is not available, just rapid fire check
+    #     # give it 15 seconds or until the popup box is not available, just rapid fire check
+    #     endTime = time.time() + 15
+    #     while True:
+    #         try:
+    #             self.processingPopupStillAvailable = self.driver.find_element(By.CLASS_NAME, 'ProgressIndicatorModal')
+    #         except NoSuchElementException:
+    #             self.printverbosity('The processingPopup box has disappeared!')
+    #             break
+            
+    #         if time.time() > endTime:
+    #             raise WhileTimerTimeoutExcpetion('The processingPopup box never went away!')
+                
+                
+    def waitForProcessingPopup(self):
+        popup_locator = (By.CLASS_NAME, 'ProgressIndicatorModal')
+    
+        # Step 1: Try to detect the popup (short timeout just to see if it appears)
+        try:
+            self.processingPopup = WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located(popup_locator)
+            )
+            self.printverbosity('Processing popup detected!')
+        except TimeoutException:
+            self.printverbosity('No processing popup appeared.')
+            return False  # never appeared
+    
+        # Step 2: If it appeared, wait until it's gone
         endTime = time.time() + 15
         while True:
             try:
-                self.processingPopupStillAvailable = self.driver.find_element(By.CLASS_NAME, 'ProgressIndicatorModal')
+                self.driver.find_element(*popup_locator)
             except NoSuchElementException:
-                self.printverbosity('The processingPopup box has disappeared!')
-                break
-            
+                self.printverbosity('The processing popup box has disappeared!')
+                return True  # appeared and then disappeared
+    
             if time.time() > endTime:
-                raise WhileTimerTimeoutExcpetion('The processingPopup box never went away!')
+                raise WhileTimerTimeoutExcpetion('The processing popup never went away!')     
+                
+
                 
     def groupHoursFinale(self, dateString, exclude_terminated=False):
         self.startTime = datetime.datetime.now()
@@ -457,6 +504,8 @@ class TimeClockBase():
         
         self.take_screenshot('3')
         
+        safe_send_keys(self.endDateInput, dateString, self.driver)
+        
         # Clear the field
         delete_range(self.endDateInput)
         self.printverbosity('Deleted End Date')
@@ -466,6 +515,8 @@ class TimeClockBase():
         
         self.take_screenshot('4')
         
+        
+        safe_send_keys(self.startDateInput, dateString, self.driver)
         
         delete_range(self.startDateInput)
         self.printverbosity('Deleted Start Date')
@@ -543,8 +594,10 @@ class TimeClockBase():
                 self.printverbosity('We were able to press the menuDownloadButton')
                 self.take_screenshot('10')
                 break
-            except ElementClickInterceptedException:
-                self.maximizeWindow()
+            # except ElementClickInterceptedException as e:
+            #     print(e)
+                # self.maximizeWindow()
+                # self.driver.set_window_size(1920, 1080)
             except Exception as e:
                 print(e)
                 
@@ -610,6 +663,7 @@ class TimeClockEZGroupHours(TimeClockBase):
         self.date_str = date_str
         self.offscreen = offscreen
         self.headless = headless
+        self.debug = False
         
         # self.download_folder = "C:\\users\\cwilson\\downloads\\GroupHours\\"
         self.download_folder = Path.home() / 'Downloads' / 'GroupHours'
@@ -617,10 +671,17 @@ class TimeClockEZGroupHours(TimeClockBase):
     def get_filepath(self):
         if self.offscreen:
             self.tcb = TimeClockBase(download_folder=self.download_folder, offscreen=self.offscreen, fullscreen=True)
+            
         
         elif self.headless:
             self.tcb = TimeClockBase(download_folder=self.download_folder, headless=True)
+        
         self.tcb.verbosity=1
+        
+        if self.debug:
+            self.tcb.verbosity = 2
+            self.tcb.screenshotDirectory = 'C:\\Users\\Netadmin\\Downloads\\New folder'
+        
         self.tcb.startupBrowser()
         self.tcb.tryLogin()
         self.tcb.openTabularMenu()
@@ -650,6 +711,8 @@ class TimeClockEZGroupHours(TimeClockBase):
 '''
 x = TimeClockEZGroupHours('07/21/2024')
 x = TimeClockEZGroupHours('03/06/2025')
+x = TimeClockEZGroupHours('03/06/2025', headless=True, offscreen=False)
+x.debug = True
 
 filepath = x.get_filepath()
 x.kill()
@@ -658,27 +721,28 @@ x.kill()
         
         
 '''        
-x = TimeClockBase(offscreen=False)  
-# x.maximizeWindow()
-# x.moveOnscreen()
-x.verbosity=2
-x.startupBrowser()
-x.tryLogin()
-x.openTabularMenu()
-# x.searchFromTabularMenu('export')
-# x.clickTabularMenuSearchResults('Tools > Export')
-# x.employeeLocationFinale()
-# filepath = x.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
+self = TimeClockBase(offscreen=False)
+self.screenshotDirectory = 'C:\\Users\\Netadmin\\Downloads\\New folder'
+# self.maximizeWindow()
+# self.moveOnscreen()
+self.verbosity=2
+self.startupBrowser()
+self.tryLogin()
+self.openTabularMenu()
+# self.searchFromTabularMenu('export')
+# self.clickTabularMenuSearchResults('Tools > Export')
+# self.employeeLocationFinale()
+# filepath = self.retrieveDownloadedFile(10, '*.csv', 'Employee Information')
 
-x.searchFromTabularMenu('Group Hours')
-x.clickTabularMenuSearchResults('Hours > Group Hours')
-x.groupHoursFinale('05/22/2025')
-filepath = x.retrieveDownloadedFile(10, '*.html', 'Hours')
+self.searchFromTabularMenu('Group Hours')
+self.clickTabularMenuSearchResults('Hours > Group Hours')
+self.groupHoursFinale('08/12/2025')
+filepath = self.retrieveDownloadedFile(10, '*.html', 'Hours')
 print(filepath)
 
 
   #%%      
-x.kill()        
+self.kill()        
 
 '''
 

@@ -25,7 +25,7 @@ for i in range(2,60):
         
     try:
         download_folder = Path.home() / 'downloads' / 'GroupHours_SuperRemediation'
-        x = insertGroupHours(date_str=date, download_folder=download_folder, source=source)
+        x = insertGroupHours(date_str=date, download_folder=download_folder, source=source, headless=True, offscreen=False)
         x.doStuff()
     except Exception as e:
         output_error_string = f'Could not complete insertGroupHours("{date}") \n {e}'
