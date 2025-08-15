@@ -27,8 +27,8 @@ source = 'bat_insertGroupHoursToSQL_Manual'
 # targetDates = pd.unique(noEmployeeNumber['targetdate'])
 
 targetDates = []
-start_dt = datetime.date(2020,1,18)
-while start_dt <= datetime.date(2025,3,23):
+start_dt = datetime.date(2025,7,30)
+while start_dt <= datetime.date(2025,8,2):
     start_dt += datetime.timedelta(days=1)
     
     date_str = start_dt.strftime('%m/%d/%Y')

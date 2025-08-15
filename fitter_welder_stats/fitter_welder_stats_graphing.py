@@ -63,7 +63,7 @@ def file_name_suffix(state=None, classification=None):
     
 #%% Tons completed
     
-def weight_by_employee(main_df, state=None, classification=None, topN=25, SAVEFILES=SAVEFILES):
+def weight_by_employee(main_df, state=None, classification=None, topN=25, min_tons=3, SAVEFILES=SAVEFILES):
     col = 'Tonnage' if 'Tonnage' in main_df else 'Tons'
     filename = 'WeightByEmployee_' + file_name_suffix(state,classification) + '.png'
     df = determine_location_and_classification(main_df, state, classification)
@@ -78,7 +78,7 @@ def weight_by_employee(main_df, state=None, classification=None, topN=25, SAVEFI
         # get top n
         df = df.iloc[:topN]
         
-    df = df[df[col] > 3]
+    df = df[df[col] > min_tons]
     
     # Color mapping
     colors = df['Location'].map(color_map)
@@ -188,7 +188,7 @@ def defects_by_employee(main_df, state=None, classification=None, topN=25, SAVEF
 
 #%%
 
-def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN=25, SAVEFILES=SAVEFILES):
+def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN=25, min_qty=None, SAVEFILES=SAVEFILES):
     col = 'Average Tonnage per Piece'
     filename = 'AverageTonsPerPiece_' + file_name_suffix(state,classification) + '.png'
     df = determine_location_and_classification(main_df, state, classification)
@@ -214,7 +214,12 @@ def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN
     title_text = f'{classification} {col}'
     if not state is None:
         title_text += f' for {state}'
+        
+    # cut out any entries with less than min_pieces
+    if not min_qty is None:
+        df = df[df['Quantity'] >= min_qty]
     
+    # get a top remaining entries
     if not topN is None:
         # get top n
         df = df.iloc[:topN]
@@ -276,7 +281,7 @@ def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN
 
 #%% Compare Hours worked to Hours earned
 
-def earned_hours_by_employee(main_df, state=None, classification=None, topN=25, SAVEFILES=SAVEFILES):
+def earned_hours_by_employee(main_df, state=None, classification=None, topN=25, min_hours=10, SAVEFILES=SAVEFILES):
     col1 = 'Earned Hours'
     col2 = 'Total Hours'
     col2a = 'Direct Hours'
@@ -284,7 +289,8 @@ def earned_hours_by_employee(main_df, state=None, classification=None, topN=25, 
     df = determine_location_and_classification(main_df, state, classification)
     df = df.rename(columns={'total':col2, 'direct':col2a})
     
-    df = df[df['Earned Hours'] > 100]
+    # must have accomplished atleast 10 hours
+    df = df[df['Earned Hours'] > min_hours]
 
     # Get top N by Total Hours or Earned Hours
     df = df.sort_values(col1, ascending=False)
@@ -332,6 +338,8 @@ def earned_hours_by_employee(main_df, state=None, classification=None, topN=25, 
 
     ax.set_yticks(range(len(df)))
     ax.set_yticklabels(df['Name'])
+    
+    
 
     # Tight layout & save/show
     plt.tight_layout()
@@ -635,6 +643,7 @@ def total_direct_labor_efficiency(main_df, state=None, classification=None, topN
     df = determine_location_and_classification(main_df, state, classification)
     df[col1] = df['Earned Hours'] / df[col1_hours]
     df[col2] = df['Earned Hours'] / df[col2_hours]
+    # must have worked 40 total hours
     df = df[df[col2_hours] > 40]
     # Sort by Tonnage to match chart order
     df = df.sort_values(col1, ascending=False)
@@ -644,9 +653,12 @@ def total_direct_labor_efficiency(main_df, state=None, classification=None, topN
         # get top n
         df = df.iloc[:topN]
         
-    df = df[(df[col1] > 0.2) & (df[col2] > 0.2)]
+    # must have both efficiencies above 5%
+    df = df[(df[col1] > 0.05) & (df[col2] > 0.05)]
+    # get rid of infinitys!
     df = df[(df[col1] != np.inf) & (df[col2] != np.inf)]
-    df = df[df[col1_hours] > 20]
+    # must have 20 direct hours logged
+    # df = df[df[col1_hours] > 20]
     
     
     # Color mapping

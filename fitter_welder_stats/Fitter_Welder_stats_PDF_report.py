@@ -443,7 +443,9 @@ class pdf_report():
         note_text = (
         f"The values of Earned Hours, Tons, Defects, are only in relation to when the employee is "
         f"credited as being the {classification} for pieces. Again, these are pieces that the employee "
-        f"has earned from fabricating as a {classification.upper()}."
+        f"has earned from fabricating as a {classification.upper()}. "
+        f"As of August 2025: Earned Hours will correspond to the hours earned under the {classification} "
+        "task, instead of the overal EVA hours for a piece!"
         )
         table_note = Paragraph(note_text, centered_note_style)
         self.elements.append(Spacer(1, 12))
@@ -508,7 +510,8 @@ class pdf_report():
     def add_AverageTonsPerPiece(self, classification):
         print(f'Building add_AverageTonsPerPiece {classification}')
         from fitter_welder_stats.fitter_welder_stats_graphing import tonnage_per_piece_by_employee
-        graphic = tonnage_per_piece_by_employee(self.main_df, self.state, classification, SAVEFILES=True)    
+        min_qty = 5
+        graphic = tonnage_per_piece_by_employee(self.main_df, self.state, classification, topN=25, min_qty=min_qty, SAVEFILES=True)    
         if not os.path.exists(graphic):
             raise Exception('Could not find {graphic} ')
                     
@@ -521,6 +524,15 @@ class pdf_report():
         img = Image(graphic, width=520, height=650)
         
         self.elements.append(img)
+        
+        note_text = (
+        f"* Employees with more than {min_qty} pieces credited as a {classification}."
+        )
+        table_note = Paragraph(note_text, centered_note_style)
+        self.elements.append(Spacer(1, 12))
+        self.elements.append(table_note)
+        
+        
         
         
     def add_DirectAndTotalEfficiency(self, classification):
@@ -541,9 +553,9 @@ class pdf_report():
         
     def add_EarnedAndTotalHours(self, classification):
         print(f'Building add_EarnedAndTotalHours {classification}...')
-
+        min_hours = 10
         from fitter_welder_stats.fitter_welder_stats_graphing import earned_hours_by_employee
-        graphic = earned_hours_by_employee(self.main_df, self.state, classification, SAVEFILES=True)
+        graphic = earned_hours_by_employee(self.main_df, self.state, classification, min_hours=min_hours, SAVEFILES=True)
         if not os.path.exists(graphic):
             raise Exception('Could not find {graphic}')
             
@@ -556,7 +568,7 @@ class pdf_report():
         self.elements.append(img)
         
         note_text = (
-        f"* Employees with more than 100 Earned Hours credited as a {classification}."
+        f"* Employees with more than {min_hours} Earned Hours credited as a {classification}."
         )
         table_note = Paragraph(note_text, centered_note_style)
         self.elements.append(Spacer(1, 12))
@@ -564,7 +576,7 @@ class pdf_report():
         
     def add_TonsByEmployee(self, classification):
         print(f'Building add_TonsByEmployee {classification}...')
-
+        min_tons = 3
         from fitter_welder_stats.fitter_welder_stats_graphing import weight_by_employee
         graphic = weight_by_employee(self.main_df, self.state, classification, SAVEFILES=True)
         if not os.path.exists(graphic):
@@ -579,7 +591,7 @@ class pdf_report():
         self.elements.append(img)
         
         note_text = (
-        f"* Employees with more than 3 Tons credited as a {classification}."
+        f"* Employees with more than {min_tons} Tons credited as a {classification}."
         )
         table_note = Paragraph(note_text, centered_note_style)
         self.elements.append(Spacer(1, 12))
