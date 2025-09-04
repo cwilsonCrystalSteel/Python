@@ -471,6 +471,13 @@ class pdf_report():
         
         self.elements.append(img)
         
+        # note_text = (
+        # f"* Employees with more than {min_qty} pieces credited as a {classification}."
+        # )
+        # table_note = Paragraph(note_text, centered_note_style)
+        # self.elements.append(Spacer(1, 12))
+        # self.elements.append(table_note)
+        
     def add_MonthOverMonth_Hours(self, hours_type, classification):
         print(f'Building add_MonthOverMonth_Hours {hours_type} {classification}')
         HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
@@ -537,8 +544,9 @@ class pdf_report():
         
     def add_DirectAndTotalEfficiency(self, classification):
         print(f'Building add_DirectAndTotalEfficiency {classification}...')
+        min_hours = 10
         from fitter_welder_stats.fitter_welder_stats_graphing import total_direct_labor_efficiency
-        graphic = total_direct_labor_efficiency(self.main_df, self.state, classification, SAVEFILES=True)   
+        graphic = total_direct_labor_efficiency(self.main_df, self.state, classification, min_hours=min_hours, SAVEFILES=True)   
         if not os.path.exists(graphic):
             raise Exception('Could not find {graphic}')
             
@@ -549,6 +557,13 @@ class pdf_report():
         img = Image(graphic, width=520, height=650)
         
         self.elements.append(img)
+        
+        note_text = (
+        f"* Employees with more than {min_hours} Direct Hours worked."
+        )
+        table_note = Paragraph(note_text, centered_note_style)
+        self.elements.append(Spacer(1, 12))
+        self.elements.append(table_note)
         
         
     def add_EarnedAndTotalHours(self, classification):
@@ -573,6 +588,7 @@ class pdf_report():
         table_note = Paragraph(note_text, centered_note_style)
         self.elements.append(Spacer(1, 12))
         self.elements.append(table_note)
+        
         
     def add_TonsByEmployee(self, classification):
         print(f'Building add_TonsByEmployee {classification}...')

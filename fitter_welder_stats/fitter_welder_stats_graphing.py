@@ -634,7 +634,7 @@ def direct_labor_efficiency(main_df, state=None, classification=None, topN=25, S
 
 #%% DL Efficiency + Total Labor Efficiency -->  Earned Hours / Total Hours
 
-def total_direct_labor_efficiency(main_df, state=None, classification=None, topN=25, SAVEFILES=SAVEFILES):
+def total_direct_labor_efficiency(main_df, state=None, classification=None, topN=25, min_hours=10, SAVEFILES=SAVEFILES):
     col1 = 'DL Efficiency'
     col2 = 'TTL Efficiency'
     col1_hours = 'direct' if 'direct' in main_df.columns else 'Direct Hours'
@@ -647,6 +647,9 @@ def total_direct_labor_efficiency(main_df, state=None, classification=None, topN
     df = df[df[col2_hours] > 40]
     # Sort by Tonnage to match chart order
     df = df.sort_values(col1, ascending=False)
+    
+    # must have wiorked atleast 10 hours
+    df = df[df[col1_hours] > min_hours]
     
     
     if not topN is None:
