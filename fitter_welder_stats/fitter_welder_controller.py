@@ -25,14 +25,23 @@ if not os.path.exists(output_dir):
 
 
 # this is the actual email list 
-state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.net',
-                          'ewilson@crystalsteel.net', 'ssmith@crystalsteel.net',
-                          'rrichard@crystalsteel.net','emohamed@crystalsteel.net'],
-                    'MD':['cwilson@crystalsteel.net',  'mmishler@crystalsteel.net',
+state_recipients = {'TN':['cwilson@crystalsteel.net', 
+                          'awhitacre@crystalsteel.net',
+                          'ewilson@crystalsteel.net', 
+                          'ssmith@crystalsteel.net', 
+                          'rrichard@crystalsteel.net',
+                          'emohamed@crystalsteel.net'],
+                    'MD':['cwilson@crystalsteel.net',  
+                          'awhitacre@crystalsteel.net',
+                          'mmishler@crystalsteel.net',
                           'jkeith@crystalsteel.net',
-                          'rrichard@crystalsteel.net','emohamed@crystalsteel.net'],
-                    'DE':['cwilson@crystalsteel.net',  'jrodriguez@crystalsteel.net',
-                          'rrichard@crystalsteel.net','emohamed@crystalsteel.net']
+                          'rrichard@crystalsteel.net',
+                          'emohamed@crystalsteel.net'],
+                    'DE':['cwilson@crystalsteel.net',  
+                          'awhitacre@crystalsteel.net',
+                          'jrodriguez@crystalsteel.net',
+                          'rrichard@crystalsteel.net',
+                          'emohamed@crystalsteel.net']
                     }
 
 production=True
@@ -97,6 +106,7 @@ for i in range(1,1+number_months):
 
 
 for state in ['MD','DE','TN']:
+    print(f"Running report for {state}...")
     try:
         output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
