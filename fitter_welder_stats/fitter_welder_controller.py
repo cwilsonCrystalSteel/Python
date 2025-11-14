@@ -14,6 +14,7 @@ from fitter_welder_stats.Fitter_Welder_Stats_emailing import email_pdf_report, e
 import pandas as pd
 
 
+
 file_timestamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
 output_dir = Path().home() / 'documents' / 'FitterWelderStatsPDFReports'
 if not os.path.exists(output_dir):
@@ -50,6 +51,14 @@ production=True
 state_recipients = {'TN':['cwilson@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net']
+                    }
+
+state_recipients = {'TN':['cwilson@crystalsteel.net', 
+                          'awhitacre@crystalsteel.net'],
+                    'MD':['cwilson@crystalsteel.net', 
+                          'awhitacre@crystalsteel.net'],
+                    'DE':['cwilson@crystalsteel.net', 
+                          'awhitacre@crystalsteel.net']
                     }
 production = False
 
@@ -110,8 +119,14 @@ for state in ['MD','DE','TN']:
     try:
         output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
-        pdfreport = pdf_report(state, aggregate_data=aggregate_data, output_pdf=output_filepath, past_agg_data=past_agg_data)
+        output_xlsx = output_filepath.with_suffix('.xlsx')
+        pdfreport = pdf_report(state, 
+                               aggregate_data=aggregate_data, 
+                               output_pdf=output_filepath,
+                               output_xlsx = output_xlsx,
+                               past_agg_data=past_agg_data)
         pdfreport.build_report()
+        
     
     
         wrong_state = aggregate_data.get('wrong_state').get(state)
@@ -130,7 +145,8 @@ for state in ['MD','DE','TN']:
                           year=year, 
                           dfs_to_fix_dict = dfs_to_fix_dict,
                           state=state, 
-                          recipients=state_recipients[state])
+                          recipients=state_recipients[state],
+                          xlsx_filepath = output_xlsx)
     
     except Exception as e:
         print(e)
