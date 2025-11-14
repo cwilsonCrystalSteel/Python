@@ -105,11 +105,12 @@ def lotnumber_cleaner(lot): # move this to get_model_estimate_hours_attached_to_
                 # if we split on alphabets on the start/end, we will get blank strings, so remove those, and spaces
                 alpha_split = [i for i in alpha_split if not re.match(r'(\s)|(^$)',i)]
                 # if we only have one number left, lets call that the lot number
-                if len(alpha_split) == 1:
-                    number = alpha_split[0]
-                # if we had letters/numbers/letters/numbers, we will have len(alpha_split) > 1, so we cant decide
-                else:
-                    raise Exception(f'Tried splitting the Lot ({lot}/{cleaned}) by letters, but got more than 1 reminaing value: {alpha_split}')
+                number = alpha_split[0]
+                # if len(alpha_split) == 1:
+                #     number = alpha_split[0]
+                # # if we had letters/numbers/letters/numbers, we will have len(alpha_split) > 1, so we cant decide
+                # else:
+                #     raise Exception(f'Tried splitting the Lot ({lot}/{cleaned}) by letters, but got more than 1 reminaing value: {alpha_split}')
                 
                 islot = True
             except Exception as e:

@@ -371,6 +371,7 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
     filename = 'AllHourTypeComparisonByEmployee_' + file_name_suffix(state, classification) + '.png'
     df = determine_location_and_classification(main_df, state, classification)
     df = df.rename(columns={'total':col1, 'direct':col2, 'indirect':col3, 'missed':col4, 'notcounted':col5})
+    df = df[['Name', 'Location', col1, col2, col3, col4, col5]]
 
     # Get top N by Total Hours or Earned Hours
     df = df.sort_values(col1, ascending=False)
@@ -476,7 +477,7 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
     if SAVEFILES:
         plt.savefig(out_folder / filename, dpi=300)
         plt.close()
-        return out_folder / filename
+        return out_folder / filename, df
     else:
         plt.show()
         return None

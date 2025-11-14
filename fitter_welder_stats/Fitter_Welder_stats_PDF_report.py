@@ -10,40 +10,7 @@ import pandas as pd
 from pathlib import Path
 import numpy as np 
 import datetime
-
-    
-    
-# graphics_dir = Path(r'C:\Users\Netadmin\Documents\FitterWelderStatsCharts\2025-04-21')
-
-
-# df_file = Path(r'C:/Users/Netadmin/documents/FitterWelderPerformanceCSVs/all_both_2025-03_2025-04-18-18-15-57.csv')
-
-
-
-# main_df = pd.read_csv(df_file, index_col=0)
-# # this is a place holder until I figure out how to alert on when employees are terminated but being credited with work /
-# # did not work any during that month but are credited
-# main_df = main_df[~main_df['direct'].isna()]
-
-# main_df = main_df.sort_values('Earned Hours', ascending=False)
-
-# main_df = main_df.rename(columns={'direct':'Direct Hours',
-#                                   'indirect':'Indirect Hours',
-#                                   'total':'Total Hours',
-#                                   'missed':'Missed Hours',
-#                                   'notcounted':'Other Hours',
-#                                   'Tonnage':'Tons',
-#                                   'Tonnage per Piece':'Tons per Piece'})
-
-# state = 'MD'
-# classification = 'Fitter'
-# display_cols = ['Name','Earned Hours','Tons','Defect Quantity','Tons per Piece',
-#                 'Direct Hours','Total Hours','Missed Hours']
-
-
-# graphics = os.listdir(graphics_dir)
-# state_graphics = [i for i in graphics if f'State-{state}' in i]
-
+from openpyxl import Workbook, load_workbook
 #%%
 
 from reportlab.lib import colors
@@ -74,7 +41,7 @@ centered_note_style = ParagraphStyle(
 
 
 class pdf_report():
-    def __init__(self, state, csv_file=None, output_pdf=None, aggregate_data=None, past_agg_data=None):
+    def __init__(self, state, csv_file=None, output_pdf=None, aggregate_data=None, past_agg_data=None, output_xlsx=None):
         self.state = state
         self.aggregate_data = aggregate_data
         if csv_file is None and not aggregate_data is None:
@@ -107,9 +74,14 @@ class pdf_report():
             
         
         self.output_pdf = output_pdf
+        self.output_xlsx = output_xlsx
+        self._excel_workbook = None
         
         if not os.path.dirname(output_pdf):
             os.makedirs(os.path.dirname(output_pdf))
+            
+        if not os.path.dirname(output_xlsx):
+            os.makedirs(os.path.dirname(output_xlsx))
         
         # This will store the current values to display in the header
         self.header_context = {
@@ -190,6 +162,7 @@ class pdf_report():
             
                 
         self.build_document()
+        self.save_excel_if_needed()
 
     
         
@@ -451,13 +424,14 @@ class pdf_report():
         self.elements.append(Spacer(1, 12))
         self.elements.append(table_note)
         
-        # Add a page break before graphics
-        # self.do_pagebreak()
+        
+        self._write_excel_sheet(f"{classification} Summary Table", state_df)
+        
         
     def add_AllHourTypeComparison(self):
         print('Building add_AllHourTypeComparison...')
         from fitter_welder_stats.fitter_welder_stats_graphing import hours_comparison_by_employee
-        graphic = hours_comparison_by_employee(self.main_df, self.state, SAVEFILES=True)
+        graphic, xlsx_df = hours_comparison_by_employee(self.main_df, self.state, SAVEFILES=True)
         if not os.path.exists(graphic):
             raise Exception('Could not find {graphic}')
 
@@ -477,6 +451,7 @@ class pdf_report():
         # table_note = Paragraph(note_text, centered_note_style)
         # self.elements.append(Spacer(1, 12))
         # self.elements.append(table_note)
+        self._write_excel_sheet(f"Hours Worked by Type", xlsx_df)
         
     def add_MonthOverMonth_Hours(self, hours_type, classification):
         print(f'Building add_MonthOverMonth_Hours {hours_type} {classification}')
@@ -496,6 +471,8 @@ class pdf_report():
         img = Image(graphic, width=520, height = 325)
         
         self.elements.append(img)
+        
+        # self._write_excel_sheet(f"{classification} Monthly Hours", state_df)
         
         
     def add_DefectsPlot(self, classification):
@@ -652,6 +629,57 @@ class pdf_report():
         self.elements.append(Spacer(1, 12))
         self.elements.append(table_note)           
         
+
+    # ---------------------------
+    # EXCEL HELPER METHODS
+    # ---------------------------
+    def _ensure_excel_workbook(self):
+        """Creates or loads an Excel workbook only when needed."""
+        if self.output_xlsx is None:
+            return None
+
+        if self._excel_workbook is None:
+            excel_file = Path(self.output_xlsx)
+
+            if excel_file.exists():
+                self._excel_workbook = load_workbook(excel_file)
+            else:
+                self._excel_workbook = Workbook()
+                del self._excel_workbook["Sheet"]  # remove default blank sheet
+
+        return self._excel_workbook
+
+    def _write_excel_sheet(self, sheet_name: str, df: pd.DataFrame):
+        """Write a dataframe to a new sheet in the Excel file (if enabled)."""
+        if self.output_xlsx is None:
+            return  # Do nothing if Excel export is disabled
+
+        wb = self._ensure_excel_workbook()
+
+        # Avoid sheet-name conflicts
+        if sheet_name in wb.sheetnames:
+            # Auto-rename: e.g., "Summary", "Summary (2)"
+            i = 2
+            new_name = f"{sheet_name} ({i})"
+            while new_name in wb.sheetnames:
+                i += 1
+                new_name = f"{sheet_name} ({i})"
+            sheet_name = new_name[:30] # excel is funny 
+
+        ws = wb.create_sheet(title=sheet_name)
+
+        # Write dataframe to sheet
+        ws.append(df.columns.tolist())
+        for _, row in df.iterrows():
+            ws.append(row.tolist())
+
+    def save_excel_if_needed(self):
+        """Finalize and write Excel workbook to disk."""
+        if self.output_xlsx and self._excel_workbook:
+            self._excel_workbook.save(self.output_xlsx)
+            # self._excel_workbook = None
+            print(f'File saved to: {self.output_xlsx}')
+            
 
         
         

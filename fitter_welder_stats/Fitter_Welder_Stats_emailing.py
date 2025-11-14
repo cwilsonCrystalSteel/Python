@@ -20,7 +20,7 @@ import base64
 
 
 
-def email_pdf_report(pdf_filepath, month_name, year, dfs_to_fix_dict, state, recipients):
+def email_pdf_report(pdf_filepath, month_name, year, dfs_to_fix_dict, state, recipients, xlsx_filepath = None):
     service = get_email_service()
     # import shutil
     print(f'Sending {state} {month_name} {year} Fitter & Welder Stats Report email to: ', recipients)
@@ -45,6 +45,9 @@ def email_pdf_report(pdf_filepath, month_name, year, dfs_to_fix_dict, state, rec
         table_text = f"\n<p>Bad Entries Caused By: <b>{table}</b></p>\n"
         print(table)
         df = dfs_to_fix_dict[table].copy()
+        # set to object type first to prevent error/warning
+        df.iloc[:, 2] = df.iloc[:, 2].astype("object")
+        df.iloc[:, 3] = df.iloc[:, 3].astype("object")
         # fitter/welder id columns
         df.iloc[:, 2] = df.iloc[:, 2].apply(lambda x: x if isinstance(x, str) else (f"{int(x)}" if pd.notnull(x) else ""))
         # job number
@@ -79,8 +82,14 @@ def email_pdf_report(pdf_filepath, month_name, year, dfs_to_fix_dict, state, rec
     encoders.encode_base64(part)
     part.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(pdf_filepath)))
     msg.attach(part)
+    
+    if xlsx_filepath is not None:
+        part1 = MIMEBase('application', "octet-stream")
+        part1.set_payload(open(xlsx_filepath, "rb").read())
+        encoders.encode_base64(part1)
+        part1.add_header('Content-Disposition','attachment; filename="{}"'.format(os.path.basename(xlsx_filepath)))
+        msg.attach(part1)
 
-    # msg.attach(part1)
     
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
     create_message = {
