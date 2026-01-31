@@ -10,6 +10,7 @@ from pathlib import Path
 import os
 from fitter_welder_stats.Fitter_Welder_Stats_v2 import fitter_welder_stats_month, find_old_file
 from fitter_welder_stats.Fitter_Welder_stats_PDF_report import pdf_report
+from fitter_welder_stats.Fabricator_PDF_report import pdf_report_fabricator
 from fitter_welder_stats.Fitter_Welder_Stats_emailing import email_pdf_report, email_error_message
 import pandas as pd
 
@@ -85,9 +86,34 @@ year = month_start.year
 # now get the data for that month
 aggregate_data = fitter_welder_stats_month(month, year, production)
 
-#%% get the previous month's data
+# from dateutil.relativedelta import relativedelta
+# for i in range(0,12):
+    
+#     # current date
+#     today = datetime.datetime.now()
+    
+#     today = today - relativedelta(months=i)
+    
+#     # go to the last day of the previous month
+#     month_start = datetime.datetime(today.year, today.month, 1) - datetime.timedelta(days=1)
+#     # now go back to first day of previous month
+#     month_start = datetime.datetime(month_start.year, month_start.month, 1)
+#     # grab its month number
+#     month = month_start.month
+#     # convert month to its calendar name
+#     month_name = month_start.strftime('%B')
+#     # get the year
+#     year = month_start.year
+    
+#     print(month_name, year)
+    
+        
+#     # now get the data for that month
+#     aggregate_data = fitter_welder_stats_month(month, year, production)
+    
+    #%% get the previous month's data
 
-number_months = 12
+number_months = 24
 
 past_agg_data = {}
 for i in range(1,1+number_months):
@@ -120,11 +146,18 @@ for state in ['MD','DE','TN']:
         output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
         output_xlsx = output_filepath.with_suffix('.xlsx')
-        pdfreport = pdf_report(state, 
+        # pdfreport = pdf_report(state, 
+        #                        aggregate_data=aggregate_data, 
+        #                        output_pdf=output_filepath,
+        #                        output_xlsx = output_xlsx,
+        #                        past_agg_data=past_agg_data)
+        
+        pdfreport = pdf_report_fabricator(state, 
                                aggregate_data=aggregate_data, 
                                output_pdf=output_filepath,
                                output_xlsx = output_xlsx,
                                past_agg_data=past_agg_data)
+        
         pdfreport.build_report()
         
     

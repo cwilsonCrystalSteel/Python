@@ -41,6 +41,42 @@ def further_fablisting_df_preperations(fablisting_df): # move this to get_model_
             
     # df['Job #'] = df['Job #'].astype(str)
     
+    
+    # try and make sure headers are as we expect!
+    expected_cols = [
+        "column 0", "timestamp", "job #", "lot #", "quantity",
+        "piece mark - rev", "weight", "fitter", "fit qc",
+        "welder", "weld qc", "does this piece have a defect?",
+        "hyperlink", 'sheetname', 'pcmark', 'rev', 'lot_3_digit', 
+        'lot_with_t_start', 'shop'
+    ]
+
+    actual_cols = list(df.columns)
+    
+    matches = sum(
+        1 for i, col in enumerate(actual_cols)
+        if i < len(expected_cols) and col == expected_cols[i]
+    )
+    
+    match_ratio = matches / len(expected_cols)
+        
+    if match_ratio >= 0.8:
+        df = df.copy()
+        df.columns = expected_cols
+    else:
+        raise ValueError(
+            f"Only {match_ratio:.0%} of columns match expected order — refusing to rename."
+        )    
+            
+    comparison = [
+        (i, actual_cols[i], expected_cols[i])
+        for i in range(min(len(actual_cols), len(expected_cols)))
+        if actual_cols[i] != expected_cols[i]
+    ]
+    
+    for i, actual, expected in comparison:
+        print(f"Col {i}: '{actual}' → '{expected}'")        
+    
     return df
 
 def lotnumber_cleaner(lot): # move this to get_model_estimate_hours_attached_to_fablisting_SQL

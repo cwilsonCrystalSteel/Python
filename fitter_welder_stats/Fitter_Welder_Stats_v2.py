@@ -92,6 +92,7 @@ def fitter_welder_stats_month(month_num=3, year=2025, production=False):
     
     all_fitters_dict = {}
     all_welders_dict = {}
+    all_combined_dict = {}
     invalid_id_dict = {}
     wrong_state_dict = {}
     didnt_work_dict = {}
@@ -141,6 +142,45 @@ def fitter_welder_stats_month(month_num=3, year=2025, production=False):
         all_fitters_dict[state] = fitter_data['employees'].copy().reset_index(drop=True)
         all_welders_dict[state] = welder_data['employees'].copy().reset_index(drop=True)
         
+        combo = pd.merge(left=fitter_data['employees'].copy(),
+                         right=welder_data['employees'].copy(),
+                         left_index=True, right_index=True,
+                         how = 'outer', # only get people who are in both
+                         # indicator='_merge'
+                         )
+        # add up _x/_y cols together
+        cols_to_sum = ['Quantity','Weight','Earned Hours','Unique Quantity',
+                       'Defect Quantity', 'Defect Unique','Tonnage']
+        for col in cols_to_sum:
+            combo[col] = (
+                combo[[f"{col}_x", f"{col}_y"]]
+                .fillna(0)
+                .sum(axis=1)
+            )
+        
+        # recalc these values with new basis values
+        combo['Weight per Piece'] = combo['Weight'] / combo['Quantity']
+        combo['Tonnage per Piece'] = combo['Tonnage'] / combo['Quantity']
+        combo['Pieces per Defect'] = combo['Quantity'] / combo['Defect Quantity']
+        combo['Tons per Defect'] = combo['Tonnage'] / combo['Defect Quantity']
+        # These can throw np.inf if someone has no defects
+        combo['Pieces per Defect'] = combo['Pieces per Defect'].replace(np.inf, 0)
+        # replace any np.inf with zero
+        combo['Tons per Defect'] = combo['Tons per Defect'].replace(np.inf, 0)     
+        # default value
+        combo['Classification'] = 'Combination'
+        # coalesce these ones
+        combo['Name'] = combo[['Name_x','Name_y']].bfill(axis=1).iloc[:,0]
+        combo['Location'] = combo[['Location_x','Location_y']].bfill(axis=1).iloc[:,0]
+            
+        # then drop those columns with _x/_y in them
+        combo = combo.drop(
+            columns=[f"{c}" for c in combo.columns if c.endswith('_x') or c.endswith('_y')]
+        )
+            
+        
+        all_combined_dict[state] = combo.copy()
+        
         invalid_id = combine_to_make_fixing_df_for_email(fitter_data['df_to_fix'], welder_data['df_to_fix'], 'Invalid ID')
         invalid_id_dict[state] = invalid_id
         
@@ -160,15 +200,45 @@ def fitter_welder_stats_month(month_num=3, year=2025, production=False):
         
         
     # combine
-    all_both = pd.concat(list(all_fitters_dict.values()) +  list(all_welders_dict.values()), axis=0)
-    all_both = all_both.sort_values(by=['Classification','Weight'], ascending=False)
+    all_classifications = pd.concat(list(all_fitters_dict.values()) +  
+                                    list(all_welders_dict.values()) + 
+                                    list(all_combined_dict.values()),
+                                    axis=0)
+    # this is to get 3 entries for every employees - one for each classifcation value
+    full_index = pd.MultiIndex.from_product(
+        [all_classifications['Name'].unique(), ['Fitter','Welder','Combination']],
+        names=['Name', 'Classification']
+    )
+    
+    # get the location right
+    location_map = (
+        all_classifications[['Name', 'Location']]
+        .drop_duplicates()
+        .set_index('Name')['Location']
+    )
+    
+    # now make rows for each name if they dont exist
+    all_classifications = (
+        all_classifications
+        .set_index(['Name', 'Classification'])
+        .reindex(full_index)
+        .reset_index()
+    )
+    # now set the location correctly
+    all_classifications['Location'] = all_classifications['Name'].map(location_map)
+    # set zeros
+    all_classifications = all_classifications.fillna(0)
+    
+    
+    
+    all_classifications = all_classifications.sort_values(by=['Classification','Weight'], ascending=False)
     
     # join to the hours worked
-    # out_df = pd.merge(left=all_both, left_on=['Name','Location'],
+    # out_df = pd.merge(left=all_classifications, left_on=['Name','Location'],
     #                   right=hours_types_pivot, right_on=['Name','Location'],
     #                   how='left')
     out_df = pd.merge(left=hours_types_pivot, left_on=['Name','Location'],
-                      right=all_both, right_on=['Name','Location'],
+                      right=all_classifications, right_on=['Name','Location'],
                       how='left')    
     
     out_df = out_df.fillna(0)

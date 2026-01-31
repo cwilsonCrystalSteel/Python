@@ -369,21 +369,50 @@ def hours_comparison_by_employee(main_df, state=None, classification=None, topN=
     col4 = 'Other Hours'
     col5 = 'Missed Hours'
     filename = 'AllHourTypeComparisonByEmployee_' + file_name_suffix(state, classification) + '.png'
+    # so that we can pass in a fake {start}-{edn} value for file_name_suffix
+    if classification is not None and '-' in classification:
+        classification = None
     df = determine_location_and_classification(main_df, state, classification)
     df = df.rename(columns={'total':col1, 'direct':col2, 'indirect':col3, 'missed':col4, 'notcounted':col5})
     df = df[['Name', 'Location', col1, col2, col3, col4, col5]]
 
-    # Get top N by Total Hours or Earned Hours
+
+
+    # get xlimits before slicing
+    xlims = {
+        col1: df[col1].max() * 1.05,
+        col2: df[col2].max() * 1.05,
+        col3: df[col3].max() * 1.05,
+        col4: df[col4].max() * 1.05,
+        col5: df[col5].max() * 1.05,
+    }
+    
+
+
+    # This is how we order to slice
     df = df.sort_values(col1, ascending=False)
-    if not topN is None:
+    if topN is None: 
+        pass
+    elif isinstance(topN, (tuple, list)):
+        df = df.iloc[topN[0] : topN[1]]
+    else:
         df = df.iloc[:topN]
 
     
+    # This is how we order to display
+    df = df.sort_values(col1, ascending=True)
+
     # Color mapping
     colors = df['Location'].map(color_map)
 
     # Plotting
     fig, (ax, ax2, ax3, ax4, ax5) = plt.subplots(nrows=1, ncols=5, sharey=True, figsize=(13, 16))
+    
+    ax.set_xlim(0, xlims[col1])
+    ax2.set_xlim(0, xlims[col2])
+    ax3.set_xlim(0, xlims[col3])
+    ax4.set_xlim(0, xlims[col4])
+    ax5.set_xlim(0, xlims[col5])
     
     # Plot Earned Hours (left side)
     ax.barh(df['Name'], df[col1], color=colors, label=col1, alpha=0.5)
@@ -689,31 +718,32 @@ def total_direct_labor_efficiency(main_df, state=None, classification=None, topN
     
     ax_xlim = ax.get_xlim()
     ax2_xlim = ax2.get_xlim()
-    for i, (dl_eff, ttl_eff, direct_hours, total_hours) in enumerate(zip(df[col1], df[col2], df[col1_hours], df[col2_hours])):
+    # # this puts the # of hours they worked on the bars - kinda confusing
+    # for i, (dl_eff, ttl_eff, direct_hours, total_hours) in enumerate(zip(df[col1], df[col2], df[col1_hours], df[col2_hours])):
         
-        location = dl_eff / 2
-        print_value = f"{int(direct_hours)}"
-        if dl_eff > ax_xlim[1] * 0.55:
-            print_value = 'Direct Hours = ' + print_value
-        elif dl_eff > ax_xlim[1] * 0.35:
-            print_value = 'Direct = ' + print_value
+    #     location = dl_eff / 2
+    #     print_value = f"{int(direct_hours)}"
+    #     if dl_eff > ax_xlim[1] * 0.55:
+    #         print_value = 'Direct Hours = ' + print_value
+    #     elif dl_eff > ax_xlim[1] * 0.35:
+    #         print_value = 'Direct = ' + print_value
             
-        if dl_eff < ax_xlim[1] * 0.25:
-            location = dl_eff + 0.25
+    #     if dl_eff < ax_xlim[1] * 0.25:
+    #         location = dl_eff + 0.25
         
-        ax.text(location, i, print_value, ha='center', va='center', fontsize=8, color='black')
+    #     ax.text(location, i, print_value, ha='center', va='center', fontsize=8, color='black')
         
-        location = ttl_eff / 2
-        print_value = f"{int(total_hours)}"
-        if ttl_eff > ax2_xlim[1] * 0.55:
-            print_value = 'Total Hours = ' + print_value
-        elif ttl_eff > ax2_xlim[1] * 0.35:
-            print_value = 'Total = ' + print_value
+    #     location = ttl_eff / 2
+    #     print_value = f"{int(total_hours)}"
+    #     if ttl_eff > ax2_xlim[1] * 0.55:
+    #         print_value = 'Total Hours = ' + print_value
+    #     elif ttl_eff > ax2_xlim[1] * 0.35:
+    #         print_value = 'Total = ' + print_value
             
-        if ttl_eff < ax2_xlim[1] * 0.25:
-            location = ttl_eff + 0.25
+    #     if ttl_eff < ax2_xlim[1] * 0.25:
+    #         location = ttl_eff + 0.25
         
-        ax2.text(location, i, print_value, ha='center', va='center', fontsize=8, color='black')
+    #     ax2.text(location, i, print_value, ha='center', va='center', fontsize=8, color='black')
             
         
     ax.set_xlim(ax_xlim[0], ax_xlim[1] * 1.05)
@@ -1090,16 +1120,17 @@ def mom_hours_worked_by_shop(dict_of_dfs, state=None, hours_type='Total Hours', 
         df = dfs[k].copy()
         df = df[df['Location'] == state]
         # make sure we are gpoing to get the right class when doing the drop_duplicates
-        if not classification is None:
+        if classification is not None:
             # use a custom sort key so that the value of Classification=classification is always the first option if it is available
-            df_sorted = df.sort_values(
+            df = df.sort_values(
                 by=['Name', 'Classification'],
                 key=lambda col: col.map(lambda x: 0 if x == classification else 1) if col.name == 'Classification' else col
             )
             
         df = df.drop_duplicates(subset='Name', keep='first')
             
-            
+        # only get people who actually contributed to fabrication via number of earned hours 
+        df = df[(df['Earned Hours'] > 0) | (df['Weight'] > 0) | (df['Quantity'] > 0)]
         df = df[['Name',hours_type,'Classification']]
         df= df.set_index('Name')
         dfs[k] = df
