@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 21 09:25:38 2025
+Created on Fri Jan 30 15:43:02 2026
 
 @author: Netadmin
 """
+
 
 import os
 import pandas as pd
@@ -40,7 +41,7 @@ centered_note_style = ParagraphStyle(
 )
 
 
-class pdf_report():
+class pdf_report_fabricator():
     def __init__(self, state, csv_file=None, output_pdf=None, aggregate_data=None, past_agg_data=None, output_xlsx=None):
         self.state = state
         self.aggregate_data = aggregate_data
@@ -115,52 +116,61 @@ class pdf_report():
         
         # Page 1 - Different tpyes of hours for all employees 
         self.elements.append(NextPageTemplate("AllEmployees"))
-        self.do_pagebreak()
-        self.add_AllHourTypeComparison()
+        # self.do_pagebreak() # this is handled in the looping for the below graphic
+        self.add_AllHourTypeComparison_n_per_page()
+        # self.add_AllHourTypeComparison()
         
+        classification = 'Combination'
         self.do_pagebreak()
-        self.add_MonthOverMonth_Hours('Total Hours', None)
+        self.add_MonthOverMonth_Hours('Total Hours', classification)
         
         # self.do_pagebreak()
-        self.add_MonthOverMonth_Hours('Missed Hours', None)
+        self.add_MonthOverMonth_Hours('Missed Hours', classification)
         
-        for classification in ['Fitter','Welder','Combination']:
-            self.elements.append(NextPageTemplate(classification))
-            self.do_pagebreak()
-            self.add_state_table(classification)
-           
-            self.do_pagebreak()
-            self.add_MonthOverMonth_Hours('Total Hours', classification)
+        self.elements.append(NextPageTemplate(classification))
+        
+        # Page 1
+        self.do_pagebreak()
+        self.add_state_table(classification)
+       
+        # # page 2a
+        # self.do_pagebreak()
+        # self.add_MonthOverMonth_Hours('Total Hours', classification)
+        
+        # # page 2b
+        # self.add_MonthOverMonth_Hours('Missed Hours', classification)
+        
+    
+        
+        # Page 3 defects
+        self.do_pagebreak()
+        self.add_DefectsPlot(classification)
+        
+        # Page 4 Tons per piece 
+        self.do_pagebreak()
+        self.add_AverageTonsPerPiece(classification)
+        
+        # Page 5 efficienies
+        self.do_pagebreak()
+        self.add_DirectAndTotalEfficiency(classification)
+        
+        # Page 6 Earned hours Total/Direct
+        self.do_pagebreak()
+        self.add_EarnedAndTotalHours(classification)
+        
+       
+        # Page 7 tonnage
+        self.do_pagebreak()
+        self.add_TonsByEmployee(classification)
+        
             
+        # bad entries by fit/weld
+        for classification in ['Fitter','Welder']:
+            # self.elements.append(NextPageTemplate(classification))
             # self.do_pagebreak()
-            self.add_MonthOverMonth_Hours('Missed Hours', classification)
-            
-           
-            if classification != 'Combination':
-                # how bad the bad entries effect them
-                self.do_pagebreak()
-                self.add_badEntries(classification)
-        
-            
-            # Page 3 defects fitter
+            # how bad the bad entries effect them
             self.do_pagebreak()
-            self.add_DefectsPlot(classification)
-            
-            # Page 
-            self.do_pagebreak()
-            self.add_AverageTonsPerPiece(classification)
-            
-            # Page 
-            self.do_pagebreak()
-            self.add_DirectAndTotalEfficiency(classification)
-            
-            # Page 
-            self.do_pagebreak()
-            self.add_EarnedAndTotalHours(classification)
-            
-            # Page 
-            self.do_pagebreak()
-            self.add_TonsByEmployee(classification)
+            self.add_badEntries(classification)
             
                 
         self.build_document()
@@ -336,7 +346,7 @@ class pdf_report():
         self.elements.append(Spacer(1, 180))  # Push content toward vertical center
 
         # --- Main Title ---
-        title = Paragraph(f"Fitter & Welder Stats for {self.state}", title_style)
+        title = Paragraph(f"Fabricator Stats for {self.state}", title_style)
         self.elements.append(title)
 
         # --- Subtitle ---
@@ -361,7 +371,10 @@ class pdf_report():
 
         state_df = self.main_df[(self.main_df['Location'] == self.state) & 
                                 (self.main_df['Classification'] == classification)].copy()
+        # only select columns
         state_df = state_df[self.display_cols]
+        # only show people who have earned something
+        state_df = state_df[state_df['Earned Hours'] > 0]
         state_df['DL Efficiency']  = state_df['Earned Hours'] / state_df['Direct Hours']
         state_df['TTL Efficiency'] = state_df['Earned Hours'] / state_df['Total Hours']
         
@@ -430,6 +443,97 @@ class pdf_report():
         self._write_excel_sheet(f"{classification} Summary Table", state_df)
         
         
+    def add_AllHourTypeComparison_n_per_page(self):
+        print('Building add_AllHourTypeComparison_n_per_page')
+        from fitter_welder_stats.fitter_welder_stats_graphing import hours_comparison_by_employee
+        
+        df = self.main_df.copy()
+        # i just copied these header names from: 
+        # from fitter_welder_stats.fitter_welder_stats_graphing import hours_comparison_by_employee
+        col0 = 'Name'
+        col00 = 'Location'
+        col1 = 'Total Hours'
+        col2 = 'Direct Hours'
+        col3 = 'Indirect Hours'
+        col4 = 'Other Hours'
+        col5 = 'Missed Hours'
+        
+        df = df[(df['Earned Hours'] > 0) | (df['Weight'] > 0) | (df['Quantity'] > 0)]
+        
+        # only keep cols we want
+        df = df[[col0, col00, col1, col2, col3, col4, col5]]
+        # just get one entry per worker
+        df = df.drop_duplicates(keep='first', subset=['Name','Location'])
+        
+        # only get this state b/c we are doing this page-end stuff
+        df = df[df['Location'] == self.state]
+        # only get more than 0 hours worked
+        df = df[df[col1] > 0]
+        # sort now 
+        df = df.sort_values(col1, ascending=False)
+        
+      
+        
+        total = df.shape[0]
+        min_per_page = 18
+        min_per_page = min_per_page if min_per_page < total else total 
+        max_per_page = 32
+        
+        possible_pages = []
+        
+        for pages in range(1, total + 1):
+            per_page = total / pages
+            if min_per_page <= per_page <= max_per_page:
+                possible_pages.append(pages)
+        
+        # pick the page count closest to the midpoint
+        target = (min_per_page + max_per_page) / 2
+        num_pages = min(
+            possible_pages,
+            key=lambda p: abs((total / p) - target)
+        )
+        
+        base = total // num_pages
+        remainder = total % num_pages
+        
+        page_sizes = [
+            base + (1 if i < remainder else 0)
+            for i in range(num_pages)
+        ]
+        
+        
+        start = 0
+        
+        for size in page_sizes:
+            end = start + size
+            print(f'Building add_AllHourTypeComparison_n_per_page for #{start}-{end}')
+            fake_classifcation_for_graphic_saving = f'{start}-{end}'
+            graphic, _ = hours_comparison_by_employee(main_df = df, 
+                                                            state=self.state, 
+                                                            classification=fake_classifcation_for_graphic_saving, 
+                                                            topN=(start,end), 
+                                                            SAVEFILES=True)
+            if not os.path.exists(graphic):
+                raise Exception('Could not find {graphic}')
+                
+            
+            self.do_pagebreak()
+            title_text = f"Types of Hours Worked (Rank #{start+1}-{end})"
+            title = Paragraph(title_text, title_style)
+            self.elements.append(title)
+            img = Image(graphic, width=520, height=640)
+            self.elements.append(img)
+        
+            
+            # move the index range up 
+            start = end
+            
+            
+        # still do this so that we can add to the excel file
+        _, xlsx_df = hours_comparison_by_employee(self.main_df, self.state, SAVEFILES=True)
+        self._write_excel_sheet("Types of Hours Worked", xlsx_df)
+        
+        
     def add_AllHourTypeComparison(self):
         print('Building add_AllHourTypeComparison...')
         from fitter_welder_stats.fitter_welder_stats_graphing import hours_comparison_by_employee
@@ -453,18 +557,21 @@ class pdf_report():
         # table_note = Paragraph(note_text, centered_note_style)
         # self.elements.append(Spacer(1, 12))
         # self.elements.append(table_note)
-        self._write_excel_sheet(f"Hours Worked by Type", xlsx_df)
+        self._write_excel_sheet("Hours Worked by Type", xlsx_df)
         
     def add_MonthOverMonth_Hours(self, hours_type, classification):
         print(f'Building add_MonthOverMonth_Hours {hours_type} {classification}')
-        HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
+        # HOURS_TYPE_VALID = ['Total Hours','Direct Hours','Missed Hours']
         from fitter_welder_stats.fitter_welder_stats_graphing import mom_hours_worked_by_shop
-        graphic = mom_hours_worked_by_shop(self.past_agg_data, self.state, 
-                                           hours_type, classification,
-                                           self.month_name, self.year,
+        graphic = mom_hours_worked_by_shop(dict_of_dfs = self.past_agg_data, 
+                                           state = self.state, 
+                                           hours_type = hours_type, 
+                                           classification = classification,
+                                           month_0_name = self.month_name, 
+                                           month_0_year = self.year,
                                            SAVEFILES=True)
         
-        title_text = f'{hours_type} by Month'
+        title_text = f'Average {hours_type} Worked by Month'
         if not classification is None:
             title_text += f" for {classification}"
         title = Paragraph(title_text, title_style)
@@ -622,7 +729,7 @@ class pdf_report():
         self.elements.append(Spacer(1, 12))
         
         note_text = (
-        f"<b>* Invalid Employee ID</b>: No ID was entered, OR Employee ID did not match any ID in TimeClock."
+        "<b>* Invalid Employee ID</b>: No ID was entered, OR Employee ID did not match any ID in TimeClock."
         f"<br/><b>* Employee Did Not Work in The Month</b>: Employee ID returned an Employee who did not log hours in Timeclock for the month at hand."
         f"<br/><b>* Employee Works at Different Shop</b>: Employee ID returned an Employee who has a Productive Status indicating a different shop."
         )
