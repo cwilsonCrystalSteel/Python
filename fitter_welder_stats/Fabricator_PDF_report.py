@@ -163,6 +163,16 @@ class pdf_report_fabricator():
         self.do_pagebreak()
         self.add_TonsByEmployee(classification)
         
+        # show specific class based 
+        for classification in ['Fitter','Welder']:
+            # table for that classifcation
+            self.do_pagebreak()
+            self.add_state_table(classification)
+            
+            # earned hours graphic for that classification
+            self.do_pagebreak()
+            self.add_EarnedAndTotalHours(classification)
+        
             
         # bad entries by fit/weld
         for classification in ['Fitter','Welder']:
