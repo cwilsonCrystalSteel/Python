@@ -10,7 +10,7 @@ from pathlib import Path
 import os
 from fitter_welder_stats.Fitter_Welder_Stats_v2 import fitter_welder_stats_month, find_old_file
 from fitter_welder_stats.Fitter_Welder_stats_PDF_report import pdf_report
-from fitter_welder_stats.Fabricator_PDF_report import pdf_report_fabricator
+from fitter_welder_stats.Fabricator_PDF_report_2 import pdf_report_fabricator
 from fitter_welder_stats.Fitter_Welder_Stats_emailing import email_pdf_report, email_error_message
 import pandas as pd
 
@@ -143,6 +143,7 @@ for i in range(1,1+number_months):
 for state in ['MD','DE','TN']:
     print(f"Running report for {state}...")
     try:
+#%%    
         output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
         output_xlsx = output_filepath.with_suffix('.xlsx')
@@ -180,7 +181,7 @@ for state in ['MD','DE','TN']:
                           state=state, 
                           recipients=state_recipients[state],
                           xlsx_filepath = output_xlsx)
-    
+#%%    
     except Exception as e:
         print(e)
         email_error_message(['fitter_welder_controller.py',
