@@ -186,6 +186,128 @@ def defects_by_employee(main_df, state=None, classification=None, topN=25, SAVEF
 # defects_by_employee(classification='Fitter', topN=30)
 # defects_by_employee(classification='Welder', topN=30)
 
+
+def defects_by_employee_both_classifications(main_df, state=None, topN=25, SAVEFILES=SAVEFILES):
+    col = 'Defect Quantity'
+    classification = 'Combination'
+    filename = 'DefectsByEmployeeBothClassifcations_' + file_name_suffix(state, classification) + '.png'
+    df_fit = determine_location_and_classification(main_df, state, 'Fitter')
+    df_weld = determine_location_and_classification(main_df, state, 'Welder')
+    
+    df_fit = df_fit[['Name','Location',col]]
+    df_weld = df_weld[['Name','Location',col]]
+
+    df = pd.merge(left=df_fit,
+                  right=df_weld,
+                  left_on=('Name','Location'),
+                  right_on=('Name','Location'),
+                  how='outer',
+                  suffixes=('_Fit','_Weld'))    
+    
+    df['Total'] = df[[f'{col}_Fit', f'{col}_Weld']].sum(axis=1)
+    df = df.sort_values('Total', ascending=False)
+    
+    # # Sort by Tonnage to match chart order
+    # df = df.sort_values(col, ascending=False)
+    
+    title_text = f'{classification} {col}'
+    if not state is None:
+        title_text += f' for {state}'
+    
+    if not topN is None:
+        # get top n
+        df = df.iloc[:topN]
+        
+    df = df[df['Total'] > 0]
+    
+    # Color mapping
+    colors = df['Location'].map(color_map)
+    
+    # Plotting
+    plt.figure(figsize=(7.5, 10))
+    # plt.barh(df['Name'], df[col], color=colors, alpha=0.5)
+    
+    fit_col  = f"{col}_Fit"
+    weld_col = f"{col}_Weld"
+        
+    plt.barh(
+        df['Name'],
+        df[fit_col],
+        alpha=1.0,
+        label='Fit',
+        color=colors
+    )
+    
+    # stacked bars
+    plt.barh(
+        df['Name'],
+        df[weld_col],
+        left=df[fit_col],
+        alpha=0.3,
+        label='Weld',
+        color=colors,
+        # hatch='/'
+    )
+    
+    for i, (fit, weld) in enumerate(zip(df[fit_col], df[weld_col])):
+        # Fit label (center of fit segment)
+        if fit > 0:
+            plt.text(
+                fit / 2,
+                i,
+                f"{fit:.1f}",
+                ha='center',
+                va='center',
+                fontsize=8,
+                color='black'
+            )
+    
+        # Weld label (center of weld segment)
+        if weld > 0:
+            plt.text(
+                fit + weld / 2,
+                i,
+                f"{weld:.1f}",
+                ha='center',
+                va='center',
+                fontsize=8,
+                color='black'
+            )
+    
+    colour = colors.iloc[0] if state is not None else 'gray'
+    legend_handles = [
+    Patch(facecolor=colour, edgecolor='black', label='FIT'),
+    Patch(facecolor=colour, edgecolor='black', hatch='', label='WELD', alpha=0.3)
+    ]
+    
+    plt.legend(
+        handles=legend_handles,
+        loc='upper right',
+        frameon=True
+    )
+    
+    plt.grid(axis='x', color='gray', linestyle='--', linewidth=0.5)
+    
+    # add in the state tag to each bar
+    if state is None:
+        # Adding location labels (optional, to match your plot)
+        for i, (tonnage, loc) in enumerate(zip(df[col], df['Location'])):
+            plt.text(tonnage +0.1, i, loc, va='center')
+            
+    # Labels and title
+    plt.xlabel(col)
+    # plt.title(title_text)
+            
+    
+    plt.tight_layout()
+    if SAVEFILES:
+        plt.savefig(out_folder / filename, dpi=300)
+        plt.close()
+        return out_folder / filename
+    else:
+        plt.show()
+        return None
+
 #%%
 
 def tonnage_per_piece_by_employee(main_df, state=None, classification=None, topN=25, min_qty=None, SAVEFILES=SAVEFILES):
