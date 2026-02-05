@@ -274,7 +274,9 @@ def defects_by_employee_both_classifications(main_df, state=None, topN=25, SAVEF
                 color='black'
             )
     
-    colour = colors.iloc[0] if state is not None else 'gray'
+    colour = 'gray'
+    if state is not None and df.shape[0]:
+        colour = colors.iloc[0]
     legend_handles = [
     Patch(facecolor=colour, edgecolor='black', label='FIT'),
     Patch(facecolor=colour, edgecolor='black', hatch='', label='WELD', alpha=0.3)

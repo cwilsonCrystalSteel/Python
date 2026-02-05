@@ -139,11 +139,11 @@ for i in range(1,1+number_months):
 
     
 
+#%%    
 
 for state in ['MD','DE','TN']:
     print(f"Running report for {state}...")
     try:
-#%%    
         output_file = f"FitterWelderStats-{state}-{month_name}-{year}_{file_timestamp}.pdf"
         output_filepath = output_dir / output_file
         output_xlsx = output_filepath.with_suffix('.xlsx')
@@ -181,9 +181,11 @@ for state in ['MD','DE','TN']:
                           state=state, 
                           recipients=state_recipients[state],
                           xlsx_filepath = output_xlsx)
-#%%    
+        
     except Exception as e:
         print(e)
         email_error_message(['fitter_welder_controller.py',
                              str(e),
                              f"{state} {month_name} {year}"])
+
+#%%    

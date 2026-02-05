@@ -278,7 +278,8 @@ def return_sorted_and_ranked(df, ei, array_of_ids, col_name, defect_log, state, 
     df_na_ID2 = df_na_ID2[df_na_ID2['Name'].isna()]
 
     df_na_ID2['Name'] = 'Unknown'
-    df_na_ID = pd.concat([df_na_ID, df_na_ID2])    
+    # df_na_ID = pd.concat([df_na_ID, df_na_ID2])    
+    df_na_ID = df_na_ID2
     
     if df_na_ID.shape[0]:
         print(f'We found {df_na_ID.shape[0]} records in fablisting that having missing or invalid {col_name} IDs')
