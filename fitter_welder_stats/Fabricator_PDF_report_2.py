@@ -570,7 +570,13 @@ class pdf_report_fabricator():
         col_headers = state_df_display.columns.tolist()
         col_headers = [Paragraph(i.replace(' ','<br/>')) for i in col_headers]
         
-    
+        eff_cols = ['DL Efficiency', 'TTL Efficiency']
+        eff_col_idxs = [
+            state_df_display.columns.get_loc(c)
+            for c in eff_cols
+            if c in state_df_display.columns
+        ]
+
         
         # Convert DataFrame to list-of-lists
         data = [col_headers] + state_df_display.values.tolist()
@@ -578,17 +584,38 @@ class pdf_report_fabricator():
         colWidths = [130,47,35,50,40,40,40,44,58,58,55,55,55,55,55]
         # Create Table
         pdf_table = Table(data, colWidths=colWidths)
-        pdf_table.setStyle(TableStyle([
+        # pdf_table.setStyle(TableStyle([
+        #     ('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
+        #     ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        #     ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        #     ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        #     ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        #     ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey])
+        # ]))
+        
+        
+                
+        table_style = [
             ('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
             ('GRID', (0, 0), (-1, -1), 1, colors.black),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey])
-        ]))
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
+        ]
+        
+        # Shade efficiency columns (data rows only)
+        for idx in eff_col_idxs:
+            table_style.append(
+                ('BACKGROUND', (idx, 1), (idx, -1), colors.mintcream)
+            )
+        
+        pdf_table.setStyle(TableStyle(table_style))
+        
+        
         
         # --- Add title above table ---
-        title_text = f"Table Summary of Stats"
+        title_text = "Table Summary of Stats"
         title = Paragraph(title_text, title_style)
         self.elements.append(title)
         
@@ -607,7 +634,7 @@ class pdf_report_fabricator():
         # self.elements.append(table_note)
         
         
-        self._write_excel_sheet(f"Summary Table", state_df)        
+        self._write_excel_sheet("Summary Table", state_df)        
         
         
     def add_AllHourTypeComparison_n_per_page(self):
