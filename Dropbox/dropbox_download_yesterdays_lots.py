@@ -64,15 +64,25 @@ print(f"Found the last successfullly completed date: {last_successful_date}")
 
 
  
-possible_dir = ['Y:/','X:/','\\\\192.168.50.9\\Dropbox_(CSF)']
+# possible_dir = ['Y:/','X:/','\\\\192.168.50.9\\Dropbox_(CSF)']
+# for ii in possible_dir:
+#     if os.path.exists(Path(ii)):
+#         base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+#         print(f'Using the drive: "{base_dir}"')
+#         break
+#     else:
+#         continue
+
+possible_dir = [r'G:\Shared drives']
 for ii in possible_dir:
-    if os.path.exists(Path(ii)):
-        base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+    base_dir = Path(ii) / 'production' / 'EVA Reports' /'EVA REPORTS FOR THE DAY'
+    
+    if os.path.exists(base_dir):
         print(f'Using the drive: "{base_dir}"')
         break
+        
     else:
         continue
-
 
 
 for i in range(0,delta):

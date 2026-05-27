@@ -53,7 +53,7 @@ state_recipients = {'TN':['cwilson@crystalsteel.net', 'awhitacre@crystalsteel.ne
                           'ewilson@crystalsteel.net','lrhoads@crystalsteel.net',
                           'acook@crystalsteel.net','fvillatoro@crystalsteel.net'],
                     'MD':['cwilson@crystalsteel.net',  'mmishler@crystalsteel.net',
-                          'jkeith@crystalsteel.net','jlaird@crystalsteel.net'],
+                          'jkeith@crystalsteel.net','zfortuna@crystalsteel.net'],
                     'DE':['cwilson@crystalsteel.net',  'jrodriguez@crystalsteel.net'],
                     'EC':['cwilson@crystalsteel.net']}
 
