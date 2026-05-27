@@ -29,7 +29,7 @@ def get_timeclock_summary(start_dt, end_dt, states=None, basis=None, output_prod
     
     '''
     Code Refactor! 
-    1014-10-16: we have database up & running, imports seem to be firing off.
+    2024-10-16: we have database up & running, imports seem to be firing off.
         Need to ensure the remediation bat file is scheduled at an appropriate time
         2 lines of code will replace spaghetti
     '''
