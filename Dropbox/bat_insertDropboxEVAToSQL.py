@@ -31,12 +31,15 @@ now = datetime.datetime.now()
 
 
 def determine_directory_path():
-    possible_dir = ['Y:/','X:/','\\\\192.168.50.9\\Dropbox_(CSF)']
+    # possible_dir = ['Y:/','X:/','\\\\192.168.50.9\\Dropbox_(CSF)']
+    possible_dir = [r'G:\Shared drives']
     for ii in possible_dir:
-        if os.path.exists(Path(ii)):
-            base_dir = Path(ii) / 'production control' / 'EVA REPORTS FOR THE DAY'
+        base_dir = Path(ii) / 'production' / 'EVA Reports' /'EVA REPORTS FOR THE DAY'
+        
+        if os.path.exists(base_dir):
             print(f'Using the drive: "{base_dir}"')
             break
+            
         else:
             continue
     
