@@ -24,6 +24,7 @@ import signal
 # from psutil import Process, NoSuchProcess
 import psutil
 from pathlib import Path
+import re 
 
 
 def printwait(string='', waittime=0):
@@ -120,6 +121,10 @@ class WhileTimerTimeoutExcpetion(Exception):
     def __init__(self, message=''):
         # Call the base class constructor with the parameters it needs
         super(WhileTimerTimeoutExcpetion, self).__init__(message)
+        
+        
+def normalize_filename(text):
+    return re.sub(r'[^a-z0-9]', '', text.lower())
 
 
 #%%
@@ -135,7 +140,8 @@ class PrimePointBase():
         self.creds = returnPrimePointCredentials()
         if download_folder is None:
             download_folder = Path.home() / 'Downloads'
-        self.download_folder = download_folder
+        # self.download_folder = download_folder
+        
         self.headless = headless
         self.fullscreen = fullscreen
         self.offscreen = offscreen
@@ -157,6 +163,8 @@ class PrimePointBase():
         self.driver = webdriver.Chrome(service=self.service, options = options)
         print('Driver created...')
         
+        self.setDownloadFolder(download_folder)
+        
         if self.offscreen:
             self.moveOffscreen()
             
@@ -172,6 +180,17 @@ class PrimePointBase():
             
         # create download folder if not exists
         
+        
+            
+            
+        self.pid = self.driver.service.process.pid
+        
+        self.screenshotDirectory = None
+        
+        self.startTime = datetime.datetime.now()
+        
+    def setDownloadFolder(self, download_folder):
+        self.download_folder = download_folder
         if os.path.exists(download_folder):
             enable_download(self.driver, self.download_folder)
         else:
@@ -183,13 +202,7 @@ class PrimePointBase():
                 os.makedirs(download_folder)
                 
             enable_download(self.driver, self.download_folder)
-            
-            
-        self.pid = self.driver.service.process.pid
         
-        self.screenshotDirectory = None
-        
-        self.startTime = datetime.datetime.now()
         
     def enableScreenshots(self, directory):
         if not os.path.exists(directory):
@@ -457,39 +470,53 @@ class PrimePointBase():
         self.printverbosity(f'Selected "{search_key}"')
         
         
+        
+        
+        
+        # files = list(Path(self.download_folder).iterdir())
+        
+        # if files:
+        #     existing_file = max(files, key=lambda p: p.stat().st_mtime)
+        #     old_mtime = existing_file.stat().st_mtime
+        # else:
+        #     old_mtime = 0
+        
         # download
         self.startTime = datetime.datetime.now()
         self.DownloadExcel = validateElement(self.driver, (By.XPATH, "//button[contains(@class,'btn') and contains(text(),'Download Report as Excel Spreadsheet')]"), 'DownloadExcel', True, True, verbosity=self.verbosity)
         self.DownloadExcel.click()
         self.printverbosity('Clicked Download Excel button')
         
-        filepath = self.retrieveDownloadedFile(waitTime=10, fileType='*.xlsx', searchText=reportName)
+        
+        
+        
+        # filepath = self.retrieveDownloadedFile(waitTime=10, fileType='*.xlsx', searchText=reportName)
+        
+        filepath = self.retrieveDownloadedFile(waitTime=10, searchText=reportName)
+        
         self.printverbosity(f'File Downloaded as: {filepath}')
         
         
         date_file_format = valid_date.strftime('%m.%d.%Y')
         filepath_pathlib = Path(filepath)
-        renamed_file = f'{state} {date_file_format} BS{filepath_pathlib.suffix}'
+        renamed_file = f'{state} {date_file_format} BS {self.startTime.strftime("%Y%m%d_%H%M%S")}{filepath_pathlib.suffix}'
         
         
         new_filepath = filepath_pathlib.with_name(renamed_file)
         if os.path.exists(new_filepath):
             self.printverbosity(f'Overwriting file because it exists: {new_filepath}')
             
-            
-            
-        print('\n\n==================================================')
-        print(f"Source: {filepath_pathlib}")
-        print(f"Dest:   {new_filepath}")
-        print(f"Dest exists? {new_filepath.exists()}")    
+              
         
         filepath_pathlib.replace(new_filepath)
+        # os.remove(filepath_pathlib)
         
         self.printverbosity(f'File renamed to: {new_filepath}')
         
-        
-        
-        return filepath
+        if os.path.exists(new_filepath):
+            return new_filepath
+        else:
+            raise Exception(f'Did not successfully create new file: {new_filepath}')
         
                 
                       
@@ -572,21 +599,15 @@ class PrimePointBase():
         self.DownloadButton.click()       
         self.printverbosity('DownloadButton Clicked')
         
-        filepath = self.retrieveDownloadedFile(waitTime=10, fileType='*.xls', searchText=reportName.replace(' ' , '_'))
+        # filepath = self.retrieveDownloadedFile(waitTime=10, fileType='*.xls', searchText=reportName.replace(' ' , '_'))
+        filepath = self.retrieveDownloadedFile(waitTime=10, searchText=reportName)
+        
         self.printverbosity(f'File Downloaded as: {filepath}')
         
         date_file_format = valid_date.strftime('%m.%d.%Y')
         filepath_pathlib = Path(filepath)
-        renamed_file = f'{state} {date_file_format} Tax Report{filepath_pathlib.suffix}'
-        
-        
+        renamed_file = f'{state} {date_file_format} Tax Report {self.startTime.strftime("%Y%m%d_%H%M%S")}{filepath_pathlib.suffix}'
         new_filepath = filepath_pathlib.with_name(renamed_file)
-        
-        print('\n\n==================================================')
-        print(f"Source: {filepath_pathlib}")
-        print(f"Dest:   {new_filepath}")
-        print(f"Dest exists? {new_filepath.exists()}")
-        
         filepath_pathlib.replace(new_filepath)
         
         self.printverbosity(f'File renamed to: {filepath_pathlib}')
@@ -612,32 +633,52 @@ class PrimePointBase():
   
         
         
-    def retrieveDownloadedFile(self, waitTime, fileType, searchText):
+    def retrieveDownloadedFile(self, waitTime, searchText):
         
-        
-        self.printverbosity(f"Searching for {fileType} with text '{searchText}' in {self.download_folder}")
+        normalized_search = normalize_filename(searchText)
+    
+        matching_files = [f for f in Path(self.download_folder).iterdir() if f.is_file() and normalized_search in normalize_filename(f.name)]
+    
+        old_mtime = 0
+    
+        if matching_files:
+            old_mtime = max(f.stat().st_mtime for f in matching_files)
+    
+        self.printverbosity(f"Waiting for download containing '{searchText}'")
+    
         endTime = time.time() + waitTime
-        while True:
-            try:
-                self.listOfFileTypes = glob.glob(os.path.join(self.download_folder, fileType)) # * means all if need specific format then *.csv
-                # Create a list with only the states we want to look at
-                self.foundFiles = [f for f in self.listOfFileTypes if searchText in f]
-                # Get the most recent file for that state
-                self.newestFile = max(self.foundFiles, key=os.path.getctime)
-                # get the file creation time as a datetime
-                self.newestFileTime = datetime.datetime.fromtimestamp(os.path.getctime(self.newestFile))
-                
-                if self.newestFileTime > self.startTime:
-                    print(f'File found: {self.newestFile}')
-                    return self.newestFile
-            except Exception:
-                # mostly this will just be 'max() arg is an empty sequence' 
-                # becuase the file will not be downloaded yet
-                # print(e)
-                pass
-                
-            if time.time() > endTime:
-                raise WhileTimerTimeoutExcpetion(f'No filetype {fileType} was found downloaded.')
+    
+        while time.time() < endTime:
+    
+            matching_files = [
+                f for f in Path(self.download_folder).iterdir()
+                if (
+                    f.is_file()
+                    and normalized_search in normalize_filename(f.name)
+                    and not f.name.endswith(".crdownload")
+                )
+            ]
+    
+            if matching_files:
+    
+                newest = max(matching_files, key=lambda p: p.stat().st_mtime)
+    
+                if newest.stat().st_mtime > old_mtime:
+    
+                    # Wait until file size stabilizes
+                    size1 = newest.stat().st_size
+                    time.sleep(0.25)
+                    size2 = newest.stat().st_size
+    
+                    if size1 == size2:
+                        self.printverbosity(f"File found: {newest}")
+                        return str(newest)
+    
+            time.sleep(0.25)
+    
+        raise WhileTimerTimeoutExcpetion(
+            f"No downloaded file containing '{searchText}' found."
+        )
     
                 
         
@@ -681,6 +722,7 @@ class PrimePointEZ(PrimePointBase):
         
         self.tcb.openReporting()
         # get all of the CRYSSW xxxx reports 
+        self.tcb.setDownloadFolder(self.download_folder / 'getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport')
         for state in self.states_list:
             filepath = self.tcb.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state=state, date=self.friday_date_string)
             self.filepaths_to_move.append(filepath)
@@ -690,6 +732,7 @@ class PrimePointEZ(PrimePointBase):
 
         
         # get all of the Labor Distribution reports
+        self.tcb.setDownloadFolder(self.download_folder / 'getLaborDistributionPayrollSummary')
         for state in self.states_list:
             filepath = self.tcb.getLaborDistributionPayrollSummary(state=state, date=self.friday_date_string)
             self.filepaths_to_move.append(filepath)
@@ -703,7 +746,6 @@ class PrimePointEZ(PrimePointBase):
 '''
 
 y = PrimePointEZ('2026-06-12')
-
 y.get_filepaths_wrapper()
 y.kill()
 
@@ -715,19 +757,24 @@ y.kill()
 
 '''
 x = PrimePointBase(headless=False)
-x.verbosity = 2
+x.verbosity = 0
 # x.enableScreenshots(Path('c:/users/netadmin/downloads/test'))
 x.startupBrowser()
 x.tryLogin()
 x.openReporting()
-filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='DE', date='2026-06-12')
-filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='TN', date='2026-06-12')
+# x.setDownloadFolder(Path.home() / 'Downloads' / 'getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport')
+# filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='DE', date='2026-06-12')
+# filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='TN', date='2026-06-12')
+# filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='NY', date='2026-06-12')
 
 
 
-x.goToReportingFromSpecificReportPage()
+# x.goToReportingFromSpecificReportPage()
+x.setDownloadFolder(Path.home() / 'Downloads' / 'getLaborDistributionPayrollSummary')
 
 filepath1 = x.getLaborDistributionPayrollSummary('DE', '2026-06-12')
+filepath1 = x.getLaborDistributionPayrollSummary('TN', '2026-06-12')
+filepath1 = x.getLaborDistributionPayrollSummary('PA', '2026-06-12')
 
 x.kill()
 '''
