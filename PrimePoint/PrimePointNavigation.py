@@ -610,11 +610,12 @@ class PrimePointBase():
         new_filepath = filepath_pathlib.with_name(renamed_file)
         filepath_pathlib.replace(new_filepath)
         
-        self.printverbosity(f'File renamed to: {filepath_pathlib}')
+        self.printverbosity(f'File renamed to: {new_filepath}')
         
-        
-        
-        return filepath
+        if os.path.exists(new_filepath):
+            return new_filepath
+        else:
+            raise Exception(f'Did not successfully create new file: {new_filepath}')
         
         
     def goToReportingFromSpecificReportPage(self):
@@ -676,9 +677,7 @@ class PrimePointBase():
     
             time.sleep(0.25)
     
-        raise WhileTimerTimeoutExcpetion(
-            f"No downloaded file containing '{searchText}' found."
-        )
+        raise WhileTimerTimeoutExcpetion(f"No downloaded file containing '{searchText}' found.")
     
                 
         
