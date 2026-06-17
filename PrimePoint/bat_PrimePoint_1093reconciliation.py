@@ -14,10 +14,11 @@ import shutil
 import glob
 import re
 
+
 today = datetime.datetime.now()
 friday = today
 while friday.weekday() != 4:
-    friday = friday - datetime.timedelta(days=1)
+    friday = friday + datetime.timedelta(days=1)
     
 friday_str = friday.strftime('%Y-%m-%d')
 friday_str_dir = friday.strftime('%Y.%m.%d')
@@ -43,7 +44,9 @@ if not len(paths):
 
 ''' NNED TO HAVE THE DRIVE AS A SHARED DRIVE AND NOT A SHARED-WITH-ME-FOLDER '''
 # I AM GOING TO TRY THIS ONE FIRST G:\My Drive\2026 UNTIL I HAVE ACCESS TO IT IN A SHAREDRIVE
-possible_dir = [r'c:\users\netadmin\downloads\test-g-drive', r'G:\My Drive', r'G:\Shared drives\xxxxxxx\yyyyyy']
+# possible_dir = [r"C:\Users\Netadmin\Downloads\test-g-drive", r'G:\Shared drives\Payroll\Primepoint\Payroll Imports\1093 (taxes) Upload']
+possible_dir = [r'G:\Shared drives\Payroll\Primepoint\Payroll Imports\1093 (taxes) Upload']
+
 for ii in possible_dir:
     
     base_dir = Path(ii)
@@ -70,8 +73,7 @@ last_week_dir = base_dir / str(last_week_friday.year) / last_week_friday_str_dir
 
 if not os.path.exists(this_week_dir):
     os.makedirs(this_week_dir)
-
-
+    print(f'Making directory: {this_week_dir}')
 
 
 ######## create subfolders
@@ -84,6 +86,7 @@ for ii in dirs_to_create:
     if not os.path.exists(to_make):
         
         os.makedirs(to_make)
+        print(f"Making directory: {to_make}")
     
     
     
@@ -131,20 +134,6 @@ states = set([i[:2] for i in input_files])
 
 # for each state do macro file 
 for state in states:
-    # # make new macro file name // start with template 
-    # state_macro_file_name = new_macro_file_template.stem
-    # # if we have TEMPLATE in the name then replace that 
-    # if 'template' in state_macro_file_name.lower():
-    #     # state_macro_file_name = state_macro_file_name.replace('template', state)
-    #     state_macro_file_name  = re.sub('template', state, state_macro_file_name , flags=re.IGNORECASE)
-    # # if we dont have template, just add the state to the file name
-    # else:
-    #     state_macro_file_name += f' {state}'
-        
-    # # add the date 
-    # state_macro_file_name += f' {friday_str_dir}'
-    # # add extension back on 
-    # state_macro_file_name += new_macro_file_template.suffix
     
     state_macro_file_name = f'Taxes {state} {friday_str_dir}{new_macro_file_template.suffix}'
     # make the full path 

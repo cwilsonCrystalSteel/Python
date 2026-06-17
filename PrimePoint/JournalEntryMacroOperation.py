@@ -12,28 +12,28 @@ import os
 
 
 
-def run_macro(template_file, output_file, bs_file, tax_report_file):
-    print('Generating copy of {template_file.name} to {output_file.name}')
+def run_macro(template_file, output_file, bs_filepath, tax_report_filepath):
+    print(f'Generating copy of {template_file.name} to {output_file.name}')
     shutil.copy2(template_file, output_file)
 
     excel = win32.Dispatch("Excel.Application")
     excel.Visible = False
     
     # macro can only accept str-path, not Path
-    if isinstance(bs_file, Path):
-        bs_file = str(bs_file)
+    if isinstance(bs_filepath, Path):
+        bs_filepath = str(bs_filepath)
         
-    if isinstance(tax_report_file, Path):
-        bs_file = str(tax_report_file)
+    if isinstance(tax_report_filepath, Path):
+        tax_report_filepath = str(tax_report_filepath)
 
     try:
         wb = excel.Workbooks.Open(output_file)
         
-        print(f'Running ImportCRYSSWSpectrumEmployerTaxExpenseJournalEntry on: {bs_file}')
-        excel.Application.Run("ImportCRYSSWSpectrumEmployerTaxExpenseJournalEntry", bs_file, True)
+        print(f'Running ImportCRYSSWSpectrumEmployerTaxExpenseJournalEntry on: {bs_filepath}')
+        excel.Application.Run("ImportCRYSSWSpectrumEmployerTaxExpenseJournalEntry", bs_filepath, True)
         
-        print(f'Running ImportLaborDistributionPayrollSummary on: {tax_report_file}')
-        excel.Application.Run("ImportLaborDistributionPayrollSummary", tax_report_file, True)
+        print(f'Running ImportLaborDistributionPayrollSummary on: {tax_report_filepath}')
+        excel.Application.Run("ImportLaborDistributionPayrollSummary", tax_report_filepath, True)
         
         print('Running ProcessData...')
         excel.Application.Run("ProcessData")
