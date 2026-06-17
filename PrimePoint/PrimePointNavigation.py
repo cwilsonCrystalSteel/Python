@@ -443,31 +443,61 @@ class PrimePointBase():
         self.PayrollSelectionSearchBar = validateElement(self.driver, (By.XPATH, "//input[@placeholder='Type to search...']"), 'PayrollSelectionSearchBar', True, True, verbosity=self.verbosity)
         
         
-        # make sure its the right format 
-        try:
-            valid_date = datetime.datetime.strptime(date, '%Y-%m-%d')
-        except:
-            raise Exception(f"Invalid Date Format: '{date}'. Only YYYY-mm-dd allowed.")
-            
-        date_for_search = date
-        if state == 'NY':
-            valid_date = valid_date - datetime.timedelta(days=2)
-            date_for_search = valid_date.strftime('%Y-%m-%d')
-        # only allow fridays 
-        elif valid_date.weekday() != 4:
-            raise Exception(f"Provided date '{date}' is not on a Friday")
+        top_options = self.driver.find_elements(By.XPATH, "//select-dropdown//div[contains(@class, 'options')]//li/span")
+        top_options = {e.text.strip():{'Date':None,'Element':e} for e in top_options}
         
-        # send the string we want for the date and state with an extra space
-        # self.PayrollSelectionSearchBar.send_keys('{DATE AS YYYY-MM-DD} - {STATE AS 2 LETTER} ')
-        # self.PayrollSelectionSearchBar.send_keys('2026-06-12 - DE ')
-        search_key = f'{date_for_search} - {state} '
-        self.PayrollSelectionSearchBar.send_keys(search_key)
-        self.printverbosity(f"Entered '{search_key}' into PayrollSelectionSearchBar")
-        # do the backspace to force a refresh
-        self.PayrollSelectionSearchBar.send_keys(Keys.BACK_SPACE)
-        # select it with enter
-        self.PayrollSelectionSearchBar.send_keys(Keys.ENTER)
-        self.printverbosity(f'Selected "{search_key}"')
+        for option_text in top_options:
+            try:
+                top_options[option_text]['Date'] = datetime.datetime.strptime(option_text[:10], '%Y-%m-%d')
+            except:
+                pass
+        
+        
+        state_options = {k:top_options[k] for k in top_options.keys() if state.lower() in k[:20].lower() and 'weekly' in k.lower() and 'payroll not yet produced' not in k.lower()}
+
+        valid_options = {k:state_options[k] for k in state_options.keys() if state_options[k]['Date'] is not None}
+        week_number = datetime.datetime.strptime(date, '%Y-%m-%d').isocalendar().week
+        valid_options = {k:state_options[k] for k in state_options.keys() if state_options[k]['Date'].isocalendar().week == week_number}
+
+        
+        if len(valid_options) == 0:
+            raise NoRecordsFoundException(f'Could not find a report for {state} that had a date the same week as {date} (weeknumber = {week_number})')
+        elif len(valid_options) > 1:
+            raise Exception(f"Found multiple ({len(valid_options)}) reports for {state} that had a date the same week as {date} (weeknumber = {week_number})")
+        
+        # get the only remaining dict key
+        option_text = next(iter(valid_options))
+        option_date = valid_options[option_text]['Date']
+        # get the web element to click on 
+        self.PayrollSelectionOption = valid_options[option_text]['Element']
+        self.PayrollSelectionOption.click()
+        self.printverbosity(f"Clicked on '{option_text}'")        
+        
+        # # make sure its the right format 
+        # try:
+        #     valid_date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        # except:
+        #     raise Exception(f"Invalid Date Format: '{date}'. Only YYYY-mm-dd allowed.")
+            
+        # date_for_search = date
+        # if state == 'NY':
+        #     valid_date = valid_date - datetime.timedelta(days=2)
+        #     date_for_search = valid_date.strftime('%Y-%m-%d')
+        # # only allow fridays 
+        # elif valid_date.weekday() != 4:
+        #     raise Exception(f"Provided date '{date}' is not on a Friday")
+        
+        # # send the string we want for the date and state with an extra space
+        # # self.PayrollSelectionSearchBar.send_keys('{DATE AS YYYY-MM-DD} - {STATE AS 2 LETTER} ')
+        # # self.PayrollSelectionSearchBar.send_keys('2026-06-12 - DE ')
+        # search_key = f'{date_for_search} - {state} '
+        # self.PayrollSelectionSearchBar.send_keys(search_key)
+        # self.printverbosity(f"Entered '{search_key}' into PayrollSelectionSearchBar")
+        # # do the backspace to force a refresh
+        # self.PayrollSelectionSearchBar.send_keys(Keys.BACK_SPACE)
+        # # select it with enter
+        # self.PayrollSelectionSearchBar.send_keys(Keys.ENTER)
+        # self.printverbosity(f'Selected "{search_key}"')
         
         
         
@@ -497,7 +527,7 @@ class PrimePointBase():
         self.printverbosity(f'File Downloaded as: {filepath}')
         
         
-        date_file_format = valid_date.strftime('%m.%d.%Y')
+        date_file_format = option_date.strftime('%m.%d.%Y')
         filepath_pathlib = Path(filepath)
         renamed_file = f'{state} {date_file_format} BS {self.startTime.strftime("%Y%m%d_%H%M%S")}{filepath_pathlib.suffix}'
         
@@ -522,6 +552,30 @@ class PrimePointBase():
                       
             
     def getLaborDistributionPayrollSummary(self, state, date):
+        """
+        
+
+        Parameters
+        ----------
+        state : STR
+            oone of ['TN','MD','DE','PA','NY']
+        date : STR
+            date formatted 'yyyy-mm-dd' // '%Y-%m-%d'
+            We use whatever date this is to get the report from that same week
+            If you give date of monday, and report is dated friday we get it
+            if you give date of friday and report is dated friday we get it 
+
+        Raises
+        ------
+        Exception
+            DESCRIPTION.
+
+        Returns
+        -------
+        new_filepath : Path
+            location of downloaded report. gets renamed to existing structure 
+
+        """
         
         
         
@@ -538,33 +592,63 @@ class PrimePointBase():
         self.printverbosity('Clicked PayrollSelection')
         self.PayrollSelectionSearchBar = validateElement(self.driver, (By.XPATH, "//input[@placeholder='Type to search...']"), 'PayrollSelectionSearchBar', True, True, verbosity=self.verbosity)
         
+        
+        top_options = self.driver.find_elements(By.XPATH, "//select-dropdown//div[contains(@class, 'options')]//li/span")
+        top_options = {e.text.strip():{'Date':None,'Element':e} for e in top_options}
+        
+        for option_text in top_options:
+            try:
+                top_options[option_text]['Date'] = datetime.datetime.strptime(option_text[:10], '%Y-%m-%d')
+            except:
+                pass
+        
+        
+        state_options = {k:top_options[k] for k in top_options.keys() if state.lower() in k[:20].lower() and 'weekly' in k.lower() and 'payroll not yet produced' not in k.lower()}
 
-        # make sure its the right format 
-        try:
-            valid_date = datetime.datetime.strptime(date, '%Y-%m-%d')
-        except:
-            raise Exception(f"Invalid Date Format: '{date}'. Only YYYY-mm-dd allowed.")
+        valid_options = {k:state_options[k] for k in state_options.keys() if state_options[k]['Date'] is not None}
+        week_number = datetime.datetime.strptime(date, '%Y-%m-%d').isocalendar().week
+        valid_options = {k:state_options[k] for k in state_options.keys() if state_options[k]['Date'].isocalendar().week == week_number}
+
+        
+        if len(valid_options) == 0:
+            raise NoRecordsFoundException(f'Could not find a report for {state} that had a date the same week as {date} (weeknumber = {week_number})')
+        elif len(valid_options) > 1:
+            raise Exception(f"Found multiple ({len(valid_options)}) reports for {state} that had a date the same week as {date} (weeknumber = {week_number})")
+        
+        # get the only remaining dict key
+        option_text = next(iter(valid_options))
+        option_date = valid_options[option_text]['Date']
+        # get the web element to click on 
+        self.PayrollSelectionOption = valid_options[option_text]['Element']
+        self.PayrollSelectionOption.click()
+        self.printverbosity(f"Clicked on '{option_text}'")
+        
+        # # make sure its the right format 
+        # try:
+        #     valid_date = datetime.datetime.strptime(date, '%Y-%m-%d')
+        # except:
+        #     raise Exception(f"Invalid Date Format: '{date}'. Only YYYY-mm-dd allowed.")
             
-        date_for_search = date
-        if state == 'NY':
-            valid_date = valid_date - datetime.timedelta(days=2)
-            date_for_search = valid_date.strftime('%Y-%m-%d')
-        # only allow fridays 
-        elif valid_date.weekday() != 4:
-            raise Exception(f"Provided date '{date}' is not on a Friday")
+        # date_for_search = date
+        # if state == 'NY':
+        #     valid_date = valid_date - datetime.timedelta(days=2)
+        #     date_for_search = valid_date.strftime('%Y-%m-%d')
+        # # only allow fridays 
+        # elif valid_date.weekday() != 4:
+        #     raise Exception(f"Provided date '{date}' is not on a Friday")
         
-        # send the string we want for the date and state with an extra space
-        # self.PayrollSelectionSearchBar.send_keys('{DATE AS YYYY-MM-DD} - {STATE AS 2 LETTER} ')
-        # self.PayrollSelectionSearchBar.send_keys('2026-06-12 - DE ')
-        search_key = f'{date_for_search} - {state} '
+        # # send the string we want for the date and state with an extra space
+        # # self.PayrollSelectionSearchBar.send_keys('{DATE AS YYYY-MM-DD} - {STATE AS 2 LETTER} ')
+        # # self.PayrollSelectionSearchBar.send_keys('2026-06-12 - DE ')
+        # search_key = f'{date_for_search} - {state} '
         
-        self.PayrollSelectionSearchBar.send_keys(search_key)
-        self.printverbosity(f"Entered {search_key} into PayrollSelectionSearchBar")
-        # do the backspace to force a refresh
-        self.PayrollSelectionSearchBar.send_keys(Keys.BACK_SPACE)
-        # select it with enter
-        self.PayrollSelectionSearchBar.send_keys(Keys.ENTER)
-        self.printverbosity(f"Selected '{search_key}'")
+        # self.PayrollSelectionSearchBar.send_keys(search_key)
+        # self.printverbosity(f"Entered {search_key} into PayrollSelectionSearchBar")
+        # # do the backspace to force a refresh
+        # self.PayrollSelectionSearchBar.send_keys(Keys.BACK_SPACE)
+        # # select it with enter
+        # self.PayrollSelectionSearchBar.send_keys(Keys.ENTER)
+        # self.printverbosity(f"Selected '{search_key}'")
         
         
         # self.AllocationLevelDropdown = validateElement(self.driver, (By.TAG_NAME, "SELECT"), "AllocationLevelDropdown", True, True, verbosity=self.verbosity)
@@ -604,7 +688,7 @@ class PrimePointBase():
         
         self.printverbosity(f'File Downloaded as: {filepath}')
         
-        date_file_format = valid_date.strftime('%m.%d.%Y')
+        date_file_format = option_date.strftime('%m.%d.%Y')
         filepath_pathlib = Path(filepath)
         renamed_file = f'{state} {date_file_format} Tax Report {self.startTime.strftime("%Y%m%d_%H%M%S")}{filepath_pathlib.suffix}'
         new_filepath = filepath_pathlib.with_name(renamed_file)
@@ -723,8 +807,11 @@ class PrimePointEZ(PrimePointBase):
         # get all of the CRYSSW xxxx reports 
         self.tcb.setDownloadFolder(self.download_folder / 'getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport')
         for state in self.states_list:
-            filepath = self.tcb.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state=state, date=self.friday_date_string)
-            self.filepaths_to_move.append(filepath)
+            try:
+                filepath = self.tcb.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state=state, date=self.friday_date_string)
+                self.filepaths_to_move.append(filepath)
+            except NoRecordsFoundException:
+                pass
 
         # go back to the list of available reports
         self.tcb.goToReportingFromSpecificReportPage()
@@ -733,8 +820,12 @@ class PrimePointEZ(PrimePointBase):
         # get all of the Labor Distribution reports
         self.tcb.setDownloadFolder(self.download_folder / 'getLaborDistributionPayrollSummary')
         for state in self.states_list:
-            filepath = self.tcb.getLaborDistributionPayrollSummary(state=state, date=self.friday_date_string)
-            self.filepaths_to_move.append(filepath)
+            try:
+                filepath = self.tcb.getLaborDistributionPayrollSummary(state=state, date=self.friday_date_string)
+                self.filepaths_to_move.append(filepath)
+            except NoRecordsFoundException as e:
+                print(e)
+                pass
         
         
     
@@ -744,7 +835,7 @@ class PrimePointEZ(PrimePointBase):
         
 '''
 
-y = PrimePointEZ('2026-06-12')
+y = PrimePointEZ('2026-06-19')
 y.get_filepaths_wrapper()
 y.kill()
 
@@ -765,10 +856,11 @@ x.openReporting()
 # filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='DE', date='2026-06-12')
 # filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='TN', date='2026-06-12')
 # filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='NY', date='2026-06-12')
+filepath = x.getCRYSSWSpectrumEmployerTaxExpenseJournalEntryExport(state='MD', date='2026-06-12')
 
 
 
-# x.goToReportingFromSpecificReportPage()
+x.goToReportingFromSpecificReportPage()
 x.setDownloadFolder(Path.home() / 'Downloads' / 'getLaborDistributionPayrollSummary')
 
 filepath1 = x.getLaborDistributionPayrollSummary('DE', '2026-06-12')
