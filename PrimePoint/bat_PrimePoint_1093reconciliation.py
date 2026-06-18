@@ -92,28 +92,37 @@ for ii in dirs_to_create:
     
     
 ####### Get the macro file to copy over    
+
+this_week_macro_file = list(this_week_dir.glob('*.xlsm'))
+if this_week_macro_file:
+    new_macro_file_template = this_week_macro_file[0]
+    print(f"Using existing macro file already in the directory because the directory already existed! {new_macro_file_template}")
     
-# WE SHOULD GET THIS FROM THE LAST WEEK's DIRECTORY
-last_week_macro_file = list(last_week_dir.glob('*.xlsm'))
-# we dont find a macro file in last week's dir
-if len(last_week_macro_file) == 0:    
-    macro_file = Path(r'./PrimePoint/Macro File v2 - TEMPLATE.xlsm')
-    print(f'Using default macro file from code repository: {macro_file}')
-elif len(last_week_macro_file) == 1:
-    macro_file = last_week_macro_file[0]
-    print(f"Using last week's macro file: {macro_file}")
+    
 else:
-    # if there are multiple macro files, try to get the newest based on its name v2 -> v1 -> etc.
-    last_week_macro_file.sort(reverse=True)
-    macro_file = last_week_macro_file[0]
-    print(f"Using one of last week's {len(last_week_macro_file)} macro files (MULTIPLE FOUND): {macro_file}")
-
-
-# copy the macro file over 
-new_macro_file_template = this_week_dir / macro_file.name
-shutil.copy(macro_file, new_macro_file_template)
+        
+    # WE SHOULD GET THIS FROM THE LAST WEEK's DIRECTORY
+    last_week_macro_file = list(last_week_dir.glob('*.xlsm'))
+    # we dont find a macro file in last week's dir
+    if len(last_week_macro_file) == 0:    
+        macro_file = Path(r'./PrimePoint/Macro File v2 - TEMPLATE.xlsm')
+        print(f'Using default macro file from code repository: {macro_file}')
+    elif len(last_week_macro_file) == 1:
+        macro_file = last_week_macro_file[0]
+        print(f"Using last week's macro file: {macro_file}")
+    else:
+        # if there are multiple macro files, try to get the newest based on its name v2 -> v1 -> etc.
+        last_week_macro_file.sort(reverse=True)
+        macro_file = last_week_macro_file[0]
+        print(f"Using one of last week's {len(last_week_macro_file)} macro files (MULTIPLE FOUND): {macro_file}")
     
-
+    
+    # copy the macro file over 
+    new_macro_file_template = this_week_dir / macro_file.name
+    shutil.copy(macro_file, new_macro_file_template)
+        
+    if not os.path.exists(new_macro_file_template):
+        raise Exception(f'Could not find the newly copied macro file: {new_macro_file_template}')
 
 
 ####### place the files from PrimePoint paths into the correct location
@@ -122,6 +131,11 @@ for ii in paths:
     ii = Path(ii)
     new_dir = input_files_dir / ii.name
     shutil.copy(ii, new_dir)
+    
+    if os.path.exists(new_dir):
+        print(f'Successfully moved input file {ii} to {new_dir}')
+    else:
+        Exception(f'Failed to copy {ii} to {new_dir}')
 
 
 # trigger the macros with appropriate state files
