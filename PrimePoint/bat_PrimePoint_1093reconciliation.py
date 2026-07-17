@@ -14,31 +14,19 @@ import shutil
 import glob
 import re
 
-
 today = datetime.datetime.now()
 friday = today
 while friday.weekday() != 4:
     friday = friday + datetime.timedelta(days=1)
     
+friday += datetime.timedelta(days=-7)
+
 friday_str = friday.strftime('%Y-%m-%d')
 friday_str_dir = friday.strftime('%Y.%m.%d')
     
-attempts = 0
-
-while attempts < 4:
-    ppe = PrimePointEZ(friday_str)
-    ppe.get_filepaths_wrapper()
-    paths = ppe.filepaths_to_move
-    ppe.kill()
-    
-    attempts += 1
-    
-    if len(paths):
-        break 
-
-if not len(paths):
-    raise Exception ('COULD NOT GET THE PRIMEPOINT FILES TO MOVE')
-
+###############################################
+# 1) Connect to google drive and make directory(s)
+###############################################
 
 ##### create the folder in g-drive
 
@@ -100,7 +88,6 @@ if this_week_macro_file:
     
     
 else:
-        
     # WE SHOULD GET THIS FROM THE LAST WEEK's DIRECTORY
     last_week_macro_file = list(last_week_dir.glob('*.xlsm'))
     # we dont find a macro file in last week's dir
@@ -125,6 +112,36 @@ else:
         raise Exception(f'Could not find the newly copied macro file: {new_macro_file_template}')
 
 
+
+###############################################
+# 2) Download files from primepoint
+###############################################
+
+
+attempts = 0
+
+while attempts < 4:
+    attempts += 1
+    try:
+        ppe = PrimePointEZ(friday_str)
+        ppe.get_filepaths_wrapper()
+        paths = ppe.filepaths_to_move
+        ppe.kill()
+        
+        
+        if len(paths):
+            break 
+    except Exception as e:
+        print(f"Going to next loop {attempts} because of some error: {e}")
+
+if not len(paths):
+    raise Exception ('COULD NOT GET THE PRIMEPOINT FILES TO MOVE')
+    
+    
+###############################################
+# 3) Move primepoint files into directory
+###############################################
+
 ####### place the files from PrimePoint paths into the correct location
 input_files_dir = this_week_dir / data_input_files
 for ii in paths:
@@ -137,6 +154,12 @@ for ii in paths:
     else:
         Exception(f'Failed to copy {ii} to {new_dir}')
 
+
+
+
+###############################################
+# 4) Run files through macro
+###############################################
 
 # trigger the macros with appropriate state files
 
